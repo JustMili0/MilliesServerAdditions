@@ -4,15 +4,11 @@ import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.mechanics.abilities.ability.Ability;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.justmili.servertweaks.util.ScalerUtil;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -27,11 +23,9 @@ import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class AbilitiesRegistry {
@@ -68,9 +62,9 @@ public class AbilitiesRegistry {
     public static final Ability BURNS_IN_DAYLIGHT = register(new BurnsInDaylight());                // KINDA WORKS
     public static final Ability IS_MONSTER = register(new IsMonster());
     public static final Ability CLIMBS_WALLS = register(new Ability("CLIMBS_WALLS"));         // DOESN'T WORK
-    public static final Ability CARNIVORE = register(new Ability("CARNIVORE"));               // DOESN'T WORK
-    public static final Ability VEGETARIAN = register(new Ability("VEGETARIAN"));             // DOESN'T WORK
-    public static final Ability ONLY_EATS_SWEETS = register(new Ability("ONLY_EATS_SWEETS")); // DOESN'T WORK
+    public static final Ability CARNIVORE = register(new Ability("CARNIVORE"));               // KINDA WORKS
+    public static final Ability VEGETARIAN = register(new Ability("VEGETARIAN"));             // KINDA WORKS
+    public static final Ability ONLY_EATS_SWEETS = register(new Ability("ONLY_EATS_SWEETS")); // KINDA WORKS
     public static final Ability GRASS_EATER = register(new Ability("GRASS_EATER"));
 
     private static Ability register(Ability ability) {
@@ -84,9 +78,9 @@ public class AbilitiesRegistry {
 
     /// Define ticking abilities
 
-    // FIRE_IMMUNE - AbilityEffects (ALLOW_DAMAGE)
-    // FREEZE_IMMUNE - AbilityEffects (ALLOW_DAMAGE)
-    // FALL_IMMUNE - AbilityEffects (ALLOW_DAMAGE)
+    // FIRE_IMMUNE - AbilityEffects (specialDamageImmune)
+    // FREEZE_IMMUNE - AbilityEffects (specialDamageImmune)
+    // FALL_IMMUNE - AbilityEffects (specialDamageImmune)
 
     static class Light extends TickingAbility {
         Light() {
@@ -121,7 +115,7 @@ public class AbilitiesRegistry {
             AttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
 
             if (speed.getModifier(SLOW_SPEED) == null) {
-                speed.addTransientModifier(new AttributeModifier(SLOW_SPEED, - 0.47, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                speed.addTransientModifier(new AttributeModifier(SLOW_SPEED, -0.47, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
             }
         }
     }
@@ -190,7 +184,7 @@ public class AbilitiesRegistry {
         }
     }
 
-    // BREATHES_UNDERWATER ticking + AbilityEffects (ALLOW_DAMAGE)
+    // BREATHES_UNDERWATER ticking + AbilityEffects (specialDamageImmune)
     static class BreathesUnderwater extends TickingAbility {
         BreathesUnderwater() {
             super("BREATHES_UNDERWATER");
@@ -245,10 +239,8 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            boolean inWaterOrRain = player.isInWater()
-                || (level.isRaining() && level.canSeeSky(player.blockPosition()))
-                || level.getBlockState(player.blockPosition()).is(Blocks.WATER_CAULDRON);
-            if (inWaterOrRain && level.getGameTime() % 20 == 0) player.hurt(level.damageSources().drown(), 1.0F);
+            boolean inWaterGeneric = player.isInWaterOrRain() || level.getBlockState(player.blockPosition()).is(Blocks.WATER_CAULDRON);
+            if (inWaterGeneric && level.getGameTime() % 20 == 0) player.hurt(level.damageSources().magic(), 1.0F);
         }
     }
 
@@ -361,7 +353,7 @@ public class AbilitiesRegistry {
             boolean hasHelmet = !player.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
             if (hasHelmet) return;
             if (player.isInWater()) {
-                if (level.getGameTime() % 30 == 0) player.hurt(level.damageSources().inFire(), 0.5F);
+                if (level.getGameTime() % 30 == 0) player.hurt(level.damageSources().magic(), 0.5F);
             } else {
                 player.igniteForSeconds(2);
             }
@@ -400,18 +392,4 @@ public class AbilitiesRegistry {
     // VEGETARIAN - AbilityEffects (RIGHT_CLICK_BLOCK + RIGHT_CLICK_ITEM)
     // ONLY_EATS_SWEETS - AbilityEffects (RIGHT_CLICK_BLOCK + RIGHT_CLICK_ITEM)
     // GRASS_EATER - AbilityEffects (RIGHT_CLICK_BLOCK)
-
-    // Ticking abilities helper methods
-    private static void applyEffect(ServerPlayer player, Holder<@NotNull MobEffect> effects, int duration, int power) {
-        player.addEffect(new MobEffectInstance(effects, duration, power, false, false, false));
-    }
-    private static void applyEffect(ServerPlayer player, Holder<@NotNull MobEffect> effects) {
-        player.addEffect(new MobEffectInstance(effects, 100, 0, false, false, false));
-    }
-    private static void applyEffect(ServerPlayer player, Holder<@NotNull MobEffect> effects, int power) {
-        player.addEffect(new MobEffectInstance(effects, 100, power, false, false, false));
-    }
-    private static <T extends Mob> List<T> getNearby(ServerPlayer player, Class<T> mob, double radius) {
-        return player.level().getEntitiesOfClass(mob, player.getBoundingBox().inflate(radius));
-    }
 }

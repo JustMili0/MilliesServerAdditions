@@ -18,6 +18,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
@@ -33,8 +35,8 @@ public class AbilityEffects {
         TickEvent.PLAYER_POST.register(AbilityEffects::tickTickingAbilities);
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(AbilityEffects::specialDamageImmune);
         InteractionEvent.RIGHT_CLICK_BLOCK.register(AbilityEffects::grassEater);
-        InteractionEvent.RIGHT_CLICK_BLOCK.register(AbilityEffects::dietRestrictions);
-        InteractionEvent.RIGHT_CLICK_ITEM.register(AbilityEffects::dietRestrictions);
+        InteractionEvent.RIGHT_CLICK_ITEM.register(AbilityEffects::dietRestrictionsOnItem);
+        InteractionEvent.RIGHT_CLICK_BLOCK.register(AbilityEffects::dietRestrictionsOnBlock);
     }
 
     private static void tickTickingAbilities(Player ticking) {
@@ -92,7 +94,8 @@ public class AbilityEffects {
         return false;
     }
 
-    private static InteractionResult dietRestrictions(Player interacting, InteractionHand hand) {
+    /// TODO: Find out if you can even block the animation from starting to play
+    private static InteractionResult dietRestrictionsOnItem(Player interacting, InteractionHand hand) {
         if (interacting.level().isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
@@ -101,7 +104,7 @@ public class AbilityEffects {
 
         return InteractionResult.PASS;
     }
-    private static InteractionResult dietRestrictions(Player interacting, InteractionHand hand, BlockPos pos, Direction direction) {
+    private static InteractionResult dietRestrictionsOnBlock(Player interacting, InteractionHand hand, BlockPos pos, Direction direction) {
         if (interacting.level().isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
@@ -128,6 +131,9 @@ public class AbilityEffects {
             if (hasGold && DietCategories.GOLDEN_FOODS.contains(stack.getItem())) return false;
             return !DietCategories.SWEET.contains(stack.getItem());
         }
+
+        // Experimental way of discouraging/showing that food you're trying to eat is not in your diet
+        TickingAbility.applyEffect(player, MobEffects.NAUSEA, 5, 1);
         return false;
     }
 }
