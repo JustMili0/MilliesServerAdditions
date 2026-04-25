@@ -18,7 +18,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -37,6 +36,7 @@ public class AbilityEffects {
         InteractionEvent.RIGHT_CLICK_BLOCK.register(AbilityEffects::grassEater);
         InteractionEvent.RIGHT_CLICK_ITEM.register(AbilityEffects::dietRestrictionsOnItem);
         InteractionEvent.RIGHT_CLICK_BLOCK.register(AbilityEffects::dietRestrictionsOnBlock);
+        TickEvent.PLAYER_POST.register(AbilityEffects::cancelIllegalEating);
     }
 
     private static void tickTickingAbilities(Player ticking) {
@@ -94,13 +94,23 @@ public class AbilityEffects {
         return false;
     }
 
-    /// TODO: Find out if you can even block the animation from starting to play
+    /*
+    Current idea:
+    - Prevent player from eating what's not in their diet
+    - Apply nausea if attempting to eat something that isn't in player's diet
+    - Prevent being slowed down when trying to eat something that isn't in player's diet
+      - Prevent player from continuously eating something that isn't in their diet
+     */
     private static InteractionResult dietRestrictionsOnItem(Player interacting, InteractionHand hand) {
         if (interacting.level().isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
-        if (isDietBlocked(player, player.getItemInHand(hand))) return InteractionResult.FAIL;
+        ItemStack stack = player.getItemInHand(hand);
+        DietResult result = getDietResult(player, stack);
+        interacting.stopUsingItem();
+
+        if (result == DietResult.BLOCKED) return InteractionResult.FAIL;
 
         return InteractionResult.PASS;
     }
@@ -109,31 +119,49 @@ public class AbilityEffects {
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
-        if (isDietBlocked(player, player.getItemInHand(hand))) return InteractionResult.FAIL;
+        ItemStack stack = player.getItemInHand(hand);
+        DietResult result = getDietResult(player, stack);
+
+        if (result == DietResult.BLOCKED) return InteractionResult.FAIL;
 
         return InteractionResult.PASS;
     }
-    private static boolean isDietBlocked(ServerPlayer player, ItemStack stack) {
-        if (!stack.has(DataComponents.FOOD)) return false;
+
+    private static void cancelIllegalEating(Player ticking) {
+        if (!(ticking instanceof ServerPlayer player)) return;
+        if (!player.isUsingItem()) return;
+
+        ItemStack stack = player.getUseItem();
+        DietResult result = getDietResult(player, stack);
+
+        if (result == DietResult.BLOCKED || result == DietResult.DISCOURAGED) {
+            player.stopUsingItem();
+            if (!player.hasEffect(MobEffects.NAUSEA)) {
+                TickingAbility.applyEffect(player, MobEffects.NAUSEA, 60, 0);
+            }
+        }
+    }
+    private enum DietResult { ALLOWED, DISCOURAGED, BLOCKED }
+    private static DietResult getDietResult(ServerPlayer player, ItemStack stack) {
+        if (!stack.has(DataComponents.FOOD)) return DietResult.ALLOWED;
+
         UUID uuid = player.getUUID();
         Set<Ability> abilities = AbilityManager.getAbilities(uuid);
         boolean hasGold = AbilityManager.has(uuid, AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET);
 
         if (abilities.contains(AbilitiesRegistry.CARNIVORE)) {
-            if (hasGold && DietCategories.GOLDEN_FOODS.contains(stack.getItem())) return false;
-            return !DietCategories.CARNIVORE.contains(stack.getItem());
+            if (hasGold && DietCategories.GOLDEN_FOODS.contains(stack.getItem())) return DietResult.ALLOWED;
+            return DietCategories.CARNIVORE.contains(stack.getItem()) ? DietResult.ALLOWED : DietResult.BLOCKED;
         }
         if (abilities.contains(AbilitiesRegistry.VEGETARIAN)) {
-            if (hasGold && DietCategories.GOLDEN_FOODS.contains(stack.getItem())) return false;
-            return !DietCategories.VEGETARIAN.contains(stack.getItem());
+            if (hasGold && DietCategories.GOLDEN_FOODS.contains(stack.getItem())) return DietResult.ALLOWED;
+            return DietCategories.VEGETARIAN.contains(stack.getItem()) ? DietResult.ALLOWED : DietResult.BLOCKED;
         }
         if (abilities.contains(AbilitiesRegistry.ONLY_EATS_SWEETS)) {
-            if (hasGold && DietCategories.GOLDEN_FOODS.contains(stack.getItem())) return false;
-            return !DietCategories.SWEET.contains(stack.getItem());
+            if (hasGold && DietCategories.GOLDEN_FOODS.contains(stack.getItem())) return DietResult.ALLOWED;
+            return DietCategories.SWEET.contains(stack.getItem()) ? DietResult.ALLOWED : DietResult.BLOCKED;
         }
 
-        // Experimental way of discouraging/showing that food you're trying to eat is not in your diet
-        TickingAbility.applyEffect(player, MobEffects.NAUSEA, 5, 1);
-        return false;
+        return DietResult.DISCOURAGED;
     }
 }
