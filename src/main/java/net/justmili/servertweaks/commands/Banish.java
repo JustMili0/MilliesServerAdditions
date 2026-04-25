@@ -23,7 +23,7 @@ public class Banish {
                         ServerLevel banishmentLevel = source.getServer().getLevel(Dimensions.BANISHMENT_WORLD);
 
                         if (banishmentLevel == null) {
-                            CommandUtil.sendFail(source, "Banishment dimension is not loaded.");
+                            CommandUtil.sendFail(source, "Banishment dimension is not loaded");
                             return 0;
                         }
 

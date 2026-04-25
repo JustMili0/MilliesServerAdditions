@@ -18,6 +18,12 @@
     - A proper config add/remove for player abilities will be added once testing and experiments will be done
 - Very undeveloped `/fillextras` command because vanilla didn't have what I needed
 
+### ***BUG FIXES***
+- Fixed broken duel invites messages
+
+### ***TECHNICAL CHANGES***
+- Removed "[ServerTweaks] " prefix from all messages sent by the mod
+
 TODO:
 - Fix abilities
 - Fix that weird bug with duel invites

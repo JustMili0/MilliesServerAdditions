@@ -54,7 +54,7 @@ public class WhileDuel {
         endDuel(player, opponent);
 
         if (opponent != null)
-            CommandUtil.sendTo(opponent, "[ServerTweaks] Your opponent disconnected. The duel has ended.");
+            CommandUtil.sendTo(opponent, "Your opponent disconnected. The duel has ended");
     }
 
     public static void endDuel(ServerPlayer player, ServerPlayer opponent) {

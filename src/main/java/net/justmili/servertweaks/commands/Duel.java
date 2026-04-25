@@ -24,26 +24,26 @@ public class Duel {
 
                         //Prevent dueling yourself
                         if (sender == recipient) {
-                            CommandUtil.sendTo(sender, "[ServerTweaks] You can not duel yourself.");
+                            CommandUtil.sendTo(sender, "You can not duel yourself");
                             return 0;
-                        }
-                        if (FdaApiUtil.getBoolValue(sender, PlayerAttachments.IN_DUEL)) {
-                            CommandUtil.sendTo(sender, "[ServerTweaks] You are already in a duel.");
-                            return 0;
-                        }
-                        if (FdaApiUtil.getBoolValue(recipient, PlayerAttachments.IN_DUEL)) {
-                            CommandUtil.sendTo(sender, "[ServerTweaks] " + recipient.getName().getString() + " is already in a duel.");
-                            return 0;
-                        }
-                        if (FdaApiUtil.getStringValue(recipient, PlayerAttachments.AWAITING_DUEL_SENDER) != null
-                            || FdaApiUtil.getStringValue(recipient, PlayerAttachments.AWAITING_DUEL_SENDER) != "val_inactive") {
-
-                            CommandUtil.sendTo(sender, "[ServerTweaks] " + recipient.getDisplayName() + " already has a pending duel request.");
-                            CommandUtil.sendTo(recipient, "[ServerTweaks] " + recipient.getDisplayName() + " tried to send a duel request but you already have one pending.");
                         }
 
-                        CommandUtil.sendTo(sender, "[ServerTweaks] You've sent a duel request to " + recipient.getName().getString() + ".");
-                        CommandUtil.sendTo(recipient, "[ServerTweaks] " + sender.getName().getString() + " has sent you a duel request.");
+                        // Prevent overwriting invites
+                        String senderPendingRecipient = FdaApiUtil.getStringValue(sender, PlayerAttachments.AWAITING_DUEL_RECIPIENT);
+                        if (senderPendingRecipient != null && !senderPendingRecipient.equals("val_inactive")) {
+                            CommandUtil.sendTo(sender, "You've already sent a duel request to " + recipient.getName().getString());
+                            return 0;
+                        }
+                        String recipientPendingSender = FdaApiUtil.getStringValue(recipient, PlayerAttachments.AWAITING_DUEL_SENDER);
+                        if (recipientPendingSender != null && !recipientPendingSender.equals("val_inactive")) {
+                            CommandUtil.sendTo(sender, recipient.getName().getString() + " already has a pending duel request");
+                            CommandUtil.sendTo(recipient, sender.getName().getString() + " tried to send you a duel request but you already have one pending");
+                            return 0;
+                        }
+
+                        // Send request
+                        CommandUtil.sendTo(sender, "You've sent a duel request to " + recipient.getName().getString());
+                        CommandUtil.sendTo(recipient, "" + sender.getName().getString() + " has sent you a duel request");
 
                         FdaApiUtil.setStringValue(sender, PlayerAttachments.AWAITING_DUEL_RECIPIENT, recipient.getStringUUID());
                         FdaApiUtil.setStringValue(recipient, PlayerAttachments.AWAITING_DUEL_SENDER, sender.getStringUUID());
@@ -62,7 +62,7 @@ public class Duel {
                             ServerPlayer sender = context.getSource().getServer().getPlayerList().getPlayer(java.util.UUID.fromString(senderUUID));
 
                             if (sender == null) {
-                                CommandUtil.sendTo(recipient, "[ServerTweaks] That player is no longer online.");
+                                CommandUtil.sendTo(recipient, "That player is no longer online");
                                 FdaApiUtil.setStringValue(recipient, PlayerAttachments.AWAITING_DUEL_SENDER, "val_inactive");
                                 return 0;
                             }
@@ -72,8 +72,8 @@ public class Duel {
                             FdaApiUtil.setBoolValue(recipient, PlayerAttachments.IN_DUEL, true);
                             FdaApiUtil.setBoolValue(sender, PlayerAttachments.IN_DUEL, true);
 
-                            CommandUtil.sendTo(recipient, "[ServerTweaks] You are now in a duel with " + sender.getName().getString() + ".");
-                            CommandUtil.sendTo(sender, "[ServerTweaks] You are now in a duel with " + recipient.getName().getString() + ".");
+                            CommandUtil.sendTo(recipient, "You are now in a duel with " + sender.getName().getString());
+                            CommandUtil.sendTo(sender, "You are now in a duel with " + recipient.getName().getString());
 
                             return 1;
                         }
@@ -94,13 +94,13 @@ public class Duel {
                             FdaApiUtil.setStringValue(recipient, PlayerAttachments.AWAITING_DUEL_SENDER, "val_inactive");
 
                             if (sender == null) {
-                                CommandUtil.sendTo(recipient, "[ServerTweaks] That player is no longer online.");
+                                CommandUtil.sendTo(recipient, "That player is no longer online");
                                 return 0;
                             }
                             FdaApiUtil.setStringValue(sender, PlayerAttachments.AWAITING_DUEL_RECIPIENT, "val_inactive");
 
-                            CommandUtil.sendTo(recipient, "[ServerTweaks] You declined a duel with " + sender.getName().getString() + ".");
-                            CommandUtil.sendTo(sender, "[ServerTweaks] " + recipient.getName().getString() + " declined your duel.");
+                            CommandUtil.sendTo(recipient, "You declined a duel with " + sender.getName().getString());
+                            CommandUtil.sendTo(sender, "" + recipient.getName().getString() + " declined your duel");
 
                             return 1;
                         }
@@ -115,13 +115,13 @@ public class Duel {
                         ServerPlayer player = context.getSource().getPlayer();
 
                         if (!FdaApiUtil.getBoolValue(player, PlayerAttachments.IN_DUEL)) {
-                            CommandUtil.sendTo(player, "[ServerTweaks] You are not in a duel.");
+                            CommandUtil.sendTo(player, "You are not in a duel");
                             return 0;
                         }
 
                         long ticksSinceHit = player.level().getGameTime() - FdaApiUtil.getLongValue(player, PlayerAttachments.LAST_HIT_TIME);
                         if (ticksSinceHit < 600) {
-                            CommandUtil.sendTo(player, "[ServerTweaks] You cannot end a duel within 30 seconds of being hit.");
+                            CommandUtil.sendTo(player, "You cannot end a duel within 30 seconds of being hit");
                             return 0;
                         }
 
@@ -130,8 +130,8 @@ public class Duel {
 
                         WhileDuel.endDuel(player, opponent);
 
-                        CommandUtil.sendTo(player, "[ServerTweaks] You have ended the duel.");
-                        if (opponent != null) CommandUtil.sendTo(opponent, "[ServerTweaks] " + player.getName().getString() + " has ended the duel.");
+                        CommandUtil.sendTo(player, "You have ended the duel");
+                        if (opponent != null) CommandUtil.sendTo(opponent, "" + player.getName().getString() + " has ended the duel");
 
                         return 1;
                     })

@@ -76,7 +76,7 @@ public class AbilityManager {
                 UUID uuid;
                 try { uuid = UUID.fromString(entry.getKey()); }
                 catch (IllegalArgumentException e) {
-                    ServerTweaks.LOGGER.warn("[AbilityManager] Invalid UUID '{}', skipping.", entry.getKey());
+                    ServerTweaks.LOGGER.warn("[AbilityManager] Invalid UUID '{}', skipping", entry.getKey());
                     continue;
                 }
 
@@ -86,7 +86,7 @@ public class AbilityManager {
                     for (var element : object.getAsJsonArray("abilities")) {
                         Ability ability = AbilitiesRegistry.byName(element.getAsString());
                         if (ability == null) { 
-                            ServerTweaks.LOGGER.warn("[AbilityManager] Unknown ability '{}', skipping.", element.getAsString()); 
+                            ServerTweaks.LOGGER.warn("[AbilityManager] Unknown ability '{}', skipping", element.getAsString());
                             continue; 
                         }
                         abilities.add(ability);
@@ -97,7 +97,7 @@ public class AbilityManager {
                     for (var element : object.getAsJsonArray("ability_modifiers")) {
                         AbilityModifier modifier = AbilityModifierRegistry.byName(element.getAsString());
                         if (modifier == null) { 
-                            ServerTweaks.LOGGER.warn("[AbilityManager] Unknown modifier '{}', skipping.", element.getAsString()); continue; 
+                            ServerTweaks.LOGGER.warn("[AbilityManager] Unknown modifier '{}', skipping", element.getAsString()); continue;
                         }
                         modifiers.add(modifier);
                     }
@@ -144,7 +144,7 @@ public class AbilityManager {
             try (Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
                 GSON.toJson(root, writer);
             }
-            ServerTweaks.LOGGER.info("[AbilityManager] Saved abilities for {} player(s).", allUuids.size());
+            ServerTweaks.LOGGER.info("[AbilityManager] Saved abilities for {} player(s)", allUuids.size());
         } catch (Exception e) {
             ServerTweaks.LOGGER.error("[AbilityManager] Failed to save config: {}", e.getMessage());
         }

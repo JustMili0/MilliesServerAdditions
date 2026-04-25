@@ -49,7 +49,7 @@ public class Config {
         builder.push("AFK-Command-Specific");
         despawnMonsters = builder.comment("Should \"wild\" monsters despawn around the player when coming out of AFK?")
             .define("despawnMonsters", true);
-        afkCommandCooldown = builder.comment("Amount of time between the AFK command can be used again.")
+        afkCommandCooldown = builder.comment("Amount of time between the AFK command can be used again")
             .define("afkCommandCooldown", 6000, 0, Integer.MAX_VALUE-255);
         builder.pop();
 

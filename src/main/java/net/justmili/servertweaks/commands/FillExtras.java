@@ -55,7 +55,7 @@ public class FillExtras {
                                                     count++;
                                                 }
                                             }
-                                    CommandUtil.sendSucc(source, "Successfully filled "+count+" block(s) of "+targetBlock.getBlock().getName().getString()+".");
+                                    CommandUtil.sendSucc(source, "Successfully filled "+count+" block(s) of "+targetBlock.getBlock().getName().getString());
                                     return count;
                                 })
                             )
@@ -86,7 +86,7 @@ public class FillExtras {
                                                     count++;
                                                 }
                                             }
-                                    CommandUtil.sendSucc(source, "Successfully filled "+count+" block(s) of "+targetBlock.getBlock().getName().getString()+".");
+                                    CommandUtil.sendSucc(source, "Successfully filled "+count+" block(s) of "+targetBlock.getBlock().getName().getString());
                                     return count;
                                 })
                             )
@@ -115,7 +115,7 @@ public class FillExtras {
                                                 count++;
                                             }
                                         }
-                                CommandUtil.sendSucc(source, "Silk-touch destroyed "+count+" block(s).");
+                                CommandUtil.sendSucc(source, "Silk-touch destroyed "+count+" block(s)");
                                 return count;
                             })
                         )
@@ -144,7 +144,7 @@ public class FillExtras {
                                                     count++;
                                                 }
                                             }
-                                    CommandUtil.sendSucc(source, "Silk-touch destroyed "+count+" block(s) of "+targetBlock.getBlock().getName().getString()+".");
+                                    CommandUtil.sendSucc(source, "Silk-touch destroyed "+count+" block(s) of "+targetBlock.getBlock().getName().getString());
                                     return count;
                                 })
                             )
@@ -175,7 +175,7 @@ public class FillExtras {
                                                     count++;
                                                 }
                                             }
-                                    CommandUtil.sendSucc(source, "Fortune "+fortuneLevel+" destroyed "+count+" block(s).");
+                                    CommandUtil.sendSucc(source, "Fortune "+fortuneLevel+" destroyed "+count+" block(s)");
                                     return count;
                                 })
                             )
@@ -207,7 +207,7 @@ public class FillExtras {
                                                         count++;
                                                     }
                                                 }
-                                        CommandUtil.sendSucc(source, "Fortune "+fortuneLevel+" destroyed "+count+" block(s) of "+targetBlock.getBlock().getName().getString()+".");
+                                        CommandUtil.sendSucc(source, "Fortune "+fortuneLevel+" destroyed "+count+" block(s) of "+targetBlock.getBlock().getName().getString());
                                         return count;
                                     })
                                 )

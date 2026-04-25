@@ -33,7 +33,7 @@ public class Afk {
 
                 int cooldown = FdaApiUtil.getIntValue(player, PlayerAttachments.AFK_COOLDOWN);
                 if (!FdaApiUtil.getBoolValue(player, PlayerAttachments.IS_AFK) && Config.afkCommandCooldown.get() != 0 && cooldown > 0) {
-                    CommandUtil.sendFail(source, "[ServerTweaks] You must wait " + (cooldown / 20) + "s before using this command again.");
+                    CommandUtil.sendFail(source, "You must wait " + (cooldown / 20) + "s before using this command again");
                     return 0;
                 }
 
@@ -61,7 +61,7 @@ public class Afk {
                         despawnNearbyMonsters(player);
                     }
 
-                    CommandUtil.sendSucc(source, "[ServerTweaks] You are no longer AFK.");
+                    CommandUtil.sendSucc(source, "You are no longer AFK");
                 } else {
                     //Set position at which command was executed at
                     //Add to team and set IS_AFK to true
@@ -73,7 +73,7 @@ public class Afk {
                     scoreboard.addPlayerToTeam(player.getScoreboardName(), team);
                     FdaApiUtil.setBoolValue(player, PlayerAttachments.IS_AFK, true);
 
-                    CommandUtil.sendSucc(source, "[ServerTweaks] You are now AFK.");
+                    CommandUtil.sendSucc(source, "You are now AFK");
                 }
 
                 return 1;
