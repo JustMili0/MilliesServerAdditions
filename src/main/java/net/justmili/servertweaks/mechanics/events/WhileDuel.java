@@ -59,16 +59,16 @@ public class WhileDuel {
 
     public static void endDuel(ServerPlayer player, ServerPlayer opponent) {
         FdaApiUtil.setBoolValue(player, PlayerAttachments.IN_DUEL, false);
-        FdaApiUtil.setStringValue(player, PlayerAttachments.DUELING_WITH, "val_inactive");
-        FdaApiUtil.setStringValue(player, PlayerAttachments.AWAITING_DUEL_SENDER, "val_inactive");
-        FdaApiUtil.setStringValue(player, PlayerAttachments.AWAITING_DUEL_RECIPIENT, "val_inactive");
+        FdaApiUtil.setStringValue(player, PlayerAttachments.DUELING_WITH, "none");
+        FdaApiUtil.setStringValue(player, PlayerAttachments.AWAITING_DUEL_SENDER, "none");
+        FdaApiUtil.setStringValue(player, PlayerAttachments.AWAITING_DUEL_RECIPIENT, "none");
         FdaApiUtil.setLongValue(player, PlayerAttachments.LAST_HIT_TIME, 0L);
 
         if (opponent != null) {
             FdaApiUtil.setBoolValue(opponent, PlayerAttachments.IN_DUEL, false);
-            FdaApiUtil.setStringValue(opponent, PlayerAttachments.DUELING_WITH, "val_inactive");
-            FdaApiUtil.setStringValue(opponent, PlayerAttachments.AWAITING_DUEL_SENDER, "val_inactive");
-            FdaApiUtil.setStringValue(opponent, PlayerAttachments.AWAITING_DUEL_RECIPIENT, "val_inactive");
+            FdaApiUtil.setStringValue(opponent, PlayerAttachments.DUELING_WITH, "none");
+            FdaApiUtil.setStringValue(opponent, PlayerAttachments.AWAITING_DUEL_SENDER, "none");
+            FdaApiUtil.setStringValue(opponent, PlayerAttachments.AWAITING_DUEL_RECIPIENT, "none");
             FdaApiUtil.setLongValue(opponent, PlayerAttachments.LAST_HIT_TIME, 0L);
         }
     }

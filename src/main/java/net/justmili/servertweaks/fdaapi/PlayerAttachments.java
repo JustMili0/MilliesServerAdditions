@@ -23,10 +23,10 @@ public final class PlayerAttachments {
     public static final AttachmentType<Integer> AFK_COOLDOWN = createPersistentValue("afk_cooldown", Config.afkCommandCooldown.get(), Codec.INT);
 
     //Duel-Command related
-    public static final AttachmentType<String> AWAITING_DUEL_RECIPIENT = createValue("duel_recipient", "ValueReturnedNull", Codec.STRING);
-    public static final AttachmentType<String> AWAITING_DUEL_SENDER = createValue("duel_sender", "ValueReturnedNull", Codec.STRING);
+    public static final AttachmentType<String> AWAITING_DUEL_RECIPIENT = createValue("duel_recipient", "none", Codec.STRING);
+    public static final AttachmentType<String> AWAITING_DUEL_SENDER = createValue("duel_sender", "none", Codec.STRING);
     public static final AttachmentType<Boolean> IN_DUEL = createValue("in_duel", false, Codec.BOOL);
-    public static final AttachmentType<String> DUELING_WITH = createValue("dueling_with", "ValueReturnedNull", Codec.STRING);
+    public static final AttachmentType<String> DUELING_WITH = createValue("dueling_with", "none", Codec.STRING);
     public static final AttachmentType<Long> LAST_HIT_TIME = createValue("last_hit_time", 0L, Codec.LONG);
 
 }
