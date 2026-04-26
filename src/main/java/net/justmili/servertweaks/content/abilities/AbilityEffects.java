@@ -36,7 +36,6 @@ public class AbilityEffects {
         InteractionEvent.RIGHT_CLICK_BLOCK.register(AbilityEffects::grassEater);
         InteractionEvent.RIGHT_CLICK_ITEM.register(AbilityEffects::dietRestrictionsOnItem);
         InteractionEvent.RIGHT_CLICK_BLOCK.register(AbilityEffects::dietRestrictionsOnBlock);
-        TickEvent.PLAYER_POST.register(AbilityEffects::cancelIllegalEating);
     }
 
     private static void tickTickingAbilities(Player ticking) {
@@ -97,20 +96,18 @@ public class AbilityEffects {
     /*
     Current idea:
     - Prevent player from eating what's not in their diet
-    - Apply nausea if attempting to eat something that isn't in player's diet
-    - Prevent being slowed down when trying to eat something that isn't in player's diet
-      - Prevent player from continuously eating something that isn't in their diet
+    - Apply constant nausea if attempting to eat something that isn't in player's diet
      */
+    // TODO: FIX - NAUSEA IS NOT GETTING APPLIED
     private static InteractionResult dietRestrictionsOnItem(Player interacting, InteractionHand hand) {
         if (interacting.level().isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
-        ItemStack stack = player.getItemInHand(hand);
-        DietResult result = getDietResult(player, stack);
-        interacting.stopUsingItem();
-
-        if (result == DietResult.BLOCKED) return InteractionResult.FAIL;
+        if (isDietBlocked(player, player.getItemInHand(hand))) {
+            TickingAbility.applyEffect(player, MobEffects.NAUSEA, 60, 1);
+            return InteractionResult.FAIL;
+        }
 
         return InteractionResult.PASS;
     }
@@ -119,49 +116,32 @@ public class AbilityEffects {
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
-        ItemStack stack = player.getItemInHand(hand);
-        DietResult result = getDietResult(player, stack);
-
-        if (result == DietResult.BLOCKED) return InteractionResult.FAIL;
+        if (isDietBlocked(player, player.getItemInHand(hand))) {
+            TickingAbility.applyEffect(player, MobEffects.NAUSEA, 60, 1);
+            return InteractionResult.FAIL;
+        }
 
         return InteractionResult.PASS;
     }
-
-    private static void cancelIllegalEating(Player ticking) {
-        if (!(ticking instanceof ServerPlayer player)) return;
-        if (!player.isUsingItem()) return;
-
-        ItemStack stack = player.getUseItem();
-        DietResult result = getDietResult(player, stack);
-
-        if (result == DietResult.BLOCKED || result == DietResult.DISCOURAGED) {
-            player.stopUsingItem();
-            if (!player.hasEffect(MobEffects.NAUSEA)) {
-                TickingAbility.applyEffect(player, MobEffects.NAUSEA, 60, 0);
-            }
-        }
-    }
-    private enum DietResult { ALLOWED, DISCOURAGED, BLOCKED }
-    private static DietResult getDietResult(ServerPlayer player, ItemStack stack) {
-        if (!stack.has(DataComponents.FOOD)) return DietResult.ALLOWED;
-
+    private static boolean isDietBlocked(ServerPlayer player, ItemStack stack) {
+        if (!stack.has(DataComponents.FOOD)) return false;
         UUID uuid = player.getUUID();
         Set<Ability> abilities = AbilityManager.getAbilities(uuid);
         boolean hasGold = AbilityManager.has(uuid, AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET);
 
         if (abilities.contains(AbilitiesRegistry.CARNIVORE)) {
-            if (hasGold && Lists.GOLDEN_FOODS.contains(stack.getItem())) return DietResult.ALLOWED;
-            return Lists.CARNIVORE.contains(stack.getItem()) ? DietResult.ALLOWED : DietResult.BLOCKED;
+            if (hasGold && Lists.GOLDEN_FOODS.contains(stack.getItem())) return false;
+            return !Lists.CARNIVORE.contains(stack.getItem());
         }
         if (abilities.contains(AbilitiesRegistry.VEGETARIAN)) {
-            if (hasGold && Lists.GOLDEN_FOODS.contains(stack.getItem())) return DietResult.ALLOWED;
-            return Lists.VEGETARIAN.contains(stack.getItem()) ? DietResult.ALLOWED : DietResult.BLOCKED;
+            if (hasGold && Lists.GOLDEN_FOODS.contains(stack.getItem())) return false;
+            return !Lists.VEGETARIAN.contains(stack.getItem());
         }
         if (abilities.contains(AbilitiesRegistry.ONLY_EATS_SWEETS)) {
-            if (hasGold && Lists.GOLDEN_FOODS.contains(stack.getItem())) return DietResult.ALLOWED;
-            return Lists.SWEET.contains(stack.getItem()) ? DietResult.ALLOWED : DietResult.BLOCKED;
+            if (hasGold && Lists.GOLDEN_FOODS.contains(stack.getItem())) return false;
+            return !Lists.SWEET.contains(stack.getItem());
         }
 
-        return DietResult.DISCOURAGED;
+        return false;
     }
 }
