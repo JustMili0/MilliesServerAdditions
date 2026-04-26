@@ -26,7 +26,7 @@
 
 TODO:
 - Fix abilities
-- Fix that weird bug with duel invites
+- Fix discarding containers on entities
 
 FROM TESTING:
 Doesn't work (no changes get applied to player behavior):

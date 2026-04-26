@@ -55,7 +55,9 @@ public class FillExtras {
                                                     count++;
                                                 }
                                             }
-                                    CommandUtil.sendSucc(source, "Successfully filled "+count+" block(s) of "+targetBlock.getBlock().getName().getString());
+
+                                    CommandUtil.sendSucc(source, "Successfully destroyed " + count + " block(s) of " + targetBlock.getBlock().getName().getString()
+                                        + " and replaced with" + replaceWith.getBlock().getName().getString());
                                     return count;
                                 })
                             )
@@ -86,7 +88,9 @@ public class FillExtras {
                                                     count++;
                                                 }
                                             }
-                                    CommandUtil.sendSucc(source, "Successfully filled "+count+" block(s) of "+targetBlock.getBlock().getName().getString());
+
+                                    CommandUtil.sendSucc(source, "Successfully replaced " + count + " block(s) of " + targetBlock.getBlock().getName().getString()
+                                        + " and replaced with" + replaceWith.getBlock().getName().getString());
                                     return count;
                                 })
                             )
@@ -96,13 +100,16 @@ public class FillExtras {
                             .executes(context -> {
                                 CommandSourceStack source = context.getSource();
                                 ServerLevel level = source.getLevel();
+
                                 BlockPos from = BlockPosArgument.getLoadedBlockPos(context, "from");
                                 BlockPos to = BlockPosArgument.getLoadedBlockPos(context, "to");
                                 BlockState replaceWith = BlockStateArgument.getBlock(context, "block").getState();
                                 ItemStack silkTool = makeSilkTouchTool(level);
+
                                 int minX = Math.min(from.getX(), to.getX()), maxX = Math.max(from.getX(), to.getX());
                                 int minY = Math.min(from.getY(), to.getY()), maxY = Math.max(from.getY(), to.getY());
                                 int minZ = Math.min(from.getZ(), to.getZ()), maxZ = Math.max(from.getZ(), to.getZ());
+
                                 int count = 0;
                                 for (int x = minX; x <= maxX; x++)
                                     for (int y = minY; y <= maxY; y++)
@@ -115,7 +122,8 @@ public class FillExtras {
                                                 count++;
                                             }
                                         }
-                                CommandUtil.sendSucc(source, "Silk-touch destroyed "+count+" block(s)");
+
+                                CommandUtil.sendSucc(source, "Successfully destroyed " + count + " block(s) with Silk Touch effect");
                                 return count;
                             })
                         )
@@ -124,14 +132,17 @@ public class FillExtras {
                                 .executes(context -> {
                                     CommandSourceStack source = context.getSource();
                                     ServerLevel level = source.getLevel();
+
                                     BlockPos from = BlockPosArgument.getLoadedBlockPos(context, "from");
                                     BlockPos to = BlockPosArgument.getLoadedBlockPos(context, "to");
                                     BlockState replaceWith = BlockStateArgument.getBlock(context, "block").getState();
                                     BlockState targetBlock = BlockStateArgument.getBlock(context, "target").getState();
                                     ItemStack silkTool = makeSilkTouchTool(level);
+
                                     int minX = Math.min(from.getX(), to.getX()), maxX = Math.max(from.getX(), to.getX());
                                     int minY = Math.min(from.getY(), to.getY()), maxY = Math.max(from.getY(), to.getY());
                                     int minZ = Math.min(from.getZ(), to.getZ()), maxZ = Math.max(from.getZ(), to.getZ());
+
                                     int count = 0;
                                     for (int x = minX; x <= maxX; x++)
                                         for (int y = minY; y <= maxY; y++)
@@ -144,7 +155,9 @@ public class FillExtras {
                                                     count++;
                                                 }
                                             }
-                                    CommandUtil.sendSucc(source, "Silk-touch destroyed "+count+" block(s) of "+targetBlock.getBlock().getName().getString());
+
+                                    CommandUtil.sendSucc(source, "Successfully destroyed " + count + " " +
+                                        targetBlock.getBlock().getName().getString() + " block(s) with Silk Touch effect");
                                     return count;
                                 })
                             )
@@ -155,14 +168,17 @@ public class FillExtras {
                                 .executes(context -> {
                                     CommandSourceStack source = context.getSource();
                                     ServerLevel level = source.getLevel();
+
                                     BlockPos from = BlockPosArgument.getLoadedBlockPos(context, "from");
                                     BlockPos to = BlockPosArgument.getLoadedBlockPos(context, "to");
                                     BlockState replaceWith = BlockStateArgument.getBlock(context, "block").getState();
                                     int fortuneLevel = IntegerArgumentType.getInteger(context, "fortuneLevel");
                                     ItemStack fortuneTool = makeFortuneTool(level, fortuneLevel);
+
                                     int minX = Math.min(from.getX(), to.getX()), maxX = Math.max(from.getX(), to.getX());
                                     int minY = Math.min(from.getY(), to.getY()), maxY = Math.max(from.getY(), to.getY());
                                     int minZ = Math.min(from.getZ(), to.getZ()), maxZ = Math.max(from.getZ(), to.getZ());
+
                                     int count = 0;
                                     for (int x = minX; x <= maxX; x++)
                                         for (int y = minY; y <= maxY; y++)
@@ -175,7 +191,8 @@ public class FillExtras {
                                                     count++;
                                                 }
                                             }
-                                    CommandUtil.sendSucc(source, "Fortune "+fortuneLevel+" destroyed "+count+" block(s)");
+
+                                    CommandUtil.sendSucc(source, "Successfully destroyed " + count + " block(s) with Fortune level" + fortuneLevel + " effect");
                                     return count;
                                 })
                             )
@@ -186,15 +203,18 @@ public class FillExtras {
                                     .executes(context -> {
                                         CommandSourceStack source = context.getSource();
                                         ServerLevel level = source.getLevel();
+
                                         BlockPos from = BlockPosArgument.getLoadedBlockPos(context, "from");
                                         BlockPos to = BlockPosArgument.getLoadedBlockPos(context, "to");
                                         BlockState replaceWith = BlockStateArgument.getBlock(context, "block").getState();
                                         BlockState targetBlock = BlockStateArgument.getBlock(context, "target").getState();
                                         int fortuneLevel = IntegerArgumentType.getInteger(context, "fortuneLevel");
                                         ItemStack fortuneTool = makeFortuneTool(level, fortuneLevel);
+
                                         int minX = Math.min(from.getX(), to.getX()), maxX = Math.max(from.getX(), to.getX());
                                         int minY = Math.min(from.getY(), to.getY()), maxY = Math.max(from.getY(), to.getY());
                                         int minZ = Math.min(from.getZ(), to.getZ()), maxZ = Math.max(from.getZ(), to.getZ());
+
                                         int count = 0;
                                         for (int x = minX; x <= maxX; x++)
                                             for (int y = minY; y <= maxY; y++)
@@ -207,7 +227,9 @@ public class FillExtras {
                                                         count++;
                                                     }
                                                 }
-                                        CommandUtil.sendSucc(source, "Fortune "+fortuneLevel+" destroyed "+count+" block(s) of "+targetBlock.getBlock().getName().getString());
+
+                                        CommandUtil.sendSucc(source, "Successfully destroyed " + count + " " +
+                                            targetBlock.getBlock().getName().getString() + " block(s) with Fortune level" + fortuneLevel + " effect");
                                         return count;
                                     })
                                 )
