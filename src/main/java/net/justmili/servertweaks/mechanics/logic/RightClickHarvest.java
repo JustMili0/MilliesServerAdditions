@@ -17,19 +17,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
 public final class RightClickHarvest {
 
-    public static InteractionResult onUseBlock(Player player, InteractionHand hand, BlockPos pos, Direction direction) {
-        Level level = player.level();
+    public static InteractionResult onUseBlock(Player player, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
         if (!Config.rightClickHarvest.get()) return InteractionResult.PASS;
         if (level.isClientSide()) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
         if (player.isSpectator()) return InteractionResult.PASS;
 
+        BlockPos pos = blockHitResult.getBlockPos();
         BlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
         boolean hoeHeld = player.getMainHandItem().getItem() instanceof HoeItem;

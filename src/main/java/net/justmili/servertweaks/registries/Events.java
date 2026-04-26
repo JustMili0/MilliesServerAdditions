@@ -1,10 +1,10 @@
 package net.justmili.servertweaks.registries;
 
-import dev.architectury.event.events.common.EntityEvent;
-import dev.architectury.event.events.common.InteractionEvent;
-import dev.architectury.event.events.common.PlayerEvent;
-import dev.architectury.event.events.common.TickEvent;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.servertweaks.content.abilities.AbilityEffects;
 import net.justmili.servertweaks.mechanics.logic.*;
 
@@ -14,12 +14,17 @@ public class Events {
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(WhileAfk::onEntityHurt);
         //ServerLivingEntityEvents.ALLOW_DAMAGE.register(WhileDuel::onEntityHurt);
         //EntityEvent.LIVING_DEATH.register(WhileDuel::onPlayerDeath);
-        EntityEvent.ADD.register(Banishment::onEntityLoad);
-        TickEvent.PLAYER_POST.register(Banishment::onPlayerTick);
-        TickEvent.PLAYER_POST.register(WhileAfk::onPlayerTick);
-        PlayerEvent.PLAYER_JOIN.register(ScaleConvert::onServerJoined);
+        ServerEntityEvents.ENTITY_LOAD.register(Banishment::onEntityLoad);
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            for (var player : server.getPlayerList().getPlayers()) {
+                Banishment.onPlayerTick(player);
+                WhileAfk.onPlayerTick(player);
+            }
+        });
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) ->
+            ScaleConvert.onServerJoined(handler.player));
         //PlayerEvent.PLAYER_QUIT.register(WhileDuel::onPlayerDisconnect);
-        InteractionEvent.RIGHT_CLICK_BLOCK.register(RightClickHarvest::onUseBlock);
+        UseBlockCallback.EVENT.register(RightClickHarvest::onUseBlock);
         AbilityEffects.registerAbilityEvents();
     }
 }

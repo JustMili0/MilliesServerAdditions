@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "servertweaks",
-  "version": "${mod_version}+mc${minecraft_version}",
+  "version": "${mod_version}",
   "name": "Useful & Fun Server Tweaks",
   "description": "",
   "authors": [
@@ -24,7 +24,6 @@
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
     "supermartijn642configlib": "*",
-    "architectury": "*",
     "minecraft": "${minecraft_version}"
   }
 }

@@ -1,8 +1,9 @@
 package net.justmili.servertweaks.content.abilities;
 
-import dev.architectury.event.events.common.InteractionEvent;
-import dev.architectury.event.events.common.TickEvent;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.ability.Ability;
 import net.justmili.servertweaks.content.abilities.ability.Lists;
@@ -24,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.Set;
 import java.util.UUID;
@@ -31,11 +33,17 @@ import java.util.UUID;
 public class AbilityEffects {
     public static void registerAbilityEvents() {
         if (!(Config.playerAbilities.get())) return;
-        TickEvent.PLAYER_POST.register(AbilityEffects::tickTickingAbilities);
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                AbilityEffects.tickTickingAbilities(player);
+            }
+        });
+
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(AbilityEffects::specialDamageImmune);
-        InteractionEvent.RIGHT_CLICK_BLOCK.register(AbilityEffects::grassEater);
-        InteractionEvent.RIGHT_CLICK_ITEM.register(AbilityEffects::dietRestrictionsOnItem);
-        InteractionEvent.RIGHT_CLICK_BLOCK.register(AbilityEffects::dietRestrictionsOnBlock);
+
+        UseBlockCallback.EVENT.register(AbilityEffects::grassEater);
+        UseItemCallback.EVENT.register(AbilityEffects::dietRestrictionsOnItem);
+        UseBlockCallback.EVENT.register(AbilityEffects::dietRestrictionsOnBlock);
     }
 
     private static void tickTickingAbilities(Player ticking) {
@@ -64,15 +72,17 @@ public class AbilityEffects {
         return true;
     }
 
-    private static InteractionResult grassEater(Player interacting, InteractionHand hand, BlockPos pos, Direction direction) { // Block RC
-        if (interacting.level().isClientSide()) return InteractionResult.PASS;
+    private static InteractionResult grassEater(Player interacting, Level world, InteractionHand hand, BlockHitResult hitResult) {
+        if (world.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
-        if (!AbilityManager.has(player.getUUID(), AbilitiesRegistry.GRASS_EATER)) return InteractionResult.PASS;
-        if (!Lists.GRASSY.contains(player.level().getBlockState(pos).getBlock())) return InteractionResult.PASS;
+        BlockPos pos = hitResult.getBlockPos();
 
-        player.level().destroyBlock(pos, false);
+        if (!AbilityManager.has(player.getUUID(), AbilitiesRegistry.GRASS_EATER)) return InteractionResult.PASS;
+        if (!Lists.GRASSY.contains(world.getBlockState(pos).getBlock())) return InteractionResult.PASS;
+
+        world.destroyBlock(pos, false);
         FoodData food = player.getFoodData();
         food.eat(2, 0.2F);
         player.swing(InteractionHand.MAIN_HAND, true);
@@ -99,8 +109,8 @@ public class AbilityEffects {
     - Apply constant nausea if attempting to eat something that isn't in player's diet
      */
     // TODO: FIX - NAUSEA IS NOT GETTING APPLIED
-    private static InteractionResult dietRestrictionsOnItem(Player interacting, InteractionHand hand) {
-        if (interacting.level().isClientSide()) return InteractionResult.PASS;
+    private static InteractionResult dietRestrictionsOnItem(Player interacting, Level level, InteractionHand hand) {
+        if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
@@ -111,8 +121,9 @@ public class AbilityEffects {
 
         return InteractionResult.PASS;
     }
-    private static InteractionResult dietRestrictionsOnBlock(Player interacting, InteractionHand hand, BlockPos pos, Direction direction) {
-        if (interacting.level().isClientSide()) return InteractionResult.PASS;
+
+    private static InteractionResult dietRestrictionsOnBlock(Player interacting, Level world, InteractionHand hand, BlockHitResult hitResult) {
+        if (world.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 

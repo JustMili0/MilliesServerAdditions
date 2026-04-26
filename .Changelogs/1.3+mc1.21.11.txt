@@ -49,9 +49,14 @@
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 TODO:
+- See if everything still works properly after getting rid of Architectury API
+  - Abilities
+  - Banishment
+  - Afk
+  - RightClickHarvest
 - Rewrite the README
-- Fix abilities
 - Fix discarding containers on entities
+- Fix abilities
 - Add new abilities
   - Magnetic (nearby items come to player)
   - Sticky (magnetic but cool slime visuals)
