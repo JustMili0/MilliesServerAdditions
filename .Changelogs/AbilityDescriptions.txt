@@ -15,7 +15,7 @@ AQUA_GRACE - Dolphin-based | Gains Conduit Power and Dolphin's Grace while in wa
 BREATHES_UNDERWATER - Fish-based | Breathes underwater indefinitely.
 CANT_BREATHE_AIR - Fish-based | Drowns on land. Air supply drains while out of water and restores while submerged.
 CANT_SWIM - Undead-based | Sinks in water.
-HYDROPHOBIC - Enderman-based | Takes 1 damage per second from standing in water, water cauldrons, or rain.
+HYDROPHOBIC - Enderman-based | Takes 1 damage per second from standing in water, water cauldrons, or rain. Rain damage does not apply if wearing a helmet.
 
 HUNTED_BY_FOX - Custom | Non-trusting foxes within 12 blocks will target and attack the player unprovoked.
 HUNTED_BY_WOLF - Custom | Untamed wolves within 16 blocks will target and attack the player unprovoked.
@@ -30,7 +30,7 @@ NIGHT_VISION - Custom | Gains hidden Night Vision only during nighttime (level.i
 
 BURNS_IN_DAYLIGHT - Undead-based | Burns in direct sunlight (requires sky light > 8 and clear sky view). Helmet negates all burning. In water,
                                    doesn't ignite but takes 0.5 damage every 1.5s instead. Incompatible with FIRE_IMMUNE.
-IS_MONSTER - Monster-based | Iron golems and snow golems attack the player. Villagers flee. Pillagers ignore the player.
+IS_MONSTER - Monster-based | Iron golems and snow golems attack the player. Villagers flee. Pillagers, zombies and skeletons ignore the player.
 CLIMBS_WALLS - Spider-based | Can climb any solid wall.
 
 CARNIVORE - Wild Animal-based | Can only eat meat. Honey bottles, milk and other misc items are always allowed.

@@ -1,9 +1,9 @@
 package net.justmili.servertweaks.mixin.abilities;
 
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.mechanics.abilities.AbilityManager;
-import net.justmili.servertweaks.mechanics.abilities.context.PlayerContext;
-import net.justmili.servertweaks.mechanics.abilities.registry.AbilitiesRegistry;
+import net.justmili.servertweaks.content.abilities.AbilityManager;
+import net.justmili.servertweaks.content.abilities.context.PlayerContext;
+import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;

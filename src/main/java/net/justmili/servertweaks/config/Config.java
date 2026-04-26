@@ -9,10 +9,9 @@ public class Config {
     //Individual configs for each command.
     public static final Supplier<Boolean> enableAfkCommand;
     public static final Supplier<Boolean> enableScaleCommand;
-    public static final Supplier<Boolean> enableDuelCommand;
-    public static final Supplier<Boolean> enableDaycountCommand;
     public static final Supplier<Boolean> enableDamageToggleCommand;
     public static final Supplier<Boolean> enableBanishCommand;
+    public static final Supplier<Boolean> enableFlyCommand;
 
     //Config for "Afk" command.
     public static final Supplier<Boolean> despawnMonsters;
@@ -40,10 +39,9 @@ public class Config {
         builder.comment("Should these commands be enabled on the server?");
         enableAfkCommand = builder.define("enableAfkCommand", true);
         enableScaleCommand = builder.define("enableScaleCommand", true);
-        enableDuelCommand = builder.define("enableDuelCommand", false);
-        enableDaycountCommand = builder.define("enableDaycountCommand", true);
         enableDamageToggleCommand = builder.define("enableDamageToggleCommand", true);
         enableBanishCommand = builder.define("enableBanishCommand", true);
+        enableFlyCommand = builder.define("enableFlyCommand", true);
         builder.pop();
 
         builder.push("AFK-Command-Specific");

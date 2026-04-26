@@ -11,6 +11,7 @@
   "license": "All-Rights-Reserved",
   "icon": "icon.png",
   "environment": "*",
+  "accessWidener": "servertweaks.accesswidener",
   "entrypoints": {
     "main": [
       "net.justmili.servertweaks.ServerTweaks"

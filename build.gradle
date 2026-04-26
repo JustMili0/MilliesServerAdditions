@@ -10,6 +10,9 @@ base {
     archivesName = project.archives_base_name
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/servertweaks.accesswidener")
+}
 
 repositories {
     maven { url = "https://cursemaven.com/" }
