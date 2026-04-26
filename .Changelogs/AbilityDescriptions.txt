@@ -15,7 +15,8 @@ AQUA_GRACE - Dolphin-based | Gains Conduit Power and Dolphin's Grace while in wa
 BREATHES_UNDERWATER - Fish-based | Breathes underwater indefinitely.
 CANT_BREATHE_AIR - Fish-based | Drowns on land. Air supply drains while out of water and restores while submerged.
 CANT_SWIM - Undead-based | Sinks in water.
-HYDROPHOBIC - Enderman-based | Takes 1 damage per second from standing in water, water cauldrons, or rain. Rain damage does not apply if wearing a helmet.
+HYDROPHOBIC - Enderman-based | Takes 1 damage per second from standing in water, water cauldrons, or rain.
+              Rain damage does not apply if wearing a helmet. Damage still applies if player is in a wet biome, even if wearing a helmet.
 
 HUNTED_BY_FOX - Custom | Non-trusting foxes within 12 blocks will target and attack the player unprovoked.
 HUNTED_BY_WOLF - Custom | Untamed wolves within 16 blocks will target and attack the player unprovoked.

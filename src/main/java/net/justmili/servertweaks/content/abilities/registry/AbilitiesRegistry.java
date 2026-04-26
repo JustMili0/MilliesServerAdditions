@@ -2,6 +2,7 @@ package net.justmili.servertweaks.content.abilities.registry;
 
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.ability.Ability;
+import net.justmili.servertweaks.content.abilities.ability.Lists;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.justmili.servertweaks.core.util.ScalerUtil;
 import net.minecraft.resources.Identifier;
@@ -229,8 +230,8 @@ public class AbilitiesRegistry {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.isInWater()) return;
-            Vec3 mov = player.getDeltaMovement();
-            if (mov.y > 0) player.setDeltaMovement(mov.x, 0, mov.z);
+            Vec3 delta = player.getDeltaMovement();
+            if (delta.y > 0) player.setDeltaMovement(delta.x, -0.1, delta.z);
         }
     }
 
@@ -242,8 +243,11 @@ public class AbilitiesRegistry {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             boolean inWaterBlock = player.isInWater();
-            boolean inRain = player.isInRain() && player.getItemBySlot(EquipmentSlot.HEAD).isEmpty(); // Cancel damage from rain if has helmet
             boolean inWaterCauldron = level.getBlockState(player.blockPosition()).is(Blocks.WATER_CAULDRON);
+
+            boolean hasHelmet = !player.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
+            boolean inWetBiome = level.getBiome(player.blockPosition()).is(Lists.WET_BIOMES::contains);
+            boolean inRain = player.isInRain() && (!hasHelmet || inWetBiome);
 
             boolean inWater = inWaterBlock || inRain || inWaterCauldron;
 

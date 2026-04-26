@@ -1,13 +1,16 @@
 package net.justmili.servertweaks.content.abilities.ability;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.Set;
 
-public class DietCategories {
+public class Lists {
     public static final Set<Item> CARNIVORE = Set.of(
         Items.PORKCHOP, Items.COOKED_PORKCHOP,
         Items.BEEF, Items.COOKED_BEEF,
@@ -71,5 +74,16 @@ public class DietCategories {
         Blocks.TALL_DRY_GRASS,
         Blocks.BUSH,
         Blocks.FIREFLY_BUSH
+    );
+
+    public static final Set<ResourceKey<Biome>> WET_BIOMES = Set.of(
+        Biomes.JUNGLE,
+        Biomes.SPARSE_JUNGLE,
+        Biomes.BAMBOO_JUNGLE,
+        Biomes.SWAMP,
+        Biomes.MANGROVE_SWAMP,
+        Biomes.OLD_GROWTH_SPRUCE_TAIGA,
+        Biomes.OLD_GROWTH_PINE_TAIGA,
+        Biomes.LUSH_CAVES
     );
 }

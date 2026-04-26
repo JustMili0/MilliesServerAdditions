@@ -5,7 +5,7 @@ import dev.architectury.event.events.common.TickEvent;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.ability.Ability;
-import net.justmili.servertweaks.content.abilities.ability.DietCategories;
+import net.justmili.servertweaks.content.abilities.ability.Lists;
 import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
 import net.justmili.servertweaks.content.abilities.registry.AbilityModifierRegistry;
 import net.justmili.servertweaks.content.abilities.registry.TickingAbility;
@@ -71,7 +71,7 @@ public class AbilityEffects {
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
         if (!AbilityManager.has(player.getUUID(), AbilitiesRegistry.GRASS_EATER)) return InteractionResult.PASS;
-        if (!DietCategories.GRASSY.contains(player.level().getBlockState(pos).getBlock())) return InteractionResult.PASS;
+        if (!Lists.GRASSY.contains(player.level().getBlockState(pos).getBlock())) return InteractionResult.PASS;
 
         player.level().destroyBlock(pos, false);
         FoodData food = player.getFoodData();
@@ -150,16 +150,16 @@ public class AbilityEffects {
         boolean hasGold = AbilityManager.has(uuid, AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET);
 
         if (abilities.contains(AbilitiesRegistry.CARNIVORE)) {
-            if (hasGold && DietCategories.GOLDEN_FOODS.contains(stack.getItem())) return DietResult.ALLOWED;
-            return DietCategories.CARNIVORE.contains(stack.getItem()) ? DietResult.ALLOWED : DietResult.BLOCKED;
+            if (hasGold && Lists.GOLDEN_FOODS.contains(stack.getItem())) return DietResult.ALLOWED;
+            return Lists.CARNIVORE.contains(stack.getItem()) ? DietResult.ALLOWED : DietResult.BLOCKED;
         }
         if (abilities.contains(AbilitiesRegistry.VEGETARIAN)) {
-            if (hasGold && DietCategories.GOLDEN_FOODS.contains(stack.getItem())) return DietResult.ALLOWED;
-            return DietCategories.VEGETARIAN.contains(stack.getItem()) ? DietResult.ALLOWED : DietResult.BLOCKED;
+            if (hasGold && Lists.GOLDEN_FOODS.contains(stack.getItem())) return DietResult.ALLOWED;
+            return Lists.VEGETARIAN.contains(stack.getItem()) ? DietResult.ALLOWED : DietResult.BLOCKED;
         }
         if (abilities.contains(AbilitiesRegistry.ONLY_EATS_SWEETS)) {
-            if (hasGold && DietCategories.GOLDEN_FOODS.contains(stack.getItem())) return DietResult.ALLOWED;
-            return DietCategories.SWEET.contains(stack.getItem()) ? DietResult.ALLOWED : DietResult.BLOCKED;
+            if (hasGold && Lists.GOLDEN_FOODS.contains(stack.getItem())) return DietResult.ALLOWED;
+            return Lists.SWEET.contains(stack.getItem()) ? DietResult.ALLOWED : DietResult.BLOCKED;
         }
 
         return DietResult.DISCOURAGED;
