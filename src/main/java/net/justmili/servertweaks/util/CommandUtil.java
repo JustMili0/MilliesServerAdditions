@@ -19,7 +19,7 @@ public class CommandUtil {
     public static void checkIfPlayerExecuted(CommandContext<CommandSourceStack> context) {
         CommandSourceStack source = context.getSource();
         if (!(source.getEntity() instanceof ServerPlayer)) {
-            sendFail(source, "Failed to execute \"" + context.getInput() + "\" - Command must be ran by a player");
+            sendFail(source, "A player is required to run this command here");
         }
     }
 

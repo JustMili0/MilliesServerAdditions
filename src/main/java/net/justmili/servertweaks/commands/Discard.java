@@ -25,33 +25,38 @@ import java.util.List;
 public class Discard {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext, Commands.CommandSelection environment) {
         dispatcher.register(Commands.literal("discard").requires(src -> CommandUtil.hasPerms(src, 4))
+            // Entity discard
             .then(Commands.argument("entity", EntityArgument.entities())
                 .executes(context -> {
                     Collection<? extends Entity> entities = EntityArgument.getEntities(context, "entity");
                     CommandSourceStack source = context.getSource();
 
+                    // Get players, and prevent players from being discarded
                     List<Entity> players = new ArrayList<>(entities.stream().filter(e -> e instanceof Player).toList());
                     if (!players.isEmpty()) {
                         for (Entity player : players) {
-                            CommandUtil.sendFail(source, "Can not discard entity " + player.getType().toShortString());
+                            CommandUtil.sendFail(source, "Can't discard entity " + player.getType().toShortString());
                         }
                         return 0;
                     }
 
+                    // Discard entities
                     for (Entity entity : entities) {
                         entity.discard();
                     }
 
+                    // One or multiple? Send message
                     if (entities.size() == 1) {
                         Entity only = entities.iterator().next();
-                        CommandUtil.sendSucc(source, "Discarded " + only.getType().toShortString());
+                        CommandUtil.sendSucc(source, "Discarded " + only.getName().getString());
                     } else {
                         CommandUtil.sendSucc(source, "Discarded " + entities.size() + " entities");
                     }
-
                     return entities.size();
                 })
             )
+
+            // Block discard
             .then(Commands.argument("block", BlockPosArgument.blockPos())
                 .executes(context -> {
                     BlockPos pos = BlockPosArgument.getLoadedBlockPos(context, "block");
@@ -59,44 +64,60 @@ public class Discard {
                     BlockEntity blockEntity = level.getBlockEntity(pos);
                     CommandSourceStack source = context.getSource();
 
-                    String blockId = level.getBlockState(pos).getBlock().builtInRegistryHolder().key().identifier().toString();
+                    // Get block name
+                    String blockId = level.getBlockState(pos).getBlock().getName().getString();
 
+                    // First clear the inventory of the block
                     if (blockEntity instanceof Clearable clearable) {
                         clearable.clearContent();
                     }
+                    // Remove the block from level
                     level.removeBlock(pos, false);
 
-                    CommandUtil.sendSucc(source, "Discarded block " + blockId + " from " + formatPos(pos));
-
+                    // Send message
+                    CommandUtil.sendSucc(source, "Discarded " + blockId + " from " + formatPos(pos));
                     return 1;
                 })
             )
+
+            // Entity/Block inventory discard
             .then(Commands.literal("inventory")
+
+                // Entity
                 .then(Commands.argument("entity", EntityArgument.entity())
                     .executes(context -> {
                         Entity entity = EntityArgument.getEntity(context, "entity");
                         CommandSourceStack source = context.getSource();
                         int cleared = 0;
 
+                        // Players, clear everything, even carried items
                         if (entity instanceof Player player) {
                             cleared = countContainer(player.getInventory());
                             player.getInventory().clearContent();
                             player.containerMenu.setCarried(ItemStack.EMPTY);
+
+                        // Mobs, clear armor, held items, equipped containers
                         } else if (entity instanceof Mob mob) {
-                            if (mob instanceof Container container) {
-                                cleared += countContainer(container);
-                                container.clearContent();
-                            }
+                            // Clear armor, held items
                             for (EquipmentSlot slot : EquipmentSlot.values()) {
                                 if (!mob.getItemBySlot(slot).isEmpty()) cleared++;
                                 mob.setItemSlot(slot, ItemStack.EMPTY);
+                            }
+                            /* TODO: FIX
+                            Tested with a donkey - cleared the saddle, but not equipped chests or their contents
+                             */
+                            // Clear items in mobs with containers (e.g. donkeys with chests)
+                            if (mob instanceof Container container) {
+                                cleared += countContainer(container);
+                                container.clearContent();
                             }
                         } else if (entity instanceof Container container) {
                             cleared = countContainer(container);
                             container.clearContent();
                         }
 
-                        CommandUtil.sendSucc(source, "Discarded " + cleared + " item(s) from " + entity.getType().toShortString() + "'s inventory");
+                        // Send message
+                        CommandUtil.sendSucc(source, "Discarded " + cleared + " item(s) from " + entity.getName().getString() + "'s inventory");
                         return cleared;
                     })
                 )
@@ -107,16 +128,25 @@ public class Discard {
                         BlockEntity blockEntity = level.getBlockEntity(pos);
                         CommandSourceStack source = context.getSource();
 
-                        String blockId = level.getBlockState(pos).getBlock().builtInRegistryHolder().key().identifier().toString();
+                        // Get block name
+                        String blockId = level.getBlockState(pos).getBlock().getName().getString();
                         int cleared = 0;
 
+                        // Is it a clearable container?
                         if (blockEntity instanceof Clearable clearable) {
+                            // Get how much will be cleared
                             if (blockEntity instanceof Container container) {
                                 cleared = countContainer(container);
                             }
+                            // Clear
                             clearable.clearContent();
+                        } else {
+                            // ...No? Fail.
+                            CommandUtil.sendFail(source, "Could not clear " + blockId + ". Block is not a container");
+                            return 0;
                         }
 
+                        // Send message
                         CommandUtil.sendSucc(source, "Discarded " + cleared + " item(s) from " + blockId + "'s inventory at " + formatPos(pos));
                         return cleared;
                     })
@@ -125,6 +155,7 @@ public class Discard {
         );
     }
 
+    // Helper methods
     private static int countContainer(Container container) {
         int count = 0;
         for (int i = 0; i < container.getContainerSize(); i++) {
