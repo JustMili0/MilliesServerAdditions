@@ -3,8 +3,8 @@ package net.justmili.servertweaks.mechanics.logic;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.mixin.accessors.CropBlockAccessor;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -23,9 +23,9 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 
 public final class RightClickHarvest {
-
-    public static InteractionResult onUseBlock(Player player, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
+    public static InteractionResult onUseBlock(Player interacting, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
         if (!Config.rightClickHarvest.get()) return InteractionResult.PASS;
+        if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (level.isClientSide()) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
         if (player.isSpectator()) return InteractionResult.PASS;
@@ -37,9 +37,9 @@ public final class RightClickHarvest {
 
         switch (block) {
             case CropBlock cropBlock -> {
-                if (! harvestCrop(player, (ServerLevel) level, pos, state, cropBlock)) return InteractionResult.PASS;
+                if (!harvestCrop(player, (ServerLevel) level, pos, state, cropBlock)) return InteractionResult.PASS;
                 if (hoeHeld) {
-                    for (BlockPos near : BlockPos.betweenClosed(pos.offset(- 1, 0, - 1), pos.offset(1, 0, 1))) {
+                    for (BlockPos near : BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 0, 1))) {
                         if (near.equals(pos)) continue;
                         BlockState nearState = level.getBlockState(near);
                         if (nearState.getBlock() instanceof CropBlock nearCrop)
@@ -48,9 +48,9 @@ public final class RightClickHarvest {
                 }
             }
             case NetherWartBlock netherWartBlock -> {
-                if (! harvestNetherWart(player, (ServerLevel) level, pos, state)) return InteractionResult.PASS;
+                if (!harvestNetherWart(player, (ServerLevel) level, pos, state)) return InteractionResult.PASS;
                 if (hoeHeld) {
-                    for (BlockPos near : BlockPos.betweenClosed(pos.offset(- 1, 0, - 1), pos.offset(1, 0, 1))) {
+                    for (BlockPos near : BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 0, 1))) {
                         if (near.equals(pos)) continue;
                         BlockState nearState = level.getBlockState(near);
                         if (nearState.getBlock() instanceof NetherWartBlock)
@@ -59,7 +59,7 @@ public final class RightClickHarvest {
                 }
             }
             case CocoaBlock cocoaBlock -> {
-                if (! harvestCocoa(player, (ServerLevel) level, pos, state)) return InteractionResult.PASS;
+                if (!harvestCocoa(player, (ServerLevel) level, pos, state)) return InteractionResult.PASS;
             }
             case SugarCaneBlock sugarCaneBlock -> {
                 return harvestSugarCane(player, (ServerLevel) level, pos);
@@ -74,7 +74,7 @@ public final class RightClickHarvest {
         return InteractionResult.SUCCESS;
     }
 
-    private static boolean harvestCrop(Player player, ServerLevel level, BlockPos pos, BlockState state, CropBlock cropBlock) {
+    private static boolean harvestCrop(ServerPlayer player, ServerLevel level, BlockPos pos, BlockState state, CropBlock cropBlock) {
         if (!cropBlock.isMaxAge(state)) return false;
 
         ItemStack tool = player.getMainHandItem();
@@ -88,7 +88,7 @@ public final class RightClickHarvest {
         return true;
     }
 
-    private static boolean harvestNetherWart(Player player, ServerLevel level, BlockPos pos, BlockState state) {
+    private static boolean harvestNetherWart(ServerPlayer player, ServerLevel level, BlockPos pos, BlockState state) {
         if (state.getValue(NetherWartBlock.AGE) < NetherWartBlock.MAX_AGE) return false;
 
         ItemStack tool = player.getMainHandItem();
@@ -101,7 +101,7 @@ public final class RightClickHarvest {
         return true;
     }
 
-    private static boolean harvestCocoa(Player player, ServerLevel level, BlockPos pos, BlockState state) {
+    private static boolean harvestCocoa(ServerPlayer player, ServerLevel level, BlockPos pos, BlockState state) {
         if (state.getValue(CocoaBlock.AGE) < 2) return false;
 
         ItemStack tool = player.getMainHandItem();
@@ -114,7 +114,7 @@ public final class RightClickHarvest {
         return true;
     }
 
-    private static InteractionResult harvestSugarCane(Player player, ServerLevel level, BlockPos clickedPos) {
+    private static InteractionResult harvestSugarCane(ServerPlayer player, ServerLevel level, BlockPos clickedPos) {
         // Walk down to find the bottom sugar cane block
         BlockPos bottom = clickedPos;
         while (level.getBlockState(bottom.below()).is(Blocks.SUGAR_CANE)) bottom = bottom.below();
@@ -136,7 +136,7 @@ public final class RightClickHarvest {
     }
 
     // Builds full LootParams so Fortune, Silk Touch, and all loot table conditions apply correctly
-    private static List<ItemStack> getDrops(ServerLevel level, BlockPos pos, BlockState state, Player player, ItemStack tool) {
+    private static List<ItemStack> getDrops(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player, ItemStack tool) {
         LootParams.Builder builder = new LootParams.Builder(level)
             .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
             .withParameter(LootContextParams.BLOCK_STATE, state)
@@ -156,9 +156,9 @@ public final class RightClickHarvest {
     }
 
     // Damages hoe by 1 durability if the player is holding one (respects Unbreaking)
-    private static void damageHoeIfHeld(Player player, ItemStack stack, ServerLevel level) {
+    private static void damageHoeIfHeld(ServerPlayer player, ItemStack stack, ServerLevel level) {
         if (stack.getItem() instanceof HoeItem) {
-            stack.hurtAndBreak(1, level, null, item -> {});
+            stack.hurtAndBreak(1, level, player, item -> {});
         }
     }
 }

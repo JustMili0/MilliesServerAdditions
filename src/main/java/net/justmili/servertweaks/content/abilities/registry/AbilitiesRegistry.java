@@ -246,7 +246,7 @@ public class AbilitiesRegistry {
             boolean inWaterCauldron = level.getBlockState(player.blockPosition()).is(Blocks.WATER_CAULDRON);
 
             boolean hasHelmet = !player.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
-            boolean inWetBiome = level.getBiome(player.blockPosition()).is(Lists.WET_BIOMES::contains);
+            boolean inWetBiome = level.getBiome(player.blockPosition()).is(Lists.HYDROPHOBIC_HELMET_PROTECTION_EXCEPTIONS);
             boolean inRain = player.isInRain() && (!hasHelmet || inWetBiome);
 
             boolean inWater = inWaterBlock || inRain || inWaterCauldron;

@@ -80,7 +80,7 @@ public class AbilityEffects {
         BlockPos pos = hitResult.getBlockPos();
 
         if (!AbilityManager.has(player.getUUID(), AbilitiesRegistry.GRASS_EATER)) return InteractionResult.PASS;
-        if (!Lists.GRASSY.contains(world.getBlockState(pos).getBlock())) return InteractionResult.PASS;
+        if (!world.getBlockState(pos).is(Lists.DIET_FOLIAGE)) return InteractionResult.PASS;
 
         world.destroyBlock(pos, false);
         FoodData food = player.getFoodData();
@@ -141,16 +141,16 @@ public class AbilityEffects {
         boolean hasGold = AbilityManager.has(uuid, AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET);
 
         if (abilities.contains(AbilitiesRegistry.CARNIVORE)) {
-            if (hasGold && Lists.GOLDEN_FOODS.contains(stack.getItem())) return false;
-            return !Lists.CARNIVORE.contains(stack.getItem());
+            if (hasGold && stack.is(Lists.DIET_MODIFIER_GOLDEN_FOODS)) return false;
+            return !stack.is(Lists.DIET_VARNIVORE);
         }
         if (abilities.contains(AbilitiesRegistry.VEGETARIAN)) {
-            if (hasGold && Lists.GOLDEN_FOODS.contains(stack.getItem())) return false;
-            return !Lists.VEGETARIAN.contains(stack.getItem());
+            if (hasGold && stack.is(Lists.DIET_MODIFIER_GOLDEN_FOODS)) return false;
+            return !stack.is(Lists.DIET_VEGETARIAN);
         }
         if (abilities.contains(AbilitiesRegistry.ONLY_EATS_SWEETS)) {
-            if (hasGold && Lists.GOLDEN_FOODS.contains(stack.getItem())) return false;
-            return !Lists.SWEET.contains(stack.getItem());
+            if (hasGold && stack.is(Lists.DIET_MODIFIER_GOLDEN_FOODS)) return false;
+            return !stack.is(Lists.DIET_SWEETS);
         }
 
         return false;

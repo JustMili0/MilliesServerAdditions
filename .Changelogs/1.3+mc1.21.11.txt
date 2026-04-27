@@ -15,7 +15,7 @@
   - All abilities based on Minecraft mobs
   - Can be configured to be disabled
   - Player abilities can only be given by editing `player_abilities.json` file in `\config\servertweaks\` FOR NOW
-    - A proper config add/remove for player abilities will be added once testing and experiments will be done
+    - A proper config add/remove for player abilities will be added once testing and experiments will end
 - `/fillExtras` command because vanilla didn't have what I needed
   - `/fill` but better
   - Modes
@@ -52,21 +52,32 @@ TODO:
 - See if everything still works properly after getting rid of Architectury API
   - Abilities
   - Banishment
-  - Afk
   - RightClickHarvest
 - Rewrite the README
 - Fix discarding containers on entities
 - Fix abilities
+  - Fix nausea appliance when eating non-diet foods
+  - Fix kinda-working abilities
+  - Fix non-working abilities
 - Add new abilities
   - Magnetic (nearby items come to player)
   - Sticky (magnetic but cool slime visuals)
   - Bouncy (reduces fall and fly_into_wall damage)
+  -
 
 FROM TESTING:
 Doesn't work (no changes get applied to player behavior):
 - CLIMBS_WALLS - Nothing happens (can't climb walls)
 - WEAK_TO_DAMAGE - Nothing happens (same damage as normal)
 - CANT_SWIM - Nothing happens (can swim as normal)
+
+Kinda work (works for the most part)
+- BURNS_IN_DAYLIGHT - Player doesn't take burning damage without a helmet in water (to fix, should take tiny bit of damage in water if they don't have a helmet)
+- HUNTED_BY_FOX - Foxes are too scared to approach and attack unless the player is crouching
+- FRIENDS_WITH_NATURE - Calms down neutral animals such as wolves, bees etc. but the tame roll chance still isn't always-taming
+- CARNIVORE - Blocks foods not in diet, but eating animation still plays on servers (counter with nausea)
+- VEGETARIAN - Blocks foods not in diet, but eating animation still plays on servers (counter with nausea)
+- ONLY_EATS_SWEETS - Blocks foods not in diet, but eating animation still plays on servers (counter with nausea)
 
 Do work (works as intended):
 - FIRE_IMMUNE
@@ -89,13 +100,5 @@ Do work (works as intended):
 - SCARES_PHANTOMS
 - IS_MONSTER
 - GRASS_EATER
-
-Kinda work (works for the most part)
-- BURNS_IN_DAYLIGHT - Player doesn't take burning damage without a helmet in water (to fix, should take tiny bit of damage in water if they don't have a helmet)
-- HUNTED_BY_FOX - Foxes are too scared to approach and attack unless the player is crouching
-- FRIENDS_WITH_NATURE - Calms down neutral animals such as wolves, bees etc. but the tame roll chance still isn't always-taming
-- CARNIVORE - Blocks foods not in diet, but eating animation still plays on servers
-- VEGETARIAN - Blocks foods not in diet, but eating animation still plays on servers
-- ONLY_EATS_SWEETS - Blocks foods not in diet, but eating animation still plays on servers
 
 

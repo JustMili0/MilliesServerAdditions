@@ -29,13 +29,13 @@ public final class Banishment {
 
         if (level.dimension() != Dimensions.BANISHMENT_WORLD) return;
 
-        //Give torch so they can even see
+        // Give torch so they can even see
         ItemStack stack = player.getInventory().getItem(HOTBAR_SLOT);
         if (stack.isEmpty()) {
             player.getInventory().setItem(HOTBAR_SLOT, new ItemStack(Items.TORCH));
         }
 
-        //Safeguard 2 - Prevent falling into the deep void if the player breaks the bedrock somehow
+        // Safeguard 2 - Prevent falling into the deep void if the player breaks the bedrock somehow
         if (player.getY() < -1.0) {
             int centerX = player.blockPosition().getX();
             int centerZ = player.blockPosition().getZ();
