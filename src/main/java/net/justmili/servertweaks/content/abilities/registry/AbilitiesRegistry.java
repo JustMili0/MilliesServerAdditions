@@ -5,6 +5,9 @@ import net.justmili.servertweaks.content.abilities.ability.Ability;
 import net.justmili.servertweaks.content.abilities.ability.Lists;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.justmili.servertweaks.core.util.ScalerUtil;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,6 +26,10 @@ import net.minecraft.world.entity.monster.illager.Pillager;
 import net.minecraft.world.entity.monster.skeleton.Skeleton;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
@@ -180,10 +187,13 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            if (player.isInWater()) {
-                applyEffect(player, MobEffects.CONDUIT_POWER);
-                applyEffect(player, MobEffects.DOLPHINS_GRACE);
-            }
+            if (!player.isInWater()) return;
+            applyEffect(player, MobEffects.CONDUIT_POWER);
+            if (level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
+                .get(Enchantments.DEPTH_STRIDER)
+                .map(h -> EnchantmentHelper.getItemEnchantmentLevel(h, player.getItemBySlot(EquipmentSlot.HEAD)) > 1)
+                .orElse(false)) return; // Return before granting Dolphin's Grace if player has depth strider to prevent OP swimming speeds
+            applyEffect(player, MobEffects.DOLPHINS_GRACE);
         }
     }
 
@@ -213,6 +223,7 @@ public class AbilitiesRegistry {
                     player.setAirSupply(player.getAirSupply() + 4);
             } else {
                 // Drain air on land
+                if (player.hasEffect(MobEffects.WATER_BREATHING)) return; // Return and don't drain air if has water breathing on
                 player.setAirSupply(player.getAirSupply() - 1);
                 if (player.getAirSupply() <= - 20) {
                     player.setAirSupply(0);
@@ -385,7 +396,7 @@ public class AbilitiesRegistry {
                 villager.getNavigation().moveTo(
                     villager.getX() + (villager.getX() - player.getX()),
                     villager.getY(),
-                    villager.getZ() + (villager.getZ() - player.getZ()), 1.2);
+                    villager.getZ() + (villager.getZ() - player.getZ()), 0.5);
             }
 
             // Attack
@@ -400,10 +411,10 @@ public class AbilitiesRegistry {
             for (Pillager pillager : getNearby(player, Pillager.class, 64.0)) {
                 if (pillager.getTarget() == player) pillager.setTarget(null);
             }
-            for (Zombie zombie : getNearby(player, Zombie.class, 64.0)) {
+            for (Zombie zombie : getNearby(player, Zombie.class, 35.0)) {
                 if (zombie.getTarget() == player) zombie.setTarget(null);
             }
-            for (Skeleton skeleton : getNearby(player, Skeleton.class, 64.0)) {
+            for (Skeleton skeleton : getNearby(player, Skeleton.class, 16.0)) {
                 if (skeleton.getTarget() == player) skeleton.setTarget(null);
             }
         }

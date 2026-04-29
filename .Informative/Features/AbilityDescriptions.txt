@@ -9,11 +9,13 @@ HOPPY - Rabbit-based | Permanent hidden Jump Boost 1.
 DWARF - Custom | Height capped at 0.75 of normal scale. Players already at or below 0.75 via /scale are unaffected. Permanent hidden Haste 2.
 
 TOUGH - Iron Golem-based | Immune to knockback.
-STRONG - Custom | +4hp (2 hearts) attack damage. Max health scales inversely with armor: 100hp naked, 40hp at full netherite.
+STRONG - Custom | +4hp (2 hearts) attack damage. Max health scales inversely with armor: 100hp naked, 40hp at full Netherite.
 
 AQUA_GRACE - Dolphin-based | Gains Conduit Power and Dolphin's Grace while in water.
+             Dolphin's Grace will not be applied if player already has Depth Strider above level 1.
 BREATHES_UNDERWATER - Fish-based | Breathes underwater indefinitely.
 CANT_BREATHE_AIR - Fish-based | Drowns on land. Air supply drains while out of water and restores while submerged.
+                   Air will not deplete if player has a active Water Breathing effect.
 CANT_SWIM - Undead-based | Sinks in water.
 HYDROPHOBIC - Enderman-based | Takes 1 damage per second from standing in water, water cauldrons, or rain.
               Rain damage does not apply if wearing a helmet. Damage still applies if player is in a wet biome, even if wearing a helmet.
