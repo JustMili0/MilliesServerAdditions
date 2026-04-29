@@ -1,7 +1,4 @@
 TODO:
-- See if everything still works properly after getting rid of Architectury API
-  - Banishment
-  - RightClickHarvest
 - Fix discarding containers on entities
 - Fix abilities
   - Fix nausea appliance when eating non-diet foods
@@ -12,12 +9,13 @@ TODO:
   - Moderators - Can freely add and remove abilities on the fly without having to restart the server
     - File would be updated and reloaded
 - Add new abilities
-  - Magnetic (nearby items come to player)
-  - Sticky (magnetic but cool slime visuals)
-  - Squishy (reduces fall and fly_into_wall damage)
+  - Infinite Pearl (Shift+RC to throw a pear in the direction the player is looking)
+  - Predatory (Cows, Pigs, Sheep and Salmon will run/swim away from the player, but not so fast it's impossible for the player to catch up)
   - Nasty Eater (Feeds exclusively on slime balls, magma balls, insect/bug-like mobs, slimes (entity) and magma cubes (entity, deals a heart of fire damage when consumed))
     - For 26.2: Also can eat Sulfur Cubes but will get poisoned with nausea, but will get a lot of saturation
-  - Predatory (Cows, Pigs, Sheep and Salmon will run/swim away from the player, but not so fast it's impossible for the player to catch up)
+  - Squishy (reduces fall and fly_into_wall damage)
+  - Magnetic (nearby items come to player)
+  - Sticky (magnetic but cool slime visuals)
 
 --------------------------------------------------------------------------------–--------------------------------------
 

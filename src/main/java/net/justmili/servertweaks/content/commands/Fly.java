@@ -16,7 +16,7 @@ public class Fly {
         dispatcher.register(Commands.literal("fly")
             .requires(src -> CommandUtil.hasPerms(src, 3))
             .executes(context -> {
-                CommandUtil.checkIfPlayerExecuted(context);
+                if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
                 return toggleFly(context.getSource().getPlayer(), context.getSource());
             })
             .then(Commands.argument("targets", EntityArgument.players())

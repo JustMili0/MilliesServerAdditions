@@ -10,6 +10,7 @@ import net.justmili.servertweaks.content.abilities.ability.Ability;
 import net.justmili.servertweaks.content.abilities.ability.AbilityModifier;
 import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
 import net.justmili.servertweaks.content.abilities.registry.AbilityModifierRegistry;
+import net.justmili.servertweaks.content.commands.arguments.AbilitySetArgumentType;
 import net.minecraft.server.MinecraftServer;
 
 import java.io.*;
@@ -34,8 +35,8 @@ public class AbilityManager {
 
         // Zarsai
         HARDCODED_ABILITIES.put(UUID.fromString("3ca6c9e4-5727-46ea-bf8d-164d681ebe06"), new HashSet<>(List.of(
-            AbilitiesRegistry.HUNTED_BY_FOX, AbilitiesRegistry.HUNTED_BY_WOLF, AbilitiesRegistry.BURNS_IN_DAYLIGHT,
-            AbilitiesRegistry.HOPPY, AbilitiesRegistry.VEGETARIAN, AbilitiesRegistry.IS_MONSTER)));
+            AbilitiesRegistry.HUNTED_BY_FOX, AbilitiesRegistry.HUNTED_BY_WOLF, AbilitiesRegistry.HOPPY,
+            AbilitiesRegistry.VEGETARIAN, AbilitiesRegistry.GRASS_EATER)));
         HARDCODED_MODIFIERS.put(UUID.fromString("3ca6c9e4-5727-46ea-bf8d-164d681ebe06"),
             Set.of(AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET));
 
@@ -149,6 +150,10 @@ public class AbilityManager {
             ServerTweaks.LOGGER.error("[AbilityManager] Failed to save config: {}", e.getMessage());
         }
     }
+    public static void reloadFile(MinecraftServer server) {
+        loadFile(server);
+        ServerTweaks.LOGGER.info("[AbilityManager] Reloaded abilities");
+    }
 
     public static Set<Ability> getAbilities(UUID uuid) {
         return playerAbilities.getOrDefault(uuid, Collections.emptySet());
@@ -161,6 +166,11 @@ public class AbilityManager {
     }
     public static boolean has(UUID uuid, AbilityModifier modifier) {
         return getModifiers(uuid).contains(modifier);
+    }
+    public static void applySet(UUID uuid, AbilitySetArgumentType.AbilitySet set, MinecraftServer server) {
+        playerAbilities.put(uuid, new HashSet<>(set.abilities()));
+        playerModifiers.put(uuid, new HashSet<>(set.modifiers()));
+        saveFile(server);
     }
 
     private static File getFile() {

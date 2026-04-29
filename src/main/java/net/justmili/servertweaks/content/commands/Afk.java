@@ -26,7 +26,7 @@ public class Afk {
         dispatcher.register(Commands.literal("afk")
             .executes(context -> {
                 CommandSourceStack source = context.getSource();
-                CommandUtil.checkIfPlayerExecuted(context);
+                if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
 
                 ServerLevel world = source.getLevel();
                 ServerPlayer player = source.getPlayer();

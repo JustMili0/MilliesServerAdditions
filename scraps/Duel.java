@@ -17,7 +17,7 @@ public class Duel {
             Commands.literal("duel")
                 .then(Commands.argument("player", EntityArgument.player())
                     .executes(context -> {
-                        CommandUtil.checkIfPlayerExecuted(context);
+                        if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
 
                         ServerPlayer recipient = EntityArgument.getPlayer(context, "player");
                         ServerPlayer sender = context.getSource().getPlayer();
@@ -63,7 +63,7 @@ public class Duel {
                 )
                 .then(Commands.literal("accept")
                     .executes(context -> {
-                        CommandUtil.checkIfPlayerExecuted(context);
+                        if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
 
                         ServerPlayer recipient = context.getSource().getPlayer();
                         String senderUUID = FdaApiUtil.getStringValue(recipient, PlayerAttachments.AWAITING_DUEL_SENDER);
@@ -98,7 +98,7 @@ public class Duel {
                 )
                 .then(Commands.literal("decline")
                     .executes(context -> {
-                        CommandUtil.checkIfPlayerExecuted(context);
+                        if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
 
                         ServerPlayer recipient = context.getSource().getPlayer();
                         String senderUUID = FdaApiUtil.getStringValue(recipient, PlayerAttachments.AWAITING_DUEL_SENDER);
@@ -127,7 +127,7 @@ public class Duel {
                 )
                 .then(Commands.literal("end")
                     .executes(context -> {
-                        CommandUtil.checkIfPlayerExecuted(context);
+                        if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
 
                         ServerPlayer player = context.getSource().getPlayer();
 

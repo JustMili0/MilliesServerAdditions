@@ -20,6 +20,8 @@ public class Commands {
             FillExtras.register(dispatcher, commandBuildContext, environment) ; // This command is not configurable.
             if (CommandUtil.checkIfExpected(Config.enableFlyCommand, true))
                 Fly.register(dispatcher, commandBuildContext, environment);
+            if (CommandUtil.checkIfExpected(Config.playerAbilities, true))
+                PlayerAbilities.register(dispatcher, commandBuildContext, environment);
         });
     }
 }

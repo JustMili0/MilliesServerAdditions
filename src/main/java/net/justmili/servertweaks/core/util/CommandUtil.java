@@ -16,11 +16,13 @@ public class CommandUtil {
     }
 
     //Prevents commands from being ran from server console
-    public static void checkIfPlayerExecuted(CommandContext<CommandSourceStack> context) {
+    public static boolean checkIfPlayerExecuted(CommandContext<CommandSourceStack> context) {
         CommandSourceStack source = context.getSource();
         if (!(source.getEntity() instanceof ServerPlayer)) {
             sendFail(source, "A player is required to run this command here");
+            return false;
         }
+        return true;
     }
 
     //For if command is disabled on the server (USE AT COMMAND REGISTRATION)

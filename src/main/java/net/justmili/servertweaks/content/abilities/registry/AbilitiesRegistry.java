@@ -36,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class AbilitiesRegistry {
     /// Extra Ability variables
@@ -82,7 +83,9 @@ public class AbilitiesRegistry {
         REGISTRY.put(ability.getName(), ability);
         return ability;
     }
-
+    public static Set<String> getNames() {
+        return REGISTRY.keySet();
+    }
     public static @Nullable Ability byName(String name) {
         return REGISTRY.get(name);
     }
