@@ -6,8 +6,6 @@ Very cool 👍
 ## Why?
 I made this mod initially for my community Minecraft server, but after a while decided to put some more work into it and share it with the world.
 
-<hr>
-
 ### How long will this be kept updated?
 As long as the two Minecraft servers I moderate live. So pretty long I guess.
 
@@ -16,7 +14,7 @@ No.
 
 <hr>
 
-### Features
+# Features
 ---- CONFIG ---- <br>
 The entire mod is configurable, so you can very easily disable any features you don't want on your server!
 
@@ -87,11 +85,12 @@ Allows modifying how many blocks a single piston can push.
 
 <details>
 <summary>Player Abilities [Disabled By Default]</summary>
-A rather complex system of abilities for players to choose from. Read ---------------
+A rather complex system of abilities for players to choose from. Read <a href="https://github.com/JustMili0/UnF-ServerTweaks/blob/master/.Informative/Features/Abilities.md">About Abilities</a> to know more.
 </details>
 
 <hr>
 
-### Usage Permission
-You are not allowed to modify or/and redistribute the original code. You are allowed to distribute the mod in modpacks.<br>
-The mod will soon move its resources, util classes and Libs/APIs to MysticLib so this mod will no longer be usable as a util library.
+## Usage Permission
+You are not allowed to modify or/and redistribute the original code.<br>
+You are allowed to distribute the mod in modpacks.<br>
+You are allowed to use this mod on public and private servers.<br>
