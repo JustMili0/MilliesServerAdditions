@@ -15,13 +15,10 @@ TODO:
 - Add new abilities
   - Magnetic (nearby items come to player)
   - Sticky (magnetic but cool slime visuals)
-  - Bouncy (reduces fall and fly_into_wall damage)
+  - Squishy (reduces fall and fly_into_wall damage)
   - Nasty Eater (Feeds exclusively on slime balls, magma balls, insect/bug-like mobs, slimes (entity) and magma cubes (entity, deals a heart of fire damage when consumed))
     - For 26.2: Also can eat Sulfur Cubes but will get poisoned with nausea, but will get a lot of saturation
   - Predatory (Cows, Pigs, Sheep and Salmon will run/swim away from the player, but not so fast it's impossible for the player to catch up)
-  - Heat Sensitive (Takes burning damage in warm and hot biomes, unless has an active Fire Resistance effect)
-    - First check if Fire Resistance can block the damage without having to code that behavior in
-  - Cold Sensitive (Freezes/takes freezing damage in cold biomes, unless wearing full leather armor)
 
 --------------------------------------------------------------------------------–--------------------------------------
 

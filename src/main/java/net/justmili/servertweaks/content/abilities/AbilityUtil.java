@@ -1,8 +1,6 @@
-package net.justmili.servertweaks.content.abilities.registry;
+package net.justmili.servertweaks.content.abilities;
 
-import net.justmili.servertweaks.content.abilities.ability.Ability;
 import net.minecraft.core.Holder;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -11,15 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public abstract class TickingAbility extends Ability {
-
-    public TickingAbility(String name) {
-        super(name);
-    }
-
-    public abstract void tick(ServerPlayer player, ServerLevel level);
-
-    // Ticking abilities helper methods
+public class AbilityUtil {
     public static void applyEffect(ServerPlayer player, Holder<@NotNull MobEffect> effects, int duration, int power) {
         player.addEffect(new MobEffectInstance(effects, duration, power, false, false, false));
     }

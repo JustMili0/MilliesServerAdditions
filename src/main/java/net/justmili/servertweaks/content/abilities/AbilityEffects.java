@@ -6,10 +6,10 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.ability.Ability;
-import net.justmili.servertweaks.content.abilities.ability.Lists;
+import net.justmili.servertweaks.content.abilities.registry.AbilityTags;
 import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
 import net.justmili.servertweaks.content.abilities.registry.AbilityModifierRegistry;
-import net.justmili.servertweaks.content.abilities.registry.TickingAbility;
+import net.justmili.servertweaks.content.abilities.ability.TickingAbility;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -80,7 +80,7 @@ public class AbilityEffects {
         BlockPos pos = hitResult.getBlockPos();
 
         if (!AbilityManager.has(player.getUUID(), AbilitiesRegistry.GRASS_EATER)) return InteractionResult.PASS;
-        if (!world.getBlockState(pos).is(Lists.DIET_FOLIAGE)) return InteractionResult.PASS;
+        if (!world.getBlockState(pos).is(AbilityTags.DIET_FOLIAGE)) return InteractionResult.PASS;
 
         world.destroyBlock(pos, false);
         FoodData food = player.getFoodData();
@@ -115,7 +115,7 @@ public class AbilityEffects {
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
         if (isDietBlocked(player, player.getItemInHand(hand))) {
-            TickingAbility.applyEffect(player, MobEffects.NAUSEA, 60, 1);
+            AbilityUtil.applyEffect(player, MobEffects.NAUSEA, 60, 1);
             return InteractionResult.FAIL;
         }
 
@@ -128,7 +128,7 @@ public class AbilityEffects {
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
         if (isDietBlocked(player, player.getItemInHand(hand))) {
-            TickingAbility.applyEffect(player, MobEffects.NAUSEA, 60, 1);
+            AbilityUtil.applyEffect(player, MobEffects.NAUSEA, 60, 1);
             return InteractionResult.FAIL;
         }
 
@@ -141,16 +141,16 @@ public class AbilityEffects {
         boolean hasGold = AbilityManager.has(uuid, AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET);
 
         if (abilities.contains(AbilitiesRegistry.CARNIVORE)) {
-            if (hasGold && stack.is(Lists.DIET_MODIFIER_GOLDEN_FOODS)) return false;
-            return !stack.is(Lists.DIET_VARNIVORE);
+            if (hasGold && stack.is(AbilityTags.DIET_MODIFIER_GOLDEN_FOODS)) return false;
+            return !stack.is(AbilityTags.DIET_VARNIVORE);
         }
         if (abilities.contains(AbilitiesRegistry.VEGETARIAN)) {
-            if (hasGold && stack.is(Lists.DIET_MODIFIER_GOLDEN_FOODS)) return false;
-            return !stack.is(Lists.DIET_VEGETARIAN);
+            if (hasGold && stack.is(AbilityTags.DIET_MODIFIER_GOLDEN_FOODS)) return false;
+            return !stack.is(AbilityTags.DIET_VEGETARIAN);
         }
         if (abilities.contains(AbilitiesRegistry.ONLY_EATS_SWEETS)) {
-            if (hasGold && stack.is(Lists.DIET_MODIFIER_GOLDEN_FOODS)) return false;
-            return !stack.is(Lists.DIET_SWEETS);
+            if (hasGold && stack.is(AbilityTags.DIET_MODIFIER_GOLDEN_FOODS)) return false;
+            return !stack.is(AbilityTags.DIET_SWEETS);
         }
 
         return false;

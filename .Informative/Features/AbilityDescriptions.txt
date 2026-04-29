@@ -1,6 +1,10 @@
 FIRE_IMMUNE - Nether Mob-based | Immune to fire, being on fire, lava and magma block damage. Incompatible with BURNS_IN_DAYLIGHT.
 FREEZE_IMMUNE - Custom | Immune to freezing damage (e.g. powdered snow).
 FALL_IMMUNE - Cat-based | Immune to fall damage.
+HEAT_SENSITIVE - Snow Golem-based | Takes 1hp fire damage every 1s in warm and hot biomes.
+                 Having an active Fire Resistance effect negates fire damage.
+COLD_SENSITIVE - Custom | Takes 1hp freezing damage every 2s in cold biomes.
+                 Wearing full leather armor negates freezing damage.
 
 LIGHT - Chicken-based | Gains Slow Falling when falling faster than 0.4 blocks/tick, preventing fatal fall damage.
 SWIFT - Custom | Gains Speed 1 while sprinting.
@@ -31,8 +35,8 @@ FRIENDS_WITH_NATURE - Custom | Overworld neutral mobs will not aggro the player 
 WEAK_TO_DAMAGE - Custom | Takes 1.25x damage from all sources except fall damage.
 NIGHT_VISION - Custom | Gains hidden Night Vision only during nighttime (level.isDarkOutside()).
 
-BURNS_IN_DAYLIGHT - Undead-based | Burns in direct sunlight (requires sky light > 8 and clear sky view). Helmet negates all burning. In water,
-                                   doesn't ignite but takes 0.5 damage every 1.5s instead. Incompatible with FIRE_IMMUNE.
+BURNS_IN_DAYLIGHT - Undead-based | Burns in direct sunlight (requires skylight level > 8 and clear sky view) dealing 1hp per 1s. Helmet negates all burning. In water,
+                                   doesn't ignite but takes 0.5 damage every 1s instead. Incompatible with FIRE_IMMUNE.
 IS_MONSTER - Monster-based | Iron golems and snow golems attack the player. Villagers flee. Pillagers, zombies and skeletons ignore the player.
 CLIMBS_WALLS - Spider-based | Can climb any solid wall.
 

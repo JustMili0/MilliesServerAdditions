@@ -15,14 +15,9 @@ loom {
 }
 
 repositories {
-    maven { url = "https://cursemaven.com/" }
-    maven {
-        name = "Ladysnake Mods"
-        url = "https://maven.ladysnake.org/releases"
-    }
     maven {
         name = "Modrinth"
-        url = uri("https://api.modrinth.com/maven")
+        url = "https://api.modrinth.com/maven"
     }
     maven {
         name = 'ParchmentMC'
@@ -39,13 +34,12 @@ dependencies {
         parchment("org.parchmentmc.data:parchment-1.21.11:2025.12.20@zip")
     }
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-    modImplementation "curse.maven:supermartijn642s-config-lib-438332:7376955"
-
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.5.0")))
 
-    //modImplementation "maven.modrinth:architectury-api:19.0.1+fabric"
+    modImplementation "maven.modrinth:supermartijn642s-config-lib:1.1.8-fabric-mc1.21.11" // Config dependency
+
+    modImplementation "maven.modrinth:lithium:mc1.21.11-0.21.4-fabric"
+    //modImplementation "maven.modrinth:c2me-fabric:0.3.7+alpha.0.9+1.21.11" // doesn't work cuz it wants c2me-base and idk how to add the module in
 }
 
 processResources {
