@@ -31,13 +31,13 @@ Feedback is appriciated ^^
     - A brief description will be sent in chat for the player before the player can either confirm or reject getting the set they chose 
     - Has option `Custom` - "Contact any online staff that you'd like a custom set. Your chosen abilities, debuffs and ability modifiers will be reviewed by staff and implemented if it's compliant with server's ability creation guidelines if there are any."
   - (Admin) `reload` - Reloads abilities from file
-  - (Admin) `grantAbilityOrDebuff <player> <abilityOrDebuff>` - Allows permission level 2 and above staff to grant players abilities or ability debuffs
-  - (Admin) `revokeAbilityOrDebuff <player> <abilityOrDebuff>` - Allows permission level 2 and above staff to revoke players' abilities or ability debuffs
-  - (Admin) `grantModifier <player> <modifier>` - Allows permission level 2 and above staff to grant players ability modifiers
-  - (Admin) `revokeModifier <player> <modifier>` - Allows permission level 2 and above staff to revoke players' ability modifiers
+  - (Admin) `wipeAbilitiesProfile` - Erases a player from `player_abilities.json` file and resets `picked_ability_preset` player variable back to false
+  - (Admin) `grant <player> <abilityOrDebuff | modifier>` - Allows permission level 2 and above staff to grant players abilities, ability debuffs or ability modifiers
+  - (Admin) `revoke <player> <abilityOrDebuff | modifier>` - Allows permission level 2 and above staff to revoke players' abilities, ability debuffs or ability modifiers
 
 **Player Abilities**
 - COLD_SENSITIVE - Freezing overlay disappears when wearing full leather armor. Freezing damage stops with just partial leather armor but freezing overlay stays.
-- (NEW) Nasty Eater - ??? (Check TODO)
+- (NEW) Bug Eater - ??? (Check TODO)
 - (NEW) Predatory - ??? (Check TODO)
 - (NEW) Squishy - ??? (Check TODO)
+- (NEW) Pearling - ??? (Check TODO)

@@ -24,6 +24,9 @@ SWIFT - Custom | Gains Speed 1 while sprinting.
 SLOW - Zombie-based | Permanently slowed to roughly zombie walking speed via movement speed attribute reduction.
 HOPPY - Rabbit-based | Permanent hidden Jump Boost 1.
 DWARF - Custom | Height capped at 0.75 of normal scale. Players already at or below 0.75 via /scale are unaffected. Permanent hidden Haste 2.
+SQUISHY - ???
+MAGNETIC - ???
+STICKY - ???
 
 TOUGH - Iron Golem-based | Immune to knockback.
 STRONG - Custom | +4hp (2 hearts) attack damage. Max health scales inversely with armor: 100hp naked, 40hp at full Netherite.
@@ -52,11 +55,14 @@ BURNS_IN_DAYLIGHT - Undead-based | Burns in direct sunlight (requires skylight l
                                    doesn't ignite but takes 0.5 damage every 1s instead. Incompatible with FIRE_IMMUNE.
 IS_MONSTER - Monster-based | Iron golems and snow golems attack the player. Villagers flee. Pillagers, zombies and skeletons ignore the player.
 CLIMBS_WALLS - Spider-based | Can climb any solid wall.
+PEARLING - ???
 
+PREDATORY - ???
 CARNIVORE - Wild Animal-based | Can only eat meat. Honey bottles, milk and other misc items are always allowed.
 VEGETARIAN - Farm Animal-based | Can only eat plant-based foods. Honey bottles, milk and other misc items are always allowed.
 ONLY_EATS_SWEETS - Custom | Can only eat sweet foods (berries, cookies, cake, pie, honey, apples, melon slices).
 GRASS_EATER - Sheep-based | Can right-click any grass (tall, short, dry) or bush to eat it, gaining 2 hunger and 0.2 saturation. Consumes the block.
+BUG_EATER - ???
 ```
 
 ### Ability Modifiers

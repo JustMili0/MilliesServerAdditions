@@ -94,8 +94,7 @@ public class PlayerAbilities {
 }
 
 /* TODO
-  - (Admin) `grantAbilityOrDebuff <player> <abilityOrDebuff>` - Allows permission level 2 and above staff to grant players abilities or ability debuffs
-  - (Admin) `revokeAbilityOrDebuff <player> <abilityOrDebuff>` - Allows permission level 2 and above staff to revoke players' abilities or ability debuffs
-  - (Admin) `grantModifier <player> <modifier>` - Allows permission level 2 and above staff to grant players ability modifiers
-  - (Admin) `revokeModifier <player> <modifier>` - Allows permission level 2 and above staff to revoke players' ability modifiers
+  - (Admin) `wipeAbilitiesProfile` - Erases a player from `player_abilities.json` file and resets `picked_ability_preset` player variable back to false
+  - (Admin) `grant <player> <abilityOrDebuff | modifier>` - Allows permission level 2 and above staff to grant players abilities, ability debuffs or ability modifiers
+  - (Admin) `revoke <player> <abilityOrDebuff | modifier>` - Allows permission level 2 and above staff to revoke players' abilities, ability debuffs or ability modifiers
  */

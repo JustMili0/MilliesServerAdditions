@@ -12,21 +12,23 @@ public final class PlayerAttachments {
     private PlayerAttachments() {}
     public static void register() {}
 
-    //Scale-Command related
+    // Scale-Command related
     public static final AttachmentType<Boolean> SCALE_LOCKED = createPersistentValue("scale_locked", false, Codec.BOOL);
 
-    //AFK-Command related
+    // AFK-Command related
     public static final AttachmentType<Boolean> IS_AFK = createPersistentValue("is_afk", false, Codec.BOOL);
     public static final AttachmentType<Double> AFK_X = createPersistentValue("afk_x", 0.0, Codec.DOUBLE);
     public static final AttachmentType<Double> AFK_Y = createPersistentValue("afk_y", 255.0, Codec.DOUBLE);
     public static final AttachmentType<Double> AFK_Z = createPersistentValue("afk_z", 0.0, Codec.DOUBLE);
     public static final AttachmentType<Integer> AFK_COOLDOWN = createPersistentValue("afk_cooldown", Config.afkCommandCooldown.get(), Codec.INT);
 
-    //Duel-Command related
+    // Duel-Command related
     public static final AttachmentType<String> AWAITING_DUEL_RECIPIENT = createValue("duel_recipient", "none", Codec.STRING);
     public static final AttachmentType<String> AWAITING_DUEL_SENDER = createValue("duel_sender", "none", Codec.STRING);
     public static final AttachmentType<Boolean> IN_DUEL = createValue("in_duel", false, Codec.BOOL);
     public static final AttachmentType<String> DUELING_WITH = createValue("dueling_with", "none", Codec.STRING);
     public static final AttachmentType<Long> LAST_HIT_TIME = createValue("last_hit_time", 0L, Codec.LONG);
 
+    // Player Abilities related
+    public static final AttachmentType<Boolean> PICKED_PRESET = createPersistentValue("picked_ability_preset", false, Codec.BOOL);
 }

@@ -58,7 +58,7 @@ public class AbilitySetArgumentType {
     aquatic
     spider
     enderian
-    toad
+    amphibian
     slime
     magma cube (slime but fire resistant and cold sensitive)
     dwarf

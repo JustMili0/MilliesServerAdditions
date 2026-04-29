@@ -57,6 +57,9 @@ public class AbilitiesRegistry {
     public static final Ability SLOW = register(new Slow());
     public static final Ability HOPPY = register(new Hoppy());
     public static final Ability DWARF = register(new Dwarf());
+    public static final Ability SQUISHY = register(new Ability("SQUISHY")); // TODO #3
+    public static final Ability MAGNETIC = register(new Ability("MAGNETIC")); // TODO #4
+    public static final Ability STICKY = register(new Ability("STICKY")); // TODO #4
     public static final Ability TOUGH = register(new Ability("TOUGH"));
     public static final Ability STRONG = register(new Strong());
     public static final Ability AQUA_GRACE = register(new AquaGrace());
@@ -74,10 +77,13 @@ public class AbilitiesRegistry {
     public static final Ability BURNS_IN_DAYLIGHT = register(new BurnsInDaylight());                // KINDA WORKS
     public static final Ability IS_MONSTER = register(new IsMonster());
     public static final Ability CLIMBS_WALLS = register(new Ability("CLIMBS_WALLS"));         // DOESN'T WORK
+    public static final Ability PEARLING = register(new Ability("PEARLING")); // TODO #3
+    public static final Ability PREDATORY = register(new Ability("PREDATORY")); // TODO #3
     public static final Ability CARNIVORE = register(new Ability("CARNIVORE"));               // KINDA WORKS
     public static final Ability VEGETARIAN = register(new Ability("VEGETARIAN"));             // KINDA WORKS
     public static final Ability ONLY_EATS_SWEETS = register(new Ability("ONLY_EATS_SWEETS")); // KINDA WORKS
     public static final Ability GRASS_EATER = register(new Ability("GRASS_EATER"));
+    public static final Ability BUG_EATER = register(new Ability("BUG_EATER")); // TODO #3
 
     private static Ability register(Ability ability) {
         REGISTRY.put(ability.getName(), ability);
