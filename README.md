@@ -1,4 +1,4 @@
-# UnF Server Tweaks
+# Millie's Server Additions
 Very cool 👍
 
 <hr>
@@ -11,58 +11,83 @@ I made this mod initially for my community Minecraft server, but after a while d
 ### How long will this be kept updated?
 As long as the two Minecraft servers I moderate live. So pretty long I guess.
 
-### Support for other mod loaders or/and older versions?
-No. This mod is only for Fabric servers and will not receive updates for older Minecraft versions as the mod's development continues.
+### Will this mod support other mod loaders or versions?
+No.
 
 <hr>
 
-### Features list
+### Features
+---- CONFIG ---- <br>
+The entire mod is configurable, so you can very easily disable any features you don't want on your server!
 
---- Config ---
-You can enable or disable basically any feature, command etc. that this mod provides.
-
---- Commands ---
-<details><summary>/scale | Fun & Administrative</summary>
-Allows the players to change their height (scale attribute) to e.g. their irl height to be height-accurate in-game. Players can not change their height again and are limited to choose between being 1-3 meters tall.
-
-Command also features some admin tools for unlocking, resetting etc. players' heights.
-</details>
-<details><summary>/duel (If Enabled) | Fun</summary>
-The command is enabled in the config, all PvP will be disabled, but players can still fight via the duel command.
-
-It exists to prevent unwanted PvP on servers that aren't too keen on it
-</details>
+---- COMMANDS ---- <br>
+For The Players
 <details>
-<summary>/daycount | Informative</summary>
-To get the tick-exact day count and game time of the server
-</details>
-<details>
-<summary>/afk | Helpful</summary>
-Puts the player in a AFK state, indicating their status in tab list, making the afk player unable to move, attack or be attacked.
-
-Configurable. Will despawn hostile mobs around the player by default.
-</details>
-<details>
-<summary>/damagetoggle | Administrative</summary>
-Allows players with Operator permissions disabling individual damage types from vanilla Minecraft. Everything goes back to normal after a server restart.
-</details>
-<details>
-<summary>/banish | Administrative</summary>
-Allows players with Operator permissions to get rid of people in a way that doesn't require banning so you can laugh at their misery in the endless void just because they broke the rules.
+<summary>/afk [Enabled By Default]</summary>
+Allows a player to safely stay in one place while they BR - The player can't be moved anywhere and becomes invulnerable but is also unable to attack anything or anyone.
 </details>
 
---- Gameplay Changes ---
 <details>
-<summary>Removed Anvil Expense Limit</summary>
-A mixin to get rid of Anvil's "Too Expensive" limit.
+<summary>/scale [Enabled By Default]</summary>
+A fun addition for players to be able to scale themselves in-game to e.g. their irl height. (Metric system only)
+
+Movement speed and block/entity reach do not get modified (Yet)
 </details>
+
+For The Server Staff
 <details>
-<summary>Never Too Fast</summary>
-Removed player movement limiters, essentially getting rid of "Player moved too fast!" warn
+<summary>/discard [Not Configurable]</summary>
+Multi-use simplified version of multiple commands such as /data, /clear, /setblock + custom entity discarding (no loot, xp, just snapped out of existence).
 </details>
+
 <details>
-<summary>Better Push Limit</summary>
-Allows the admin/owner to change the piston push limit in the mod config
+<summary>/fillExtras [Not Configurable]</summary>
+/fill on steroids - works just like /fill but has options such as replaceOnly, destroyOnly, silkDestroy, silkDestroyOnly, fortuneDestroy and fortuneDestroyOnly allowing staff
+to destroy only certain blocks within an area unlike /fill's destroy option.
+</details>
+
+<details>
+<summary>/fly [Enabled By Default]</summary>
+Allows creative flight in survival or any other non-creative gamemode. Can be applied to other players.
+</details>
+
+<details>
+<summary>/damagetoggle [Enabled By Default]</summary>
+Allows staff to disable individual damage types on the server. Resets after a server restart.
+</details>
+
+<details>
+<summary>/banish [Enabled By Default]</summary>
+A more fun way to "ban" people by sending them into the f#cking shadow realm.
+</details>
+
+---- GAMEPLAY ----
+<details>
+<summary>Right-Click Harvest [Enabled By Default]</summary>
+Harvest full-grown crops by just right-clicking them. Bigger harvest area when using hoes. Fortune does apply when harvesting.
+</details>
+
+<details>
+<summary>Not Too Expensive [Enabled By Default]</summary>
+Remove anvil's "Too Expensive" limit, with the highest EXP cost being 39 levels.
+</details>
+
+<details>
+<summary>Not Too Fast [Partially Enabled By Default]</summary>
+Individually remove speed limits for regular movement, elytra flight and vehicle movement to not be stopped by "Player moved too fast!" warnings.<br>
+This is useful for player cannons for transport.
+
+Elytra flight speed limit is removed by default.
+</details>
+
+<details>
+<summary>Pistons Pushing Limits [Default By Default]</summary>
+Allows modifying how many blocks a single piston can push.
+</details>
+
+<details>
+<summary>Player Abilities [Disabled By Default]</summary>
+A rather complex system of abilities for players to choose from. Read ---------------
 </details>
 
 <hr>

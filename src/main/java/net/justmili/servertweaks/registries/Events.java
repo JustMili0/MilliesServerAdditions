@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.justmili.servertweaks.content.abilities.AbilityEffects;
+import net.justmili.servertweaks.content.abilities.registry.AbilityEffects;
 import net.justmili.servertweaks.mechanics.logic.*;
 
 public class Events {

@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.mixin.abilities;
 
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.abilities.AbilityEffects;
+import net.justmili.servertweaks.content.abilities.registry.AbilityEffects;
 import net.justmili.servertweaks.content.abilities.AbilityManager;
 import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
 import net.justmili.servertweaks.mixin.accessors.LivingEntityAccessor;

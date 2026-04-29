@@ -1,14 +1,13 @@
-package net.justmili.servertweaks.content.abilities;
+package net.justmili.servertweaks.content.abilities.registry;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.justmili.servertweaks.config.Config;
+import net.justmili.servertweaks.content.abilities.AbilityManager;
+import net.justmili.servertweaks.content.abilities.AbilityUtil;
 import net.justmili.servertweaks.content.abilities.ability.Ability;
-import net.justmili.servertweaks.content.abilities.registry.AbilityTags;
-import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
-import net.justmili.servertweaks.content.abilities.registry.AbilityModifierRegistry;
 import net.justmili.servertweaks.content.abilities.ability.TickingAbility;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

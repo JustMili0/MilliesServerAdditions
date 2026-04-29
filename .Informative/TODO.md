@@ -2,7 +2,6 @@ TODO:
 - See if everything still works properly after getting rid of Architectury API
   - Banishment
   - RightClickHarvest
-- Rewrite the README
 - Fix discarding containers on entities
 - Fix abilities
   - Fix nausea appliance when eating non-diet foods

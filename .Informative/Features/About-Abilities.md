@@ -1,10 +1,23 @@
+# What are Player Abilities?
+Player abilities are a complex ability, debuff and ability modifier system basing itself mostly on behavior found in Minecraft mobs but also based on lore of characters made by this mod creator's friends.
+
+Player abilities can be chosen by players via the `/abilities` command. They can either pick from hardcoded premade sets or send a request to permission level 2 and higher staff for a custom set.<br>
+Those sets are mainly designed around Minecraft mobs and some DnD classes and races.
+Moderators, administrators and operators can also grant or revoke abilities, debuffs and modifiers of players in-game or by editing `/config/servertweaks/player_abilities.json` file.
+
+Some abilities and/or debuffs can be partially or completely incompatible with each other, or they will just negate each other's effects on the player.
+
+# Why were Player Abilities added?
+They supposed to be and are a server-side custom alternative to Origins/Origins Legacy for servers managed by JustMili.
+
+### Abilities & Ability Debuffs
+```
 FIRE_IMMUNE - Nether Mob-based | Immune to fire, being on fire, lava and magma block damage. Incompatible with BURNS_IN_DAYLIGHT.
 FREEZE_IMMUNE - Custom | Immune to freezing damage (e.g. powdered snow).
 FALL_IMMUNE - Cat-based | Immune to fall damage.
-HEAT_SENSITIVE - Snow Golem-based | Takes 1hp fire damage every 1s in warm and hot biomes.
-                 Having an active Fire Resistance effect negates fire damage.
+HEAT_SENSITIVE - Snow Golem-based | Takes 1hp fire damage every 1s in warm and hot biomes. Having an active Fire Resistance effect negates fire damage.
 COLD_SENSITIVE - Custom | Takes 1hp freezing damage every 2s in cold biomes.
-                 Wearing full leather armor negates freezing damage.
+                 Wearing partial leather armor negates freezing damage and wearing full leather armor gets rid of the freezing overlay.
 
 LIGHT - Chicken-based | Gains Slow Falling when falling faster than 0.4 blocks/tick, preventing fatal fall damage.
 SWIFT - Custom | Gains Speed 1 while sprinting.
@@ -44,6 +57,10 @@ CARNIVORE - Wild Animal-based | Can only eat meat. Honey bottles, milk and other
 VEGETARIAN - Farm Animal-based | Can only eat plant-based foods. Honey bottles, milk and other misc items are always allowed.
 ONLY_EATS_SWEETS - Custom | Can only eat sweet foods (berries, cookies, cake, pie, honey, apples, melon slices).
 GRASS_EATER - Sheep-based | Can right-click any grass (tall, short, dry) or bush to eat it, gaining 2 hunger and 0.2 saturation. Consumes the block.
+```
 
+### Ability Modifiers
+```
 Ability modifiers:
 ADD_GOLD_FOODS_TO_DIET - Adds golden apples, enchanted golden apples and golden carrots to any active diet restriction.
+```

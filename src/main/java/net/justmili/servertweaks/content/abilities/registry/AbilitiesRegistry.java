@@ -26,6 +26,7 @@ import net.minecraft.world.entity.monster.illager.Pillager;
 import net.minecraft.world.entity.monster.skeleton.Skeleton;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.LightLayer;
@@ -109,6 +110,12 @@ public class AbilitiesRegistry {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!level.getBiome(player.blockPosition()).is(AbilityTags.COLD_BIOMES)) return;
+            if (player.getItemBySlot(EquipmentSlot.HEAD).is(Items.LEATHER_HELMET)
+                && player.getItemBySlot(EquipmentSlot.CHEST).is(Items.LEATHER_CHESTPLATE)
+                && player.getItemBySlot(EquipmentSlot.LEGS).is(Items.LEATHER_LEGGINGS)
+                && player.getItemBySlot(EquipmentSlot.FEET).is(Items.LEATHER_BOOTS)) return;
+            // Completely cancel any effects if player has full leather armor.
+            // Still applies freezing overlays but stops damage when armor isn't full leather. It is an intended side effect.
 
             int targetTime = player.getTicksRequiredToFreeze() + 20;
             player.setTicksFrozen(targetTime);
