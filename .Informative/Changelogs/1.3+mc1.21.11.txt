@@ -50,7 +50,6 @@
 
 TODO:
 - See if everything still works properly after getting rid of Architectury API
-  - Abilities
   - Banishment
   - RightClickHarvest
 - Rewrite the README
@@ -70,6 +69,8 @@ TODO:
   - Nasty Eater (Feeds exclusively on slime balls, magma balls, insect/bug-like mobs, slimes (entity) and magma cubes (deals a heart of fire damage when consumed))
     - For 26.2: Also can eat Sulfur Cubes but will get poisoned with nausea, but will get a lot of saturation
   - Predatory (Cows, Pigs, Sheep, Salmon, ...? will run/swim away from the player, but not so fast it's impossible for the player to catch up)
+  - Heat Sensitive (Takes burning damage in warm and hot biomes)
+  - Cold Sensitive (Freezes/takes freezing damage in cold biomes)
 
 FROM TESTING:
 Doesn't work (no changes get applied to player behavior):
