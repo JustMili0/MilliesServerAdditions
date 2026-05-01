@@ -46,20 +46,23 @@ public class AbilitySetArgumentType {
             ),
             Set.of()
         ));
-        register(new AbilitySet( // TODO: ASK FAYE IS THIS IS FINE
+        register(new AbilitySet(
             "dreamweaver",
-            "\nDreamweavers are creatures of dreams, they can take an appearance of a cat-moth hybrid, sometimes humanoid; "+
+            "\nDreamweavers are creatures that create dreams for their hosts, they can take an appearance of a cat-moth hybrid, sometimes humanoid; "+
                 "though normally they don't have a physical form. "+
-                "A dreamweaver scares away creepers due to their cat characteristics, scares away phantoms [insert reason why].\n"+
-                "They also are rather weak, taking 1.25x more damage than normal, can only eat sweets if not bound to a host, and animals love them.",
+                "A dreamweaver scares away creepers due to their cat characteristics, scares away phantoms they don't need to sleep, " +
+                "since they again don't have a physical form and dreams are their domain.\n"+
+                "They also are rather weak, taking 1.25x more damage than normal, can't swim up in water, can only eat sweets if not bound to a host, and animals love them.",
             Set.of(
                 AbilitiesRegistry.SCARES_CREEPERS,
                 AbilitiesRegistry.SCARES_PHANTOMS,
                 AbilitiesRegistry.WEAK_TO_DAMAGE,
                 AbilitiesRegistry.ONLY_EATS_SWEETS,
-                AbilitiesRegistry.FRIENDS_WITH_NATURE
+                AbilitiesRegistry.FRIENDS_WITH_NATURE,
+                AbilitiesRegistry.CANT_SWIM
             ),
             Set.of()
+            // Ability set approved by Flufaye the dreamweaver Vtuber herself :3
         ));
         register(new AbilitySet(
             "bunny",

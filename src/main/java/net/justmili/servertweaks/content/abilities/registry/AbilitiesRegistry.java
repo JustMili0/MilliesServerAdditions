@@ -63,7 +63,7 @@ public class AbilitiesRegistry {
     public static final Ability SLOW = register(new Slow());
     public static final Ability HOPPY = register(new Hoppy());
     public static final Ability DWARF = register(new Dwarf());
-    public static final Ability SQUISHY = register(new Ability("SQUISHY")); // TODO #4
+    public static final Ability SQUISHY = register(new Ability("SQUISHY")); // TODO #5
     public static final Ability MAGNETIC = register(new Ability("MAGNETIC")); // TODO #5
     public static final Ability STICKY = register(new Ability("STICKY")); // TODO #5
     public static final Ability TOUGH = register(new Ability("TOUGH"));
@@ -89,7 +89,7 @@ public class AbilitiesRegistry {
     public static final Ability VEGETARIAN = register(new Ability("VEGETARIAN"));             // KINDA WORKS
     public static final Ability ONLY_EATS_SWEETS = register(new Ability("ONLY_EATS_SWEETS")); // KINDA WORKS
     public static final Ability GRASS_EATER = register(new Ability("GRASS_EATER"));
-    public static final Ability BUG_EATER = register(new Ability("BUG_EATER")); // TODO #4
+    public static final Ability BUG_EATER = register(new Ability("BUG_EATER")); // TODO #5
 
     private static Ability register(Ability ability) {
         REGISTRY.put(ability.getName(), ability);

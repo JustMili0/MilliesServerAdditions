@@ -16,9 +16,7 @@ This file was made specifically for Millie's discord announcements about small p
   - These players will receive custom ability sets
 - IS_MONSTER - Fixed Zombie and Skeleton ignore behaviors and made Husks, Parched, Drowned and Slimes also ignore the player
 - IS_MONSTER - Fixed Villager fear behavior, now running away at their usual speed
-- (NEW) Bug Eater - ??? (Check TODO)
 - (NEW) Predatory - ??? (Check TODO)
-- (NEW) Squishy - ??? (Check TODO)
 - (NEW) Pearling - ??? (Check TODO)
 
 Feedback is appriciated ^^
@@ -29,6 +27,8 @@ Feedback is appriciated ^^
 # UnF ServerTweaks Patch #3 - 1.3.0-beta.15
 
 **Player Abilities**
+- (NEW) Squishy - ??? (Check TODO)
+- (NEW) Bug Eater - ??? (Check TODO)
 - (NEW) MAGNETIC - ??? (Check TODO)
 - (NEW) STICKY - ??? (Check TODO)
 
