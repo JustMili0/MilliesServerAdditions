@@ -3,11 +3,18 @@ package net.justmili.servertweaks.content.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.justmili.servertweaks.content.abilities.AbilityManager;
+import net.justmili.servertweaks.content.abilities.ability.Ability;
+import net.justmili.servertweaks.content.abilities.ability.AbilityModifier;
+import net.justmili.servertweaks.content.commands.arguments.AbilitiesArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.AbilitySetArgumentType;
+import net.justmili.servertweaks.content.commands.arguments.ModifiersArgumentType;
 import net.justmili.servertweaks.core.util.CommandUtil;
+import net.justmili.servertweaks.core.util.FdaApiUtil;
+import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -19,16 +26,6 @@ public class PlayerAbilities {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext, Commands.CommandSelection environment) {
         dispatcher.register(
             Commands.literal("abilities")
-                .then(Commands.literal("reload")
-                    .requires(src -> CommandUtil.hasPerms(src, 2))
-                    .executes(context -> {
-                        MinecraftServer server = context.getSource().getServer();
-                        AbilityManager.reloadFile(server);
-
-                        CommandUtil.sendSucc(context.getSource(), "Reloaded Player Abilities");
-                        return 1;
-                    })
-                )
                 .then(Commands.literal("pickPremadeSet")
                     .then(Commands.argument("set", AbilitySetArgumentType.setSelect())
                         .suggests(AbilitySetArgumentType::suggest)
@@ -40,21 +37,109 @@ public class PlayerAbilities {
                             String setName = StringArgumentType.getString(context, "set");
                             AbilitySetArgumentType.AbilitySet set = AbilitySetArgumentType.getSet(setName);
                             if (set == null) {
-                                CommandUtil.sendFail(source, "Unknown ability set: " + setName);
+                                CommandUtil.sendFail(source, "Unknown ability set: "+setName);
                                 return 0;
                             }
 
-                            MutableComponent description = Component.literal(set.description() + "\n\n");
                             MutableComponent apply = Component.literal("     [APPLY] ")
-                                .setStyle(Style.EMPTY.withColor(0x55FF55).withClickEvent(new ClickEvent.RunCommand("/abilities applyChosenSet " + setName)));
+                                .setStyle(Style.EMPTY.withColor(0x55FF55).withClickEvent(new ClickEvent.RunCommand("/abilities applyChosenSet "+setName)));
                             MutableComponent cancel = Component.literal(" [CANCEL]")
                                 .setStyle(Style.EMPTY.withColor(0xFF5555).withClickEvent(new ClickEvent.RunCommand("/abilities cancelChoosingSet")));
 
-                            player.sendSystemMessage(description.append(apply).append(cancel));
+                            player.sendSystemMessage(Component.literal(set.description()+"\n\n").append(apply).append(cancel));
                             return 1;
                         })
                     )
                 )
+
+                .then(Commands.literal("reload")
+                    .requires(src -> CommandUtil.hasPerms(src, 2))
+                    .executes(context -> {
+                        MinecraftServer server = context.getSource().getServer();
+                        AbilityManager.loadFile(server);
+
+                        CommandUtil.sendSucc(context.getSource(), "Reloaded Player Abilities");
+                        return 1;
+                    })
+                )
+                .then(Commands.literal("wipeAbilitiesProfile")
+                    .requires(src -> CommandUtil.hasPerms(src, 2))
+                    .then(Commands.argument("player", EntityArgument.player())
+                        .executes(context -> {
+                            ServerPlayer player = EntityArgument.getPlayer(context, "player");
+
+                            AbilityManager.clearPlayer(player);
+                            FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, false);
+
+                            CommandUtil.sendSucc(context.getSource(), "Removed player abilities profile of "+player.getName().getString());
+
+                            return 1;
+                        })
+                    )
+                )
+                .then(Commands.literal("grant")
+                    .requires(src -> CommandUtil.hasPerms(src, 2))
+                    .then(Commands.argument("player", EntityArgument.player())
+                        .then(Commands.argument("abilityOrDebuff", AbilitiesArgumentType.abilities())
+                            .suggests(AbilitiesArgumentType::suggestGrantable)
+                            .executes(context -> {
+                                ServerPlayer player = EntityArgument.getPlayer(context, "player");
+                                Ability ability = AbilitiesArgumentType.getAbility(context, "abilityOrDebuff");
+
+                                AbilityManager.grantAbility(player, ability);
+
+                                CommandUtil.sendSucc(context.getSource(), "Granted ability "+ability.getName()+" to player "+player.getName().getString());
+
+                                return 1;
+                            })
+                        )
+                        .then(Commands.argument("modifier", ModifiersArgumentType.modifier())
+                            .suggests(ModifiersArgumentType::suggestGrantable)
+                            .executes(context -> {
+                                ServerPlayer player = EntityArgument.getPlayer(context, "player");
+                                AbilityModifier modifier = ModifiersArgumentType.getModifier(context, "modifier");
+
+                                AbilityManager.grantModifier(player, modifier);
+
+                                CommandUtil.sendSucc(context.getSource(), "Granted ability modifier "+modifier.getName()+" to player "+player.getName().getString());
+
+                                return 1;
+                            })
+                        )
+                    )
+                )
+                .then(Commands.literal("revoke")
+                    .requires(src -> CommandUtil.hasPerms(src, 2))
+                    .then(Commands.argument("player", EntityArgument.player())
+                        .then(Commands.argument("abilityOrDebuff", AbilitiesArgumentType.abilities())
+                            .suggests(AbilitiesArgumentType::suggestRevokable)
+                            .executes(context -> {
+                                ServerPlayer player = EntityArgument.getPlayer(context, "player");
+                                Ability ability = AbilitiesArgumentType.getAbility(context, "abilityOrDebuff");
+
+                                AbilityManager.revokeAbility(player, ability);
+
+                                CommandUtil.sendSucc(context.getSource(), "Removed ability "+ability.getName()+" from player "+player.getName().getString());
+
+                                return 1;
+                            })
+                        )
+                        .then(Commands.argument("modifier", ModifiersArgumentType.modifier())
+                            .suggests(ModifiersArgumentType::suggestRevokable)
+                            .executes(context -> {
+                                ServerPlayer player = EntityArgument.getPlayer(context, "player");
+                                AbilityModifier modifier = ModifiersArgumentType.getModifier(context, "modifier");
+
+                                AbilityManager.revokeModifier(player, modifier);
+
+                                CommandUtil.sendSucc(context.getSource(), "Removed ability modifier "+modifier.getName()+" from player "+player.getName().getString());
+
+                                return 1;
+                            })
+                        )
+                    )
+                )
+
                 .then(Commands.literal("applyChosenSet")
                     .requires(src -> CommandUtil.hasPerms(src, 2))
                     .then(Commands.argument("set", AbilitySetArgumentType.setSelect())
@@ -67,12 +152,13 @@ public class PlayerAbilities {
                             String setName = StringArgumentType.getString(context, "set");
                             AbilitySetArgumentType.AbilitySet set = AbilitySetArgumentType.getSet(setName);
                             if (set == null) {
-                                CommandUtil.sendFail(source, "Unknown ability set: " + setName);
+                                CommandUtil.sendFail(source, "Unknown ability set: "+setName);
                                 return 0;
                             }
 
                             AbilityManager.applySet(player.getUUID(), set, source.getServer());
-                            CommandUtil.sendSucc(source, "Applied the " + setName + " set!");
+                            FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, true);
+                            CommandUtil.sendSucc(source, "Applied the "+setName+" set!");
 
                             return 1;
                         })
@@ -81,7 +167,6 @@ public class PlayerAbilities {
                 .then(Commands.literal("cancelChoosingSet")
                     .requires(src -> CommandUtil.hasPerms(src, 2))
                     .executes(context -> {
-                        CommandSourceStack source = context.getSource();
                         if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
 
                         // Do literally fucking nothing
@@ -92,9 +177,3 @@ public class PlayerAbilities {
         );
     }
 }
-
-/* TODO
-  - (Admin) `wipeAbilitiesProfile` - Erases a player from `player_abilities.json` file and resets `picked_ability_preset` player variable back to false
-  - (Admin) `grant <player> <abilityOrDebuff | modifier>` - Allows permission level 2 and above staff to grant players abilities, ability debuffs or ability modifiers
-  - (Admin) `revoke <player> <abilityOrDebuff | modifier>` - Allows permission level 2 and above staff to revoke players' abilities, ability debuffs or ability modifiers
- */

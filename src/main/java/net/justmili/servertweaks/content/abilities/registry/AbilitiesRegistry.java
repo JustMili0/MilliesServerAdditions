@@ -13,17 +13,22 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.fox.Fox;
 import net.minecraft.world.entity.animal.golem.IronGolem;
 import net.minecraft.world.entity.animal.golem.SnowGolem;
 import net.minecraft.world.entity.animal.wolf.Wolf;
-import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.illager.Pillager;
+import net.minecraft.world.entity.monster.skeleton.Parched;
 import net.minecraft.world.entity.monster.skeleton.Skeleton;
+import net.minecraft.world.entity.monster.zombie.Drowned;
+import net.minecraft.world.entity.monster.zombie.Husk;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.item.Items;
@@ -34,9 +39,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AbilitiesRegistry {
     /// Extra Ability variables
@@ -57,9 +61,9 @@ public class AbilitiesRegistry {
     public static final Ability SLOW = register(new Slow());
     public static final Ability HOPPY = register(new Hoppy());
     public static final Ability DWARF = register(new Dwarf());
-    public static final Ability SQUISHY = register(new Ability("SQUISHY")); // TODO #3
-    public static final Ability MAGNETIC = register(new Ability("MAGNETIC")); // TODO #4
-    public static final Ability STICKY = register(new Ability("STICKY")); // TODO #4
+    public static final Ability SQUISHY = register(new Ability("SQUISHY")); // TODO #4
+    public static final Ability MAGNETIC = register(new Ability("MAGNETIC")); // TODO #5
+    public static final Ability STICKY = register(new Ability("STICKY")); // TODO #5
     public static final Ability TOUGH = register(new Ability("TOUGH"));
     public static final Ability STRONG = register(new Strong());
     public static final Ability AQUA_GRACE = register(new AquaGrace());
@@ -77,13 +81,13 @@ public class AbilitiesRegistry {
     public static final Ability BURNS_IN_DAYLIGHT = register(new BurnsInDaylight());                // KINDA WORKS
     public static final Ability IS_MONSTER = register(new IsMonster());
     public static final Ability CLIMBS_WALLS = register(new Ability("CLIMBS_WALLS"));         // DOESN'T WORK
-    public static final Ability PEARLING = register(new Ability("PEARLING")); // TODO #3
-    public static final Ability PREDATORY = register(new Ability("PREDATORY")); // TODO #3
+    public static final Ability PEARLING = register(new Ability("PEARLING")); // TODO #4
+    public static final Ability PREDATORY = register(new Ability("PREDATORY")); // TODO #4
     public static final Ability CARNIVORE = register(new Ability("CARNIVORE"));               // KINDA WORKS
     public static final Ability VEGETARIAN = register(new Ability("VEGETARIAN"));             // KINDA WORKS
     public static final Ability ONLY_EATS_SWEETS = register(new Ability("ONLY_EATS_SWEETS")); // KINDA WORKS
     public static final Ability GRASS_EATER = register(new Ability("GRASS_EATER"));
-    public static final Ability BUG_EATER = register(new Ability("BUG_EATER")); // TODO #3
+    public static final Ability BUG_EATER = register(new Ability("BUG_EATER")); // TODO #4
 
     private static Ability register(Ability ability) {
         REGISTRY.put(ability.getName(), ability);
@@ -257,17 +261,16 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            if (player.isInWater()) {
+            if (player.isInWater() || player.hasEffect(MobEffects.WATER_BREATHING)) {
                 // Restore air when in water
                 if (player.getAirSupply() < player.getMaxAirSupply())
                     player.setAirSupply(player.getAirSupply() + 4);
             } else {
                 // Drain air on land
-                if (player.hasEffect(MobEffects.WATER_BREATHING)) return; // Return and don't drain air if has water breathing on
                 player.setAirSupply(player.getAirSupply() - 1);
-                if (player.getAirSupply() <= - 20) {
-                    player.setAirSupply(0);
-                    player.hurt(level.damageSources().drown(), 2.0F);
+                if (player.getAirSupply() <= -20) {
+                    player.setAirSupply(1);
+                    player.hurt(level.damageSources().drown(), 1.0F);
                 }
             }
         }
@@ -422,6 +425,15 @@ public class AbilitiesRegistry {
         }
     }
 
+    private static final Map<UUID, List<WrappedGoal>> storedGoals = new HashMap<>();
+    private static final Map<Class<?>, Double> IGNORE_FOR = Map.of(
+        Pillager.class, 64.0, Slime.class,16.0,
+        Zombie.class, 48.0, Husk.class, 48.0, Drowned.class, 48.0,
+        Skeleton.class, 24.0, Parched.class, 24.0
+    );
+    private static final Map<Class<?>, Double> ATTACK_FOR = Map.of(
+        IronGolem.class, 16.0, SnowGolem.class, 24.0
+    );
     static class IsMonster extends TickingAbility {
         IsMonster() {
             super("IS_MONSTER");
@@ -431,32 +443,47 @@ public class AbilitiesRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
 
+            // Ignore
+            Set<UUID> stillNearby = new HashSet<>();
+            IGNORE_FOR.forEach((type, range) ->
+                AbilityUtil.forEachNearby(player, type, range, (Mob mob) -> {
+                    UUID id = mob.getUUID();
+                    stillNearby.add(id);
+                    if (!storedGoals.containsKey(id)) {
+                        List<WrappedGoal> removed = mob.targetSelector.getAvailableGoals()
+                            .stream()
+                            .filter(goal -> goal.getGoal() instanceof NearestAttackableTargetGoal<?>)
+                            .collect(Collectors.toList());
+                        removed.forEach(goal -> mob.targetSelector.removeGoal(goal.getGoal()));
+                        storedGoals.put(id, removed);
+                        mob.setTarget(null);
+                    }
+                })
+            );
+            storedGoals.entrySet().removeIf(entry -> {
+                if (stillNearby.contains(entry.getKey())) return false;
+                Entity entity = level.getEntity(entry.getKey());
+                if (entity instanceof Mob mob) {
+                    entry.getValue().forEach(g -> mob.targetSelector.addGoal(g.getPriority(), g.getGoal()));
+                }
+                return true;
+            });
+
             // Fear
             for (Villager villager : AbilityUtil.getNearby(player, Villager.class, 16.0)) {
+                if (villager.isSleeping()) villager.stopSleeping();
                 villager.getNavigation().moveTo(
                     villager.getX() + (villager.getX() - player.getX()),
                     villager.getY(),
-                    villager.getZ() + (villager.getZ() - player.getZ()), 0.5);
+                    villager.getZ() + (villager.getZ() - player.getZ()), 0.75);
             }
 
             // Attack
-            for (IronGolem ironGolem : AbilityUtil.getNearby(player, IronGolem.class, 16.0)) {
-                if (ironGolem.getTarget() != player) ironGolem.setTarget(player);
-            }
-            for (SnowGolem snowGolem : AbilityUtil.getNearby(player, SnowGolem.class, 24.0)) {
-                if (snowGolem.getTarget() != player) snowGolem.setTarget(player);
-            }
-
-            // Ignore
-            for (Pillager pillager : AbilityUtil.getNearby(player, Pillager.class, 64.0)) {
-                if (pillager.getTarget() == player) pillager.setTarget(null);
-            }
-            for (Zombie zombie : AbilityUtil.getNearby(player, Zombie.class, 35.0)) {
-                if (zombie.getTarget() == player) zombie.setTarget(null);
-            }
-            for (Skeleton skeleton : AbilityUtil.getNearby(player, Skeleton.class, 16.0)) {
-                if (skeleton.getTarget() == player) skeleton.setTarget(null);
-            }
+            ATTACK_FOR.forEach((type, range) ->
+                AbilityUtil.forEachNearby(player, type, range, (Mob mob) -> {
+                    if (mob.getTarget() != player) mob.setTarget(player);
+                })
+            );
         }
     }
 

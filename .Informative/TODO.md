@@ -1,13 +1,10 @@
 TODO:
 - Fix discarding containers on entities
 - Fix abilities
+  - Fix not being able to place any edible but placable foods with diets other than vege
   - Fix nausea appliance when eating non-diet foods
   - Fix kinda-working abilities
   - Fix non-working abilities
-- Add a command for Player Abilities management
-  - Any Player - can pick any pre-made sets of abilities and debuffs up to 3, for more a moderator will need to be contacted
-  - Moderators - Can freely add and remove abilities on the fly without having to restart the server
-    - File would be updated and reloaded
 - Add new abilities
   - Pearling (Shift+RC to throw a pear in the direction the player is looking)
   - Predatory (Cows, Pigs, Sheep and Salmon will run/swim away from the player, but not so fast it's impossible for the player to catch up)

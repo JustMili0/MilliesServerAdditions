@@ -26,7 +26,7 @@ public class MobMixin {
         Mob self = (Mob)(Object)this;
         LivingEntity target = self.getTarget();
         if (!(target instanceof ServerPlayer player)) return;
-        if (!AbilityManager.has(player.getUUID(), AbilitiesRegistry.FRIENDS_WITH_NATURE)) return;
+        if (!AbilityManager.has(player, AbilitiesRegistry.FRIENDS_WITH_NATURE)) return;
 
         if (self instanceof TamableAnimal tamed && tamed.isTame()) return;
         self.setTarget(null);

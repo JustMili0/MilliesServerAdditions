@@ -48,8 +48,7 @@ public class AbilityEffects {
     private static void tickTickingAbilities(Player ticking) {
         if (!(ticking instanceof ServerPlayer player)) return;
         ServerLevel level = player.level();
-        UUID uuid = player.getUUID();
-        Set<Ability> abilities = AbilityManager.getAbilities(uuid);
+        Set<Ability> abilities = AbilityManager.getAbilities(player);
 
         for (Ability ability : abilities) {
             if (ability instanceof TickingAbility tickingAbility) {
@@ -60,7 +59,7 @@ public class AbilityEffects {
 
     private static boolean specialDamageImmune(LivingEntity entity, DamageSource source, float value) {
         if (!(entity instanceof ServerPlayer player)) return true;
-        Set<Ability> abilities = AbilityManager.getAbilities(player.getUUID());
+        Set<Ability> abilities = AbilityManager.getAbilities(player);
 
         if (abilities.contains(AbilitiesRegistry.FIRE_IMMUNE) && (source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE)
             || source.is(DamageTypes.LAVA) || source.is(DamageTypes.HOT_FLOOR))) return false;
@@ -78,7 +77,7 @@ public class AbilityEffects {
 
         BlockPos pos = hitResult.getBlockPos();
 
-        if (!AbilityManager.has(player.getUUID(), AbilitiesRegistry.GRASS_EATER)) return InteractionResult.PASS;
+        if (!AbilityManager.has(player, AbilitiesRegistry.GRASS_EATER)) return InteractionResult.PASS;
         if (!world.getBlockState(pos).is(AbilityTags.DIET_FOLIAGE)) return InteractionResult.PASS;
 
         world.destroyBlock(pos, false);
@@ -91,7 +90,7 @@ public class AbilityEffects {
 
     public static boolean shouldClimb(ServerPlayer player) {
         if (!(Config.playerAbilities.get())) return false;
-        if (!AbilityManager.has(player.getUUID(), AbilitiesRegistry.CLIMBS_WALLS)) return false;
+        if (!AbilityManager.has(player, AbilitiesRegistry.CLIMBS_WALLS)) return false;
         if (player.onGround()) return false;
         Level level = player.level();
         BlockPos pos = player.blockPosition();
@@ -135,9 +134,8 @@ public class AbilityEffects {
     }
     private static boolean isDietBlocked(ServerPlayer player, ItemStack stack) {
         if (!stack.has(DataComponents.FOOD)) return false;
-        UUID uuid = player.getUUID();
-        Set<Ability> abilities = AbilityManager.getAbilities(uuid);
-        boolean hasGold = AbilityManager.has(uuid, AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET);
+        Set<Ability> abilities = AbilityManager.getAbilities(player);
+        boolean hasGold = AbilityManager.has(player, AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET);
 
         if (abilities.contains(AbilitiesRegistry.CARNIVORE)) {
             if (hasGold && stack.is(AbilityTags.DIET_MODIFIER_GOLDEN_FOODS)) return false;

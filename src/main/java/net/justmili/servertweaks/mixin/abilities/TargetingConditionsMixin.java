@@ -20,7 +20,7 @@ public class TargetingConditionsMixin {
     private void servertweaks$preventTargetingFriendlyPlayer(ServerLevel level, LivingEntity attacker, LivingEntity target, CallbackInfoReturnable<Boolean> cir) {
         if (!(Config.playerAbilities.get())) return;
         if (!(target instanceof ServerPlayer player)) return;
-        if (!AbilityManager.has(player.getUUID(), AbilitiesRegistry.FRIENDS_WITH_NATURE)) return;
+        if (!AbilityManager.has(player, AbilitiesRegistry.FRIENDS_WITH_NATURE)) return;
 
         if (attacker instanceof TamableAnimal tamed && tamed.isTame()) return;
         cir.setReturnValue(false);

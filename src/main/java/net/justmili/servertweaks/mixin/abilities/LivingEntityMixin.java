@@ -27,7 +27,7 @@ public class LivingEntityMixin {
         if (!(Config.playerAbilities.get())) return;
         LivingEntity self = (LivingEntity) (Object) this;
         if (!(self instanceof ServerPlayer player)) return;
-        if (AbilityManager.has(player.getUUID(), AbilitiesRegistry.TOUGH)) ci.cancel();
+        if (AbilityManager.has(player, AbilitiesRegistry.TOUGH)) ci.cancel();
     }
 
     // WEAK_TO_DAMAGE
@@ -37,7 +37,7 @@ public class LivingEntityMixin {
         if (!(Config.playerAbilities.get())) return;
         if (applyDamageModifyer) return;
         if (!(((LivingEntity) (Object) this) instanceof ServerPlayer player)) return;
-        if (!AbilityManager.has(player.getUUID(), AbilitiesRegistry.WEAK_TO_DAMAGE)) return;
+        if (!AbilityManager.has(player, AbilitiesRegistry.WEAK_TO_DAMAGE)) return;
         if (source.is(DamageTypes.FALL)) return;
 
         applyDamageModifyer = true;
@@ -50,9 +50,8 @@ public class LivingEntityMixin {
     @Inject(method = "increaseAirSupply", at = @At("HEAD"), cancellable = true)
     private void servertweaks$increaseAirSupply(int currentAir, CallbackInfoReturnable<Integer> cir) {
         if (!(Config.playerAbilities.get())) return;
-        LivingEntity self = (LivingEntity)(Object)this;
-        if (!(self instanceof ServerPlayer player)) return;
-        if (!AbilityManager.has(player.getUUID(), AbilitiesRegistry.CANT_BREATHE_AIR)) return;
+        if (!((LivingEntity)(Object)this instanceof ServerPlayer player)) return;
+        if (!AbilityManager.has(player, AbilitiesRegistry.CANT_BREATHE_AIR)) return;
         if (!player.isInWater()) cir.setReturnValue(currentAir);
     }
 

@@ -7,6 +7,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.justmili.servertweaks.content.abilities.ability.Ability;
 import net.justmili.servertweaks.content.abilities.ability.AbilityModifier;
 import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
+import net.justmili.servertweaks.content.abilities.registry.AbilityModifierRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,8 +30,9 @@ public class AbilitySetArgumentType {
         ));
         register(new AbilitySet(
             "feline",
-            "\nThe Feline set will make you scare away creepers and phantoms, will grant you speed 1 effect when sprinting, and you won't take fall damage " +
-                "but you'll only be able to eat meat, untamed wolves will attack you unprovoked, and you can't swim in water.",
+            "\nFelines can mimic the hissing of a creeper and screeching of phantoms, scaring them away; they are also immune to fall damage" +
+                "and are extra fast when sprinting. They are carnivores, meaning they can only eat meat, can't exactly swim up in water to not drown" +
+                "and untamed wolves turn aggressive towards them unprovoked.",
             Set.of(
                 AbilitiesRegistry.SCARES_CREEPERS,
                 AbilitiesRegistry.SCARES_PHANTOMS,
@@ -42,9 +44,38 @@ public class AbilitySetArgumentType {
             ),
             Set.of()
         ));
+        register(new AbilitySet( // TODO: ASK FAYE IS THIS IS FINE
+            "dreamweaver",
+            "\nDreamweavers are creatures of dreams, they can take an appearance of a cat-moth hybrid, sometimes humanoid; " +
+                "though normally they don't have a physical form. " +
+                "A dreamweaver scares away creepers due to their cat characteristics, scares away phantoms [insert reason why].\n" +
+                "They also are rather weak, taking 1.25x more damage than normal, can only eat sweets if not bound to a host, and animals love them.",
+            Set.of(
+                AbilitiesRegistry.SCARES_CREEPERS,
+                AbilitiesRegistry.SCARES_PHANTOMS,
+                AbilitiesRegistry.WEAK_TO_DAMAGE,
+                AbilitiesRegistry.ONLY_EATS_SWEETS,
+                AbilitiesRegistry.FRIENDS_WITH_NATURE
+            ),
+            Set.of()
+        ));
+        register(new AbilitySet(
+            "bunny",
+            "",
+            Set.of(
+                AbilitiesRegistry.HUNTED_BY_WOLF,
+                AbilitiesRegistry.HUNTED_BY_FOX,
+                AbilitiesRegistry.VEGETARIAN,
+                AbilitiesRegistry.GRASS_EATER,
+                AbilitiesRegistry.HOPPY,
+                AbilitiesRegistry.SWIFT
+            ),
+            Set.of(
+                AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET
+            )
+        ));
     }
     /* TODO: IDEAS
-    dreamweaver
     bunny
     monster_generic
     undead_generic
@@ -55,7 +86,7 @@ public class AbilitySetArgumentType {
     knight
     imp
     chicken
-    aquatic
+    aquarian
     spider
     enderian
     amphibian
