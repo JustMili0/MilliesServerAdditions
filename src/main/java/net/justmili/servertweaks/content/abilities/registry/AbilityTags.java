@@ -9,7 +9,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 
 public class AbilityTags {
-    public static final TagKey<Item> DIET_VARNIVORE = TagKey.create(
+    public static final TagKey<Item> DIET_CARNIVORE = TagKey.create(
         Registries.ITEM, ServerTweaks.asResource("diet_carnivore"));
     public static final TagKey<Item> DIET_VEGETARIAN = TagKey.create(
         Registries.ITEM, ServerTweaks.asResource("diet_vegetarian"));

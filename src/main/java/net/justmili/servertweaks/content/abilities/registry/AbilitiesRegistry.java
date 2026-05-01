@@ -177,7 +177,7 @@ public class AbilitiesRegistry {
             AttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
 
             if (speed.getModifier(SLOW_SPEED) == null) {
-                speed.addTransientModifier(new AttributeModifier(SLOW_SPEED, -0.47, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                speed.addTransientModifier(new AttributeModifier(SLOW_SPEED, -0.25, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
             }
         }
     }
@@ -424,13 +424,9 @@ public class AbilitiesRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!level.isBrightOutside() || !level.canSeeSky(player.blockPosition())) return;
             if ((level.getBrightness(LightLayer.SKY, player.blockPosition()) <= 8)) return;
-            boolean hasHelmet = !player.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
-            if (hasHelmet) return;
-            if (player.isInWater()) {
-                if (level.getGameTime() % 20 == 0) player.hurt(level.damageSources().magic(), 0.5F);
-            } else {
-                player.igniteForSeconds(2);
-            }
+
+            if (!player.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) return;
+            player.igniteForSeconds(2);
         }
     }
 

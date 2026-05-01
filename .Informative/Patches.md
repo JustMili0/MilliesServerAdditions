@@ -16,8 +16,13 @@ This file was made specifically for Millie's discord announcements about small p
   - These players will receive custom ability sets
 - IS_MONSTER - Fixed Zombie and Skeleton ignore behaviors and made Husks, Parched, Drowned and Slimes also ignore the player
 - IS_MONSTER - Fixed Villager fear behavior, now running away at their usual speed
-- (NEW) Predatory - ??? (Check TODO)
-- (NEW) Pearling - ??? (Check TODO)
+- COLD_SENSITIVE - Removed `cold_ocean` and `deep_cold_ocean` from list tag of cold biomes due to how frequent they are in the world
+- GRASS_EATER - Added underwater foliage to diet list tag
+- GRASS_EATER - Client now gets updated about updated food values
+- GRASS_EATER - Now properly restricts food consumption when no other diets are applied
+- SLOW - Decreased slowness modifier
+- (NEW) Predatory - ??? (Check TODO)   ***NOT DONE YET***
+- (NEW) Pearling - ??? (Check TODO)    ***NOT DONE YET***
 
 Feedback is appriciated ^^
 

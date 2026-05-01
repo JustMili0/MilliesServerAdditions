@@ -11,6 +11,7 @@ import net.justmili.servertweaks.content.abilities.ability.TickingAbility;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.Set;
@@ -71,6 +73,7 @@ public class AbilityEffects {
     private static InteractionResult grassEater(Player interacting, Level world, InteractionHand hand, BlockHitResult hitResult) {
         if (world.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
+        if (!player.isShiftKeyDown()) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
         BlockPos pos = hitResult.getBlockPos();
@@ -78,10 +81,14 @@ public class AbilityEffects {
         if (!AbilityUtil.has(player, AbilitiesRegistry.GRASS_EATER)) return InteractionResult.PASS;
         if (!world.getBlockState(pos).is(AbilityTags.DIET_FOLIAGE)) return InteractionResult.PASS;
 
-        world.destroyBlock(pos, false);
         FoodData food = player.getFoodData();
-        food.eat(2, 0.2F);
+        if (!(food.getFoodLevel() < 20 || food.getSaturationLevel() < 20)) return InteractionResult.PASS;
+        world.destroyBlock(pos, false);
+        food.eat(2, 0.5F);
         player.swing(InteractionHand.MAIN_HAND, true);
+
+        // Update the client about eaten food
+        player.connection.send(new ClientboundSetHealthPacket(player.getHealth(), food.getFoodLevel(), food.getSaturationLevel()));
 
         return InteractionResult.SUCCESS;
     }
@@ -105,7 +112,7 @@ public class AbilityEffects {
     - Apply constant nausea if attempting to eat something that isn't in player's diet
      */
     // TODO: FIX - NAUSEA IS NOT GETTING APPLIED
-    private static InteractionResult dietRestrictionsOnItem(Player interacting, Level level, InteractionHand hand) {
+    private static InteractionResult dietRestrictionsOnItem(Player interacting, Level level, InteractionHand hand) { // Clicking while looking at nothing
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
@@ -118,7 +125,7 @@ public class AbilityEffects {
         return InteractionResult.PASS;
     }
 
-    private static InteractionResult dietRestrictionsOnBlock(Player interacting, Level world, InteractionHand hand, BlockHitResult hitResult) {
+    private static InteractionResult dietRestrictionsOnBlock(Player interacting, Level world, InteractionHand hand, BlockHitResult hitResult) { // Clicking while looking at a block
         if (world.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
@@ -134,21 +141,26 @@ public class AbilityEffects {
     private static boolean isDietBlocked(ServerPlayer player, ItemStack stack) {
         if (!stack.has(DataComponents.FOOD)) return false;
         Set<Ability> abilities = AbilityUtil.getAbilities(player);
-        boolean hasGold = AbilityUtil.has(player, AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET);
 
-        if (abilities.contains(AbilitiesRegistry.CARNIVORE)) {
-            if (hasGold && stack.is(AbilityTags.DIET_MODIFIER_GOLDEN_FOODS)) return false;
-            return !stack.is(AbilityTags.DIET_VARNIVORE);
-        }
-        if (abilities.contains(AbilitiesRegistry.VEGETARIAN)) {
-            if (hasGold && stack.is(AbilityTags.DIET_MODIFIER_GOLDEN_FOODS)) return false;
-            return !stack.is(AbilityTags.DIET_VEGETARIAN);
-        }
-        if (abilities.contains(AbilitiesRegistry.ONLY_EATS_SWEETS)) {
-            if (hasGold && stack.is(AbilityTags.DIET_MODIFIER_GOLDEN_FOODS)) return false;
-            return !stack.is(AbilityTags.DIET_SWEETS);
-        }
+        boolean carnivore = abilities.contains(AbilitiesRegistry.CARNIVORE);
+        boolean vegetarian = abilities.contains(AbilitiesRegistry.VEGETARIAN);
+        boolean sweetOnly = abilities.contains(AbilitiesRegistry.ONLY_EATS_SWEETS);
+        boolean grassEater = abilities.contains(AbilitiesRegistry.GRASS_EATER);
+        boolean canConsumeGolden = AbilityUtil.has(player, AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET);
 
-        return false;
+        boolean isMeat = stack.is(AbilityTags.DIET_CARNIVORE);
+        boolean isVege = stack.is(AbilityTags.DIET_VEGETARIAN);
+        boolean isSweet = stack.is(AbilityTags.DIET_SWEETS);
+        boolean isGold = stack.is(AbilityTags.DIET_MODIFIER_GOLDEN_FOODS);
+
+        if (!carnivore && !vegetarian && !sweetOnly && !grassEater) return false;
+
+        if (canConsumeGolden && isGold) return false;
+        if (carnivore && isMeat) return false;
+        if (vegetarian && isVege) return false;
+        if (sweetOnly && isSweet) return false;
+        // No GRASS_EATER item tag for this to check. GRASS_EATER diet is handled by grassEater interaction method.
+
+        return true;
     }
 }

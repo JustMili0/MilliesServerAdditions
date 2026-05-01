@@ -1,4 +1,5 @@
 TODO:
+- Figure out why suggestions for `/abilities grant|revoke` don't work
 - Fix discarding containers on entities
 - Fix abilities
   - Fix not being able to place any edible but placeable foods with diets other than vegetarian

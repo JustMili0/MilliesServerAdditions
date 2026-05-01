@@ -82,6 +82,7 @@ public class PlayerAbilities {
                     .requires(src -> CommandUtil.hasPerms(src, 2))
                     .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.argument("abilityOrDebuff", AbilitiesArgumentType.abilities())
+                            .suggests(AbilitiesArgumentType::suggest)
                             .executes(context -> {
                                 ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                 Ability ability = AbilitiesArgumentType.getAbility(context, "abilityOrDebuff");
@@ -94,6 +95,7 @@ public class PlayerAbilities {
                             })
                         )
                         .then(Commands.argument("modifier", ModifiersArgumentType.modifier())
+                            .suggests(ModifiersArgumentType::suggest)
                             .executes(context -> {
                                 ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                 AbilityModifier modifier = ModifiersArgumentType.getModifier(context, "modifier");
@@ -111,6 +113,7 @@ public class PlayerAbilities {
                     .requires(src -> CommandUtil.hasPerms(src, 2))
                     .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.argument("abilityOrDebuff", AbilitiesArgumentType.abilities())
+                            .suggests(AbilitiesArgumentType::suggest)
                             .executes(context -> {
                                 ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                 Ability ability = AbilitiesArgumentType.getAbility(context, "abilityOrDebuff");
@@ -123,6 +126,7 @@ public class PlayerAbilities {
                             })
                         )
                         .then(Commands.argument("modifier", ModifiersArgumentType.modifier())
+                            .suggests(ModifiersArgumentType::suggest)
                             .executes(context -> {
                                 ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                 AbilityModifier modifier = ModifiersArgumentType.getModifier(context, "modifier");

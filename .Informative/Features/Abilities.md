@@ -51,18 +51,18 @@ FRIENDS_WITH_NATURE - Custom | Overworld neutral mobs will not aggro the player 
 WEAK_TO_DAMAGE - Custom | Takes 1.25x damage from all sources except fall damage.
 NIGHT_VISION - Custom | Gains hidden Night Vision only during nighttime (level.isDarkOutside()).
 
-BURNS_IN_DAYLIGHT - Undead-based | Burns in direct sunlight (requires skylight level > 8 and clear sky view) dealing 1hp per 1s. Helmet negates all burning. In water,
-                                   doesn't ignite but takes 0.5 damage every 1s instead. Incompatible with FIRE_IMMUNE.
+BURNS_IN_DAYLIGHT - Undead-based | Burns in direct sunlight (requires skylight level > 8 and clear sky view) dealing 1hp per 1s. Helmet negates all burning.
+                    Incompatible with FIRE_IMMUNE.
 IS_MONSTER - Monster-based | Iron golems and snow golems attack the player. Villagers flee. Pillagers, zombies and skeletons ignore the player.
 CLIMBS_WALLS - Spider-based | Can climb any solid wall.
 PEARLING - ???
 
-PREDATORY - ???
+PREDATORY - Custom | Smaller animals like chickens, fish and baby mobs will run away from the player.
 CARNIVORE - Wild Animal-based | Can only eat meat. Honey bottles, milk and other misc items are always allowed.
 VEGETARIAN - Farm Animal-based | Can only eat plant-based foods. Honey bottles, milk and other misc items are always allowed.
 ONLY_EATS_SWEETS - Custom | Can only eat sweet foods (berries, cookies, cake, pie, honey, apples, melon slices).
-GRASS_EATER - Sheep-based | Can right-click any grass (tall, short, dry) or bush to eat it, gaining 2 hunger and 0.2 saturation. Consumes the block.
-BUG_EATER - ???
+GRASS_EATER - Sheep-based | Can shift-right-click any grass (tall, short, dry) or bush to eat it, gaining 2 hunger and 0.2 saturation. Consumes the block.
+BUG_EATER - Frog-based | Can only feed on bug-like entities, slimes, magma cubes, sulfur cubes, and items like slime balls and magma creams
 ```
 
 ### Ability Modifiers
