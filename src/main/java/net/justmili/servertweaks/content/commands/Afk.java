@@ -2,9 +2,9 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.justmili.servertweaks.core.util.CommandUtil;
 import net.justmili.servertweaks.core.util.FdaApiUtil;
+import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -33,7 +33,7 @@ public class Afk {
 
                 int cooldown = FdaApiUtil.getIntValue(player, PlayerAttachments.AFK_COOLDOWN);
                 if (!FdaApiUtil.getBoolValue(player, PlayerAttachments.IS_AFK) && Config.afkCommandCooldown.get() != 0 && cooldown > 0) {
-                    CommandUtil.sendFail(source, "You must wait " + (cooldown / 20) + "s before using this command again");
+                    CommandUtil.sendFail(source, "You must wait "+(cooldown / 20)+"s before using this command again");
                     return 0;
                 }
 
@@ -85,8 +85,8 @@ public class Afk {
         ServerLevel level = player.level();
         if (level.isBrightOutside()) return;
         AABB box = new AABB(
-            player.getX() - 8, player.getY() - 8, player.getZ() - 8,
-            player.getX() + 8, player.getY() + 8, player.getZ() + 8
+            player.getX()-8, player.getY()-8, player.getZ()-8,
+            player.getX()+8, player.getY()+8, player.getZ()+8
         );
 
         for (Monster monster : level.getEntitiesOfClass(Monster.class, box)) {

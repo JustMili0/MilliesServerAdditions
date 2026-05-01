@@ -6,7 +6,10 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.servertweaks.content.abilities.registry.AbilityEffects;
-import net.justmili.servertweaks.mechanics.logic.*;
+import net.justmili.servertweaks.mechanics.logic.Banishment;
+import net.justmili.servertweaks.mechanics.logic.RightClickHarvest;
+import net.justmili.servertweaks.mechanics.logic.ScaleConvert;
+import net.justmili.servertweaks.mechanics.logic.WhileAfk;
 
 public class Events {
     public static void register() {

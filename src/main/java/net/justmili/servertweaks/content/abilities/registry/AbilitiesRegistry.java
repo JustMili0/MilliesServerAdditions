@@ -4,8 +4,8 @@ import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.AbilityUtil;
 import net.justmili.servertweaks.content.abilities.ability.Ability;
 import net.justmili.servertweaks.content.abilities.ability.TickingAbility;
-import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.justmili.servertweaks.core.util.ScalerUtil;
+import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +23,9 @@ import net.minecraft.world.entity.animal.fox.Fox;
 import net.minecraft.world.entity.animal.golem.IronGolem;
 import net.minecraft.world.entity.animal.golem.SnowGolem;
 import net.minecraft.world.entity.animal.wolf.Wolf;
-import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.illager.Pillager;
 import net.minecraft.world.entity.monster.skeleton.Parched;
 import net.minecraft.world.entity.monster.skeleton.Skeleton;
@@ -93,9 +95,11 @@ public class AbilitiesRegistry {
         REGISTRY.put(ability.getName(), ability);
         return ability;
     }
+
     public static Set<String> getNames() {
         return REGISTRY.keySet();
     }
+
     public static @Nullable Ability byName(String name) {
         return REGISTRY.get(name);
     }
@@ -107,7 +111,9 @@ public class AbilitiesRegistry {
     // FALL_IMMUNE - AbilityEffects (specialDamageImmune)
 
     static class HeatSensitive extends TickingAbility {
-        HeatSensitive() { super("HEAT_SENSITIVE"); }
+        HeatSensitive() {
+            super("HEAT_SENSITIVE");
+        }
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
@@ -118,7 +124,9 @@ public class AbilitiesRegistry {
     }
 
     static class ColdSensitive extends TickingAbility {
-        ColdSensitive() { super("COLD_SENSITIVE"); }
+        ColdSensitive() {
+            super("COLD_SENSITIVE");
+        }
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
@@ -130,7 +138,7 @@ public class AbilitiesRegistry {
             // Completely cancel any effects if player has full leather armor.
             // Still applies freezing overlays but stops damage when armor isn't full leather. It is an intended side effect.
 
-            int targetTime = player.getTicksRequiredToFreeze() + 20;
+            int targetTime = player.getTicksRequiredToFreeze()+20;
             player.setTicksFrozen(targetTime);
             player.getEntityData().set(Entity.DATA_TICKS_FROZEN, targetTime, true);
         }
@@ -210,11 +218,11 @@ public class AbilitiesRegistry {
             if (level.getGameTime() % 5 != 0) return;
 
             int armor = player.getArmorValue();
-            float targetHp = Math.max(40.0F, Math.min(100.0F, 100.0F - (armor * 3.0F)));
+            float targetHp = Math.max(40.0F, Math.min(100.0F, 100.0F-(armor * 3.0F)));
             AttributeInstance maxHp = player.getAttribute(Attributes.MAX_HEALTH);
             if (maxHp != null) {
                 maxHp.removeModifier(STRONG_HP);
-                maxHp.addTransientModifier(new AttributeModifier(STRONG_HP, targetHp - 20.0, AttributeModifier.Operation.ADD_VALUE));
+                maxHp.addTransientModifier(new AttributeModifier(STRONG_HP, targetHp-20.0, AttributeModifier.Operation.ADD_VALUE));
                 if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
             }
             AttributeInstance attack = player.getAttribute(Attributes.ATTACK_DAMAGE);
@@ -236,7 +244,8 @@ public class AbilitiesRegistry {
             if (level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
                 .get(Enchantments.DEPTH_STRIDER)
                 .map(h -> EnchantmentHelper.getItemEnchantmentLevel(h, player.getItemBySlot(EquipmentSlot.HEAD)) > 1)
-                .orElse(false)) return; // Return before granting Dolphin's Grace if player has depth strider to prevent OP swimming speeds
+                .orElse(false))
+                return; // Return before granting Dolphin's Grace if player has depth strider to prevent OP swimming speeds
             AbilityUtil.applyEffect(player, MobEffects.DOLPHINS_GRACE);
         }
     }
@@ -264,10 +273,10 @@ public class AbilitiesRegistry {
             if (player.isInWater() || player.hasEffect(MobEffects.WATER_BREATHING)) {
                 // Restore air when in water
                 if (player.getAirSupply() < player.getMaxAirSupply())
-                    player.setAirSupply(player.getAirSupply() + 4);
+                    player.setAirSupply(player.getAirSupply()+4);
             } else {
                 // Drain air on land
-                player.setAirSupply(player.getAirSupply() - 1);
+                player.setAirSupply(player.getAirSupply()-1);
                 if (player.getAirSupply() <= -20) {
                     player.setAirSupply(1);
                     player.hurt(level.damageSources().drown(), 1.0F);
@@ -349,9 +358,9 @@ public class AbilitiesRegistry {
             for (Creeper creeper : AbilityUtil.getNearby(player, Creeper.class, 8.0)) {
                 creeper.setTarget(null);
                 creeper.getNavigation().moveTo(
-                    creeper.getX() + (creeper.getX() - player.getX()),
+                    creeper.getX()+(creeper.getX()-player.getX()),
                     creeper.getY(),
-                    creeper.getZ() + (creeper.getZ() - player.getZ()), 1.2);
+                    creeper.getZ()+(creeper.getZ()-player.getZ()), 1.2);
             }
         }
     }
@@ -366,9 +375,9 @@ public class AbilitiesRegistry {
             for (Phantom phantom : AbilityUtil.getNearby(player, Phantom.class, 16.0)) {
                 phantom.setTarget(null);
                 phantom.getNavigation().moveTo(
-                    phantom.getX() + (phantom.getX() - player.getX()),
-                    phantom.getY() + 8,
-                    phantom.getZ() + (phantom.getZ() - player.getZ()), 1.2);
+                    phantom.getX()+(phantom.getX()-player.getX()),
+                    phantom.getY()+8,
+                    phantom.getZ()+(phantom.getZ()-player.getZ()), 1.2);
             }
         }
     }
@@ -427,13 +436,14 @@ public class AbilitiesRegistry {
 
     private static final Map<UUID, List<WrappedGoal>> storedGoals = new HashMap<>();
     private static final Map<Class<?>, Double> IGNORE_FOR = Map.of(
-        Pillager.class, 64.0, Slime.class,16.0,
+        Pillager.class, 64.0, Slime.class, 16.0,
         Zombie.class, 48.0, Husk.class, 48.0, Drowned.class, 48.0,
         Skeleton.class, 24.0, Parched.class, 24.0
     );
     private static final Map<Class<?>, Double> ATTACK_FOR = Map.of(
         IronGolem.class, 16.0, SnowGolem.class, 24.0
     );
+
     static class IsMonster extends TickingAbility {
         IsMonster() {
             super("IS_MONSTER");
@@ -473,9 +483,9 @@ public class AbilitiesRegistry {
             for (Villager villager : AbilityUtil.getNearby(player, Villager.class, 16.0)) {
                 if (villager.isSleeping()) villager.stopSleeping();
                 villager.getNavigation().moveTo(
-                    villager.getX() + (villager.getX() - player.getX()),
+                    villager.getX()+(villager.getX()-player.getX()),
                     villager.getY(),
-                    villager.getZ() + (villager.getZ() - player.getZ()), 0.75);
+                    villager.getZ()+(villager.getZ()-player.getZ()), 0.75);
             }
 
             // Attack

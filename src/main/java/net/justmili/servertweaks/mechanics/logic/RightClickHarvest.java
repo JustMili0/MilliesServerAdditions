@@ -158,7 +158,8 @@ public final class RightClickHarvest {
     // Damages hoe by 1 durability if the player is holding one (respects Unbreaking)
     private static void damageHoeIfHeld(ServerPlayer player, ItemStack stack, ServerLevel level) {
         if (stack.getItem() instanceof HoeItem) {
-            stack.hurtAndBreak(1, level, player, item -> {});
+            stack.hurtAndBreak(1, level, player, item -> {
+            });
         }
     }
 }

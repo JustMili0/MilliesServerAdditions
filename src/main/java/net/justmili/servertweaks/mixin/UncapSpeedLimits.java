@@ -17,7 +17,7 @@ public abstract class UncapSpeedLimits {
         return Float.MAX_VALUE;
     }
 
-    @ModifyConstant(method = {"handleMoveVehicle"}, constant = {@Constant(doubleValue = (double)100.0F)})
+    @ModifyConstant(method = {"handleMoveVehicle"}, constant = {@Constant(doubleValue = (double) 100.0F)})
     private double uncapVehicleSpeed(double speed) {
         return Double.MAX_VALUE;
     }

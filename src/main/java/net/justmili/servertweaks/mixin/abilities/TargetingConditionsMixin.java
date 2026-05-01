@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.mixin.abilities;
 
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.abilities.AbilityManager;
+import net.justmili.servertweaks.content.abilities.AbilityUtil;
 import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,7 +20,7 @@ public class TargetingConditionsMixin {
     private void servertweaks$preventTargetingFriendlyPlayer(ServerLevel level, LivingEntity attacker, LivingEntity target, CallbackInfoReturnable<Boolean> cir) {
         if (!(Config.playerAbilities.get())) return;
         if (!(target instanceof ServerPlayer player)) return;
-        if (!AbilityManager.has(player, AbilitiesRegistry.FRIENDS_WITH_NATURE)) return;
+        if (!AbilityUtil.has(player, AbilitiesRegistry.FRIENDS_WITH_NATURE)) return;
 
         if (attacker instanceof TamableAnimal tamed && tamed.isTame()) return;
         cir.setReturnValue(false);

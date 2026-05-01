@@ -17,21 +17,23 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class AbilitySetArgumentType {
-    public record AbilitySet(String name, String description, Set<Ability> abilities, Set<AbilityModifier> modifiers) {}
+    public record AbilitySet(String name, String description, Set<Ability> abilities, Set<AbilityModifier> modifiers) {
+    }
+
     private static final Map<String, AbilitySet> SETS = new LinkedHashMap<>();
 
     static {
         register(new AbilitySet(
             "custom",
-            "\nContact any online staff that you'd like a custom set. Your chosen abilities, debuffs and ability modifiers " +
+            "\nContact any online staff that you'd like a custom set. Your chosen abilities, debuffs and ability modifiers "+
                 "will be reviewed by staff and implemented if it's compliant with server's ability creation guidelines if there are any.",
             Set.of(),
             Set.of()
         ));
         register(new AbilitySet(
             "feline",
-            "\nFelines can mimic the hissing of a creeper and screeching of phantoms, scaring them away; they are also immune to fall damage" +
-                "and are extra fast when sprinting. They are carnivores, meaning they can only eat meat, can't exactly swim up in water to not drown" +
+            "\nFelines can mimic the hissing of a creeper and screeching of phantoms, scaring them away; they are also immune to fall damage"+
+                "and are extra fast when sprinting. They are carnivores, meaning they can only eat meat, can't exactly swim up in water to not drown"+
                 "and untamed wolves turn aggressive towards them unprovoked.",
             Set.of(
                 AbilitiesRegistry.SCARES_CREEPERS,
@@ -46,9 +48,9 @@ public class AbilitySetArgumentType {
         ));
         register(new AbilitySet( // TODO: ASK FAYE IS THIS IS FINE
             "dreamweaver",
-            "\nDreamweavers are creatures of dreams, they can take an appearance of a cat-moth hybrid, sometimes humanoid; " +
-                "though normally they don't have a physical form. " +
-                "A dreamweaver scares away creepers due to their cat characteristics, scares away phantoms [insert reason why].\n" +
+            "\nDreamweavers are creatures of dreams, they can take an appearance of a cat-moth hybrid, sometimes humanoid; "+
+                "though normally they don't have a physical form. "+
+                "A dreamweaver scares away creepers due to their cat characteristics, scares away phantoms [insert reason why].\n"+
                 "They also are rather weak, taking 1.25x more damage than normal, can only eat sweets if not bound to a host, and animals love them.",
             Set.of(
                 AbilitiesRegistry.SCARES_CREEPERS,
@@ -98,12 +100,15 @@ public class AbilitySetArgumentType {
     private static void register(AbilitySet set) {
         SETS.put(set.name(), set);
     }
+
     public static StringArgumentType setSelect() {
         return StringArgumentType.word();
     }
+
     public static @Nullable AbilitySet getSet(String name) {
         return SETS.get(name.toLowerCase());
     }
+
     public static Set<String> getNames() {
         return SETS.keySet();
     }

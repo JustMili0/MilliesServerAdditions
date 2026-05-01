@@ -36,7 +36,7 @@ public class Discard {
                     List<Entity> players = new ArrayList<>(entities.stream().filter(e -> e instanceof Player).toList());
                     if (!players.isEmpty()) {
                         for (Entity player : players) {
-                            CommandUtil.sendFail(source, "Can't discard entity " + player.getType().toShortString());
+                            CommandUtil.sendFail(source, "Can't discard entity "+player.getType().toShortString());
                         }
                         return 0;
                     }
@@ -49,9 +49,9 @@ public class Discard {
                     // One or multiple? Send message
                     if (entities.size() == 1) {
                         Entity only = entities.iterator().next();
-                        CommandUtil.sendSucc(source, "Discarded " + only.getName().getString());
+                        CommandUtil.sendSucc(source, "Discarded "+only.getName().getString());
                     } else {
-                        CommandUtil.sendSucc(source, "Discarded " + entities.size() + " entities");
+                        CommandUtil.sendSucc(source, "Discarded "+entities.size()+" entities");
                     }
                     return entities.size();
                 })
@@ -76,7 +76,7 @@ public class Discard {
                     level.removeBlock(pos, false);
 
                     // Send message
-                    CommandUtil.sendSucc(source, "Discarded " + blockId + " from " + formatPos(pos));
+                    CommandUtil.sendSucc(source, "Discarded "+blockId+" from "+formatPos(pos));
                     return 1;
                 })
             )
@@ -97,7 +97,7 @@ public class Discard {
                             player.getInventory().clearContent();
                             player.containerMenu.setCarried(ItemStack.EMPTY);
 
-                        // Mobs, clear armor, held items, equipped containers
+                            // Mobs, clear armor, held items, equipped containers
                         } else if (entity instanceof Mob mob) {
                             // Clear armor, held items
                             for (EquipmentSlot slot : EquipmentSlot.values()) {
@@ -119,7 +119,7 @@ public class Discard {
                         }
 
                         // Send message
-                        CommandUtil.sendSucc(source, "Discarded " + cleared + " item(s) from " + entity.getName().getString() + "'s inventory");
+                        CommandUtil.sendSucc(source, "Discarded "+cleared+" item(s) from "+entity.getName().getString()+"'s inventory");
                         return cleared;
                     })
                 )
@@ -144,12 +144,12 @@ public class Discard {
                             clearable.clearContent();
                         } else {
                             // ...No? Fail.
-                            CommandUtil.sendFail(source, "Could not clear " + blockId + ". Block is not a container");
+                            CommandUtil.sendFail(source, "Could not clear "+blockId+". Block is not a container");
                             return 0;
                         }
 
                         // Send message
-                        CommandUtil.sendSucc(source, "Discarded " + cleared + " item(s) from " + blockId + "'s inventory at " + formatPos(pos));
+                        CommandUtil.sendSucc(source, "Discarded "+cleared+" item(s) from "+blockId+"'s inventory at "+formatPos(pos));
                         return cleared;
                     })
                 )
@@ -167,6 +167,6 @@ public class Discard {
     }
 
     private static String formatPos(BlockPos pos) {
-        return pos.getX() + " " + pos.getY() + " " + pos.getZ();
+        return pos.getX()+" "+pos.getY()+" "+pos.getZ();
     }
 }

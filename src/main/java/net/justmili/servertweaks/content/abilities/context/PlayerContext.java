@@ -6,6 +6,11 @@ import org.jspecify.annotations.Nullable;
 public final class PlayerContext {
     private static @Nullable Player interactingPlayer = null;
 
-    public static void set(@Nullable Player player) { interactingPlayer = player; }
-    public static @Nullable Player get() { return interactingPlayer; }
+    public static void set(@Nullable Player player) {
+        interactingPlayer = player;
+    }
+
+    public static @Nullable Player get() {
+        return interactingPlayer;
+    }
 }

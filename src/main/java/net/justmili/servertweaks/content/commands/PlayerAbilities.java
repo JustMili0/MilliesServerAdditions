@@ -3,6 +3,7 @@ package net.justmili.servertweaks.content.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.justmili.servertweaks.content.abilities.AbilityManager;
+import net.justmili.servertweaks.content.abilities.AbilityUtil;
 import net.justmili.servertweaks.content.abilities.ability.Ability;
 import net.justmili.servertweaks.content.abilities.ability.AbilityModifier;
 import net.justmili.servertweaks.content.commands.arguments.AbilitiesArgumentType;
@@ -68,7 +69,7 @@ public class PlayerAbilities {
                         .executes(context -> {
                             ServerPlayer player = EntityArgument.getPlayer(context, "player");
 
-                            AbilityManager.clearPlayer(player);
+                            AbilityUtil.clearPlayer(player);
                             FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, false);
 
                             CommandUtil.sendSucc(context.getSource(), "Removed player abilities profile of "+player.getName().getString());
@@ -81,12 +82,11 @@ public class PlayerAbilities {
                     .requires(src -> CommandUtil.hasPerms(src, 2))
                     .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.argument("abilityOrDebuff", AbilitiesArgumentType.abilities())
-                            .suggests(AbilitiesArgumentType::suggestGrantable)
                             .executes(context -> {
                                 ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                 Ability ability = AbilitiesArgumentType.getAbility(context, "abilityOrDebuff");
 
-                                AbilityManager.grantAbility(player, ability);
+                                AbilityUtil.grantAbility(player, ability);
 
                                 CommandUtil.sendSucc(context.getSource(), "Granted ability "+ability.getName()+" to player "+player.getName().getString());
 
@@ -94,12 +94,11 @@ public class PlayerAbilities {
                             })
                         )
                         .then(Commands.argument("modifier", ModifiersArgumentType.modifier())
-                            .suggests(ModifiersArgumentType::suggestGrantable)
                             .executes(context -> {
                                 ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                 AbilityModifier modifier = ModifiersArgumentType.getModifier(context, "modifier");
 
-                                AbilityManager.grantModifier(player, modifier);
+                                AbilityUtil.grantModifier(player, modifier);
 
                                 CommandUtil.sendSucc(context.getSource(), "Granted ability modifier "+modifier.getName()+" to player "+player.getName().getString());
 
@@ -112,12 +111,11 @@ public class PlayerAbilities {
                     .requires(src -> CommandUtil.hasPerms(src, 2))
                     .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.argument("abilityOrDebuff", AbilitiesArgumentType.abilities())
-                            .suggests(AbilitiesArgumentType::suggestRevokable)
                             .executes(context -> {
                                 ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                 Ability ability = AbilitiesArgumentType.getAbility(context, "abilityOrDebuff");
 
-                                AbilityManager.revokeAbility(player, ability);
+                                AbilityUtil.revokeAbility(player, ability);
 
                                 CommandUtil.sendSucc(context.getSource(), "Removed ability "+ability.getName()+" from player "+player.getName().getString());
 
@@ -125,12 +123,11 @@ public class PlayerAbilities {
                             })
                         )
                         .then(Commands.argument("modifier", ModifiersArgumentType.modifier())
-                            .suggests(ModifiersArgumentType::suggestRevokable)
                             .executes(context -> {
                                 ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                 AbilityModifier modifier = ModifiersArgumentType.getModifier(context, "modifier");
 
-                                AbilityManager.revokeModifier(player, modifier);
+                                AbilityUtil.revokeModifier(player, modifier);
 
                                 CommandUtil.sendSucc(context.getSource(), "Removed ability modifier "+modifier.getName()+" from player "+player.getName().getString());
 
@@ -156,7 +153,7 @@ public class PlayerAbilities {
                                 return 0;
                             }
 
-                            AbilityManager.applySet(player.getUUID(), set, source.getServer());
+                            AbilityUtil.applySet(player.getUUID(), set, source.getServer());
                             FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, true);
                             CommandUtil.sendSucc(source, "Applied the "+setName+" set!");
 

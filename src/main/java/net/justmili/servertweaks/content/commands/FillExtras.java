@@ -56,8 +56,8 @@ public class FillExtras {
                                                 }
                                             }
 
-                                    CommandUtil.sendSucc(source, "Successfully destroyed " + count + " block(s) of " + targetBlock.getBlock().getName().getString()
-                                        + " and replaced with" + replaceWith.getBlock().getName().getString());
+                                    CommandUtil.sendSucc(source, "Successfully destroyed "+count+" block(s) of "+targetBlock.getBlock().getName().getString()
+                                        +" and replaced with"+replaceWith.getBlock().getName().getString());
                                     return count;
                                 })
                             )
@@ -89,8 +89,8 @@ public class FillExtras {
                                                 }
                                             }
 
-                                    CommandUtil.sendSucc(source, "Successfully replaced " + count + " block(s) of " + targetBlock.getBlock().getName().getString()
-                                        + " and replaced with" + replaceWith.getBlock().getName().getString());
+                                    CommandUtil.sendSucc(source, "Successfully replaced "+count+" block(s) of "+targetBlock.getBlock().getName().getString()
+                                        +" and replaced with"+replaceWith.getBlock().getName().getString());
                                     return count;
                                 })
                             )
@@ -123,7 +123,7 @@ public class FillExtras {
                                             }
                                         }
 
-                                CommandUtil.sendSucc(source, "Successfully destroyed " + count + " block(s) with Silk Touch effect");
+                                CommandUtil.sendSucc(source, "Successfully destroyed "+count+" block(s) with Silk Touch effect");
                                 return count;
                             })
                         )
@@ -156,8 +156,8 @@ public class FillExtras {
                                                 }
                                             }
 
-                                    CommandUtil.sendSucc(source, "Successfully destroyed " + count + " " +
-                                        targetBlock.getBlock().getName().getString() + " block(s) with Silk Touch effect");
+                                    CommandUtil.sendSucc(source, "Successfully destroyed "+count+" "+
+                                        targetBlock.getBlock().getName().getString()+" block(s) with Silk Touch effect");
                                     return count;
                                 })
                             )
@@ -192,7 +192,7 @@ public class FillExtras {
                                                 }
                                             }
 
-                                    CommandUtil.sendSucc(source, "Successfully destroyed " + count + " block(s) with Fortune level" + fortuneLevel + " effect");
+                                    CommandUtil.sendSucc(source, "Successfully destroyed "+count+" block(s) with Fortune level"+fortuneLevel+" effect");
                                     return count;
                                 })
                             )
@@ -228,8 +228,8 @@ public class FillExtras {
                                                     }
                                                 }
 
-                                        CommandUtil.sendSucc(source, "Successfully destroyed " + count + " " +
-                                            targetBlock.getBlock().getName().getString() + " block(s) with Fortune level" + fortuneLevel + " effect");
+                                        CommandUtil.sendSucc(source, "Successfully destroyed "+count+" "+
+                                            targetBlock.getBlock().getName().getString()+" block(s) with Fortune level"+fortuneLevel+" effect");
                                         return count;
                                     })
                                 )

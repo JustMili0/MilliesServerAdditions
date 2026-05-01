@@ -10,7 +10,6 @@ import net.justmili.servertweaks.content.abilities.ability.Ability;
 import net.justmili.servertweaks.content.abilities.ability.AbilityModifier;
 import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
 import net.justmili.servertweaks.content.abilities.registry.AbilityModifierRegistry;
-import net.justmili.servertweaks.content.commands.arguments.AbilitySetArgumentType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -21,8 +20,8 @@ import java.util.*;
 public class AbilityManager {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String FILE_NAME = "player_abilities.json";
-    private static final Map<UUID, Set<Ability>> playerAbilities = new HashMap<>();
-    private static final Map<UUID, Set<AbilityModifier>> playerModifiers = new HashMap<>();
+    public static final Map<UUID, Set<Ability>> playerAbilities = new HashMap<>();
+    public static final Map<UUID, Set<AbilityModifier>> playerModifiers = new HashMap<>();
 
     public static void loadFile(MinecraftServer server) {
         playerAbilities.clear();
@@ -39,8 +38,9 @@ public class AbilityManager {
             JsonObject root = GSON.fromJson(reader, JsonObject.class);
             for (var entry : root.entrySet()) {
                 UUID uuid;
-                try { uuid = UUID.fromString(entry.getKey()); }
-                catch (IllegalArgumentException e) {
+                try {
+                    uuid = UUID.fromString(entry.getKey());
+                } catch (IllegalArgumentException e) {
                     ServerTweaks.LOGGER.warn("Invalid UUID '{}', skipping", entry.getKey());
                     continue;
                 }
@@ -50,9 +50,9 @@ public class AbilityManager {
                 if (object.has("abilities")) {
                     for (var element : object.getAsJsonArray("abilities")) {
                         Ability ability = AbilitiesRegistry.byName(element.getAsString());
-                        if (ability == null) { 
+                        if (ability == null) {
                             ServerTweaks.LOGGER.warn("Unknown ability '{}', skipping", element.getAsString());
-                            continue; 
+                            continue;
                         }
                         abilities.add(ability);
                     }
@@ -61,8 +61,9 @@ public class AbilityManager {
                 if (object.has("ability_modifiers")) {
                     for (var element : object.getAsJsonArray("ability_modifiers")) {
                         AbilityModifier modifier = AbilityModifierRegistry.byName(element.getAsString());
-                        if (modifier == null) { 
-                            ServerTweaks.LOGGER.warn("Unknown modifier '{}', skipping", element.getAsString()); continue;
+                        if (modifier == null) {
+                            ServerTweaks.LOGGER.warn("Unknown modifier '{}', skipping", element.getAsString());
+                            continue;
                         }
                         modifiers.add(modifier);
                     }
@@ -74,6 +75,7 @@ public class AbilityManager {
             ServerTweaks.LOGGER.error("Failed to read config: {}", e.getMessage());
         }
     }
+
     public static void saveFile(MinecraftServer server) {
         JsonObject root = new JsonObject();
 
@@ -111,48 +113,7 @@ public class AbilityManager {
         }
     }
 
-    public static Set<Ability> getAbilities(ServerPlayer player) {
-        return playerAbilities.getOrDefault(player.getUUID(), Collections.emptySet());
-    }
-    public static Set<AbilityModifier> getModifiers(ServerPlayer player) {
-        return playerModifiers.getOrDefault(player.getUUID(), Collections.emptySet());
-    }
-    public static void grantAbility(ServerPlayer player, Ability ability) {
-        playerAbilities.computeIfAbsent(player.getUUID(), uuid -> new HashSet<>()).add(ability);
-        saveFile(player.level().getServer());
-    }
-    public static void revokeAbility(ServerPlayer player, Ability ability) {
-        playerAbilities.getOrDefault(player.getUUID(), Collections.emptySet()).remove(ability);
-        saveFile(player.level().getServer());
-    }
-    public static void grantModifier(ServerPlayer player, AbilityModifier modifier) {
-        playerModifiers.computeIfAbsent(player.getUUID(), uuid -> new HashSet<>()).add(modifier);
-        saveFile(player.level().getServer());
-    }
-    public static void revokeModifier(ServerPlayer player, AbilityModifier modifier) {
-        playerModifiers.getOrDefault(player.getUUID(), Collections.emptySet()).remove(modifier);
-        saveFile(player.level().getServer());
-    }
-    public static void clearPlayer(ServerPlayer player) {
-        UUID uuid = player.getUUID();
-        MinecraftServer server = player.level().getServer();
-        playerAbilities.remove(uuid);
-        playerModifiers.remove(uuid);
-        saveFile(server);
-    }
-    public static boolean has(ServerPlayer player, Ability ability) {
-        return getAbilities(player).contains(ability);
-    }
-    public static boolean has(ServerPlayer player, AbilityModifier modifier) {
-        return getModifiers(player).contains(modifier);
-    }
-    public static void applySet(UUID uuid, AbilitySetArgumentType.AbilitySet set, MinecraftServer server) {
-        playerAbilities.put(uuid, new HashSet<>(set.abilities()));
-        playerModifiers.put(uuid, new HashSet<>(set.modifiers()));
-        saveFile(server);
-    }
-
     private static File getFile() {
-        return new File("config/servertweaks/" + FILE_NAME);
+        return new File("config/servertweaks/"+FILE_NAME);
     }
 }

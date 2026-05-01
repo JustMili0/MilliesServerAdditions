@@ -46,9 +46,11 @@ public class ScalerUtil {
     public static boolean wasScaled(ServerPlayer player) {
         return FdaApiUtil.getBoolValue(player, PlayerAttachments.SCALE_LOCKED);
     }
+
     public static @Nullable AttributeInstance getScale(ServerPlayer player) {
         return player.getAttribute(Attributes.SCALE);
     }
+
     public static void setScale(ServerPlayer player, double scale) {
         getScale(player).setBaseValue(scale);
     }

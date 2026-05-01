@@ -17,9 +17,11 @@ public class AbilityModifierRegistry {
         REGISTRY.put(modifier.getName(), modifier);
         return modifier;
     }
+
     public static Set<String> getNames() {
         return REGISTRY.keySet();
     }
+
     public static @Nullable AbilityModifier byName(String name) {
         return REGISTRY.get(name);
     }

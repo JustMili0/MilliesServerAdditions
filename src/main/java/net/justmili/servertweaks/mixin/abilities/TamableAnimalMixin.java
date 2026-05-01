@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.mixin.abilities;
 
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.abilities.AbilityManager;
+import net.justmili.servertweaks.content.abilities.AbilityUtil;
 import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.TamableAnimal;
@@ -18,8 +18,8 @@ public class TamableAnimalMixin {
     private void servertweaks$tame(Player player, CallbackInfo ci) {
         if (!(Config.playerAbilities.get())) return;
         if (!(player instanceof ServerPlayer serverPlayer)) return;
-        if (!AbilityManager.has(serverPlayer, AbilitiesRegistry.FRIENDS_WITH_NATURE)) return;
-        TamableAnimal self = (TamableAnimal)(Object)this;
+        if (!AbilityUtil.has(serverPlayer, AbilitiesRegistry.FRIENDS_WITH_NATURE)) return;
+        TamableAnimal self = (TamableAnimal) (Object) this;
         self.setOwner(player);
         self.setTame(true, true);
         ci.cancel();

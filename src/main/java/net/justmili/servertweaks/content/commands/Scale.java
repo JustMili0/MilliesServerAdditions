@@ -2,10 +2,10 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
-import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.justmili.servertweaks.core.util.CommandUtil;
 import net.justmili.servertweaks.core.util.FdaApiUtil;
 import net.justmili.servertweaks.core.util.ScalerUtil;
+import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

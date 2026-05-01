@@ -9,8 +9,11 @@ import static net.justmili.servertweaks.core.util.FdaApiUtil.createValue;
 
 @SuppressWarnings({"UnstableApiUsage", "NullableProblems"})
 public final class PlayerAttachments {
-    private PlayerAttachments() {}
-    public static void register() {}
+    private PlayerAttachments() {
+    }
+
+    public static void register() {
+    }
 
     // Scale-Command related
     public static final AttachmentType<Boolean> SCALE_LOCKED = createPersistentValue("scale_locked", false, Codec.BOOL);

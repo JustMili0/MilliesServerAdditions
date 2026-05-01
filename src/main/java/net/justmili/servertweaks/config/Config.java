@@ -31,7 +31,7 @@ public class Config {
     //Config for "RightClickHarvest" feature.
     public static final Supplier<Boolean> rightClickHarvest;
     public static final Supplier<Boolean> playerAbilities;
-    
+
     static {
         IConfigBuilder builder = ConfigBuilders.newTomlConfig("servertweaks", "", true);
 
@@ -61,12 +61,12 @@ public class Config {
         removeAnvilLimit = builder.comment("Should the server clamp the max anvil cost to 39 levels if at or over, to prevent \"Too Expensive\"?")
             .define("removeAnvilLimit", true);
         pistonPushLimit = builder.comment("How many blocks should the piston be able to push?")
-                .define("pistonPushLimit", 12, 0, 511);
+            .define("pistonPushLimit", 12, 0, 511);
         builder.pop();
 
         builder.push("Features");
         rightClickHarvest = builder.comment("Should the player be able to harvest crops with by just right-clicking?")
-                .define("rightClickHarvest", true);
+            .define("rightClickHarvest", true);
         playerAbilities = builder.comment("[EXPERIMENTAL] Allows server owners to configure player abilities for some or all members")
             .define("playerAbilities", false);
         builder.pop();

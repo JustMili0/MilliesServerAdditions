@@ -34,9 +34,11 @@ public class CommandUtil {
     public static void sendSucc(CommandSourceStack source, String message) {
         source.sendSuccess(() -> Component.literal(message), false);
     }
+
     public static void sendFail(CommandSourceStack source, String message) {
         source.sendFailure(Component.literal(message));
     }
+
     public static void sendTo(ServerPlayer player, String message) {
         player.sendSystemMessage(Component.literal(message));
     }

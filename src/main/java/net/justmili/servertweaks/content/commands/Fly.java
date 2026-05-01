@@ -41,7 +41,7 @@ public class Fly {
 
         player.onUpdateAbilities();
 
-        CommandUtil.sendSucc(source, (abilities.mayfly ? "Enabled" : "Disabled") + " creative flight for " + player.getName().getString());
+        CommandUtil.sendSucc(source, (abilities.mayfly ? "Enabled" : "Disabled")+" creative flight for "+player.getName().getString());
         return 1;
     }
 }

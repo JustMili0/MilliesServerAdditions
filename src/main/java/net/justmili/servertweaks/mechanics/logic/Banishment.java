@@ -42,7 +42,7 @@ public final class Banishment {
 
             for (int dx = -2; dx <= 2; dx++) {
                 for (int dz = -2; dz <= 2; dz++) {
-                    BlockPos pos = new BlockPos(centerX + dx, 0, centerZ + dz);
+                    BlockPos pos = new BlockPos(centerX+dx, 0, centerZ+dz);
                     if (!level.getBlockState(pos).is(Blocks.BEDROCK)) {
                         level.setBlock(pos, Blocks.BEDROCK.defaultBlockState(), 3);
                     }

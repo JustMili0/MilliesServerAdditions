@@ -1,9 +1,9 @@
 package net.justmili.servertweaks.mixin.abilities;
 
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.abilities.registry.AbilityEffects;
-import net.justmili.servertweaks.content.abilities.AbilityManager;
+import net.justmili.servertweaks.content.abilities.AbilityUtil;
 import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
+import net.justmili.servertweaks.content.abilities.registry.AbilityEffects;
 import net.justmili.servertweaks.mixin.accessors.LivingEntityAccessor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,17 +27,19 @@ public class LivingEntityMixin {
         if (!(Config.playerAbilities.get())) return;
         LivingEntity self = (LivingEntity) (Object) this;
         if (!(self instanceof ServerPlayer player)) return;
-        if (AbilityManager.has(player, AbilitiesRegistry.TOUGH)) ci.cancel();
+        if (AbilityUtil.has(player, AbilitiesRegistry.TOUGH)) ci.cancel();
     }
 
     // WEAK_TO_DAMAGE
-    @Unique private boolean applyDamageModifyer = false;
+    @Unique
+    private boolean applyDamageModifyer = false;
+
     @Inject(method = "actuallyHurt", at = @At("HEAD"), cancellable = true)
     private void onActuallyHurt(ServerLevel level, DamageSource source, float amount, CallbackInfo ci) {
         if (!(Config.playerAbilities.get())) return;
         if (applyDamageModifyer) return;
         if (!(((LivingEntity) (Object) this) instanceof ServerPlayer player)) return;
-        if (!AbilityManager.has(player, AbilitiesRegistry.WEAK_TO_DAMAGE)) return;
+        if (!AbilityUtil.has(player, AbilitiesRegistry.WEAK_TO_DAMAGE)) return;
         if (source.is(DamageTypes.FALL)) return;
 
         applyDamageModifyer = true;
@@ -50,8 +52,8 @@ public class LivingEntityMixin {
     @Inject(method = "increaseAirSupply", at = @At("HEAD"), cancellable = true)
     private void servertweaks$increaseAirSupply(int currentAir, CallbackInfoReturnable<Integer> cir) {
         if (!(Config.playerAbilities.get())) return;
-        if (!((LivingEntity)(Object)this instanceof ServerPlayer player)) return;
-        if (!AbilityManager.has(player, AbilitiesRegistry.CANT_BREATHE_AIR)) return;
+        if (!((LivingEntity) (Object) this instanceof ServerPlayer player)) return;
+        if (!AbilityUtil.has(player, AbilitiesRegistry.CANT_BREATHE_AIR)) return;
         if (!player.isInWater()) cir.setReturnValue(currentAir);
     }
 

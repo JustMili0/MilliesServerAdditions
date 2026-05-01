@@ -1,8 +1,8 @@
 package net.justmili.servertweaks.mechanics.logic;
 
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.justmili.servertweaks.core.util.FdaApiUtil;
+import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,7 +39,7 @@ public class WhileAfk {
         if (!FdaApiUtil.getBoolValue(serverPlayer, PlayerAttachments.IS_AFK) && Config.afkCommandCooldown.get() != 0) {
             int cooldown = FdaApiUtil.getIntValue(serverPlayer, PlayerAttachments.AFK_COOLDOWN);
             if (cooldown > 0) {
-                FdaApiUtil.setIntValue(serverPlayer, PlayerAttachments.AFK_COOLDOWN, cooldown - 1);
+                FdaApiUtil.setIntValue(serverPlayer, PlayerAttachments.AFK_COOLDOWN, cooldown-1);
             }
         }
     }

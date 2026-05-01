@@ -61,6 +61,7 @@ public class DamageToggle {
                 )
         );
     }
+
     //Suggests damage types
     private static CompletableFuture<Suggestions> suggestDamageTypes(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
         Registry<DamageType> registry =
@@ -97,6 +98,7 @@ public class DamageToggle {
         );
         return 1;
     }
+
     private static int sendStatus(CommandContext<CommandSourceStack> context) {
         Identifier id = IdentifierArgument.getId(context, "type");
 
