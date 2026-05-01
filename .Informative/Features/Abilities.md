@@ -24,9 +24,8 @@ SWIFT - Custom | Gains Speed 1 while sprinting.
 SLOW - Zombie-based | Permanently slowed to roughly zombie walking speed via movement speed attribute reduction.
 HOPPY - Rabbit-based | Permanent hidden Jump Boost 1.
 DWARF - Custom | Height capped at 0.75 of normal scale. Players already at or below 0.75 via /scale are unaffected. Permanent hidden Haste 2.
-SQUISHY - ???
-MAGNETIC - ???
-STICKY - ???
+SQUISHY - Custom | Decreases fall and fly_into_wall damage by 75% each.
+MAGNETIC - Custom | On-ground items within 6 blocks of the player get pulled towards the player
 
 TOUGH - Iron Golem-based | Immune to knockback.
 STRONG - Custom | +4hp (2 hearts) attack damage. Max health scales inversely with armor: 100hp naked, 40hp at full Netherite.
@@ -62,7 +61,7 @@ CARNIVORE - Wild Animal-based | Can only eat meat. Honey bottles, milk and other
 VEGETARIAN - Farm Animal-based | Can only eat plant-based foods. Honey bottles, milk and other misc items are always allowed.
 ONLY_EATS_SWEETS - Custom | Can only eat sweet foods (berries, cookies, cake, pie, honey, apples, melon slices).
 GRASS_EATER - Sheep-based | Can shift-right-click any grass (tall, short, dry) or bush to eat it, gaining 2 hunger and 0.2 saturation. Consumes the block.
-BUG_EATER - Frog-based | Can only feed on bug-like entities, slimes, magma cubes, sulfur cubes, and items like slime balls and magma creams
+BUG_EATER - Frog-based | Can only feed on bug-like entities, slimes, magma cubes, sulfur cubes, and items like slime balls and magma creams.
 ```
 
 ### Ability Modifiers

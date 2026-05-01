@@ -14,7 +14,6 @@
     - For 26.2: Also can eat Sulfur Cubes but will get poisoned with nausea, but will get a lot of saturation
   - Squishy (reduces fall and fly_into_wall damage)
   - Magnetic (nearby items come to player)
-  - Sticky (magnetic but cool slime visuals)
 
 --------------------------------------------------------------------------------–--------------------------------------
 
@@ -22,7 +21,6 @@
 **Not yet coded**
 - SQUISHY
 - MAGNETIC
-- STICKY
 - PEARLING
 - PREDATORY
 - BUG_EATER

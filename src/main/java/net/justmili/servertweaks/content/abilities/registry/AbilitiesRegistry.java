@@ -65,7 +65,6 @@ public class AbilitiesRegistry {
     public static final Ability DWARF = register(new Dwarf());
     public static final Ability SQUISHY = register(new Ability("SQUISHY")); // TODO #5
     public static final Ability MAGNETIC = register(new Ability("MAGNETIC")); // TODO #5
-    public static final Ability STICKY = register(new Ability("STICKY")); // TODO #5
     public static final Ability TOUGH = register(new Ability("TOUGH"));
     public static final Ability STRONG = register(new Strong());
     public static final Ability AQUA_GRACE = register(new AquaGrace());
