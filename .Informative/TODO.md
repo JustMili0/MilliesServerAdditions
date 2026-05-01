@@ -1,4 +1,5 @@
-TODO:
+# TODO:
+- Finish writing presets
 - Figure out why suggestions for `/abilities grant|revoke` don't work
 - Fix discarding containers on entities
 - Fix abilities
@@ -17,21 +18,28 @@ TODO:
 
 --------------------------------------------------------------------------------–--------------------------------------
 
-FROM TESTING PLAYER ABILITIES:
-Doesn't work (no changes get applied to player behavior):
+## FROM TESTING PLAYER ABILITIES:
+**Not yet coded**
+- SQUISHY
+- MAGNETIC
+- STICKY
+- PEARLING
+- PREDATORY
+- BUG_EATER
+
+**Doesn't work (no changes get applied to player behavior):**
 - CLIMBS_WALLS - Nothing happens (can't climb walls)
 - WEAK_TO_DAMAGE - Nothing happens (same damage as normal)
 - CANT_SWIM - Nothing happens (can swim as normal)
 
-Kinda work (works for the most part)
-- BURNS_IN_DAYLIGHT - Player doesn't take burning damage without a helmet in water (to fix, should take tiny bit of damage in water if they don't have a helmet)
+**Kinda work (works for the most part)**
 - HUNTED_BY_FOX - Foxes are too scared to approach and attack unless the player is crouching
 - FRIENDS_WITH_NATURE - Calms down neutral animals such as wolves, bees etc. but the tame roll chance still isn't always-taming
 - CARNIVORE - Blocks foods not in diet, but eating animation still plays on servers (counter with nausea)
 - VEGETARIAN - Blocks foods not in diet, but eating animation still plays on servers (counter with nausea)
 - ONLY_EATS_SWEETS - Blocks foods not in diet, but eating animation still plays on servers (counter with nausea)
 
-Do work (works as intended):
+**Do work (works as intended):**
 - FIRE_IMMUNE
 - FREEZE_IMMUNE
 - FALL_IMMUNE
@@ -50,5 +58,6 @@ Do work (works as intended):
 - HUNTED_BY_WOLF
 - SCARES_CREEPERS
 - SCARES_PHANTOMS
+- BURNS_IN_DAYLIGHT
 - IS_MONSTER
 - GRASS_EATER

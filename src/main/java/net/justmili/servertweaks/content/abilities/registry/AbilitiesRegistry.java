@@ -80,7 +80,7 @@ public class AbilitiesRegistry {
     public static final Ability FRIENDS_WITH_NATURE = register(new FriendsWithNature());            // KINDA WORKS
     public static final Ability WEAK_TO_DAMAGE = register(new Ability("WEAK_TO_DAMAGE"));     // DOESN'T WORK
     public static final Ability NIGHT_VISION = register(new NightVision());
-    public static final Ability BURNS_IN_DAYLIGHT = register(new BurnsInDaylight());                // KINDA WORKS
+    public static final Ability BURNS_IN_DAYLIGHT = register(new BurnsInDaylight());
     public static final Ability IS_MONSTER = register(new IsMonster());
     public static final Ability CLIMBS_WALLS = register(new Ability("CLIMBS_WALLS"));         // DOESN'T WORK
     public static final Ability PEARLING = register(new Ability("PEARLING")); // TODO #4

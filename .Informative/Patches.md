@@ -21,8 +21,8 @@ This file was made specifically for Millie's discord announcements about small p
 - GRASS_EATER - Client now gets updated about updated food values
 - GRASS_EATER - Now properly restricts food consumption when no other diets are applied
 - SLOW - Decreased slowness modifier
-- (NEW) Predatory - ??? (Check TODO)   ***NOT DONE YET***
-- (NEW) Pearling - ??? (Check TODO)    ***NOT DONE YET***
+- (NEW) PREDATORY - ??? (Check TODO)   ***NOT DONE YET***
+- (NEW) PEARLING - ??? (Check TODO)    ***NOT DONE YET***
 
 Feedback is appriciated ^^
 
@@ -32,8 +32,8 @@ Feedback is appriciated ^^
 # UnF ServerTweaks Patch #3 - 1.3.0-beta.15
 
 **Player Abilities**
-- (NEW) Squishy - ??? (Check TODO)
-- (NEW) Bug Eater - ??? (Check TODO)
+- (NEW) SQUISHY - ??? (Check TODO)
+- (NEW) BUG EATER - ??? (Check TODO)
 - (NEW) MAGNETIC - ??? (Check TODO)
 - (NEW) STICKY - ??? (Check TODO)
 
