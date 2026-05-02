@@ -6,9 +6,7 @@ import net.justmili.servertweaks.content.abilities.AbilityManager;
 import net.justmili.servertweaks.content.abilities.AbilityUtil;
 import net.justmili.servertweaks.content.abilities.ability.Ability;
 import net.justmili.servertweaks.content.abilities.ability.AbilityModifier;
-import net.justmili.servertweaks.content.commands.arguments.AbilitiesArgumentType;
-import net.justmili.servertweaks.content.commands.arguments.AbilitySetArgumentType;
-import net.justmili.servertweaks.content.commands.arguments.ModifiersArgumentType;
+import net.justmili.servertweaks.content.commands.arguments.*;
 import net.justmili.servertweaks.core.util.CommandUtil;
 import net.justmili.servertweaks.core.util.FdaApiUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
@@ -27,25 +25,25 @@ public class PlayerAbilities {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext, Commands.CommandSelection environment) {
         dispatcher.register(
             Commands.literal("abilities")
-                .then(Commands.literal("pickPremadeSet")
-                    .then(Commands.argument("set", AbilitySetArgumentType.setSelect())
+                .then(Commands.literal("pickPreset")
+                    .then(Commands.argument("preset", AbilitySetArgumentType.setSelect())
                         .suggests(AbilitySetArgumentType::suggest)
                         .executes(context -> {
                             CommandSourceStack source = context.getSource();
                             if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
                             ServerPlayer player = source.getPlayer();
 
-                            String setName = StringArgumentType.getString(context, "set");
+                            String setName = StringArgumentType.getString(context, "preset");
                             AbilitySetArgumentType.AbilitySet set = AbilitySetArgumentType.getSet(setName);
                             if (set == null) {
-                                CommandUtil.sendFail(source, "Unknown ability set: "+setName);
+                                CommandUtil.sendFail(source, "Unknown ability preset: "+setName);
                                 return 0;
                             }
 
                             MutableComponent apply = Component.literal("     [APPLY] ")
-                                .setStyle(Style.EMPTY.withColor(0x55FF55).withClickEvent(new ClickEvent.RunCommand("/abilities applyChosenSet "+setName)));
+                                .setStyle(Style.EMPTY.withColor(0x55FF55).withClickEvent(new ClickEvent.RunCommand("/abilities applyPreset "+setName)));
                             MutableComponent cancel = Component.literal(" [CANCEL]")
-                                .setStyle(Style.EMPTY.withColor(0xFF5555).withClickEvent(new ClickEvent.RunCommand("/abilities cancelChoosingSet")));
+                                .setStyle(Style.EMPTY.withColor(0xFF5555).withClickEvent(new ClickEvent.RunCommand("/abilities dontApplyPreset")));
 
                             player.sendSystemMessage(Component.literal(set.description()+"\n\n").append(apply).append(cancel));
                             return 1;
@@ -145,31 +143,36 @@ public class PlayerAbilities {
                     )
                 )
 
-                .then(Commands.literal("applyChosenSet")
+                .then(Commands.literal("applyPreset")
                     .requires(src -> CommandUtil.hasPerms(src, 2))
-                    .then(Commands.argument("set", AbilitySetArgumentType.setSelect())
+                    .then(Commands.argument("preset", AbilitySetArgumentType.setSelect())
                         .suggests(AbilitySetArgumentType::suggest)
                         .executes(context -> {
                             CommandSourceStack source = context.getSource();
                             if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
                             ServerPlayer player = source.getPlayer();
 
-                            String setName = StringArgumentType.getString(context, "set");
+                            String setName = StringArgumentType.getString(context, "preset");
                             AbilitySetArgumentType.AbilitySet set = AbilitySetArgumentType.getSet(setName);
                             if (set == null) {
-                                CommandUtil.sendFail(source, "Unknown ability set: "+setName);
+                                CommandUtil.sendFail(source, "Unknown ability preset: "+setName);
+                                return 0;
+                            }
+
+                            if (FdaApiUtil.getBoolValue(player, PlayerAttachments.PICKED_PRESET)) {
+                                CommandUtil.sendFail(source, "You have already picked an ability preset.");
                                 return 0;
                             }
 
                             AbilityUtil.applySet(player.getUUID(), set, source.getServer());
                             FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, true);
-                            CommandUtil.sendSucc(source, "Applied the "+setName+" set!");
+                            CommandUtil.sendSucc(source, "Applied the "+setName+" preset!");
 
                             return 1;
                         })
                     )
                 )
-                .then(Commands.literal("cancelChoosingSet")
+                .then(Commands.literal("dontApplyPreset")
                     .requires(src -> CommandUtil.hasPerms(src, 2))
                     .executes(context -> {
                         if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
