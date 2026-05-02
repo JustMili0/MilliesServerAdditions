@@ -9,7 +9,6 @@
   - Fix kinda-working abilities
   - Fix non-working abilities
 - Add new abilities
-  - Pearling (Shift+RC to throw a pear in the direction the player is looking)
   - Bug Eater (Feeds exclusively on slime balls, magma balls, insect/bug-like mobs, slimes (entity) and magma cubes (entity, deals a heart of fire damage when consumed))
     - For 26.2: Also can eat Sulfur Cubes but will get poisoned with nausea, but will get a lot of saturation
   - Squishy (reduces fall and fly_into_wall damage)

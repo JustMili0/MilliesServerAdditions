@@ -56,7 +56,7 @@ BURNS_IN_DAYLIGHT - Undead-based | Burns in direct sunlight (requires skylight l
                     Incompatible with FIRE_IMMUNE.
 IS_MONSTER - Monster-based | Iron golems and snow golems attack the player. Villagers flee. Pillagers, zombies and skeletons ignore the player.
 CLIMBS_WALLS - Spider-based | Can climb any solid wall.
-PEARLING - Enderman-based | Shift-right-click with an empty hand to throw an ender pearl even if you didn't have any.
+PEARLING - Enderman-based | Ender Pearls never get used up when thrown.
 
 PREDATORY - Custom | Smaller animals like for example chickens, fish and frogs will run away from the player.
 CARNIVORE - Wild Animal-based | Can only eat meat. Honey bottles, milk and other misc items are always allowed.

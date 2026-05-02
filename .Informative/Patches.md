@@ -38,7 +38,6 @@ Feedback is appriciated ^^
 
 ------------------------------------------------------------------------------------------------------------------------
 
-(AWAITING COMPLETION, WORK IN PROGRESS)
 # Millie's Server Additions, Patch #4 - 1.3.0-beta.14
 **Generic**
 - Mod name changed
@@ -60,13 +59,15 @@ Feedback is appriciated ^^
 - GRASS_EATER - Added underwater foliage and sugar cane to diet list tag
 - GRASS_EATER - Client now gets updated about updated food values
 - GRASS_EATER - Now properly restricts food consumption when no other diets are applied
-- SLOW - Decreased slowness modifier
+- SLOW - Decreased slowness modifier from `-0.47` multiplier to `-0.32` multiplier
 - FIRE_IMMUNE - Split into `FIRE_IMMUNE`, `LAVA_IMMUNE` and `HEAT_IMMUNE` for very specific use cases
+  - (NEW) LAVA_IMMUNE - Protects against lava damage
+  - (NEW) HEAT_IMMUNE - Protects against hot floor (magma) damage
 - FIRE_IMMUNE - Now only protects against fire and on-fire damage
 - (NEW) LAVA_IMMUNE - Immune lava damage
 - (NEW) HEAT_IMMUNE - Immune to standing-on-magma damage
-- (NEW) PREDATORY - Smaller animals like for example chickens, fish and frogs will run away from the player.
-- (NEW) PEARLING - ??? (Check TODO)    ***NOT DONE YET***
+- (NEW) PREDATORY - Smaller animals like for example chickens, fish and frogs will run away from the player
+- (NEW) PEARLING - Ender Pearls never get used up when thrown
 
 Feedback is appriciated ^^
 

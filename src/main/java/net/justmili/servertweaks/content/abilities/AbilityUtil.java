@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import static net.justmili.servertweaks.content.abilities.AbilityManager.*;
 

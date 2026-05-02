@@ -23,8 +23,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.Set;
@@ -40,6 +40,7 @@ public class AbilityEffects {
 
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(AbilityEffects::specialDamageImmune);
 
+        UseItemCallback.EVENT.register(AbilityEffects::pearling);
         UseBlockCallback.EVENT.register(AbilityEffects::grassEater);
         UseItemCallback.EVENT.register(AbilityEffects::dietRestrictionsOnItem);
         UseBlockCallback.EVENT.register(AbilityEffects::dietRestrictionsOnBlock);
@@ -71,20 +72,44 @@ public class AbilityEffects {
         return true;
     }
 
-    private static InteractionResult grassEater(Player interacting, Level world, InteractionHand hand, BlockHitResult hitResult) {
-        if (world.isClientSide()) return InteractionResult.PASS;
+    private static InteractionResult pearling(Player interacting, Level level, InteractionHand hand) {
+        if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
+
+        if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
+
+        ItemStack pearl = new ItemStack(Items.ENDER_PEARL);
+        ItemStack heldItem = player.getItemInHand(hand);
+        if (!heldItem.is(pearl.getItem())) return InteractionResult.PASS;
+        if (player.getCooldowns().isOnCooldown(pearl)) return InteractionResult.PASS;
+        if (!AbilityUtil.has(player, AbilitiesRegistry.PEARLING)) return InteractionResult.PASS;
+
+        int slot = player.getInventory().getSelectedSlot();
+        ItemStack inSlot = player.getInventory().getItem(slot);
+        if (inSlot.isEmpty()) {
+            player.getInventory().setItem(slot, pearl);
+        } else {
+            player.getInventory().add(pearl); // Just in case
+        }
+
+        return InteractionResult.PASS;
+    }
+
+    private static InteractionResult grassEater(Player interacting, Level level, InteractionHand hand, BlockHitResult hitResult) {
+        if (level.isClientSide()) return InteractionResult.PASS;
+        if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
+
         if (!player.isShiftKeyDown()) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
         BlockPos pos = hitResult.getBlockPos();
 
         if (!AbilityUtil.has(player, AbilitiesRegistry.GRASS_EATER)) return InteractionResult.PASS;
-        if (!world.getBlockState(pos).is(AbilityTags.DIET_FOLIAGE)) return InteractionResult.PASS;
+        if (!level.getBlockState(pos).is(AbilityTags.DIET_FOLIAGE)) return InteractionResult.PASS;
 
         FoodData food = player.getFoodData();
         if (!(food.getFoodLevel() < 20 || food.getSaturationLevel() < 20)) return InteractionResult.PASS;
-        world.destroyBlock(pos, false);
+        level.destroyBlock(pos, false);
         food.eat(2, 0.5F);
         player.swing(InteractionHand.MAIN_HAND, true);
 
@@ -98,12 +123,14 @@ public class AbilityEffects {
         if (!(Config.playerAbilities.get())) return false;
         if (!AbilityUtil.has(player, AbilitiesRegistry.CLIMBS_WALLS)) return false;
         if (player.onGround()) return false;
+
         Level level = player.level();
         BlockPos pos = player.blockPosition();
         for (Direction dir : Direction.Plane.HORIZONTAL) {
             BlockPos side = pos.relative(dir);
             if (level.getBlockState(side).isSolid() || level.getBlockState(side.above()).isSolid()) return true;
         }
+
         return false;
     }
 
@@ -116,6 +143,7 @@ public class AbilityEffects {
     private static InteractionResult dietRestrictionsOnItem(Player interacting, Level level, InteractionHand hand) { // Clicking while looking at nothing
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
+
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
         if (isDietBlocked(player, player.getItemInHand(hand))) {
@@ -126,9 +154,10 @@ public class AbilityEffects {
         return InteractionResult.PASS;
     }
 
-    private static InteractionResult dietRestrictionsOnBlock(Player interacting, Level world, InteractionHand hand, BlockHitResult hitResult) { // Clicking while looking at a block
-        if (world.isClientSide()) return InteractionResult.PASS;
+    private static InteractionResult dietRestrictionsOnBlock(Player interacting, Level level, InteractionHand hand, BlockHitResult hitResult) { // Clicking while looking at a block
+        if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
+
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
         if (isDietBlocked(player, player.getItemInHand(hand))) {

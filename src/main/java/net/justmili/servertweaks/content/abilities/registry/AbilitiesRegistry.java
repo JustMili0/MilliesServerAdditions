@@ -2,11 +2,11 @@ package net.justmili.servertweaks.content.abilities.registry;
 
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.AbilityUtil;
+import net.justmili.servertweaks.content.abilities.AbilityUtil.MobData;
 import net.justmili.servertweaks.content.abilities.ability.Ability;
 import net.justmili.servertweaks.content.abilities.ability.TickingAbility;
 import net.justmili.servertweaks.core.util.ScalerUtil;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
-import net.justmili.servertweaks.content.abilities.AbilityUtil.MobData;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -94,7 +94,7 @@ public class AbilitiesRegistry {
     public static final Ability BURNS_IN_DAYLIGHT = register(new BurnsInDaylight());
     public static final Ability IS_MONSTER = register(new IsMonster());
     public static final Ability CLIMBS_WALLS = register(new Ability("CLIMBS_WALLS"));         // DOESN'T WORK
-    public static final Ability PEARLING = register(new Ability("PEARLING")); // TODO #4
+    public static final Ability PEARLING = register(new Ability("PEARLING"));
     public static final Ability PREDATORY = register(new Predatory());
     public static final Ability CARNIVORE = register(new Ability("CARNIVORE"));               // KINDA WORKS
     public static final Ability VEGETARIAN = register(new Ability("VEGETARIAN"));             // KINDA WORKS
@@ -496,7 +496,7 @@ public class AbilitiesRegistry {
 
             // Ignore
             Set<UUID> stillNearby = new HashSet<>();
-            AbilityUtil.executeForNearby(player, MONSTER_FEAR, (mob, data) -> {
+            AbilityUtil.executeForNearby(player, MONSTER_IGNORE, (mob, data) -> {
                 UUID id = mob.getUUID();
                 stillNearby.add(id);
 
