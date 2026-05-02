@@ -61,7 +61,7 @@ public class AbilitiesRegistry {
     private static final Identifier STRONG_DAMAGE = ServerTweaks.asResource("strong_damage");
 
     /// Registry
-    private static final Map<String, Ability> REGISTRY = new HashMap<>();
+    private static final Map<String, Ability> REGISTRY = new LinkedHashMap<>();
 
     public static final Ability FIRE_IMMUNE = register(new Ability("FIRE_IMMUNE"));
     public static final Ability LAVA_IMMUNE = register(new Ability("LAVA_IMMUNE"));

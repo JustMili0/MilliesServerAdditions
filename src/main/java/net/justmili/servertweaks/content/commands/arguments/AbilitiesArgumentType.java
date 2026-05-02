@@ -7,6 +7,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.justmili.servertweaks.content.abilities.ability.Ability;
 import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -20,9 +21,6 @@ public class AbilitiesArgumentType {
     }
 
     public static CompletableFuture<Suggestions> suggest(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
-        AbilitiesRegistry.getNames().forEach(name -> {
-            if (name.toUpperCase().startsWith(builder.getRemaining().toUpperCase())) builder.suggest(name);
-        });
-        return builder.buildFuture();
+        return SharedSuggestionProvider.suggest(AbilitiesRegistry.getNames(), builder);
     }
 }

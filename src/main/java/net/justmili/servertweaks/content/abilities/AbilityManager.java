@@ -20,8 +20,8 @@ import java.util.*;
 public class AbilityManager {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String FILE_NAME = "player_abilities.json";
-    public static final Map<UUID, Set<Ability>> playerAbilities = new HashMap<>();
-    public static final Map<UUID, Set<AbilityModifier>> playerModifiers = new HashMap<>();
+    public static final Map<UUID, Set<Ability>> playerAbilities = new LinkedHashMap<>();
+    public static final Map<UUID, Set<AbilityModifier>> playerModifiers = new LinkedHashMap<>();
 
     public static void loadFile(MinecraftServer server) {
         playerAbilities.clear();

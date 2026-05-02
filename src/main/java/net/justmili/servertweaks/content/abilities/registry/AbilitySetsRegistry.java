@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class AbilitySetsRegistry {
-    public static final Map<String, AbilitySet> SETS = new LinkedHashMap<>();
+    public static final Map<String, AbilitySet> REGISTRY = new LinkedHashMap<>();
 
     static {
         register(new AbilitySet(
@@ -131,12 +131,12 @@ public class AbilitySetsRegistry {
             Set.of(
             )
         ));
-        register(new AbilitySet( // TODO: TO BE REWRITTEN
+        register(new AbilitySet(
             "husk",
             "Husks are undead monsters. Villagers run away from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
                 "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack a Husk. " +
-                "Husks don't burn in daylight, primarily reside in the desert and are immune to the heat of the hot sand under their feet, but freeze easily " +
-                "and can not swim up in water but because they don't need air to live, they can breathe underwater. " +
+                "Unlike most undead, Husks don't burn in daylight and are immune to heat, but are sensitive to the cold. " +
+                "They can not swim up in water but because they don't need air to live, they can breathe underwater. " +
                 "They also are rather slow and can only eat meat to sustain their hunger.",
             Set.of(
                 AbilitiesRegistry.IS_MONSTER,
@@ -244,10 +244,13 @@ public class AbilitySetsRegistry {
     }
 
     public static void register(AbilitySet set) {
-        SETS.put(set.name(), set);
+        REGISTRY.put(set.name(), set);
     }
 
     public static Map<String, AbilitySet> getSets() {
-        return SETS;
+        return REGISTRY;
+    }
+    public static Set<String> getNames() {
+        return AbilitySetsRegistry.getSets().keySet();
     }
 }
