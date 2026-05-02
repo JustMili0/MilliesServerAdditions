@@ -50,7 +50,7 @@ public class AbilitySetArgumentType {
             "dreamweaver",
             "\nDreamweavers are creatures that create dreams for their hosts, they can take an appearance of a cat-moth hybrid, sometimes humanoid; "+
                 "though normally they don't have a physical form. "+
-                "A dreamweaver scares away creepers due to their cat characteristics, scares away phantoms they don't need to sleep, " +
+                "A dreamweaver scares away creepers due to their cat characteristics, scares away phantoms because they don't need to sleep, " +
                 "since they again don't have a physical form and dreams are their domain.\n"+
                 "They also are rather weak, taking 1.25x more damage than normal, can't swim up in water, can only eat sweets if not bound to a host, and animals love them.",
             Set.of(
@@ -140,6 +140,23 @@ public class AbilitySetArgumentType {
                 AbilitiesRegistry.GRASS_EATER,
                 AbilitiesRegistry.BREATHES_UNDERWATER,
                 AbilitiesRegistry.TOUGH
+            ),
+            Set.of(
+            )
+        ));
+        register(new AbilitySet( // TODO: TO BE REWRITTEN
+            "husk",
+            "Husks are undead monsters. Villagers run away from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
+                "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack a Husk. " +
+                "Husks don't burn in daylight, primarily reside in the desert and are immune to the heat of the hot sand under their feet, but freeze easily " +
+                "and can not swim up in water but because they don't need air to live, they can breathe underwater. " +
+                "They also are rather slow and can only eat meat to sustain their hunger.",
+            Set.of(
+                AbilitiesRegistry.IS_MONSTER,
+                AbilitiesRegistry.SLOW,
+                AbilitiesRegistry.CARNIVORE,
+                AbilitiesRegistry.COLD_SENSITIVE,
+                AbilitiesRegistry.HEAT_IMMUNE
             ),
             Set.of(
             )

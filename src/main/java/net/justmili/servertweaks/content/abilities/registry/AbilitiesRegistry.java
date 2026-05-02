@@ -19,14 +19,23 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.chicken.Chicken;
+import net.minecraft.world.entity.animal.fish.Cod;
+import net.minecraft.world.entity.animal.fish.Salmon;
 import net.minecraft.world.entity.animal.fox.Fox;
+import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.golem.IronGolem;
 import net.minecraft.world.entity.animal.golem.SnowGolem;
+import net.minecraft.world.entity.animal.parrot.Parrot;
+import net.minecraft.world.entity.animal.pig.Pig;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.entity.monster.illager.Evoker;
 import net.minecraft.world.entity.monster.illager.Pillager;
+import net.minecraft.world.entity.monster.illager.Vindicator;
 import net.minecraft.world.entity.monster.skeleton.Parched;
 import net.minecraft.world.entity.monster.skeleton.Skeleton;
 import net.minecraft.world.entity.monster.zombie.Drowned;
@@ -46,6 +55,8 @@ import java.util.stream.Collectors;
 
 public class AbilitiesRegistry {
     /// Extra Ability variables
+    private static final Map<UUID, List<WrappedGoal>> storedGoals = new HashMap<>();
+    private record MobData(double range, double speed) {}
     private static final Identifier SLOW_SPEED = ServerTweaks.asResource("slow_speed");
     private static final Identifier STRONG_HP = ServerTweaks.asResource("strong_health");
     private static final Identifier STRONG_DAMAGE = ServerTweaks.asResource("strong_damage");
@@ -54,6 +65,8 @@ public class AbilitiesRegistry {
     private static final Map<String, Ability> REGISTRY = new HashMap<>();
 
     public static final Ability FIRE_IMMUNE = register(new Ability("FIRE_IMMUNE"));
+    public static final Ability LAVA_IMMUNE = register(new Ability("LAVA_IMMUNE"));
+    public static final Ability HEAT_IMMUNE = register(new Ability("HEAT_IMMUNE"));
     public static final Ability FREEZE_IMMUNE = register(new Ability("FREEZE_IMMUNE"));
     public static final Ability FALL_IMMUNE = register(new Ability("FALL_IMMUNE"));
     public static final Ability HEAT_SENSITIVE = register(new HeatSensitive());
@@ -83,7 +96,7 @@ public class AbilitiesRegistry {
     public static final Ability IS_MONSTER = register(new IsMonster());
     public static final Ability CLIMBS_WALLS = register(new Ability("CLIMBS_WALLS"));         // DOESN'T WORK
     public static final Ability PEARLING = register(new Ability("PEARLING")); // TODO #4
-    public static final Ability PREDATORY = register(new Ability("PREDATORY")); // TODO #4
+    public static final Ability PREDATORY = register(new Predatory());
     public static final Ability CARNIVORE = register(new Ability("CARNIVORE"));               // KINDA WORKS
     public static final Ability VEGETARIAN = register(new Ability("VEGETARIAN"));             // KINDA WORKS
     public static final Ability ONLY_EATS_SWEETS = register(new Ability("ONLY_EATS_SWEETS")); // KINDA WORKS
@@ -116,6 +129,7 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
+            if (!player.gameMode.isSurvival()) return;
             if (level.getGameTime() % 20 != 0) return;
             if (!level.getBiome(player.blockPosition()).is(AbilityTags.HOT_BIOMES)) return;
             player.hurt(level.damageSources().onFire(), 1.0F);
@@ -129,6 +143,7 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
+            if (!player.gameMode.isSurvival()) return;
             if (!level.getBiome(player.blockPosition()).is(AbilityTags.COLD_BIOMES)) return;
             if (player.getItemBySlot(EquipmentSlot.HEAD).is(Items.LEATHER_HELMET)
                 && player.getItemBySlot(EquipmentSlot.CHEST).is(Items.LEATHER_CHESTPLATE)
@@ -150,6 +165,7 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
+            if (!player.gameMode.isSurvival()) return;
             if (player.getDeltaMovement().y < -0.4) AbilityUtil.applyEffect(player, MobEffects.SLOW_FALLING);
             if (player.onGround()) player.removeEffect(MobEffects.SLOW_FALLING);
         }
@@ -176,7 +192,9 @@ public class AbilitiesRegistry {
             AttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
 
             if (speed.getModifier(SLOW_SPEED) == null) {
-                speed.addTransientModifier(new AttributeModifier(SLOW_SPEED, -0.25, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                speed.addTransientModifier(new AttributeModifier(SLOW_SPEED, -0.32, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+            } else {
+                speed.removeModifier(SLOW_SPEED);
             }
         }
     }
@@ -216,6 +234,15 @@ public class AbilitiesRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (level.getGameTime() % 5 != 0) return;
 
+            AttributeInstance attack = player.getAttribute(Attributes.ATTACK_DAMAGE);
+            if (attack != null && attack.getModifier(STRONG_DAMAGE) == null) {
+                attack.addTransientModifier(new AttributeModifier(STRONG_DAMAGE, 3.0, AttributeModifier.Operation.ADD_VALUE));
+            } else {
+                attack.removeModifier(STRONG_DAMAGE);
+            }
+
+            if (!player.gameMode.isSurvival()) return;
+
             int armor = player.getArmorValue();
             float targetHp = Math.max(40.0F, Math.min(100.0F, 100.0F-(armor * 3.0F)));
             AttributeInstance maxHp = player.getAttribute(Attributes.MAX_HEALTH);
@@ -223,10 +250,8 @@ public class AbilitiesRegistry {
                 maxHp.removeModifier(STRONG_HP);
                 maxHp.addTransientModifier(new AttributeModifier(STRONG_HP, targetHp-20.0, AttributeModifier.Operation.ADD_VALUE));
                 if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
-            }
-            AttributeInstance attack = player.getAttribute(Attributes.ATTACK_DAMAGE);
-            if (attack != null && attack.getModifier(STRONG_DAMAGE) == null) {
-                attack.addTransientModifier(new AttributeModifier(STRONG_DAMAGE, 3.0, AttributeModifier.Operation.ADD_VALUE));
+            } else {
+                maxHp.removeModifier(STRONG_HP);
             }
         }
     }
@@ -257,6 +282,8 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
+            if (!player.gameMode.isSurvival()) return;
+
             if (player.isInWater()) AbilityUtil.applyEffect(player, MobEffects.WATER_BREATHING, 30, 0);
         }
     }
@@ -269,6 +296,8 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
+            if (!player.gameMode.isSurvival()) return;
+
             if (player.isInWater() || player.hasEffect(MobEffects.WATER_BREATHING)) {
                 // Restore air when in water
                 if (player.getAirSupply() < player.getMaxAirSupply())
@@ -291,7 +320,9 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
+            if (!player.gameMode.isSurvival()) return;
             if (!player.isInWater()) return;
+
             Vec3 delta = player.getDeltaMovement();
             if (delta.y > 0) player.setDeltaMovement(delta.x, -0.1, delta.z);
         }
@@ -304,6 +335,8 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
+            if (!player.gameMode.isSurvival()) return;
+
             boolean inWaterBlock = player.isInWater();
             boolean inWaterCauldron = level.getBlockState(player.blockPosition()).is(Blocks.WATER_CAULDRON);
 
@@ -354,6 +387,8 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
+            if (!player.gameMode.isSurvival()) return;
+
             for (Creeper creeper : AbilityUtil.getNearby(player, Creeper.class, 8.0)) {
                 creeper.setTarget(null);
                 creeper.getNavigation().moveTo(
@@ -371,6 +406,8 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
+            if (!player.gameMode.isSurvival()) return;
+
             for (Phantom phantom : AbilityUtil.getNearby(player, Phantom.class, 16.0)) {
                 phantom.setTarget(null);
                 phantom.getNavigation().moveTo(
@@ -421,6 +458,7 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
+            if (!player.gameMode.isSurvival()) return;
             if (!level.isBrightOutside() || !level.canSeeSky(player.blockPosition())) return;
             if ((level.getBrightness(LightLayer.SKY, player.blockPosition()) <= 8)) return;
 
@@ -429,16 +467,15 @@ public class AbilitiesRegistry {
         }
     }
 
-    private static final Map<UUID, List<WrappedGoal>> storedGoals = new HashMap<>();
-    private static final Map<Class<?>, Double> IGNORE_FOR = Map.of(
-        Pillager.class, 64.0, Slime.class, 16.0,
+    private static final Map<Class<?>, Double> MONSTER_IGNORE = Map.of(
+        Pillager.class, 64.0, Vindicator.class, 32.0, Evoker.class, 16.0, Witch.class, 16.0,
         Zombie.class, 48.0, Husk.class, 48.0, Drowned.class, 48.0,
-        Skeleton.class, 24.0, Parched.class, 24.0
+        Skeleton.class, 24.0, Parched.class, 24.0,
+        Slime.class, 16.0
     );
-    private static final Map<Class<?>, Double> ATTACK_FOR = Map.of(
+    private static final Map<Class<?>, Double> MONSTER_AGGRO = Map.of(
         IronGolem.class, 16.0, SnowGolem.class, 24.0
     );
-
     static class IsMonster extends TickingAbility {
         IsMonster() {
             super("IS_MONSTER");
@@ -450,7 +487,7 @@ public class AbilitiesRegistry {
 
             // Ignore
             Set<UUID> stillNearby = new HashSet<>();
-            IGNORE_FOR.forEach((type, range) ->
+            MONSTER_IGNORE.forEach((type, range) ->
                 AbilityUtil.forEachNearby(player, type, range, (Mob mob) -> {
                     UUID id = mob.getUUID();
                     stillNearby.add(id);
@@ -484,7 +521,7 @@ public class AbilitiesRegistry {
             }
 
             // Attack
-            ATTACK_FOR.forEach((type, range) ->
+            MONSTER_AGGRO.forEach((type, range) ->
                 AbilityUtil.forEachNearby(player, type, range, (Mob mob) -> {
                     if (mob.getTarget() != player) mob.setTarget(player);
                 })
@@ -493,6 +530,29 @@ public class AbilitiesRegistry {
     }
 
     // CLIMBS_WALLS - LivingEntityMixin (onClimbable) + AbilityEffects (shouldClimb bool)
+
+    private static final Map<Class<?>, MobData> PREDATORY_FEAR = Map.of(
+        Chicken.class, new MobData(8.0, 1.4),
+        Parrot.class, new MobData(16.0, 1.25),
+        Frog.class, new MobData(12.0, 2.0),
+        Salmon.class, new MobData(6.0, 1.25),
+        Pig.class, new MobData(8.0, 1.25)
+    );
+    static class Predatory extends TickingAbility {
+        Predatory() { super("PREDATORY"); }
+
+        @Override
+        public void tick(ServerPlayer player, ServerLevel level) {
+            PREDATORY_FEAR.forEach((type, data) ->
+                AbilityUtil.forEachNearby(player, type, data.range(), (Mob mob) -> {
+                    mob.getNavigation().moveTo(
+                        mob.getX() + (mob.getX() - player.getX()),
+                        mob.getY(),
+                        mob.getZ() + (mob.getZ() - player.getZ()), data.speed());
+                })
+            );
+        }
+    }
 
     // CARNIVORE - AbilityEffects (RIGHT_CLICK_BLOCK + RIGHT_CLICK_ITEM)
     // VEGETARIAN - AbilityEffects (RIGHT_CLICK_BLOCK + RIGHT_CLICK_ITEM)

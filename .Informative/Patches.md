@@ -53,13 +53,18 @@ Feedback is appriciated ^^
 **Player Abilities**
 - Dropped hardcoded ability sets for JustMili (SillyMili), Flufaye and Zarsai
   - These players will receive custom ability sets
-- IS_MONSTER - Fixed Zombie and Skeleton ignore behaviors and made Husks, Parched, Drowned and Slimes also ignore the player
+- Some abilities now instantly `return;` and do not execute if player isn't in survival
+- IS_MONSTER - Fixed Zombie and Skeleton ignore behaviors and made Husks, Parched, Drowned, Vindicators, Evokers, Witches and Slimes also ignore the player
 - IS_MONSTER - Fixed Villager fear behavior, now running away at their usual speed
 - COLD_SENSITIVE - Removed `cold_ocean` and `deep_cold_ocean` from list tag of cold biomes due to how frequent they are in the world
-- GRASS_EATER - Added underwater foliage to diet list tag
+- GRASS_EATER - Added underwater foliage and sugar cane to diet list tag
 - GRASS_EATER - Client now gets updated about updated food values
 - GRASS_EATER - Now properly restricts food consumption when no other diets are applied
 - SLOW - Decreased slowness modifier
+- FIRE_IMMUNE - Split into `FIRE_IMMUNE`, `LAVA_IMMUNE` and `HEAT_IMMUNE` for very specific use cases
+- FIRE_IMMUNE - Now only protects against fire and on-fire damage
+- (NEW) LAVA_IMMUNE - Immune lava damage
+- (NEW) HEAT_IMMUNE - Immune to standing-on-magma damage
 - (NEW) PREDATORY - ??? (Check TODO)   ***NOT DONE YET***
 - (NEW) PEARLING - ??? (Check TODO)    ***NOT DONE YET***
 

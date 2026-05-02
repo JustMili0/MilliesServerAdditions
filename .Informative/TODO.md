@@ -3,6 +3,7 @@
 - Figure out why suggestions for `/abilities grant|revoke` don't work
 - Fix discarding containers on entities
 - Fix abilities
+  - Fix hp resetting to 10 hearts with 
   - Fix not being able to place any edible but placeable foods with diets other than vegetarian
   - Fix nausea appliance when eating non-diet foods
   - Fix kinda-working abilities
@@ -22,7 +23,6 @@
 - SQUISHY
 - MAGNETIC
 - PEARLING
-- PREDATORY
 - BUG_EATER
 
 **Doesn't work (no changes get applied to player behavior):**
@@ -36,6 +36,7 @@
 - CARNIVORE - Blocks foods not in diet, but eating animation still plays on servers (counter with nausea)
 - VEGETARIAN - Blocks foods not in diet, but eating animation still plays on servers (counter with nausea)
 - ONLY_EATS_SWEETS - Blocks foods not in diet, but eating animation still plays on servers (counter with nausea)
+- GRASS_EATER - Blocks foods/blocks not in diet, but eating animation still plays on servers (counter with nausea)
 
 **Do work (works as intended):**
 - FIRE_IMMUNE
@@ -58,4 +59,5 @@
 - SCARES_PHANTOMS
 - BURNS_IN_DAYLIGHT
 - IS_MONSTER
+- PREDATORY
 - GRASS_EATER

@@ -61,8 +61,9 @@ public class AbilityEffects {
         if (!(entity instanceof ServerPlayer player)) return true;
         Set<Ability> abilities = AbilityUtil.getAbilities(player);
 
-        if (abilities.contains(AbilitiesRegistry.FIRE_IMMUNE) && (source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE)
-            || source.is(DamageTypes.LAVA) || source.is(DamageTypes.HOT_FLOOR))) return false;
+        if (abilities.contains(AbilitiesRegistry.FIRE_IMMUNE) && (source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE))) return false;
+        if (abilities.contains(AbilitiesRegistry.LAVA_IMMUNE) && source.is(DamageTypes.LAVA)) return false;
+        if (abilities.contains(AbilitiesRegistry.HEAT_IMMUNE) && source.is(DamageTypes.HOT_FLOOR)) return false;
         if (abilities.contains(AbilitiesRegistry.FREEZE_IMMUNE) && source.is(DamageTypes.FREEZE)) return false;
         if (abilities.contains(AbilitiesRegistry.FALL_IMMUNE) && source.is(DamageTypes.FALL)) return false;
         if (abilities.contains(AbilitiesRegistry.BREATHES_UNDERWATER) && source.is(DamageTypes.DROWN)) return false;

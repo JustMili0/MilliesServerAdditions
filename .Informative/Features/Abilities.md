@@ -12,7 +12,9 @@ They supposed to be and are a server-side custom alternative to Origins/Origins 
 
 ### Abilities & Ability Debuffs
 ```
-FIRE_IMMUNE - Nether Mob-based | Immune to fire, being on fire, lava and magma block damage. Incompatible with BURNS_IN_DAYLIGHT.
+FIRE_IMMUNE - Nether Mob-based | Immune to fire damage. Incompatible with BURNS_IN_DAYLIGHT.
+LAVA_IMMUNE - Nether Mob-based | Immune lava damage.
+HEAT_IMMUNE - Nether Mob-based | Immune to standing-on-magma damage.
 FREEZE_IMMUNE - Custom | Immune to freezing damage (e.g. powdered snow).
 FALL_IMMUNE - Cat-based | Immune to fall damage.
 HEAT_SENSITIVE - Snow Golem-based | Takes 1hp fire damage every 1s in warm and hot biomes. Having an active Fire Resistance effect negates fire damage.
