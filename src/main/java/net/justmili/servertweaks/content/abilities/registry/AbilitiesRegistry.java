@@ -6,6 +6,7 @@ import net.justmili.servertweaks.content.abilities.ability.Ability;
 import net.justmili.servertweaks.content.abilities.ability.TickingAbility;
 import net.justmili.servertweaks.core.util.ScalerUtil;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
+import net.justmili.servertweaks.content.abilities.AbilityUtil.MobData;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -20,7 +21,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.chicken.Chicken;
-import net.minecraft.world.entity.animal.fish.Cod;
 import net.minecraft.world.entity.animal.fish.Salmon;
 import net.minecraft.world.entity.animal.fox.Fox;
 import net.minecraft.world.entity.animal.frog.Frog;
@@ -56,7 +56,6 @@ import java.util.stream.Collectors;
 public class AbilitiesRegistry {
     /// Extra Ability variables
     private static final Map<UUID, List<WrappedGoal>> storedGoals = new HashMap<>();
-    private record MobData(double range, double speed) {}
     private static final Identifier SLOW_SPEED = ServerTweaks.asResource("slow_speed");
     private static final Identifier STRONG_HP = ServerTweaks.asResource("strong_health");
     private static final Identifier STRONG_DAMAGE = ServerTweaks.asResource("strong_damage");
@@ -467,14 +466,24 @@ public class AbilitiesRegistry {
         }
     }
 
-    private static final Map<Class<?>, Double> MONSTER_IGNORE = Map.of(
-        Pillager.class, 64.0, Vindicator.class, 32.0, Evoker.class, 16.0, Witch.class, 16.0,
-        Zombie.class, 48.0, Husk.class, 48.0, Drowned.class, 48.0,
-        Skeleton.class, 24.0, Parched.class, 24.0,
-        Slime.class, 16.0
+    private static final List<MobData> MONSTER_IGNORE = List.of(
+        new MobData(Pillager.class, 64.0, 0),
+        new MobData(Vindicator.class, 32.0, 0),
+        new MobData(Evoker.class, 16.0, 0),
+        new MobData(Witch.class, 16.0, 0),
+        new MobData(Zombie.class, 48.0, 0),
+        new MobData(Husk.class, 48.0, 0),
+        new MobData(Drowned.class, 48.0, 0),
+        new MobData(Skeleton.class, 24.0, 0),
+        new MobData(Parched.class, 24.0, 0),
+        new MobData(Slime.class, 16.0, 0)
     );
-    private static final Map<Class<?>, Double> MONSTER_AGGRO = Map.of(
-        IronGolem.class, 16.0, SnowGolem.class, 24.0
+    private static final List<MobData> MONSTER_FEAR = List.of(
+        new MobData(Villager.class, 16.0, 0)
+    );
+    private static final List<MobData> MONSTER_AGGRO = List.of(
+        new MobData(IronGolem.class, 16.0, 0),
+        new MobData(SnowGolem.class, 24.0, 0)
     );
     static class IsMonster extends TickingAbility {
         IsMonster() {
@@ -487,69 +496,72 @@ public class AbilitiesRegistry {
 
             // Ignore
             Set<UUID> stillNearby = new HashSet<>();
-            MONSTER_IGNORE.forEach((type, range) ->
-                AbilityUtil.forEachNearby(player, type, range, (Mob mob) -> {
-                    UUID id = mob.getUUID();
-                    stillNearby.add(id);
-                    if (!storedGoals.containsKey(id)) {
-                        List<WrappedGoal> removed = mob.targetSelector.getAvailableGoals()
-                            .stream()
-                            .filter(goal -> goal.getGoal() instanceof NearestAttackableTargetGoal<?>)
-                            .collect(Collectors.toList());
-                        removed.forEach(goal -> mob.targetSelector.removeGoal(goal.getGoal()));
-                        storedGoals.put(id, removed);
-                        mob.setTarget(null);
-                    }
-                })
-            );
+            AbilityUtil.executeForNearby(player, MONSTER_FEAR, (mob, data) -> {
+                UUID id = mob.getUUID();
+                stillNearby.add(id);
+
+                if (!storedGoals.containsKey(id)) {
+                    List<WrappedGoal> removed = mob.targetSelector.getAvailableGoals()
+                        .stream().filter(goal -> goal.getGoal() instanceof NearestAttackableTargetGoal<?>).collect(Collectors.toList());
+
+                    removed.forEach(goal -> mob.targetSelector.removeGoal(goal.getGoal()));
+                    storedGoals.put(id, removed);
+
+                    mob.setTarget(null);
+                }
+            });
             storedGoals.entrySet().removeIf(entry -> {
                 if (stillNearby.contains(entry.getKey())) return false;
                 Entity entity = level.getEntity(entry.getKey());
+
                 if (entity instanceof Mob mob) {
-                    entry.getValue().forEach(g -> mob.targetSelector.addGoal(g.getPriority(), g.getGoal()));
+                    entry.getValue().forEach(goal -> mob.targetSelector.addGoal(goal.getPriority(), goal.getGoal()));
                 }
+
                 return true;
             });
 
             // Fear
-            for (Villager villager : AbilityUtil.getNearby(player, Villager.class, 16.0)) {
-                if (villager.isSleeping()) villager.stopSleeping();
-                villager.getNavigation().moveTo(
-                    villager.getX()+(villager.getX()-player.getX()),
-                    villager.getY(),
-                    villager.getZ()+(villager.getZ()-player.getZ()), 0.75);
-            }
+            AbilityUtil.executeForNearby(player, MONSTER_FEAR, (mob, data) ->
+                mob.getNavigation().moveTo(
+                    mob.getX()+(mob.getX()-player.getX()),
+                    mob.getY(),
+                    mob.getZ()+(mob.getZ()-player.getZ()),
+                    data.speed()
+                )
+            );
 
             // Attack
-            MONSTER_AGGRO.forEach((type, range) ->
-                AbilityUtil.forEachNearby(player, type, range, (Mob mob) -> {
+            AbilityUtil.executeForNearby(player, MONSTER_AGGRO, (mob, data) -> {
                     if (mob.getTarget() != player) mob.setTarget(player);
-                })
+                }
             );
         }
     }
 
     // CLIMBS_WALLS - LivingEntityMixin (onClimbable) + AbilityEffects (shouldClimb bool)
 
-    private static final Map<Class<?>, MobData> PREDATORY_FEAR = Map.of(
-        Chicken.class, new MobData(8.0, 1.4),
-        Parrot.class, new MobData(16.0, 1.25),
-        Frog.class, new MobData(12.0, 2.0),
-        Salmon.class, new MobData(6.0, 1.25),
-        Pig.class, new MobData(8.0, 1.25)
+    private static final List<MobData> PREDATORY_FEAR = List.of(
+        new MobData(Chicken.class, 16.0, 1.4),
+        new MobData(Parrot.class, 48.0, 1.25),
+        new MobData(Frog.class, 32.0, 2.0),
+        new MobData(Salmon.class, 12.0, 1.25),
+        new MobData(Pig.class,  16.0, 1.25)
     );
     static class Predatory extends TickingAbility {
-        Predatory() { super("PREDATORY"); }
+        Predatory() {
+            super("PREDATORY");
+        }
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            PREDATORY_FEAR.forEach((type, data) ->
-                AbilityUtil.forEachNearby(player, type, data.range(), (Mob mob) -> {
-                    mob.getNavigation().moveTo(
-                        mob.getX() + (mob.getX() - player.getX()),
-                        mob.getY(),
-                        mob.getZ() + (mob.getZ() - player.getZ()), data.speed());
-                })
+            AbilityUtil.executeForNearby(player, PREDATORY_FEAR, (mob, data) ->
+                mob.getNavigation().moveTo(
+                    mob.getX()+(mob.getX()-player.getX()),
+                    mob.getY(),
+                    mob.getZ()+(mob.getZ()-player.getZ()),
+                    data.speed()
+                )
             );
         }
     }

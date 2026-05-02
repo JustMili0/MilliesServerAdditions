@@ -12,6 +12,7 @@ import net.minecraft.world.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static net.justmili.servertweaks.content.abilities.AbilityManager.*;
@@ -22,12 +23,10 @@ public class AbilityUtil {
     public static Set<Ability> getAbilities(ServerPlayer player) {
         return playerAbilities.getOrDefault(player.getUUID(), Collections.emptySet());
     }
-
     public static void grantAbility(ServerPlayer player, Ability ability) {
         playerAbilities.computeIfAbsent(player.getUUID(), uuid -> new HashSet<>()).add(ability);
         saveFile(player.level().getServer());
     }
-
     public static void revokeAbility(ServerPlayer player, Ability ability) {
         playerAbilities.getOrDefault(player.getUUID(), Collections.emptySet()).remove(ability);
         saveFile(player.level().getServer());
@@ -36,36 +35,28 @@ public class AbilityUtil {
     public static Set<AbilityModifier> getModifiers(ServerPlayer player) {
         return playerModifiers.getOrDefault(player.getUUID(), Collections.emptySet());
     }
-
     public static void grantModifier(ServerPlayer player, AbilityModifier modifier) {
         playerModifiers.computeIfAbsent(player.getUUID(), uuid -> new HashSet<>()).add(modifier);
         saveFile(player.level().getServer());
     }
-
     public static void revokeModifier(ServerPlayer player, AbilityModifier modifier) {
         playerModifiers.getOrDefault(player.getUUID(), Collections.emptySet()).remove(modifier);
         saveFile(player.level().getServer());
     }
 
+    public static boolean has(ServerPlayer player, Ability ability) { return getAbilities(player).contains(ability); }
+    public static boolean has(ServerPlayer player, AbilityModifier modifier) { return getModifiers(player).contains(modifier); }
+
+    public static void applySet(UUID uuid, AbilitySetArgumentType.AbilitySet set, MinecraftServer server) {
+        playerAbilities.put(uuid, new HashSet<>(set.abilities()));
+        playerModifiers.put(uuid, new HashSet<>(set.modifiers()));
+        saveFile(server);
+    }
     public static void clearPlayer(ServerPlayer player) {
         UUID uuid = player.getUUID();
         MinecraftServer server = player.level().getServer();
         playerAbilities.remove(uuid);
         playerModifiers.remove(uuid);
-        saveFile(server);
-    }
-
-    public static boolean has(ServerPlayer player, Ability ability) {
-        return getAbilities(player).contains(ability);
-    }
-
-    public static boolean has(ServerPlayer player, AbilityModifier modifier) {
-        return getModifiers(player).contains(modifier);
-    }
-
-    public static void applySet(UUID uuid, AbilitySetArgumentType.AbilitySet set, MinecraftServer server) {
-        playerAbilities.put(uuid, new HashSet<>(set.abilities()));
-        playerModifiers.put(uuid, new HashSet<>(set.modifiers()));
         saveFile(server);
     }
 
@@ -86,7 +77,11 @@ public class AbilityUtil {
         return player.level().getEntitiesOfClass(mob, player.getBoundingBox().inflate(radius));
     }
 
-    public static <T extends Mob> void forEachNearby(ServerPlayer player, Class<?> type, double range, Consumer<T> action) {
-        getNearby(player, type.asSubclass(Mob.class), range).forEach(mob -> action.accept((T) mob));
+    public record MobData(Class<?> entityClass, double range, double speed) { }
+    public static <T extends Mob> void executeForNearby(ServerPlayer player, List<MobData> dataList, BiConsumer<T, MobData> action) {
+        dataList.forEach(data ->
+            getNearby(player, data.entityClass().asSubclass(Mob.class), data.range())
+                .forEach(mob -> action.accept((T) mob, data))
+        );
     }
 }
