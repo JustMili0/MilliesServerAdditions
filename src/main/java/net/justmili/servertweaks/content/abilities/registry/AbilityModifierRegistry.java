@@ -4,13 +4,12 @@ import net.justmili.servertweaks.content.abilities.ability.AbilityModifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class AbilityModifierRegistry {
     // Registry
-    private static final Map<String, AbilityModifier> REGISTRY = new LinkedHashMap<>();
+    private static final Map<String, AbilityModifier> REGISTRY = new HashMap<>();
 
     public static final AbilityModifier ADD_GOLD_FOODS_TO_DIET = register(new AbilityModifier("ADD_GOLD_FOODS_TO_DIET"));
 

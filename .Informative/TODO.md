@@ -1,10 +1,10 @@
 # TODO:
-- Finish writing presets
-- Figure out why suggestions for `/abilities grant|revoke` don't work
+- Finish writing presets  [!!!]
+- Fix permissions for ability sets applying  [!!!]
 - Fix discarding containers on entities
 - Fix abilities
   - Fix hp resetting to 10 hearts with 
-  - Fix not being able to place any edible but placeable foods with diets other than vegetarian
+  - Fix not being able to place any edible but placeable foods with diets other than vegetarian  [!]
   - Fix nausea appliance when eating non-diet foods
   - Fix kinda-working abilities
   - Fix non-working abilities

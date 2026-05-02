@@ -63,77 +63,81 @@ public class PlayerAbilities {
                         return 1;
                     })
                 )
-                .then(Commands.literal("wipeAbilitiesProfile")
-                    .requires(src -> CommandUtil.hasPerms(src, 2))
-                    .then(Commands.argument("player", EntityArgument.player())
-                        .executes(context -> {
-                            ServerPlayer player = EntityArgument.getPlayer(context, "player");
 
-                            AbilityUtil.clearPlayer(player);
-                            FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, false);
-
-                            CommandUtil.sendSucc(context.getSource(), "Removed player abilities profile of "+player.getName().getString());
-
-                            return 1;
-                        })
-                    )
-                )
                 .then(Commands.literal("grant")
                     .requires(src -> CommandUtil.hasPerms(src, 2))
                     .then(Commands.argument("player", EntityArgument.player())
-                        .then(Commands.argument("abilityOrDebuff", AbilitiesArgumentType.abilities())
-                            .suggests(AbilitiesArgumentType::suggest)
-                            .executes(context -> {
-                                ServerPlayer player = EntityArgument.getPlayer(context, "player");
-                                Ability ability = AbilitiesArgumentType.getAbility(context, "abilityOrDebuff");
+                        .then(Commands.literal("ability")
+                            .then(Commands.argument("abilityOrDebuff", AbilitiesArgumentType.abilities())
+                                .suggests(AbilitiesArgumentType::suggest)
+                                .executes(context -> {
+                                    ServerPlayer player = EntityArgument.getPlayer(context, "player");
+                                    Ability ability = AbilitiesArgumentType.getAbility(context, "abilityOrDebuff");
 
-                                AbilityUtil.grantAbility(player, ability);
+                                    AbilityUtil.grantAbility(player, ability);
 
-                                CommandUtil.sendSucc(context.getSource(), "Granted ability "+ability.getName()+" to player "+player.getName().getString());
+                                    CommandUtil.sendSucc(context.getSource(), "Granted ability "+ability.getName()+" to player "+player.getName().getString());
 
-                                return 1;
-                            })
+                                    return 1;
+                                })
+                            )
                         )
-                        .then(Commands.argument("modifier", ModifiersArgumentType.modifier())
-                            .suggests(ModifiersArgumentType::suggest)
-                            .executes(context -> {
-                                ServerPlayer player = EntityArgument.getPlayer(context, "player");
-                                AbilityModifier modifier = ModifiersArgumentType.getModifier(context, "modifier");
-
-                                AbilityUtil.grantModifier(player, modifier);
-
-                                CommandUtil.sendSucc(context.getSource(), "Granted ability modifier "+modifier.getName()+" to player "+player.getName().getString());
-
-                                return 1;
-                            })
+                        .then(Commands.literal("modifier")
+                            .then(Commands.argument("modifier", ModifiersArgumentType.modifier())
+                                .suggests(ModifiersArgumentType::suggest)
+                                .executes(context -> {
+                                    ServerPlayer player = EntityArgument.getPlayer(context, "player");
+                                    AbilityModifier modifier = ModifiersArgumentType.getModifier(context, "modifier");
+                                    AbilityUtil.grantModifier(player, modifier);
+                                    CommandUtil.sendSucc(context.getSource(), "Granted ability modifier "+modifier.getName()+" to player "+player.getName().getString());
+                                    return 1;
+                                })
+                            )
                         )
                     )
                 )
+
                 .then(Commands.literal("revoke")
                     .requires(src -> CommandUtil.hasPerms(src, 2))
                     .then(Commands.argument("player", EntityArgument.player())
-                        .then(Commands.argument("abilityOrDebuff", AbilitiesArgumentType.abilities())
-                            .suggests(AbilitiesArgumentType::suggest)
-                            .executes(context -> {
-                                ServerPlayer player = EntityArgument.getPlayer(context, "player");
-                                Ability ability = AbilitiesArgumentType.getAbility(context, "abilityOrDebuff");
+                        .then(Commands.literal("ability")
+                            .then(Commands.argument("abilityOrDebuff", AbilitiesArgumentType.abilities())
+                                .suggests(AbilitiesArgumentType::suggest)
+                                .executes(context -> {
+                                    ServerPlayer player = EntityArgument.getPlayer(context, "player");
+                                    Ability ability = AbilitiesArgumentType.getAbility(context, "abilityOrDebuff");
 
-                                AbilityUtil.revokeAbility(player, ability);
+                                    AbilityUtil.revokeAbility(player, ability);
 
-                                CommandUtil.sendSucc(context.getSource(), "Removed ability "+ability.getName()+" from player "+player.getName().getString());
+                                    CommandUtil.sendSucc(context.getSource(), "Removed ability "+ability.getName()+" from player "+player.getName().getString());
 
-                                return 1;
-                            })
+                                    return 1;
+                                })
+                            )
                         )
-                        .then(Commands.argument("modifier", ModifiersArgumentType.modifier())
-                            .suggests(ModifiersArgumentType::suggest)
+                        .then(Commands.literal("modifier")
+                            .then(Commands.argument("modifier", ModifiersArgumentType.modifier())
+                                .suggests(ModifiersArgumentType::suggest)
+                                .executes(context -> {
+                                    ServerPlayer player = EntityArgument.getPlayer(context, "player");
+                                    AbilityModifier modifier = ModifiersArgumentType.getModifier(context, "modifier");
+
+                                    AbilityUtil.revokeModifier(player, modifier);
+
+                                    CommandUtil.sendSucc(context.getSource(), "Removed ability modifier "+modifier.getName()+" from player "+player.getName().getString());
+
+                                    return 1;
+                                })
+                            )
+                        )
+                        .then(Commands.literal("everything")
                             .executes(context -> {
                                 ServerPlayer player = EntityArgument.getPlayer(context, "player");
-                                AbilityModifier modifier = ModifiersArgumentType.getModifier(context, "modifier");
 
-                                AbilityUtil.revokeModifier(player, modifier);
+                                AbilityUtil.clearPlayer(player);
+                                FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, false);
 
-                                CommandUtil.sendSucc(context.getSource(), "Removed ability modifier "+modifier.getName()+" from player "+player.getName().getString());
+                                CommandUtil.sendSucc(context.getSource(), "Deleted player abilities profile of "+player.getName().getString());
 
                                 return 1;
                             })

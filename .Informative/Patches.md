@@ -45,9 +45,8 @@ Feedback is appriciated ^^
 **Commands**
 - `/abilities <options>`, new options:
     - New presets for `pickPremadeSet <set>`
-    - (Admin) `wipeAbilitiesProfile` - Erases a player from `player_abilities.json` file and resets `picked_ability_preset` player variable back to false
-    - (Admin) `grant <player> <abilityOrDebuff | modifier>` - Allows permission level 2 and above staff to grant players abilities, ability debuffs or ability modifiers
-    - (Admin) `revoke <player> <abilityOrDebuff | modifier>` - Allows permission level 2 and above staff to revoke players' abilities, ability debuffs or ability modifiers
+    - (Admin) `grant <player> <abilityOrDebuff|modifier>` - Allows permission level 2 and above staff to grant players abilities, ability debuffs or ability modifiers
+    - (Admin) `revoke <player> <ability|modifier|everything> <abilityOrDebuff|modifier>` - Allows permission level 2 and above staff to revoke players' abilities, ability debuffs, ability modifiers or the entire abilities profile
 - `/damagetoggle <damage_type> <true|false|status>`, was reworked into `/damagetoggle <options>`:
     - Removed `<damage_type> true` - Replaced with `enable <damage_type>`
     - Removed `<damage_type> false` - Replaced with `disable <damage_type>`

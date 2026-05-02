@@ -2,12 +2,12 @@ package net.justmili.servertweaks.content.abilities.registry;
 
 import net.justmili.servertweaks.content.commands.arguments.AbilitySetArgumentType.AbilitySet;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class AbilitySetsRegistry {
-    public static final Map<String, AbilitySet> REGISTRY = new LinkedHashMap<>();
+    public static final Map<String, AbilitySet> REGISTRY = new HashMap<>();
 
     static {
         register(new AbilitySet(
@@ -161,16 +161,8 @@ public class AbilitySetsRegistry {
             Set.of(
             )
         ));
-        register(new AbilitySet( // aka Golem but Human
-            "knight",
-            "",
-            Set.of(
-            ),
-            Set.of(
-            )
-        ));
         register(new AbilitySet( // aka Nether Mob
-            "imp",
+            "netherborn",
             "",
             Set.of(
             ),
