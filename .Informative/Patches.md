@@ -65,7 +65,7 @@ Feedback is appriciated ^^
 - FIRE_IMMUNE - Now only protects against fire and on-fire damage
 - (NEW) LAVA_IMMUNE - Immune lava damage
 - (NEW) HEAT_IMMUNE - Immune to standing-on-magma damage
-- (NEW) PREDATORY - ??? (Check TODO)   ***NOT DONE YET***
+- (NEW) PREDATORY - Smaller animals like for example chickens, fish and frogs will run away from the player.
 - (NEW) PEARLING - ??? (Check TODO)    ***NOT DONE YET***
 
 Feedback is appriciated ^^
