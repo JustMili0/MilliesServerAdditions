@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.mechanics.logic;
+package net.justmili.servertweaks.mechanics.features;
 
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.core.util.FdaApiUtil;

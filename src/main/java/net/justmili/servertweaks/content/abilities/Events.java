@@ -1,13 +1,15 @@
-package net.justmili.servertweaks.content.abilities.registry;
+package net.justmili.servertweaks.content.abilities;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.abilities.AbilityUtil;
-import net.justmili.servertweaks.content.abilities.ability.Ability;
-import net.justmili.servertweaks.content.abilities.ability.TickingAbility;
+import net.justmili.servertweaks.content.abilities.data.DataTags;
+import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
+import net.justmili.servertweaks.content.abilities.registries.ModifierRegistry;
+import net.justmili.servertweaks.content.abilities.type.Ability;
+import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -29,27 +31,27 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.Set;
 
-public class AbilityEffects {
+public class Events {
     public static void registerAbilityEvents() {
         if (!(Config.playerAbilities.get())) return;
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                AbilityEffects.tickTickingAbilities(player);
+                Events.tickTickingAbilities(player);
             }
         });
 
-        ServerLivingEntityEvents.ALLOW_DAMAGE.register(AbilityEffects::specialDamageImmune);
+        ServerLivingEntityEvents.ALLOW_DAMAGE.register(Events::specialDamageImmune);
 
-        UseItemCallback.EVENT.register(AbilityEffects::pearling);
-        UseBlockCallback.EVENT.register(AbilityEffects::grassEater);
-        UseItemCallback.EVENT.register(AbilityEffects::dietRestrictionsOnItem);
-        UseBlockCallback.EVENT.register(AbilityEffects::dietRestrictionsOnBlock);
+        UseItemCallback.EVENT.register(Events::pearling);
+        UseBlockCallback.EVENT.register(Events::grassEater);
+        UseItemCallback.EVENT.register(Events::dietRestrictionsOnItem);
+        UseBlockCallback.EVENT.register(Events::dietRestrictionsOnBlock);
     }
 
     private static void tickTickingAbilities(Player ticking) {
         if (!(ticking instanceof ServerPlayer player)) return;
         ServerLevel level = player.level();
-        Set<Ability> abilities = AbilityUtil.getAbilities(player);
+        Set<Ability> abilities = DataManager.getAbilities(player);
 
         for (Ability ability : abilities) {
             if (ability instanceof TickingAbility tickingAbility) {
@@ -60,14 +62,14 @@ public class AbilityEffects {
 
     private static boolean specialDamageImmune(LivingEntity entity, DamageSource source, float value) {
         if (!(entity instanceof ServerPlayer player)) return true;
-        Set<Ability> abilities = AbilityUtil.getAbilities(player);
+        Set<Ability> abilities = DataManager.getAbilities(player);
 
-        if (abilities.contains(AbilitiesRegistry.FIRE_IMMUNE) && (source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE))) return false;
-        if (abilities.contains(AbilitiesRegistry.LAVA_IMMUNE) && source.is(DamageTypes.LAVA)) return false;
-        if (abilities.contains(AbilitiesRegistry.HEAT_IMMUNE) && source.is(DamageTypes.HOT_FLOOR)) return false;
-        if (abilities.contains(AbilitiesRegistry.FREEZE_IMMUNE) && source.is(DamageTypes.FREEZE)) return false;
-        if (abilities.contains(AbilitiesRegistry.FALL_IMMUNE) && source.is(DamageTypes.FALL)) return false;
-        if (abilities.contains(AbilitiesRegistry.BREATHES_UNDERWATER) && source.is(DamageTypes.DROWN)) return false;
+        if (abilities.contains(AbilityRegistry.FIRE_IMMUNE) && (source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE))) return false;
+        if (abilities.contains(AbilityRegistry.LAVA_IMMUNE) && source.is(DamageTypes.LAVA)) return false;
+        if (abilities.contains(AbilityRegistry.HEAT_IMMUNE) && source.is(DamageTypes.HOT_FLOOR)) return false;
+        if (abilities.contains(AbilityRegistry.FREEZE_IMMUNE) && source.is(DamageTypes.FREEZE)) return false;
+        if (abilities.contains(AbilityRegistry.FALL_IMMUNE) && source.is(DamageTypes.FALL)) return false;
+        if (abilities.contains(AbilityRegistry.BREATHES_UNDERWATER) && source.is(DamageTypes.DROWN)) return false;
 
         return true;
     }
@@ -82,7 +84,7 @@ public class AbilityEffects {
         ItemStack heldItem = player.getItemInHand(hand);
         if (!heldItem.is(pearl.getItem())) return InteractionResult.PASS;
         if (player.getCooldowns().isOnCooldown(pearl)) return InteractionResult.PASS;
-        if (!AbilityUtil.has(player, AbilitiesRegistry.PEARLING)) return InteractionResult.PASS;
+        if (!DataManager.has(player, AbilityRegistry.PEARLING)) return InteractionResult.PASS;
 
         int slot = player.getInventory().getSelectedSlot();
         ItemStack inSlot = player.getInventory().getItem(slot);
@@ -104,8 +106,8 @@ public class AbilityEffects {
 
         BlockPos pos = hitResult.getBlockPos();
 
-        if (!AbilityUtil.has(player, AbilitiesRegistry.GRASS_EATER)) return InteractionResult.PASS;
-        if (!level.getBlockState(pos).is(AbilityTags.DIET_FOLIAGE)) return InteractionResult.PASS;
+        if (!DataManager.has(player, AbilityRegistry.GRASS_EATER)) return InteractionResult.PASS;
+        if (!level.getBlockState(pos).is(DataTags.DIET_FOLIAGE)) return InteractionResult.PASS;
 
         FoodData food = player.getFoodData();
         if (!(food.getFoodLevel() < 20 || food.getSaturationLevel() < 20)) return InteractionResult.PASS;
@@ -121,7 +123,7 @@ public class AbilityEffects {
 
     public static boolean shouldClimb(ServerPlayer player) {
         if (!(Config.playerAbilities.get())) return false;
-        if (!AbilityUtil.has(player, AbilitiesRegistry.CLIMBS_WALLS)) return false;
+        if (!DataManager.has(player, AbilityRegistry.CLIMBS_WALLS)) return false;
         if (player.onGround()) return false;
 
         Level level = player.level();
@@ -147,7 +149,7 @@ public class AbilityEffects {
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
         if (isDietBlocked(player, player.getItemInHand(hand))) {
-            AbilityUtil.applyEffect(player, MobEffects.NAUSEA, 60, 1);
+            DataManager.applyEffect(player, MobEffects.NAUSEA, 60, 1);
             return InteractionResult.FAIL;
         }
 
@@ -161,7 +163,7 @@ public class AbilityEffects {
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
         if (isDietBlocked(player, player.getItemInHand(hand))) {
-            AbilityUtil.applyEffect(player, MobEffects.NAUSEA, 60, 1);
+            DataManager.applyEffect(player, MobEffects.NAUSEA, 60, 1);
             return InteractionResult.FAIL;
         }
 
@@ -170,18 +172,18 @@ public class AbilityEffects {
 
     private static boolean isDietBlocked(ServerPlayer player, ItemStack stack) {
         if (!stack.has(DataComponents.FOOD)) return false;
-        Set<Ability> abilities = AbilityUtil.getAbilities(player);
+        Set<Ability> abilities = DataManager.getAbilities(player);
 
-        boolean carnivore = abilities.contains(AbilitiesRegistry.CARNIVORE);
-        boolean vegetarian = abilities.contains(AbilitiesRegistry.VEGETARIAN);
-        boolean sweetOnly = abilities.contains(AbilitiesRegistry.ONLY_EATS_SWEETS);
-        boolean grassEater = abilities.contains(AbilitiesRegistry.GRASS_EATER);
-        boolean canConsumeGolden = AbilityUtil.has(player, AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET);
+        boolean carnivore = abilities.contains(AbilityRegistry.CARNIVORE);
+        boolean vegetarian = abilities.contains(AbilityRegistry.VEGETARIAN);
+        boolean sweetOnly = abilities.contains(AbilityRegistry.ONLY_EATS_SWEETS);
+        boolean grassEater = abilities.contains(AbilityRegistry.GRASS_EATER);
+        boolean canConsumeGolden = DataManager.has(player, ModifierRegistry.ADD_GOLD_FOODS_TO_DIET);
 
-        boolean isMeat = stack.is(AbilityTags.DIET_CARNIVORE);
-        boolean isVege = stack.is(AbilityTags.DIET_VEGETARIAN);
-        boolean isSweet = stack.is(AbilityTags.DIET_SWEETS);
-        boolean isGold = stack.is(AbilityTags.DIET_MODIFIER_GOLDEN_FOODS);
+        boolean isMeat = stack.is(DataTags.DIET_CARNIVORE);
+        boolean isVege = stack.is(DataTags.DIET_VEGETARIAN);
+        boolean isSweet = stack.is(DataTags.DIET_SWEETS);
+        boolean isGold = stack.is(DataTags.DIET_MODIFIER_GOLDEN_FOODS);
 
         if (!carnivore && !vegetarian && !sweetOnly && !grassEater) return false;
 

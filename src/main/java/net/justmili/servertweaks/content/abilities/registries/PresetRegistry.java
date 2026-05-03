@@ -1,12 +1,12 @@
-package net.justmili.servertweaks.content.abilities.registry;
+package net.justmili.servertweaks.content.abilities.registries;
 
-import net.justmili.servertweaks.content.commands.arguments.AbilitySetArgumentType.AbilityPreset;
+import net.justmili.servertweaks.content.abilities.arguments.PresetArgumentType.AbilityPreset;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class AbilitySetsRegistry {
+public class PresetRegistry {
     public static final Map<String, AbilityPreset> REGISTRY = new HashMap<>();
 
     static {
@@ -23,13 +23,13 @@ public class AbilitySetsRegistry {
                 "and are extra fast when sprinting. They are carnivores, meaning they can only eat meat, can't exactly swim up in water to not drown"+
                 "and untamed wolves turn aggressive towards them unprovoked.",
             Set.of(
-                AbilitiesRegistry.SCARES_CREEPERS,
-                AbilitiesRegistry.SCARES_PHANTOMS,
-                AbilitiesRegistry.HUNTED_BY_WOLF,
-                AbilitiesRegistry.FALL_IMMUNE,
-                AbilitiesRegistry.CARNIVORE,
-                AbilitiesRegistry.CANT_SWIM,
-                AbilitiesRegistry.SWIFT
+                AbilityRegistry.SCARES_CREEPERS,
+                AbilityRegistry.SCARES_PHANTOMS,
+                AbilityRegistry.HUNTED_BY_WOLF,
+                AbilityRegistry.FALL_IMMUNE,
+                AbilityRegistry.CARNIVORE,
+                AbilityRegistry.CANT_SWIM,
+                AbilityRegistry.SWIFT
             ),
             Set.of()
         ));
@@ -41,12 +41,12 @@ public class AbilitySetsRegistry {
                 "since they again don't have a physical form and dreams are their domain.\n"+
                 "They also are rather weak, taking 1.25x more damage than normal, can't swim up in water, can only eat sweets if not bound to a host, and animals love them.",
             Set.of(
-                AbilitiesRegistry.SCARES_CREEPERS,
-                AbilitiesRegistry.SCARES_PHANTOMS,
-                AbilitiesRegistry.WEAK_TO_DAMAGE,
-                AbilitiesRegistry.ONLY_EATS_SWEETS,
-                AbilitiesRegistry.FRIENDS_WITH_NATURE,
-                AbilitiesRegistry.CANT_SWIM
+                AbilityRegistry.SCARES_CREEPERS,
+                AbilityRegistry.SCARES_PHANTOMS,
+                AbilityRegistry.WEAK_TO_DAMAGE,
+                AbilityRegistry.ONLY_EATS_SWEETS,
+                AbilityRegistry.FRIENDS_WITH_NATURE,
+                AbilityRegistry.CANT_SWIM
             ),
             Set.of()
             // Ability set approved by Flufaye the dreamweaver Vtuber herself :3
@@ -58,16 +58,16 @@ public class AbilitySetsRegistry {
                 "Bunnies also can't freeze in the cold thanks to their thick fur, " +
                 "but they're also hunted by wildlife such as wolves and foxes.",
             Set.of(
-                AbilitiesRegistry.HUNTED_BY_WOLF,
-                AbilitiesRegistry.HUNTED_BY_FOX,
-                AbilitiesRegistry.VEGETARIAN,
-                AbilitiesRegistry.GRASS_EATER,
-                AbilitiesRegistry.FREEZE_IMMUNE,
-                AbilitiesRegistry.HOPPY,
-                AbilitiesRegistry.SWIFT
+                AbilityRegistry.HUNTED_BY_WOLF,
+                AbilityRegistry.HUNTED_BY_FOX,
+                AbilityRegistry.VEGETARIAN,
+                AbilityRegistry.GRASS_EATER,
+                AbilityRegistry.FREEZE_IMMUNE,
+                AbilityRegistry.HOPPY,
+                AbilityRegistry.SWIFT
             ),
             Set.of(
-                AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET
+                ModifierRegistry.ADD_GOLD_FOODS_TO_DIET
             )
         ));
         register(new AbilityPreset(
@@ -75,7 +75,7 @@ public class AbilitySetsRegistry {
             "Villagers are scared of monsters, in result they will run away. Iron Golems and Snow Golems will attack unprovoked as they see you as a threat, " +
                 "but other monsters such as pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack another monster.",
             Set.of(
-                AbilitiesRegistry.IS_MONSTER
+                AbilityRegistry.IS_MONSTER
             ),
             Set.of(
             )
@@ -86,10 +86,10 @@ public class AbilitySetsRegistry {
                 "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack another monster. " +
                 "Undead also burn in daylight and can not swim up in water but because they don't need air to live, they can breathe underwater.",
             Set.of(
-                AbilitiesRegistry.IS_MONSTER,
-                AbilitiesRegistry.BURNS_IN_DAYLIGHT,
-                AbilitiesRegistry.CANT_SWIM,
-                AbilitiesRegistry.BREATHES_UNDERWATER
+                AbilityRegistry.IS_MONSTER,
+                AbilityRegistry.BURNS_IN_DAYLIGHT,
+                AbilityRegistry.CANT_SWIM,
+                AbilityRegistry.BREATHES_UNDERWATER
             ),
             Set.of(
             )
@@ -101,12 +101,12 @@ public class AbilitySetsRegistry {
                 "Zombies also burn in daylight and can not swim up in water but because they don't need air to live, they can breathe underwater. " +
                 "They also are rather slow and can only eat meat to sustain their hunger.",
             Set.of(
-                AbilitiesRegistry.IS_MONSTER,
-                AbilitiesRegistry.BURNS_IN_DAYLIGHT,
-                AbilitiesRegistry.CANT_SWIM,
-                AbilitiesRegistry.SLOW,
-                AbilitiesRegistry.CARNIVORE,
-                AbilitiesRegistry.BREATHES_UNDERWATER
+                AbilityRegistry.IS_MONSTER,
+                AbilityRegistry.BURNS_IN_DAYLIGHT,
+                AbilityRegistry.CANT_SWIM,
+                AbilityRegistry.SLOW,
+                AbilityRegistry.CARNIVORE,
+                AbilityRegistry.BREATHES_UNDERWATER
             ),
             Set.of(
             )
@@ -119,14 +119,14 @@ public class AbilitySetsRegistry {
                 "and are though to knock back due to them being heavier from all the water in their body." +
                 "They also are rather slow, but can feed on pretty much anything like meat, vegetables and fruits or land and underwater foliage.",
             Set.of(
-                AbilitiesRegistry.IS_MONSTER,
-                AbilitiesRegistry.BURNS_IN_DAYLIGHT,
-                AbilitiesRegistry.SLOW,
-                AbilitiesRegistry.CARNIVORE,
-                AbilitiesRegistry.VEGETARIAN,
-                AbilitiesRegistry.GRASS_EATER,
-                AbilitiesRegistry.BREATHES_UNDERWATER,
-                AbilitiesRegistry.TOUGH
+                AbilityRegistry.IS_MONSTER,
+                AbilityRegistry.BURNS_IN_DAYLIGHT,
+                AbilityRegistry.SLOW,
+                AbilityRegistry.CARNIVORE,
+                AbilityRegistry.VEGETARIAN,
+                AbilityRegistry.GRASS_EATER,
+                AbilityRegistry.BREATHES_UNDERWATER,
+                AbilityRegistry.TOUGH
             ),
             Set.of(
             )
@@ -139,11 +139,11 @@ public class AbilitySetsRegistry {
                 "They can not swim up in water but because they don't need air to live, they can breathe underwater. " +
                 "They also are rather slow and can only eat meat to sustain their hunger.",
             Set.of(
-                AbilitiesRegistry.IS_MONSTER,
-                AbilitiesRegistry.SLOW,
-                AbilitiesRegistry.CARNIVORE,
-                AbilitiesRegistry.COLD_SENSITIVE,
-                AbilitiesRegistry.HEAT_IMMUNE
+                AbilityRegistry.IS_MONSTER,
+                AbilityRegistry.SLOW,
+                AbilityRegistry.CARNIVORE,
+                AbilityRegistry.COLD_SENSITIVE,
+                AbilityRegistry.HEAT_IMMUNE
             ),
             Set.of(
             )
@@ -152,11 +152,11 @@ public class AbilitySetsRegistry {
             "golem",
             "Tough and strong, but slow and heavy but durable enough to survive any fall.",
             Set.of(
-                AbilitiesRegistry.TOUGH,
-                AbilitiesRegistry.STRONG,
-                AbilitiesRegistry.SLOW,
-                AbilitiesRegistry.CANT_SWIM,
-                AbilitiesRegistry.FALL_IMMUNE
+                AbilityRegistry.TOUGH,
+                AbilityRegistry.STRONG,
+                AbilityRegistry.SLOW,
+                AbilityRegistry.CANT_SWIM,
+                AbilityRegistry.FALL_IMMUNE
             ),
             Set.of(
             )
@@ -165,15 +165,15 @@ public class AbilitySetsRegistry {
             "netherborn",
             "Description in Progress",
             Set.of(
-                AbilitiesRegistry.LAVA_IMMUNE,
-                AbilitiesRegistry.FIRE_IMMUNE,
-                AbilitiesRegistry.HEAT_IMMUNE,
-                AbilitiesRegistry.STRONG,
-                AbilitiesRegistry.TOUGH,
-                AbilitiesRegistry.HYDROPHOBIC,
-                AbilitiesRegistry.COLD_SENSITIVE,
-                AbilitiesRegistry.CARNIVORE,
-                AbilitiesRegistry.SCARES_PHANTOMS
+                AbilityRegistry.LAVA_IMMUNE,
+                AbilityRegistry.FIRE_IMMUNE,
+                AbilityRegistry.HEAT_IMMUNE,
+                AbilityRegistry.STRONG,
+                AbilityRegistry.TOUGH,
+                AbilityRegistry.HYDROPHOBIC,
+                AbilityRegistry.COLD_SENSITIVE,
+                AbilityRegistry.CARNIVORE,
+                AbilityRegistry.SCARES_PHANTOMS
             ),
             Set.of(
             )
@@ -182,11 +182,11 @@ public class AbilitySetsRegistry {
             "galline",
             "Description in Progress",
             Set.of(
-                AbilitiesRegistry.HUNTED_BY_FOX,
-                AbilitiesRegistry.VEGETARIAN,
-                AbilitiesRegistry.GRASS_EATER,
-                AbilitiesRegistry.LIGHT,
-                AbilitiesRegistry.SWIFT
+                AbilityRegistry.HUNTED_BY_FOX,
+                AbilityRegistry.VEGETARIAN,
+                AbilityRegistry.GRASS_EATER,
+                AbilityRegistry.LIGHT,
+                AbilityRegistry.SWIFT
             ),
             Set.of(
             )
@@ -195,13 +195,13 @@ public class AbilitySetsRegistry {
             "aquarian",
             "Description in Progress",
             Set.of(
-                AbilitiesRegistry.AQUA_GRACE,
-                AbilitiesRegistry.BREATHES_UNDERWATER,
-                AbilitiesRegistry.CANT_BREATHE_AIR,
-                AbilitiesRegistry.CARNIVORE,
-                AbilitiesRegistry.GRASS_EATER,
-                AbilitiesRegistry.STRONG,
-                AbilitiesRegistry.HEAT_SENSITIVE
+                AbilityRegistry.AQUA_GRACE,
+                AbilityRegistry.BREATHES_UNDERWATER,
+                AbilityRegistry.CANT_BREATHE_AIR,
+                AbilityRegistry.CARNIVORE,
+                AbilityRegistry.GRASS_EATER,
+                AbilityRegistry.STRONG,
+                AbilityRegistry.HEAT_SENSITIVE
             ),
             Set.of(
             )
@@ -210,10 +210,10 @@ public class AbilitySetsRegistry {
             "arachnidian",
             "Description in Progress",
             Set.of(
-                AbilitiesRegistry.CLIMBS_WALLS,
-                AbilitiesRegistry.IS_MONSTER,
-                AbilitiesRegistry.CARNIVORE,
-                AbilitiesRegistry.HOPPY
+                AbilityRegistry.CLIMBS_WALLS,
+                AbilityRegistry.IS_MONSTER,
+                AbilityRegistry.CARNIVORE,
+                AbilityRegistry.HOPPY
             ),
             Set.of(
             )
@@ -222,10 +222,10 @@ public class AbilitySetsRegistry {
             "enderian",
             "Description in Progress",
             Set.of(
-                AbilitiesRegistry.PEARLING,
-                AbilitiesRegistry.HYDROPHOBIC,
-                AbilitiesRegistry.IS_MONSTER,
-                AbilitiesRegistry.FREEZE_IMMUNE
+                AbilityRegistry.PEARLING,
+                AbilityRegistry.HYDROPHOBIC,
+                AbilityRegistry.IS_MONSTER,
+                AbilityRegistry.FREEZE_IMMUNE
             ),
             Set.of(
             )
@@ -234,10 +234,10 @@ public class AbilitySetsRegistry {
             "amphibian",
             "Description in Progress",
             Set.of(
-                AbilitiesRegistry.BUG_EATER,
-                AbilitiesRegistry.CARNIVORE,
-                AbilitiesRegistry.HOPPY,
-                AbilitiesRegistry.BREATHES_UNDERWATER
+                AbilityRegistry.BUG_EATER,
+                AbilityRegistry.CARNIVORE,
+                AbilityRegistry.HOPPY,
+                AbilityRegistry.BREATHES_UNDERWATER
             ),
             Set.of(
             )
@@ -246,11 +246,11 @@ public class AbilitySetsRegistry {
             "gelatinous",
             "Description in Progress",
             Set.of(
-                AbilitiesRegistry.HOPPY,
-                AbilitiesRegistry.IS_MONSTER,
-                AbilitiesRegistry.CARNIVORE,
-                AbilitiesRegistry.COLD_SENSITIVE,
-                AbilitiesRegistry.SQUISHY
+                AbilityRegistry.HOPPY,
+                AbilityRegistry.IS_MONSTER,
+                AbilityRegistry.CARNIVORE,
+                AbilityRegistry.COLD_SENSITIVE,
+                AbilityRegistry.SQUISHY
             ),
             Set.of(
             )
@@ -259,13 +259,13 @@ public class AbilitySetsRegistry {
             "pryogelatinous",
             "Description in Progress",
             Set.of(
-                AbilitiesRegistry.FIRE_IMMUNE,
-                AbilitiesRegistry.HEAT_IMMUNE,
-                AbilitiesRegistry.HOPPY,
-                AbilitiesRegistry.IS_MONSTER,
-                AbilitiesRegistry.CARNIVORE,
-                AbilitiesRegistry.COLD_SENSITIVE,
-                AbilitiesRegistry.SQUISHY
+                AbilityRegistry.FIRE_IMMUNE,
+                AbilityRegistry.HEAT_IMMUNE,
+                AbilityRegistry.HOPPY,
+                AbilityRegistry.IS_MONSTER,
+                AbilityRegistry.CARNIVORE,
+                AbilityRegistry.COLD_SENSITIVE,
+                AbilityRegistry.SQUISHY
             ),
             Set.of(
             )
@@ -274,13 +274,13 @@ public class AbilitySetsRegistry {
             "dwarf",
             "Description in Progress",
             Set.of(
-                AbilitiesRegistry.DWARF,
-                AbilitiesRegistry.HEAT_IMMUNE,
-                AbilitiesRegistry.FRIENDS_WITH_NATURE,
-                AbilitiesRegistry.VEGETARIAN
+                AbilityRegistry.DWARF,
+                AbilityRegistry.HEAT_IMMUNE,
+                AbilityRegistry.FRIENDS_WITH_NATURE,
+                AbilityRegistry.VEGETARIAN
             ),
             Set.of(
-                AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET
+                ModifierRegistry.ADD_GOLD_FOODS_TO_DIET
             )
         ));
     }
@@ -293,6 +293,6 @@ public class AbilitySetsRegistry {
         return REGISTRY;
     }
     public static Set<String> getNames() {
-        return AbilitySetsRegistry.getSets().keySet();
+        return PresetRegistry.getSets().keySet();
     }
 }

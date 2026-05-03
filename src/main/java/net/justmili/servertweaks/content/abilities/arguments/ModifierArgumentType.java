@@ -1,26 +1,26 @@
-package net.justmili.servertweaks.content.commands.arguments;
+package net.justmili.servertweaks.content.abilities.arguments;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.justmili.servertweaks.content.abilities.ability.AbilityModifier;
-import net.justmili.servertweaks.content.abilities.registry.AbilityModifierRegistry;
+import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
+import net.justmili.servertweaks.content.abilities.registries.ModifierRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ModifiersArgumentType {
+public class ModifierArgumentType {
     public static StringArgumentType modifier() {
         return StringArgumentType.word();
     }
 
     public static AbilityModifier getModifier(CommandContext<CommandSourceStack> context, String argName) {
-        return AbilityModifierRegistry.byName(StringArgumentType.getString(context, argName));
+        return ModifierRegistry.byName(StringArgumentType.getString(context, argName));
     }
 
     public static CompletableFuture<Suggestions> suggest(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggest(AbilityModifierRegistry.getNames(), builder);
+        return SharedSuggestionProvider.suggest(ModifierRegistry.getNames(), builder);
     }
 }

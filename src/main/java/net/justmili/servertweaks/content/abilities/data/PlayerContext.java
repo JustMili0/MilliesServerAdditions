@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.content.abilities.context;
+package net.justmili.servertweaks.content.abilities.data;
 
 import net.minecraft.world.entity.player.Player;
 import org.jspecify.annotations.Nullable;

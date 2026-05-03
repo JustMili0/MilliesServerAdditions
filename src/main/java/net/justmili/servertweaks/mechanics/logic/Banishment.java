@@ -1,6 +1,6 @@
 package net.justmili.servertweaks.mechanics.logic;
 
-import net.justmili.servertweaks.registries.Dimensions;
+import net.justmili.servertweaks.registries.DimensionRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,14 +20,14 @@ public final class Banishment {
 
     public static boolean onEntityHurt(LivingEntity entity, DamageSource source, float v) {
         if (!(entity instanceof ServerPlayer player)) return true;
-        return player.level().dimension() != Dimensions.BANISHMENT_WORLD;
+        return player.level().dimension() != DimensionRegistry.BANISHMENT_WORLD;
     }
 
     public static void onPlayerTick(Player ticking) {
         if (!(ticking instanceof ServerPlayer player)) return;
         ServerLevel level = player.level();
 
-        if (level.dimension() != Dimensions.BANISHMENT_WORLD) return;
+        if (level.dimension() != DimensionRegistry.BANISHMENT_WORLD) return;
 
         // Give torch so they can even see
         ItemStack stack = player.getInventory().getItem(HOTBAR_SLOT);
@@ -56,7 +56,7 @@ public final class Banishment {
 
     public static void onEntityLoad(Entity entity, ServerLevel level) {
         // Safeguard 3 - despawn all dropped torch item entities so player can't infinitely dupe them
-        if (level.dimension() != Dimensions.BANISHMENT_WORLD) return;
+        if (level.dimension() != DimensionRegistry.BANISHMENT_WORLD) return;
         if (entity instanceof ItemEntity item && item.getItem().is(Items.TORCH)) {
             entity.discard();
         }

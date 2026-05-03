@@ -6,10 +6,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.abilities.ability.Ability;
-import net.justmili.servertweaks.content.abilities.ability.AbilityModifier;
-import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
-import net.justmili.servertweaks.content.abilities.registry.AbilityModifierRegistry;
+import net.justmili.servertweaks.content.abilities.type.Ability;
+import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
+import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
+import net.justmili.servertweaks.content.abilities.registries.ModifierRegistry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -17,7 +17,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class AbilityManager {
+public class DataStorage {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String FILE_NAME = "player_abilities.json";
     public static final Map<UUID, Set<Ability>> playerAbilities = new LinkedHashMap<>();
@@ -49,7 +49,7 @@ public class AbilityManager {
                 Set<Ability> abilities = new LinkedHashSet<>();
                 if (object.has("abilities")) {
                     for (var element : object.getAsJsonArray("abilities")) {
-                        Ability ability = AbilitiesRegistry.byName(element.getAsString());
+                        Ability ability = AbilityRegistry.byName(element.getAsString());
                         if (ability == null) {
                             ServerTweaks.LOGGER.warn("Unknown ability '{}', skipping", element.getAsString());
                             continue;
@@ -60,7 +60,7 @@ public class AbilityManager {
                 Set<AbilityModifier> modifiers = new LinkedHashSet<>();
                 if (object.has("ability_modifiers")) {
                     for (var element : object.getAsJsonArray("ability_modifiers")) {
-                        AbilityModifier modifier = AbilityModifierRegistry.byName(element.getAsString());
+                        AbilityModifier modifier = ModifierRegistry.byName(element.getAsString());
                         if (modifier == null) {
                             ServerTweaks.LOGGER.warn("Unknown modifier '{}', skipping", element.getAsString());
                             continue;

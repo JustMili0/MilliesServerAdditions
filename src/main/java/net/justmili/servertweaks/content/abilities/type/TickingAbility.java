@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.content.abilities.ability;
+package net.justmili.servertweaks.content.abilities.type;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

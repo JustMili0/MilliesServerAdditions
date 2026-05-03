@@ -2,7 +2,7 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.justmili.servertweaks.core.util.CommandUtil;
-import net.justmili.servertweaks.registries.Dimensions;
+import net.justmili.servertweaks.registries.DimensionRegistry;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -20,7 +20,7 @@ public class Banish {
                     .executes(context -> {
                         ServerPlayer player = EntityArgument.getPlayer(context, "player");
                         CommandSourceStack source = context.getSource();
-                        ServerLevel banishmentLevel = source.getServer().getLevel(Dimensions.BANISHMENT_WORLD);
+                        ServerLevel banishmentLevel = source.getServer().getLevel(DimensionRegistry.BANISHMENT_WORLD);
 
                         if (banishmentLevel == null) {
                             CommandUtil.sendFail(source, "Banishment dimension is not loaded");

@@ -1,8 +1,8 @@
-package net.justmili.servertweaks.mechanics.logic;
+package net.justmili.servertweaks.mechanics.features;
 
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.abilities.AbilityUtil;
-import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
+import net.justmili.servertweaks.content.abilities.DataManager;
+import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
 import net.justmili.servertweaks.mixin.accessors.CropBlockAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -31,7 +31,7 @@ public final class RightClickHarvest {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
         if (player.isSpectator()) return InteractionResult.PASS;
-        if (AbilityUtil.getAbilities(player).contains(AbilitiesRegistry.GRASS_EATER) && player.isShiftKeyDown()) return InteractionResult.PASS;
+        if (DataManager.getAbilities(player).contains(AbilityRegistry.GRASS_EATER) && player.isShiftKeyDown()) return InteractionResult.PASS;
 
         BlockPos pos = blockHitResult.getBlockPos();
         BlockState state = level.getBlockState(pos);

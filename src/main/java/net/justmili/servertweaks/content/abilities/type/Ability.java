@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.content.abilities.ability;
+package net.justmili.servertweaks.content.abilities.type;
 
 import java.util.Objects;
 

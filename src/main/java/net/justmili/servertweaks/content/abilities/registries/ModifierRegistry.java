@@ -1,13 +1,13 @@
-package net.justmili.servertweaks.content.abilities.registry;
+package net.justmili.servertweaks.content.abilities.registries;
 
-import net.justmili.servertweaks.content.abilities.ability.AbilityModifier;
+import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class AbilityModifierRegistry {
+public class ModifierRegistry {
     // Registry
     private static final Map<String, AbilityModifier> REGISTRY = new HashMap<>();
 

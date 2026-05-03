@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
 
-public final class Dimensions {
+public final class DimensionRegistry {
     public static final ResourceKey<Level> BANISHMENT_WORLD = ResourceKey.create(Registries.DIMENSION, ServerTweaks.asResource("banishment"));
 
     public static void register() {

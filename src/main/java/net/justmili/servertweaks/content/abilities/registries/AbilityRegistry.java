@@ -1,10 +1,11 @@
-package net.justmili.servertweaks.content.abilities.registry;
+package net.justmili.servertweaks.content.abilities.registries;
 
 import net.justmili.servertweaks.ServerTweaks;
-import net.justmili.servertweaks.content.abilities.AbilityUtil;
-import net.justmili.servertweaks.content.abilities.AbilityUtil.MobData;
-import net.justmili.servertweaks.content.abilities.ability.Ability;
-import net.justmili.servertweaks.content.abilities.ability.TickingAbility;
+import net.justmili.servertweaks.content.abilities.DataManager;
+import net.justmili.servertweaks.content.abilities.DataManager.MobData;
+import net.justmili.servertweaks.content.abilities.data.DataTags;
+import net.justmili.servertweaks.content.abilities.type.Ability;
+import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.core.util.ScalerUtil;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.minecraft.core.registries.Registries;
@@ -53,7 +54,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class AbilitiesRegistry {
+public class AbilityRegistry {
     /// Extra Ability variables
     private static final Map<UUID, List<WrappedGoal>> storedGoals = new HashMap<>();
     private static final Identifier SLOW_SPEED = ServerTweaks.asResource("slow_speed");
@@ -130,7 +131,7 @@ public class AbilitiesRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
             if (level.getGameTime() % 20 != 0) return;
-            if (!level.getBiome(player.blockPosition()).is(AbilityTags.HOT_BIOMES)) return;
+            if (!level.getBiome(player.blockPosition()).is(DataTags.HOT_BIOMES)) return;
             player.hurt(level.damageSources().onFire(), 1.0F);
         }
     }
@@ -143,7 +144,7 @@ public class AbilitiesRegistry {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
-            if (!level.getBiome(player.blockPosition()).is(AbilityTags.COLD_BIOMES)) return;
+            if (!level.getBiome(player.blockPosition()).is(DataTags.COLD_BIOMES)) return;
             if (player.getItemBySlot(EquipmentSlot.HEAD).is(Items.LEATHER_HELMET)
                 && player.getItemBySlot(EquipmentSlot.CHEST).is(Items.LEATHER_CHESTPLATE)
                 && player.getItemBySlot(EquipmentSlot.LEGS).is(Items.LEATHER_LEGGINGS)
@@ -165,7 +166,7 @@ public class AbilitiesRegistry {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
-            if (player.getDeltaMovement().y < -0.4) AbilityUtil.applyEffect(player, MobEffects.SLOW_FALLING);
+            if (player.getDeltaMovement().y < -0.4) DataManager.applyEffect(player, MobEffects.SLOW_FALLING);
             if (player.onGround()) player.removeEffect(MobEffects.SLOW_FALLING);
         }
     }
@@ -177,7 +178,7 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            if (player.isSprinting()) AbilityUtil.applyEffect(player, MobEffects.SPEED, 30, 0);
+            if (player.isSprinting()) DataManager.applyEffect(player, MobEffects.SPEED, 30, 0);
         }
     }
 
@@ -205,7 +206,7 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            AbilityUtil.applyEffect(player, MobEffects.JUMP_BOOST);
+            DataManager.applyEffect(player, MobEffects.JUMP_BOOST);
         }
     }
 
@@ -218,7 +219,7 @@ public class AbilitiesRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             AttributeInstance scale = ScalerUtil.getScale(player);
             if (scale != null && scale.getBaseValue() > 0.75) ScalerUtil.setScale(player, 0.75);
-            AbilityUtil.applyEffect(player, MobEffects.HASTE, 1);
+            DataManager.applyEffect(player, MobEffects.HASTE, 1);
         }
     }
 
@@ -263,13 +264,13 @@ public class AbilitiesRegistry {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.isInWater()) return;
-            AbilityUtil.applyEffect(player, MobEffects.CONDUIT_POWER);
+            DataManager.applyEffect(player, MobEffects.CONDUIT_POWER);
             if (level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
                 .get(Enchantments.DEPTH_STRIDER)
                 .map(h -> EnchantmentHelper.getItemEnchantmentLevel(h, player.getItemBySlot(EquipmentSlot.HEAD)) > 1)
                 .orElse(false))
                 return; // Return before granting Dolphin's Grace if player has depth strider to prevent OP swimming speeds
-            AbilityUtil.applyEffect(player, MobEffects.DOLPHINS_GRACE);
+            DataManager.applyEffect(player, MobEffects.DOLPHINS_GRACE);
         }
     }
 
@@ -283,7 +284,7 @@ public class AbilitiesRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
 
-            if (player.isInWater()) AbilityUtil.applyEffect(player, MobEffects.WATER_BREATHING, 30, 0);
+            if (player.isInWater()) DataManager.applyEffect(player, MobEffects.WATER_BREATHING, 30, 0);
         }
     }
 
@@ -340,7 +341,7 @@ public class AbilitiesRegistry {
             boolean inWaterCauldron = level.getBlockState(player.blockPosition()).is(Blocks.WATER_CAULDRON);
 
             boolean hasHelmet = !player.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
-            boolean inWetBiome = level.getBiome(player.blockPosition()).is(AbilityTags.HYDROPHOBIC_HELMET_PROTECTION_EXCEPTIONS);
+            boolean inWetBiome = level.getBiome(player.blockPosition()).is(DataTags.HYDROPHOBIC_HELMET_PROTECTION_EXCEPTIONS);
             boolean inRain = player.isInRain() && (!hasHelmet || inWetBiome);
 
             boolean inWater = inWaterBlock || inRain || inWaterCauldron;
@@ -357,7 +358,7 @@ public class AbilitiesRegistry {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
-            for (Fox fox : AbilityUtil.getNearby(player, Fox.class, 12.0)) {
+            for (Fox fox : DataManager.getNearby(player, Fox.class, 12.0)) {
                 if (((FoxAccessor) fox).invokeTrusts(player)) continue;
                 if (fox.getTarget() == null) fox.setTarget(player);
             }
@@ -372,7 +373,7 @@ public class AbilitiesRegistry {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
-            for (Wolf wolf : AbilityUtil.getNearby(player, Wolf.class, 16.0)) {
+            for (Wolf wolf : DataManager.getNearby(player, Wolf.class, 16.0)) {
                 if (wolf.isTame()) continue;
                 if (wolf.getTarget() == null) wolf.setTarget(player);
             }
@@ -388,7 +389,7 @@ public class AbilitiesRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
 
-            for (Creeper creeper : AbilityUtil.getNearby(player, Creeper.class, 8.0)) {
+            for (Creeper creeper : DataManager.getNearby(player, Creeper.class, 8.0)) {
                 creeper.setTarget(null);
                 creeper.getNavigation().moveTo(
                     creeper.getX()+(creeper.getX()-player.getX()),
@@ -407,7 +408,7 @@ public class AbilitiesRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
 
-            for (Phantom phantom : AbilityUtil.getNearby(player, Phantom.class, 16.0)) {
+            for (Phantom phantom : DataManager.getNearby(player, Phantom.class, 16.0)) {
                 phantom.setTarget(null);
                 phantom.getNavigation().moveTo(
                     phantom.getX()+(phantom.getX()-player.getX()),
@@ -424,12 +425,12 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            for (Fox fox : AbilityUtil.getNearby(player, Fox.class, 24.0)) {
+            for (Fox fox : DataManager.getNearby(player, Fox.class, 24.0)) {
                 FoxAccessor accessor = (FoxAccessor) fox;
                 if (accessor.invokeTrusts(player)) continue;
                 accessor.invokeAddTrustedEntity(player);
             }
-            for (Wolf wolf : AbilityUtil.getNearby(player, Wolf.class, 24.0)) {
+            for (Wolf wolf : DataManager.getNearby(player, Wolf.class, 24.0)) {
                 if (!wolf.isTame() && wolf.getTarget() == player) wolf.setTarget(null);
             }
             // Aggro prevention - MobMixin (tick) + TargetingConditionsMixin (test)
@@ -446,7 +447,7 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            if (level.isDarkOutside()) AbilityUtil.applyEffect(player, MobEffects.NIGHT_VISION, 320, 0);
+            if (level.isDarkOutside()) DataManager.applyEffect(player, MobEffects.NIGHT_VISION, 320, 0);
         }
     }
 
@@ -496,7 +497,7 @@ public class AbilitiesRegistry {
 
             // Ignore
             Set<UUID> stillNearby = new HashSet<>();
-            AbilityUtil.executeForNearby(player, MONSTER_IGNORE, (mob, data) -> {
+            DataManager.executeForNearby(player, MONSTER_IGNORE, (mob, data) -> {
                 UUID id = mob.getUUID();
                 stillNearby.add(id);
 
@@ -522,7 +523,7 @@ public class AbilitiesRegistry {
             });
 
             // Fear
-            AbilityUtil.executeForNearby(player, MONSTER_FEAR, (mob, data) ->
+            DataManager.executeForNearby(player, MONSTER_FEAR, (mob, data) ->
                 mob.getNavigation().moveTo(
                     mob.getX()+(mob.getX()-player.getX()),
                     mob.getY(),
@@ -532,7 +533,7 @@ public class AbilitiesRegistry {
             );
 
             // Attack
-            AbilityUtil.executeForNearby(player, MONSTER_AGGRO, (mob, data) -> {
+            DataManager.executeForNearby(player, MONSTER_AGGRO, (mob, data) -> {
                     if (mob.getTarget() != player) mob.setTarget(player);
                 }
             );
@@ -555,7 +556,7 @@ public class AbilitiesRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            AbilityUtil.executeForNearby(player, PREDATORY_FEAR, (mob, data) ->
+            DataManager.executeForNearby(player, PREDATORY_FEAR, (mob, data) ->
                 mob.getNavigation().moveTo(
                     mob.getX()+(mob.getX()-player.getX()),
                     mob.getY(),

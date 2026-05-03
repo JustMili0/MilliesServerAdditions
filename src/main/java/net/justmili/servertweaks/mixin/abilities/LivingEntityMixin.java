@@ -1,9 +1,9 @@
 package net.justmili.servertweaks.mixin.abilities;
 
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.abilities.AbilityUtil;
-import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
-import net.justmili.servertweaks.content.abilities.registry.AbilityEffects;
+import net.justmili.servertweaks.content.abilities.DataManager;
+import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
+import net.justmili.servertweaks.content.abilities.Events;
 import net.justmili.servertweaks.mixin.accessors.LivingEntityAccessor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,7 +27,7 @@ public class LivingEntityMixin {
         if (!(Config.playerAbilities.get())) return;
         LivingEntity self = (LivingEntity) (Object) this;
         if (!(self instanceof ServerPlayer player)) return;
-        if (AbilityUtil.has(player, AbilitiesRegistry.TOUGH)) ci.cancel();
+        if (DataManager.has(player, AbilityRegistry.TOUGH)) ci.cancel();
     }
 
     // WEAK_TO_DAMAGE
@@ -39,7 +39,7 @@ public class LivingEntityMixin {
         if (!(Config.playerAbilities.get())) return;
         if (applyDamageModifyer) return;
         if (!(((LivingEntity) (Object) this) instanceof ServerPlayer player)) return;
-        if (!AbilityUtil.has(player, AbilitiesRegistry.WEAK_TO_DAMAGE)) return;
+        if (!DataManager.has(player, AbilityRegistry.WEAK_TO_DAMAGE)) return;
         if (source.is(DamageTypes.FALL)) return;
 
         applyDamageModifyer = true;
@@ -53,7 +53,7 @@ public class LivingEntityMixin {
     private void servertweaks$increaseAirSupply(int currentAir, CallbackInfoReturnable<Integer> cir) {
         if (!(Config.playerAbilities.get())) return;
         if (!((LivingEntity) (Object) this instanceof ServerPlayer player)) return;
-        if (!AbilityUtil.has(player, AbilitiesRegistry.CANT_BREATHE_AIR)) return;
+        if (!DataManager.has(player, AbilityRegistry.CANT_BREATHE_AIR)) return;
         if (!player.isInWater()) cir.setReturnValue(currentAir);
     }
 
@@ -63,7 +63,7 @@ public class LivingEntityMixin {
         if (!(Config.playerAbilities.get())) return;
         if (!((Object) this instanceof ServerPlayer player)) return;
         if (cir.getReturnValue()) return;
-        if (AbilityEffects.shouldClimb(player)) {
+        if (Events.shouldClimb(player)) {
             ((LivingEntityAccessor) this).setLastClimbablePos(Optional.of(player.blockPosition()));
             cir.setReturnValue(true);
         }

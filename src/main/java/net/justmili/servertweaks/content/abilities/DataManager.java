@@ -1,8 +1,8 @@
 package net.justmili.servertweaks.content.abilities;
 
-import net.justmili.servertweaks.content.abilities.ability.Ability;
-import net.justmili.servertweaks.content.abilities.ability.AbilityModifier;
-import net.justmili.servertweaks.content.commands.arguments.AbilitySetArgumentType;
+import net.justmili.servertweaks.content.abilities.type.Ability;
+import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
+import net.justmili.servertweaks.content.abilities.arguments.PresetArgumentType;
 import net.minecraft.core.Holder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,9 +14,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.BiConsumer;
 
-import static net.justmili.servertweaks.content.abilities.AbilityManager.*;
+import static net.justmili.servertweaks.content.abilities.DataStorage.*;
 
-public class AbilityUtil {
+public class DataManager {
 
     // Ability and Modifier management
     public static Set<Ability> getAbilities(ServerPlayer player) {
@@ -46,7 +46,7 @@ public class AbilityUtil {
     public static boolean has(ServerPlayer player, Ability ability) { return getAbilities(player).contains(ability); }
     public static boolean has(ServerPlayer player, AbilityModifier modifier) { return getModifiers(player).contains(modifier); }
 
-    public static void applySet(UUID uuid, AbilitySetArgumentType.AbilityPreset set, MinecraftServer server) {
+    public static void applySet(UUID uuid, PresetArgumentType.AbilityPreset set, MinecraftServer server) {
         playerAbilities.put(uuid, new HashSet<>(set.abilities()));
         playerModifiers.put(uuid, new HashSet<>(set.modifiers()));
         saveFile(server);

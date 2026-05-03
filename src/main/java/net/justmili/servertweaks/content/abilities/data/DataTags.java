@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.content.abilities.registry;
+package net.justmili.servertweaks.content.abilities.data;
 
 import net.justmili.servertweaks.ServerTweaks;
 import net.minecraft.core.registries.Registries;
@@ -8,7 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 
-public class AbilityTags {
+public class DataTags {
     public static final TagKey<Item> DIET_CARNIVORE = TagKey.create(
         Registries.ITEM, ServerTweaks.asResource("diet_carnivore"));
     public static final TagKey<Item> DIET_VEGETARIAN = TagKey.create(

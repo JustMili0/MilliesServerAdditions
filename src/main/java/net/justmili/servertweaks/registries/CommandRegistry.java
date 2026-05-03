@@ -5,7 +5,7 @@ import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.commands.*;
 import net.justmili.servertweaks.core.util.CommandUtil;
 
-public class Commands {
+public class CommandRegistry {
     public static void register() {
         CommandRegistrationCallback.EVENT.register((dispatcher, commandBuildContext, environment) -> {
             if (CommandUtil.checkIfExpected(Config.enableScaleCommand, true))

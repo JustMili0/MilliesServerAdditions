@@ -2,11 +2,11 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import net.justmili.servertweaks.content.abilities.AbilityManager;
-import net.justmili.servertweaks.content.abilities.AbilityUtil;
-import net.justmili.servertweaks.content.abilities.ability.Ability;
-import net.justmili.servertweaks.content.abilities.ability.AbilityModifier;
-import net.justmili.servertweaks.content.commands.arguments.*;
+import net.justmili.servertweaks.content.abilities.DataStorage;
+import net.justmili.servertweaks.content.abilities.DataManager;
+import net.justmili.servertweaks.content.abilities.type.Ability;
+import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
+import net.justmili.servertweaks.content.abilities.arguments.*;
 import net.justmili.servertweaks.core.util.CommandUtil;
 import net.justmili.servertweaks.core.util.FdaApiUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
@@ -26,15 +26,15 @@ public class PlayerAbilities {
         dispatcher.register(
             Commands.literal("abilities")
                 .then(Commands.literal("pickPreset")
-                    .then(Commands.argument("preset", AbilitySetArgumentType.setSelect())
-                        .suggests(AbilitySetArgumentType::suggest)
+                    .then(Commands.argument("preset", PresetArgumentType.setSelect())
+                        .suggests(PresetArgumentType::suggest)
                         .executes(context -> {
                             CommandSourceStack source = context.getSource();
                             if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
                             ServerPlayer player = source.getPlayer();
 
                             String setName = StringArgumentType.getString(context, "preset");
-                            AbilitySetArgumentType.AbilityPreset set = AbilitySetArgumentType.getSet(setName);
+                            PresetArgumentType.AbilityPreset set = PresetArgumentType.getSet(setName);
                             if (set == null) {
                                 CommandUtil.sendFail(source, "Unknown ability preset: "+setName);
                                 return 0;
@@ -55,7 +55,7 @@ public class PlayerAbilities {
                     .requires(src -> CommandUtil.hasPerms(src, 2))
                     .executes(context -> {
                         MinecraftServer server = context.getSource().getServer();
-                        AbilityManager.loadFile(server);
+                        DataStorage.loadFile(server);
 
                         CommandUtil.sendSucc(context.getSource(), "Reloaded Player Abilities");
                         return 1;
@@ -66,13 +66,13 @@ public class PlayerAbilities {
                     .requires(src -> CommandUtil.hasPerms(src, 2))
                     .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.literal("ability")
-                            .then(Commands.argument("abilityOrDebuff", AbilitiesArgumentType.abilities())
-                                .suggests(AbilitiesArgumentType::suggest)
+                            .then(Commands.argument("abilityOrDebuff", AbilityArgumentType.abilities())
+                                .suggests(AbilityArgumentType::suggest)
                                 .executes(context -> {
                                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
-                                    Ability ability = AbilitiesArgumentType.getAbility(context, "abilityOrDebuff");
+                                    Ability ability = AbilityArgumentType.getAbility(context, "abilityOrDebuff");
 
-                                    AbilityUtil.grantAbility(player, ability);
+                                    DataManager.grantAbility(player, ability);
 
                                     CommandUtil.sendSucc(context.getSource(), "Granted ability "+ability.getName()+" to player "+player.getName().getString());
 
@@ -81,12 +81,12 @@ public class PlayerAbilities {
                             )
                         )
                         .then(Commands.literal("modifier")
-                            .then(Commands.argument("modifier", ModifiersArgumentType.modifier())
-                                .suggests(ModifiersArgumentType::suggest)
+                            .then(Commands.argument("modifier", ModifierArgumentType.modifier())
+                                .suggests(ModifierArgumentType::suggest)
                                 .executes(context -> {
                                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
-                                    AbilityModifier modifier = ModifiersArgumentType.getModifier(context, "modifier");
-                                    AbilityUtil.grantModifier(player, modifier);
+                                    AbilityModifier modifier = ModifierArgumentType.getModifier(context, "modifier");
+                                    DataManager.grantModifier(player, modifier);
                                     CommandUtil.sendSucc(context.getSource(), "Granted ability modifier "+modifier.getName()+" to player "+player.getName().getString());
                                     return 1;
                                 })
@@ -99,13 +99,13 @@ public class PlayerAbilities {
                     .requires(src -> CommandUtil.hasPerms(src, 2))
                     .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.literal("ability")
-                            .then(Commands.argument("abilityOrDebuff", AbilitiesArgumentType.abilities())
-                                .suggests(AbilitiesArgumentType::suggest)
+                            .then(Commands.argument("abilityOrDebuff", AbilityArgumentType.abilities())
+                                .suggests(AbilityArgumentType::suggest)
                                 .executes(context -> {
                                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
-                                    Ability ability = AbilitiesArgumentType.getAbility(context, "abilityOrDebuff");
+                                    Ability ability = AbilityArgumentType.getAbility(context, "abilityOrDebuff");
 
-                                    AbilityUtil.revokeAbility(player, ability);
+                                    DataManager.revokeAbility(player, ability);
 
                                     CommandUtil.sendSucc(context.getSource(), "Removed ability "+ability.getName()+" from player "+player.getName().getString());
 
@@ -114,13 +114,13 @@ public class PlayerAbilities {
                             )
                         )
                         .then(Commands.literal("modifier")
-                            .then(Commands.argument("modifier", ModifiersArgumentType.modifier())
-                                .suggests(ModifiersArgumentType::suggest)
+                            .then(Commands.argument("modifier", ModifierArgumentType.modifier())
+                                .suggests(ModifierArgumentType::suggest)
                                 .executes(context -> {
                                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
-                                    AbilityModifier modifier = ModifiersArgumentType.getModifier(context, "modifier");
+                                    AbilityModifier modifier = ModifierArgumentType.getModifier(context, "modifier");
 
-                                    AbilityUtil.revokeModifier(player, modifier);
+                                    DataManager.revokeModifier(player, modifier);
 
                                     CommandUtil.sendSucc(context.getSource(), "Removed ability modifier "+modifier.getName()+" from player "+player.getName().getString());
 
@@ -132,7 +132,7 @@ public class PlayerAbilities {
                             .executes(context -> {
                                 ServerPlayer player = EntityArgument.getPlayer(context, "player");
 
-                                AbilityUtil.clearPlayer(player);
+                                DataManager.clearPlayer(player);
                                 FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, false);
 
                                 CommandUtil.sendSucc(context.getSource(), "Deleted player abilities profile of "+player.getName().getString());
@@ -145,15 +145,15 @@ public class PlayerAbilities {
 
                 .then(Commands.literal("applyPreset")
                     .requires(src -> CommandUtil.hasPerms(src, 2))
-                    .then(Commands.argument("preset", AbilitySetArgumentType.setSelect())
-                        .suggests(AbilitySetArgumentType::suggest)
+                    .then(Commands.argument("preset", PresetArgumentType.setSelect())
+                        .suggests(PresetArgumentType::suggest)
                         .then(Commands.argument("player", EntityArgument.player())
                             .executes(context -> {
                                 CommandSourceStack source = context.getSource();
                                 ServerPlayer player = EntityArgument.getPlayer(context, "player");
 
                                 String setName = StringArgumentType.getString(context, "preset");
-                                AbilitySetArgumentType.AbilityPreset set = AbilitySetArgumentType.getSet(setName);
+                                PresetArgumentType.AbilityPreset set = PresetArgumentType.getSet(setName);
                                 if (set == null) {
                                     CommandUtil.sendFail(source, "Unknown ability preset: "+setName);
                                     return 0;
@@ -164,7 +164,7 @@ public class PlayerAbilities {
                                     return 0;
                                 }
 
-                                AbilityUtil.applySet(player.getUUID(), set, source.getServer());
+                                DataManager.applySet(player.getUUID(), set, source.getServer());
                                 FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, true);
                                 CommandUtil.sendSucc(source, "Applied the "+setName+" preset!");
                                 return 1;

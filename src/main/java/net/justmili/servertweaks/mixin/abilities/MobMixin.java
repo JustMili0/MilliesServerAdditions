@@ -1,9 +1,9 @@
 package net.justmili.servertweaks.mixin.abilities;
 
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.abilities.AbilityUtil;
-import net.justmili.servertweaks.content.abilities.context.PlayerContext;
-import net.justmili.servertweaks.content.abilities.registry.AbilitiesRegistry;
+import net.justmili.servertweaks.content.abilities.DataManager;
+import net.justmili.servertweaks.content.abilities.data.PlayerContext;
+import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,7 +26,7 @@ public class MobMixin {
         Mob self = (Mob) (Object) this;
         LivingEntity target = self.getTarget();
         if (!(target instanceof ServerPlayer player)) return;
-        if (!AbilityUtil.has(player, AbilitiesRegistry.FRIENDS_WITH_NATURE)) return;
+        if (!DataManager.has(player, AbilityRegistry.FRIENDS_WITH_NATURE)) return;
 
         if (self instanceof TamableAnimal tamed && tamed.isTame()) return;
         self.setTarget(null);
