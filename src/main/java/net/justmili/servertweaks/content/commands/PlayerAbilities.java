@@ -34,7 +34,7 @@ public class PlayerAbilities {
                             ServerPlayer player = source.getPlayer();
 
                             String setName = StringArgumentType.getString(context, "preset");
-                            AbilitySetArgumentType.AbilitySet set = AbilitySetArgumentType.getSet(setName);
+                            AbilitySetArgumentType.AbilityPreset set = AbilitySetArgumentType.getSet(setName);
                             if (set == null) {
                                 CommandUtil.sendFail(source, "Unknown ability preset: "+setName);
                                 return 0;
@@ -153,7 +153,7 @@ public class PlayerAbilities {
                                 ServerPlayer player = EntityArgument.getPlayer(context, "player");
 
                                 String setName = StringArgumentType.getString(context, "preset");
-                                AbilitySetArgumentType.AbilitySet set = AbilitySetArgumentType.getSet(setName);
+                                AbilitySetArgumentType.AbilityPreset set = AbilitySetArgumentType.getSet(setName);
                                 if (set == null) {
                                     CommandUtil.sendFail(source, "Unknown ability preset: "+setName);
                                     return 0;

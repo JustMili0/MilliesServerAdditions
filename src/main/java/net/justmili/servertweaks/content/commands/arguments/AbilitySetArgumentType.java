@@ -15,14 +15,14 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class AbilitySetArgumentType {
-    public record AbilitySet(String name, String description, Set<Ability> abilities, Set<AbilityModifier> modifiers) {
+    public record AbilityPreset(String name, String description, Set<Ability> abilities, Set<AbilityModifier> modifiers) {
     }
 
     public static StringArgumentType setSelect() {
         return StringArgumentType.word();
     }
 
-    public static @Nullable AbilitySet getSet(String name) {
+    public static @Nullable AbilityPreset getSet(String name) {
         return AbilitySetsRegistry.getSets().get(name.toLowerCase());
     }
 

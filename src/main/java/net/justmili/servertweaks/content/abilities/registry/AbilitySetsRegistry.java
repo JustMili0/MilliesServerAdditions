@@ -1,23 +1,23 @@
 package net.justmili.servertweaks.content.abilities.registry;
 
-import net.justmili.servertweaks.content.commands.arguments.AbilitySetArgumentType.AbilitySet;
+import net.justmili.servertweaks.content.commands.arguments.AbilitySetArgumentType.AbilityPreset;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class AbilitySetsRegistry {
-    public static final Map<String, AbilitySet> REGISTRY = new HashMap<>();
+    public static final Map<String, AbilityPreset> REGISTRY = new HashMap<>();
 
     static {
-        register(new AbilitySet(
+        register(new AbilityPreset(
             "custom",
             "\nContact any online staff that you'd like a custom set. Your chosen abilities, debuffs and ability modifiers "+
                 "will be reviewed by staff and implemented if it's compliant with server's ability creation guidelines if there are any.",
             Set.of(),
             Set.of()
         ));
-        register(new AbilitySet( // aka Cat
+        register(new AbilityPreset( // aka Cat
             "feline",
             "\nFelines can mimic the hissing of a creeper and screeching of phantoms, scaring them away; they are also immune to fall damage"+
                 "and are extra fast when sprinting. They are carnivores, meaning they can only eat meat, can't exactly swim up in water to not drown"+
@@ -33,7 +33,7 @@ public class AbilitySetsRegistry {
             ),
             Set.of()
         ));
-        register(new AbilitySet(
+        register(new AbilityPreset(
             "dreamweaver",
             "\nDreamweavers are creatures that create dreams for their hosts, they can take an appearance of a cat-moth hybrid, sometimes humanoid; "+
                 "though normally they don't have a physical form. "+
@@ -51,10 +51,10 @@ public class AbilitySetsRegistry {
             Set.of()
             // Ability set approved by Flufaye the dreamweaver Vtuber herself :3
         ));
-        register(new AbilitySet(
+        register(new AbilityPreset(
             "bunny",
             "Bunnies are swift and agile, giving them speed and ability to jump pretty high. " +
-                "They can feed on fruits and vegetables as well as foliage such as grass or bushes but can't eat meat. " +
+                "They feed on fruits and vegetables as well as foliage such as grass or bushes but can not eat. " +
                 "Bunnies also can't freeze in the cold thanks to their thick fur, " +
                 "but they're also hunted by wildlife such as wolves and foxes.",
             Set.of(
@@ -70,7 +70,7 @@ public class AbilitySetsRegistry {
                 AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET
             )
         ));
-        register(new AbilitySet(
+        register(new AbilityPreset(
             "monster_generic",
             "Villagers are scared of monsters, in result they will run away. Iron Golems and Snow Golems will attack unprovoked as they see you as a threat, " +
                 "but other monsters such as pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack another monster.",
@@ -80,7 +80,7 @@ public class AbilitySetsRegistry {
             Set.of(
             )
         ));
-        register(new AbilitySet(
+        register(new AbilityPreset(
             "undead_generic",
             "The undead are monsters. Villagers run away from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
                 "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack another monster. " +
@@ -94,7 +94,7 @@ public class AbilitySetsRegistry {
             Set.of(
             )
         ));
-        register(new AbilitySet(
+        register(new AbilityPreset(
             "zombie",
             "Zombies are undead monsters. Villagers run away from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
                 "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack a Zombie. " +
@@ -111,7 +111,7 @@ public class AbilitySetsRegistry {
             Set.of(
             )
         ));
-        register(new AbilitySet(
+        register(new AbilityPreset(
             "drowned",
             "Drowned are undead monsters. Villagers run away from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
                 "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack a Drowned. " +
@@ -131,7 +131,7 @@ public class AbilitySetsRegistry {
             Set.of(
             )
         ));
-        register(new AbilitySet(
+        register(new AbilityPreset(
             "husk",
             "Husks are undead monsters. Villagers run away from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
                 "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack a Husk. " +
@@ -148,7 +148,7 @@ public class AbilitySetsRegistry {
             Set.of(
             )
         ));
-        register(new AbilitySet( // aka Iron Golem
+        register(new AbilityPreset( // aka Iron Golem
             "golem",
             "Tough and strong, but slow and heavy but durable enough to survive any fall.",
             Set.of(
@@ -161,85 +161,135 @@ public class AbilitySetsRegistry {
             Set.of(
             )
         ));
-        register(new AbilitySet( // aka Nether Mob
+        register(new AbilityPreset( // aka Nether Mob
             "netherborn",
-            "",
+            "Description in Progress",
             Set.of(
+                AbilitiesRegistry.LAVA_IMMUNE,
+                AbilitiesRegistry.FIRE_IMMUNE,
+                AbilitiesRegistry.HEAT_IMMUNE,
+                AbilitiesRegistry.STRONG,
+                AbilitiesRegistry.TOUGH,
+                AbilitiesRegistry.HYDROPHOBIC,
+                AbilitiesRegistry.COLD_SENSITIVE,
+                AbilitiesRegistry.CARNIVORE,
+                AbilitiesRegistry.SCARES_PHANTOMS
             ),
             Set.of(
             )
         ));
-        register(new AbilitySet( // aka Chicken
+        register(new AbilityPreset( // aka Chicken
             "galline",
-            "",
+            "Description in Progress",
             Set.of(
+                AbilitiesRegistry.HUNTED_BY_FOX,
+                AbilitiesRegistry.VEGETARIAN,
+                AbilitiesRegistry.GRASS_EATER,
+                AbilitiesRegistry.LIGHT,
+                AbilitiesRegistry.SWIFT
             ),
             Set.of(
             )
         ));
-        register(new AbilitySet( // aka Fish
+        register(new AbilityPreset( // aka Fish
             "aquarian",
-            "",
+            "Description in Progress",
             Set.of(
+                AbilitiesRegistry.AQUA_GRACE,
+                AbilitiesRegistry.BREATHES_UNDERWATER,
+                AbilitiesRegistry.CANT_BREATHE_AIR,
+                AbilitiesRegistry.CARNIVORE,
+                AbilitiesRegistry.GRASS_EATER,
+                AbilitiesRegistry.STRONG,
+                AbilitiesRegistry.HEAT_SENSITIVE
             ),
             Set.of(
             )
         ));
-        register(new AbilitySet( // aka Spider
+        register(new AbilityPreset( // aka Spider
             "arachnidian",
-            "",
+            "Description in Progress",
             Set.of(
+                AbilitiesRegistry.CLIMBS_WALLS,
+                AbilitiesRegistry.IS_MONSTER,
+                AbilitiesRegistry.CARNIVORE,
+                AbilitiesRegistry.HOPPY
             ),
             Set.of(
             )
         ));
-        register(new AbilitySet( // aka Enderman
+        register(new AbilityPreset( // aka Enderman
             "enderian",
-            "",
+            "Description in Progress",
             Set.of(
+                AbilitiesRegistry.PEARLING,
+                AbilitiesRegistry.HYDROPHOBIC,
+                AbilitiesRegistry.IS_MONSTER,
+                AbilitiesRegistry.FREEZE_IMMUNE
             ),
             Set.of(
             )
         ));
-        register(new AbilitySet( // aka Frog
+        register(new AbilityPreset( // aka Frog
             "amphibian",
-            "",
+            "Description in Progress",
             Set.of(
+                AbilitiesRegistry.BUG_EATER,
+                AbilitiesRegistry.CARNIVORE,
+                AbilitiesRegistry.HOPPY,
+                AbilitiesRegistry.BREATHES_UNDERWATER
             ),
             Set.of(
             )
         ));
-        register(new AbilitySet(
-            "slime",
-            "",
+        register(new AbilityPreset( // aka Slime
+            "gelatinous",
+            "Description in Progress",
             Set.of(
+                AbilitiesRegistry.HOPPY,
+                AbilitiesRegistry.IS_MONSTER,
+                AbilitiesRegistry.CARNIVORE,
+                AbilitiesRegistry.COLD_SENSITIVE,
+                AbilitiesRegistry.SQUISHY
             ),
             Set.of(
             )
         ));
-        register(new AbilitySet(
-            "magma_cube",
-            "",
+        register(new AbilityPreset( // aka Magma Cube
+            "pryogelatinous",
+            "Description in Progress",
             Set.of(
+                AbilitiesRegistry.FIRE_IMMUNE,
+                AbilitiesRegistry.HEAT_IMMUNE,
+                AbilitiesRegistry.HOPPY,
+                AbilitiesRegistry.IS_MONSTER,
+                AbilitiesRegistry.CARNIVORE,
+                AbilitiesRegistry.COLD_SENSITIVE,
+                AbilitiesRegistry.SQUISHY
             ),
             Set.of(
             )
         ));
-        register(new AbilitySet(
+        register(new AbilityPreset(
             "dwarf",
-            "",
+            "Description in Progress",
             Set.of(
+                AbilitiesRegistry.DWARF,
+                AbilitiesRegistry.HEAT_IMMUNE,
+                AbilitiesRegistry.FRIENDS_WITH_NATURE,
+                AbilitiesRegistry.VEGETARIAN
             ),
             Set.of(
+                AbilityModifierRegistry.ADD_GOLD_FOODS_TO_DIET
             )
         ));
     }
 
-    public static void register(AbilitySet set) {
+    public static void register(AbilityPreset set) {
         REGISTRY.put(set.name(), set);
     }
 
-    public static Map<String, AbilitySet> getSets() {
+    public static Map<String, AbilityPreset> getSets() {
         return REGISTRY;
     }
     public static Set<String> getNames() {

@@ -46,7 +46,7 @@ public class AbilityUtil {
     public static boolean has(ServerPlayer player, Ability ability) { return getAbilities(player).contains(ability); }
     public static boolean has(ServerPlayer player, AbilityModifier modifier) { return getModifiers(player).contains(modifier); }
 
-    public static void applySet(UUID uuid, AbilitySetArgumentType.AbilitySet set, MinecraftServer server) {
+    public static void applySet(UUID uuid, AbilitySetArgumentType.AbilityPreset set, MinecraftServer server) {
         playerAbilities.put(uuid, new HashSet<>(set.abilities()));
         playerModifiers.put(uuid, new HashSet<>(set.modifiers()));
         saveFile(server);
