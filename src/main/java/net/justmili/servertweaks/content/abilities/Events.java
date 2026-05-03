@@ -146,7 +146,7 @@ public class Events {
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.getItem() instanceof BlockItem) return InteractionResult.PASS;
+        if (stack.getItem() instanceof BlockItem && !stack.has(DataComponents.FOOD)) return InteractionResult.PASS;
 
         if (isDietBlocked(player, stack)) return InteractionResult.FAIL;
 
