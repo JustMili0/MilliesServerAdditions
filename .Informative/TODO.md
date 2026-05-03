@@ -1,9 +1,8 @@
 # TODO:
 - Finish writing presets  [!!!]
-- Fix permissions for ability sets applying  [!!!]
 - Fix discarding containers on entities
 - Fix abilities
-  - Fix hp resetting to 10 hearts with 
+  - Fix hp resetting to 10 hearts with STRONG after relog
   - Fix not being able to place any edible but placeable foods with diets other than vegetarian  [!]
   - Fix nausea appliance when eating non-diet foods
   - Fix kinda-working abilities

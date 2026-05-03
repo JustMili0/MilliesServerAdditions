@@ -4,3 +4,4 @@ accessible method net/minecraft/world/entity/Entity isInRain ()Z
 accessible field net/minecraft/world/entity/Entity DATA_TICKS_FROZEN Lnet/minecraft/network/syncher/EntityDataAccessor;
 accessible field net/minecraft/world/entity/Mob goalSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
 accessible field net/minecraft/world/entity/Mob targetSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
+accessible field net/minecraft/server/network/ServerCommonPacketListenerImpl server Lnet/minecraft/server/MinecraftServer;
