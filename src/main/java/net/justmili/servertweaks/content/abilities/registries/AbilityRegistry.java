@@ -133,7 +133,12 @@ public class AbilityRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
             if (level.getGameTime() % 20 != 0) return;
+
             if (!level.getBiome(player.blockPosition()).is(DataTags.HOT_BIOMES)) return;
+            if (!(level.canSeeSky(player.blockPosition())
+                && level.getBrightness(LightLayer.SKY, player.blockPosition()) >= 8)
+                || level.isDarkOutside()) return;
+
             player.hurt(level.damageSources().onFire(), 1.0F);
         }
     }
@@ -457,7 +462,7 @@ public class AbilityRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
             if (!level.isBrightOutside() || !level.canSeeSky(player.blockPosition())) return;
-            if ((level.getBrightness(LightLayer.SKY, player.blockPosition()) <= 8)) return;
+            if (level.getBrightness(LightLayer.SKY, player.blockPosition()) <= 8) return;
 
             if (!player.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) return;
             player.igniteForSeconds(2);

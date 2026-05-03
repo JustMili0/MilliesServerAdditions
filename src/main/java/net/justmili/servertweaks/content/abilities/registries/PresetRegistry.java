@@ -72,7 +72,7 @@ public class PresetRegistry {
         ));
         register(new AbilityPreset(
             "monster_generic",
-            "Villagers are scared of monsters, in result they will run away. Iron Golems and Snow Golems will attack unprovoked as they see you as a threat, " +
+            "Villagers are scared of monsters, in result they will flee. Iron Golems and Snow Golems will attack unprovoked as they see you as a threat, " +
                 "but other monsters such as pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack another monster.",
             Set.of(
                 AbilityRegistry.IS_MONSTER
@@ -82,7 +82,7 @@ public class PresetRegistry {
         ));
         register(new AbilityPreset(
             "undead_generic",
-            "The undead are monsters. Villagers run away from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
+            "The undead are monsters. Villagers flee from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
                 "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack another monster. " +
                 "Undead also burn in daylight and can not swim up in water but because they don't need air to live, they can breathe underwater.",
             Set.of(
@@ -96,7 +96,7 @@ public class PresetRegistry {
         ));
         register(new AbilityPreset(
             "zombie",
-            "Zombies are undead monsters. Villagers run away from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
+            "Zombies are undead monsters. Villagers flee from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
                 "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack a Zombie. " +
                 "Zombies also burn in daylight and can not swim up in water but because they don't need air to live, they can breathe underwater. " +
                 "They also are rather slow and can only eat meat to sustain their hunger.",
@@ -113,7 +113,7 @@ public class PresetRegistry {
         ));
         register(new AbilityPreset(
             "drowned",
-            "Drowned are undead monsters. Villagers run away from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
+            "Drowned are undead monsters. Villagers flee from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
                 "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack a Drowned. " +
                 "Drowned also burn in daylight, they live underwater and don't need air meaning they can breathe underwater " +
                 "and are though to knock back due to them being heavier from all the water in their body." +
@@ -133,7 +133,7 @@ public class PresetRegistry {
         ));
         register(new AbilityPreset(
             "husk",
-            "Husks are undead monsters. Villagers run away from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
+            "Husks are undead monsters. Villagers flee from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
                 "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack a Husk. " +
                 "Unlike most undead, Husks don't burn in daylight and are immune to heat, but are sensitive to the cold. " +
                 "They can not swim up in water but because they don't need air to live, they can breathe underwater. " +
@@ -163,7 +163,9 @@ public class PresetRegistry {
         ));
         register(new AbilityPreset( // aka Nether Mob
             "netherborn",
-            "Description in Progress",
+            "Netherborn are creatures from the depths of the Nether. Native to it, they are immune to all hellish heat. " +
+                "They are strong and tough, but are sensitive to cold and repulsed by water. Netherborn are also carnivores, " +
+                "and their presence alone scares away Phantoms.",
             Set.of(
                 AbilityRegistry.LAVA_IMMUNE,
                 AbilityRegistry.FIRE_IMMUNE,
@@ -180,7 +182,7 @@ public class PresetRegistry {
         ));
         register(new AbilityPreset( // aka Chicken
             "galline",
-            "Description in Progress",
+            "Gallines are bird-like creatures. They are light and swift, they feed on plants and foliage, but are hunted by foxes in the wild.",
             Set.of(
                 AbilityRegistry.HUNTED_BY_FOX,
                 AbilityRegistry.VEGETARIAN,
@@ -193,7 +195,9 @@ public class PresetRegistry {
         ));
         register(new AbilityPreset( // aka Fish
             "aquarian",
-            "Description in Progress",
+            "Aquarians are aquatic beings native to oceans. They are strong and gracefully fast underwater, " +
+                "being able to breathe in water but suffocating on the surface. Aquarians can not be in hot climates, or they'll become fish soufflé." +
+                "They primarily feed on meat and underwater or surface foliage.",
             Set.of(
                 AbilityRegistry.AQUA_GRACE,
                 AbilityRegistry.BREATHES_UNDERWATER,
