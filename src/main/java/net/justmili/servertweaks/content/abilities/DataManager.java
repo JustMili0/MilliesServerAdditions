@@ -1,18 +1,24 @@
 package net.justmili.servertweaks.content.abilities;
 
+import net.justmili.servertweaks.content.abilities.data.MobData;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 import net.justmili.servertweaks.content.abilities.arguments.PresetArgumentType;
 import net.minecraft.core.Holder;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import static net.justmili.servertweaks.content.abilities.DataStorage.*;
 
@@ -76,7 +82,6 @@ public class DataManager {
         return player.level().getEntitiesOfClass(mob, player.getBoundingBox().inflate(radius));
     }
 
-    public record MobData(Class<?> entityClass, double range, double speed) { }
     public static <T extends Mob> void executeForNearby(ServerPlayer player, List<MobData> dataList, BiConsumer<T, MobData> action) {
         dataList.forEach(data ->
             getNearby(player, data.entityClass().asSubclass(Mob.class), data.range())

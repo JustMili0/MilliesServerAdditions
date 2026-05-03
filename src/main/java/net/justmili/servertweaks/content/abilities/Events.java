@@ -20,10 +20,14 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -36,7 +40,24 @@ public class Events {
         if (!(Config.playerAbilities.get())) return;
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                Events.tickTickingAbilities(player);
+                ServerLevel level = player.level();
+                Set<Ability> abilities = DataManager.getAbilities(player);
+
+                // Tick all Ticking Abilities
+                for (Ability ability : abilities) {
+                    if (ability instanceof TickingAbility tickingAbility) {
+                        tickingAbility.tick(player, level);
+                    }
+                }
+
+                // Reset attribute modifiers if related ability is not applied
+                AttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
+                AttributeInstance attack = player.getAttribute(Attributes.ATTACK_DAMAGE);
+                AttributeInstance maxHp = player.getAttribute(Attributes.MAX_HEALTH);
+
+                if (!abilities.contains(AbilityRegistry.SLOW)) speed.removeModifier(AbilityRegistry.AM_SLOW_SPEED);
+                if (!abilities.contains(AbilityRegistry.STRONG)) attack.removeModifier(AbilityRegistry.AM_STRONG_DAMAGE);
+                if (!abilities.contains(AbilityRegistry.STRONG)) maxHp.removeModifier(AbilityRegistry.AM_STRONG_HP);
             }
         });
 
@@ -46,18 +67,6 @@ public class Events {
         UseBlockCallback.EVENT.register(Events::grassEater);
         UseItemCallback.EVENT.register(Events::dietRestrictionsOnItem);
         UseBlockCallback.EVENT.register(Events::dietRestrictionsOnBlock);
-    }
-
-    private static void tickTickingAbilities(Player ticking) {
-        if (!(ticking instanceof ServerPlayer player)) return;
-        ServerLevel level = player.level();
-        Set<Ability> abilities = DataManager.getAbilities(player);
-
-        for (Ability ability : abilities) {
-            if (ability instanceof TickingAbility tickingAbility) {
-                tickingAbility.tick(player, level);
-            }
-        }
     }
 
     private static boolean specialDamageImmune(LivingEntity entity, DamageSource source, float value) {
@@ -120,56 +129,29 @@ public class Events {
 
         return InteractionResult.SUCCESS;
     }
-
-    public static boolean shouldClimb(ServerPlayer player) {
-        if (!(Config.playerAbilities.get())) return false;
-        if (!DataManager.has(player, AbilityRegistry.CLIMBS_WALLS)) return false;
-        if (player.onGround()) return false;
-
-        Level level = player.level();
-        BlockPos pos = player.blockPosition();
-        for (Direction dir : Direction.Plane.HORIZONTAL) {
-            BlockPos side = pos.relative(dir);
-            if (level.getBlockState(side).isSolid() || level.getBlockState(side.above()).isSolid()) return true;
-        }
-
-        return false;
-    }
-
-    /*
-    Current idea:
-    - Prevent player from eating what's not in their diet
-    - Apply constant nausea if attempting to eat something that isn't in player's diet
-     */
-    // TODO: FIX - NAUSEA IS NOT GETTING APPLIED
     private static InteractionResult dietRestrictionsOnItem(Player interacting, Level level, InteractionHand hand) { // Clicking while looking at nothing
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
 
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
-        if (isDietBlocked(player, player.getItemInHand(hand))) {
-            DataManager.applyEffect(player, MobEffects.NAUSEA, 60, 1);
-            return InteractionResult.FAIL;
-        }
+        if (isDietBlocked(player, player.getItemInHand(hand))) return InteractionResult.FAIL;
 
         return InteractionResult.PASS;
     }
-
-    private static InteractionResult dietRestrictionsOnBlock(Player interacting, Level level, InteractionHand hand, BlockHitResult hitResult) { // Clicking while looking at a block
+    private static InteractionResult dietRestrictionsOnBlock(Player interacting, Level level, InteractionHand hand, BlockHitResult hitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
 
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
-        if (isDietBlocked(player, player.getItemInHand(hand))) {
-            DataManager.applyEffect(player, MobEffects.NAUSEA, 60, 1);
-            return InteractionResult.FAIL;
-        }
+        ItemStack stack = player.getItemInHand(hand);
+        if (stack.getItem() instanceof BlockItem) return InteractionResult.PASS;
+
+        if (isDietBlocked(player, stack)) return InteractionResult.FAIL;
 
         return InteractionResult.PASS;
     }
-
     private static boolean isDietBlocked(ServerPlayer player, ItemStack stack) {
         if (!stack.has(DataComponents.FOOD)) return false;
         Set<Ability> abilities = DataManager.getAbilities(player);
@@ -194,5 +176,20 @@ public class Events {
         // No GRASS_EATER item tag for this to check. GRASS_EATER diet is handled by grassEater interaction method.
 
         return true;
+    }
+
+    public static boolean shouldClimb(ServerPlayer player) {
+        if (!(Config.playerAbilities.get())) return false;
+        if (!DataManager.has(player, AbilityRegistry.CLIMBS_WALLS)) return false;
+        if (player.onGround()) return false;
+
+        Level level = player.level();
+        BlockPos pos = player.blockPosition();
+        for (Direction dir : Direction.Plane.HORIZONTAL) {
+            BlockPos side = pos.relative(dir);
+            if (level.getBlockState(side).isSolid() || level.getBlockState(side.above()).isSolid()) return true;
+        }
+
+        return false;
     }
 }

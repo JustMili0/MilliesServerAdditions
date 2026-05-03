@@ -59,6 +59,8 @@ Feedback is appriciated ^^
 - Dropped hardcoded ability sets for JustMili (SillyMili), Flufaye and Zarsai
   - These players will receive custom ability sets
 - Some abilities now instantly `return;` and do not execute if player isn't in survival
+- Fixed some diets preventing the player from placing blocks like Glow Berries, Sweet Berries etc.
+- STRONG - Fixed player health resetting back to 20hp after relogging
 - IS_MONSTER - Fixed Zombie and Skeleton ignore behaviors and made Husks, Parched, Drowned, Vindicators, Evokers, Witches and Slimes also ignore the player
 - IS_MONSTER - Fixed Villager fear behavior, now running away at their usual speed
 - COLD_SENSITIVE - Removed `cold_ocean` and `deep_cold_ocean` from list tag of cold biomes due to how frequent they are in the world

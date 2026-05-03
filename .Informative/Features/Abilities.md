@@ -37,7 +37,7 @@ AQUA_GRACE - Dolphin-based | Gains Conduit Power and Dolphin's Grace while in wa
 BREATHES_UNDERWATER - Fish-based | Breathes underwater indefinitely.
 CANT_BREATHE_AIR - Fish-based | Drowns on land. Air supply drains while out of water and restores while submerged.
                    Air will not deplete if player has a active Water Breathing effect.
-CANT_SWIM - Undead-based | Sinks in water.
+CANT_SWIM - Undead-based | Prevents the player from swimming up more than a block from the bottom of a body of water.
 HYDROPHOBIC - Enderman-based | Takes 1 damage per second from standing in water, water cauldrons, or rain.
               Rain damage does not apply if wearing a helmet. Damage still applies if player is in a wet biome, even if wearing a helmet.
 

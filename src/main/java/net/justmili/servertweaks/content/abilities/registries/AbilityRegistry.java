@@ -2,13 +2,14 @@ package net.justmili.servertweaks.content.abilities.registries;
 
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.DataManager;
-import net.justmili.servertweaks.content.abilities.DataManager.MobData;
 import net.justmili.servertweaks.content.abilities.data.DataTags;
+import net.justmili.servertweaks.content.abilities.data.MobData;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.core.util.ScalerUtil;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -51,15 +52,16 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import javax.xml.crypto.Data;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class AbilityRegistry {
     /// Extra Ability variables
     private static final Map<UUID, List<WrappedGoal>> storedGoals = new HashMap<>();
-    private static final Identifier SLOW_SPEED = ServerTweaks.asResource("slow_speed");
-    private static final Identifier STRONG_HP = ServerTweaks.asResource("strong_health");
-    private static final Identifier STRONG_DAMAGE = ServerTweaks.asResource("strong_damage");
+    public static final Identifier AM_SLOW_SPEED = ServerTweaks.asResource("slow_speed");
+    public static final Identifier AM_STRONG_HP = ServerTweaks.asResource("strong_health");
+    public static final Identifier AM_STRONG_DAMAGE = ServerTweaks.asResource("strong_damage");
 
     /// Registry
     private static final Map<String, Ability> REGISTRY = new HashMap<>();
@@ -191,10 +193,8 @@ public class AbilityRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             AttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
 
-            if (speed.getModifier(SLOW_SPEED) == null) {
-                speed.addTransientModifier(new AttributeModifier(SLOW_SPEED, -0.32, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-            } else {
-                speed.removeModifier(SLOW_SPEED);
+            if (speed.getModifier(AM_SLOW_SPEED) == null) {
+                speed.addTransientModifier(new AttributeModifier(AM_SLOW_SPEED, -0.32, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
             }
         }
     }
@@ -235,23 +235,20 @@ public class AbilityRegistry {
             if (level.getGameTime() % 5 != 0) return;
 
             AttributeInstance attack = player.getAttribute(Attributes.ATTACK_DAMAGE);
-            if (attack != null && attack.getModifier(STRONG_DAMAGE) == null) {
-                attack.addTransientModifier(new AttributeModifier(STRONG_DAMAGE, 3.0, AttributeModifier.Operation.ADD_VALUE));
-            } else {
-                attack.removeModifier(STRONG_DAMAGE);
+            if (attack != null && attack.getModifier(AM_STRONG_DAMAGE) == null) {
+                attack.addTransientModifier(new AttributeModifier(AM_STRONG_DAMAGE, 3.0, AttributeModifier.Operation.ADD_VALUE));
             }
 
             if (!player.gameMode.isSurvival()) return;
 
             int armor = player.getArmorValue();
             float targetHp = Math.max(40.0F, Math.min(100.0F, 100.0F-(armor * 3.0F)));
+            if (targetHp % 2 != 0) targetHp += 1;
             AttributeInstance maxHp = player.getAttribute(Attributes.MAX_HEALTH);
             if (maxHp != null) {
-                maxHp.removeModifier(STRONG_HP);
-                maxHp.addTransientModifier(new AttributeModifier(STRONG_HP, targetHp-20.0, AttributeModifier.Operation.ADD_VALUE));
+                maxHp.removeModifier(AM_STRONG_HP);
+                maxHp.addPermanentModifier(new AttributeModifier(AM_STRONG_HP, targetHp-20.0, AttributeModifier.Operation.ADD_VALUE));
                 if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
-            } else {
-                maxHp.removeModifier(STRONG_HP);
             }
         }
     }
@@ -543,11 +540,11 @@ public class AbilityRegistry {
     // CLIMBS_WALLS - LivingEntityMixin (onClimbable) + AbilityEffects (shouldClimb bool)
 
     private static final List<MobData> PREDATORY_FEAR = List.of(
-        new MobData(Chicken.class, 16.0, 1.4),
-        new MobData(Parrot.class, 48.0, 1.25),
-        new MobData(Frog.class, 32.0, 2.0),
-        new MobData(Salmon.class, 12.0, 1.25),
-        new MobData(Pig.class,  16.0, 1.25)
+        new MobData(Chicken.class, 8.0, 1.4),
+        new MobData(Parrot.class, 12.0, 1.25),
+        new MobData(Frog.class, 12.0, 2.0),
+        new MobData(Salmon.class, 6.0, 1.25),
+        new MobData(Pig.class,  8.0, 1.25)
     );
     static class Predatory extends TickingAbility {
         Predatory() {
