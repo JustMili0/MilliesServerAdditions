@@ -29,10 +29,10 @@
 **Kinda work (works for the most part)**
 - HUNTED_BY_FOX - Foxes are too scared to approach and attack unless the player is crouching
 - FRIENDS_WITH_NATURE - Calms down neutral animals such as wolves, bees etc. but the tame roll chance still isn't always-taming
-- CARNIVORE - Blocks foods not in diet, but eating animation still plays on servers (counter with nausea)
-- VEGETARIAN - Blocks foods not in diet, but eating animation still plays on servers (counter with nausea)
-- ONLY_EATS_SWEETS - Blocks foods not in diet, but eating animation still plays on servers (counter with nausea)
-- GRASS_EATER - Blocks foods/blocks not in diet, but eating animation still plays on servers (counter with nausea)
+- CARNIVORE - Nausea doesn't apply when trying to consume foods that aren't included in player's diet
+- VEGETARIAN - Nausea doesn't apply when trying to consume foods that aren't included in player's diet
+- ONLY_EATS_SWEETS - Nausea doesn't apply when trying to consume foods that aren't included in player's diet
+- GRASS_EATER - Nausea doesn't apply when trying to consume foods that aren't included in player's diet
 
 **Do work (works as intended):**
 - FIRE_IMMUNE
