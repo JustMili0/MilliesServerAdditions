@@ -19,7 +19,6 @@
 **Not yet coded**
 - SQUISHY
 - MAGNETIC
-- PEARLING
 - BUG_EATER
 
 **Doesn't work (no changes get applied to player behavior):**
@@ -56,5 +55,6 @@
 - SCARES_PHANTOMS
 - BURNS_IN_DAYLIGHT
 - IS_MONSTER
+- PEARLING
 - PREDATORY
 - GRASS_EATER
