@@ -79,6 +79,7 @@ public class Events {
         if (abilities.contains(AbilityRegistry.FREEZE_IMMUNE) && source.is(DamageTypes.FREEZE)) return false;
         if (abilities.contains(AbilityRegistry.FALL_IMMUNE) && source.is(DamageTypes.FALL)) return false;
         if (abilities.contains(AbilityRegistry.BREATHES_UNDERWATER) && source.is(DamageTypes.DROWN)) return false;
+        if (abilities.contains(AbilityRegistry.PEARLING) && source.is(DamageTypes.ENDER_PEARL)) return false;
 
         return true;
     }

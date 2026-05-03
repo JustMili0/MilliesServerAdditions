@@ -64,6 +64,7 @@ Feedback is appriciated ^^
 - IS_MONSTER - Fixed Zombie and Skeleton ignore behaviors and made Husks, Parched, Drowned, Vindicators, Evokers, Witches and Slimes also ignore the player
 - IS_MONSTER - Fixed Villager fear behavior, now running away at their usual speed
 - COLD_SENSITIVE - Removed `cold_ocean` and `deep_cold_ocean` from list tag of cold biomes due to how frequent they are in the world
+- HEAT_SENSITIVE - Damage is no longer dealt if player is in a roofed, shaded area, if standing in water, if it's raining at player position or if it's dark outside
 - GRASS_EATER - Added underwater foliage and sugar cane to diet list tag
 - GRASS_EATER - Client now gets updated about updated food values
 - GRASS_EATER - Now properly restricts food consumption when no other diets are applied

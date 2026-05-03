@@ -293,7 +293,10 @@ public class PresetRegistry {
         ));
         register(new AbilityPreset(
             "dwarf",
-            "I AM A DWARF AND I'M DIGGING A HOLE, DIGGY DIGGY HOLE, DIGGY DIGGY HOLE", // This is a temporary description
+            "I AM A DWARF AND I'M DIGGING A HOLE, DIGGY DIGGY HOLE, DIGGY DIGGY HOLE!\n\n" +
+                "(You get permanent haste 2, you're short, " +
+                "you're immune to block heat like magma, not lava or fire, you're immune to freezing and " +
+                "animals love you, and you're a vegetarian.)",
             Set.of(
                 AbilityRegistry.DWARF,
                 AbilityRegistry.HEAT_IMMUNE,

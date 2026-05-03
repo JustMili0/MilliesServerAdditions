@@ -137,7 +137,9 @@ public class AbilityRegistry {
             if (!level.getBiome(player.blockPosition()).is(DataTags.HOT_BIOMES)) return;
             if (!(level.canSeeSky(player.blockPosition())
                 && level.getBrightness(LightLayer.SKY, player.blockPosition()) >= 8)
-                || level.isDarkOutside()) return;
+                || level.isDarkOutside()
+                || level.isRainingAt(player.blockPosition())
+                || player.isInWater()) return;
 
             player.hurt(level.damageSources().onFire(), 1.0F);
         }
