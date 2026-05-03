@@ -73,7 +73,7 @@ public class PresetRegistry {
         register(new AbilityPreset(
             "monster_generic",
             "Villagers are scared of monsters, in result they will flee. Iron Golems and Snow Golems will attack unprovoked as they see you as a threat, " +
-                "but other monsters such as pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack another monster.",
+                "but other monsters such as pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack.",
             Set.of(
                 AbilityRegistry.IS_MONSTER
             ),
@@ -83,7 +83,7 @@ public class PresetRegistry {
         register(new AbilityPreset(
             "undead_generic",
             "The undead are monsters. Villagers flee from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
-                "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack another monster. " +
+                "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
                 "Undead also burn in daylight and can not swim up in water but because they don't need air to live, they can breathe underwater.",
             Set.of(
                 AbilityRegistry.IS_MONSTER,
@@ -97,7 +97,7 @@ public class PresetRegistry {
         register(new AbilityPreset(
             "zombie",
             "Zombies are undead monsters. Villagers flee from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
-                "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack a Zombie. " +
+                "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
                 "Zombies also burn in daylight and can not swim up in water but because they don't need air to live, they can breathe underwater. " +
                 "They also are rather slow and can only eat meat to sustain their hunger.",
             Set.of(
@@ -114,7 +114,7 @@ public class PresetRegistry {
         register(new AbilityPreset(
             "drowned",
             "Drowned are undead monsters. Villagers flee from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
-                "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack a Drowned. " +
+                "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
                 "Drowned also burn in daylight, they live underwater and don't need air meaning they can breathe underwater " +
                 "and are though to knock back due to them being heavier from all the water in their body." +
                 "They also are rather slow, but can feed on pretty much anything like meat, vegetables and fruits or land and underwater foliage.",
@@ -134,7 +134,7 @@ public class PresetRegistry {
         register(new AbilityPreset(
             "husk",
             "Husks are undead monsters. Villagers flee from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
-                "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack a Husk. " +
+                "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
                 "Unlike most undead, Husks don't burn in daylight and are immune to heat, but are sensitive to the cold. " +
                 "They can not swim up in water but because they don't need air to live, they can breathe underwater. " +
                 "They also are rather slow and can only eat meat to sustain their hunger.",
@@ -212,20 +212,28 @@ public class PresetRegistry {
         ));
         register(new AbilityPreset( // aka Spider
             "arachnidian",
-            "Description in Progress",
+            "Arachnidians are humanoid spider creatures. They are considered monsters, meaning Villagers will flee from them, " +
+                "Iron Golems and Snow Golems will attack unprovoked, but pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
+                "Arachnidians are rather agile, meaning they can jump high and can scale any solid wall. " +
+                "They are also strict carnivores, feeding only on the meat of their prey.",
             Set.of(
                 AbilityRegistry.CLIMBS_WALLS,
                 AbilityRegistry.IS_MONSTER,
                 AbilityRegistry.CARNIVORE,
-                AbilityRegistry.HOPPY
+                AbilityRegistry.HOPPY,
+                AbilityRegistry.PREDATORY
             ),
             Set.of(
             )
         ));
         register(new AbilityPreset( // aka Enderman
             "enderian",
-            "Description in Progress",
-            Set.of(
+            "Enderians are creatures come from the far End islands. Due to their uncanny and creepy appearance, they are often seen as monsters, " +
+                "meaning Villagers will flee from them, Iron Golems and Snow Golems will attack unprovoked, " +
+                "but pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
+                "Enderians are aquagenic, getting hurt from getting in contact with water, though a helmet will protect them from rain. " +
+                "They are also immune to cold, since they are native to the endless cold End and can infinitely use any Ender Pearls they get their hands on.",
+                Set.of(
                 AbilityRegistry.PEARLING,
                 AbilityRegistry.HYDROPHOBIC,
                 AbilityRegistry.IS_MONSTER,
@@ -236,7 +244,9 @@ public class PresetRegistry {
         ));
         register(new AbilityPreset( // aka Frog
             "amphibian",
-            "Description in Progress",
+            "Amphibians are creatures native to swamps and lush wetlands. They are agile hoppers, able to jump quite high, " +
+                "and are equally at home on land and underwater, being able to breathe in water and on surface. " +
+                "Amphibians are carnivores with a very particular palate, feeding exclusively on bugs, slimes and magma cubes.",
             Set.of(
                 AbilityRegistry.BUG_EATER,
                 AbilityRegistry.CARNIVORE,
@@ -248,7 +258,10 @@ public class PresetRegistry {
         ));
         register(new AbilityPreset( // aka Slime
             "gelatinous",
-            "Description in Progress",
+            "The Gelatinous are bouncy, slime-like creatures. They are monsters, meaning Villagers will flee from them, " +
+                "Iron Golems and Snow Golems will attack unprovoked, but pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
+                "Their squishy body absorbs most of the impacts from falls and collisions, keeping them mostly unharmed. " +
+                "Unexplainably they are carnivores, but also are sensitive to cold and freezing in cold biomes.",
             Set.of(
                 AbilityRegistry.HOPPY,
                 AbilityRegistry.IS_MONSTER,
@@ -261,7 +274,11 @@ public class PresetRegistry {
         ));
         register(new AbilityPreset( // aka Magma Cube
             "pryogelatinous",
-            "Description in Progress",
+            "The Pryogelatinous are bouncy, magmatic slime-like creatures native to the Nether. They are monsters, meaning Villagers will flee from them, " +
+                "Iron Golems and Snow Golems will attack unprovoked, but pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
+                "Their squishy body absorbs most of the impacts from falls and collisions, keeping them mostly unharmed. " +
+                "Like their gelatinous cousins they are unexplainably carnivores, but unlike them, they are immune to fire and heat, " +
+                "though sensitive to cold and not entirely immune to lava.",
             Set.of(
                 AbilityRegistry.FIRE_IMMUNE,
                 AbilityRegistry.HEAT_IMMUNE,
@@ -276,10 +293,11 @@ public class PresetRegistry {
         ));
         register(new AbilityPreset(
             "dwarf",
-            "Description in Progress",
+            "I AM A DWARF AND I'M DIGGING A HOLE, DIGGY DIGGY HOLE, DIGGY DIGGY HOLE", // This is a temporary description
             Set.of(
                 AbilityRegistry.DWARF,
                 AbilityRegistry.HEAT_IMMUNE,
+                AbilityRegistry.FREEZE_IMMUNE,
                 AbilityRegistry.FRIENDS_WITH_NATURE,
                 AbilityRegistry.VEGETARIAN
             ),
