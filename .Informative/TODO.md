@@ -1,15 +1,11 @@
 # TODO:
 - Fix abilities
-  - Fix kinda-working abilities          [B!]
-  - Fix non-working abilities            [B!]
+  - Fix kinda-working abilities
+  - Fix non-working abilities
 - Add new abilities
-  - Bug Eater                            [B!]
+  - Bug Eater
     - For 26.2: Also can eat Sulfur Cubes but will get poisoned with nausea, but will get a lot of saturation
-  - Squishy                              [B!]
-  - Magnetic                             [M!]
-
-[M!] - Has to be done alone by **M**ille                                                                            <br>
-[B!] - Ask BluSpring for help because you don't have the knowledge of the modern codebase for this shit
+  - Squishy
 
 --------------------------------------------------------------------------------–--------------------------------------
 

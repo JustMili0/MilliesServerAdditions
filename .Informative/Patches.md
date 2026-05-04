@@ -89,8 +89,8 @@ Feedback is appriciated ^^
 - Fixed ability preset confirmation message being sent to the server instead of the client
 - Fixed cancelling choosing an ability preset (the `[CANCEL]` button)
 - Fixed container discarding for any and all `AbstractChestedHorse` entities (Any entities that can have chests mounted on them for storage)
-- (NEW) SQUISHY - Decreases fall and fly_into_wall damage by 75% each.
-- (NEW) BUG EATER - Can only feed on bug-like entities, slimes, magma cubes, sulfur cubes, and items like slime balls and magma creams.
-- (NEW) MAGNETIC - ??? (Check TODO)
+- (NEW) SQUISHY - Decreases fall and fly_into_wall damage by 75% each. [TODO]
+- (NEW) BUG EATER - Can only feed on bug-like entities, slimes, magma cubes, sulfur cubes, and items like slime balls and magma creams. [TODO]
+- (NEW) MAGNETIC - On-ground items within 6 blocks of the player get pulled towards the player
 
 Feedback is appriciated ^^

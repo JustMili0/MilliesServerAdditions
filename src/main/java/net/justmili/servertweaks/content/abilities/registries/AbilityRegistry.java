@@ -235,16 +235,17 @@ public class AbilityRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            double radius = 6.0, stop = 1.0;
+            double radius = 6.0, stop = 1.5;
             List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, player.getBoundingBox().inflate(6.0));
 
             for (ItemEntity item : items) {
+                if (!item.onGround()) return;
+
                 Vec3 directionToPlayer = player.position().add(0, 0.5, 0).subtract(item.position());
                 double distance = directionToPlayer.length();
-
                 if (distance > radius || distance < stop) continue;
 
-                item.setDeltaMovement(directionToPlayer.normalize().scale(0.45));
+                item.setDeltaMovement(directionToPlayer.normalize().scale(0.4));
             }
         }
     }
