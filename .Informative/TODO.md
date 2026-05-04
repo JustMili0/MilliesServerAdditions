@@ -1,14 +1,15 @@
 # TODO:
-- Finish writing presets  [!!!]
-- Fix discarding containers on entities
 - Fix abilities
-  - Fix kinda-working abilities
-  - Fix non-working abilities
+  - Fix kinda-working abilities          [B!]
+  - Fix non-working abilities            [B!]
 - Add new abilities
-  - Bug Eater (Feeds exclusively on slime balls, magma balls, insect/bug-like mobs, slimes (entity) and magma cubes (entity, deals a heart of fire damage when consumed))
+  - Bug Eater                            [B!]
     - For 26.2: Also can eat Sulfur Cubes but will get poisoned with nausea, but will get a lot of saturation
-  - Squishy (reduces fall and fly_into_wall damage)
-  - Magnetic (nearby items come to player)
+  - Squishy                              [B!]
+  - Magnetic                             [M!]
+
+[M!] - Has to be done alone by **M**ille                                                                            <br>
+[B!] - Ask BluSpring for help because you don't have the knowledge of the modern codebase for this shit
 
 --------------------------------------------------------------------------------–--------------------------------------
 
@@ -26,10 +27,6 @@
 **Kinda work (works for the most part)**
 - HUNTED_BY_FOX - Foxes are too scared to approach and attack unless the player is crouching
 - FRIENDS_WITH_NATURE - Calms down neutral animals such as wolves, bees etc. but the tame roll chance still isn't always-taming
-- CARNIVORE - Nausea doesn't apply when trying to consume foods that aren't included in player's diet
-- VEGETARIAN - Nausea doesn't apply when trying to consume foods that aren't included in player's diet
-- ONLY_EATS_SWEETS - Nausea doesn't apply when trying to consume foods that aren't included in player's diet
-- GRASS_EATER - Nausea doesn't apply when trying to consume foods that aren't included in player's diet
 
 **Do work (works as intended):**
 - FIRE_IMMUNE
@@ -54,4 +51,7 @@
 - IS_MONSTER
 - PEARLING
 - PREDATORY
+- CARNIVORE
+- VEGETARIAN
+- ONLY_EATS_SWEETS
 - GRASS_EATER

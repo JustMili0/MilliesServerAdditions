@@ -166,7 +166,7 @@ public class PlayerAbilities {
 
                                 DataManager.applySet(player.getUUID(), set, source.getServer());
                                 FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, true);
-                                CommandUtil.sendSucc(source, "Applied the "+setName+" preset!");
+                                CommandUtil.sendTo(player, "Applied the "+setName+" preset!");
                                 return 1;
                             })
                         )

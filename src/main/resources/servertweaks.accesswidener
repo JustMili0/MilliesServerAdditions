@@ -5,3 +5,4 @@ accessible field net/minecraft/world/entity/Entity DATA_TICKS_FROZEN Lnet/minecr
 accessible field net/minecraft/world/entity/Mob goalSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
 accessible field net/minecraft/world/entity/Mob targetSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
 accessible field net/minecraft/server/network/ServerCommonPacketListenerImpl server Lnet/minecraft/server/MinecraftServer;
+accessible field net/minecraft/world/entity/animal/equine/AbstractHorse inventory Lnet/minecraft/world/SimpleContainer;

@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.mixin;
+package net.justmili.servertweaks.mixin.abilities;
 
 import com.mojang.brigadier.ParseResults;
 import net.minecraft.commands.CommandSourceStack;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClickEventAsServer {
     @Inject(method = "performUnsignedChatCommand", at = @At("HEAD"), cancellable = true)
     private void servertweaks$elevateAbilityCommands(String command, CallbackInfo ci) {
-        if (command.startsWith("abilities applyPreset ") || command.equals("abilities dontApplyPreset")) {
+        if (command.startsWith("abilities applyPreset ") || command.startsWith("abilities dontApplyPreset ")) {
             ServerPlayer player = ((ServerGamePacketListenerImpl) (Object) this).player;
             MinecraftServer server = player.level().getServer();
 

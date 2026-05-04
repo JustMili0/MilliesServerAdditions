@@ -17,8 +17,8 @@ public class DataTags {
         Registries.ITEM, ServerTweaks.asResource("diet_sweets"));
     public static final TagKey<Block> DIET_FOLIAGE = TagKey.create(
         Registries.BLOCK, ServerTweaks.asResource("diet_foliage"));
-    public static final TagKey<Block> DIET_BUG_ITEMS = TagKey.create(
-        Registries.BLOCK, ServerTweaks.asResource("diet_bug_items"));
+    public static final TagKey<Item> DIET_BUG_ITEMS = TagKey.create(
+        Registries.ITEM, ServerTweaks.asResource("diet_bug_items"));
 
     public static final TagKey<Item> DIET_MODIFIER_GOLDEN_FOODS = TagKey.create(
         Registries.ITEM, ServerTweaks.asResource("diet_modifier_golden_foods"));

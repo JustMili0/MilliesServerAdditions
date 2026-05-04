@@ -5,7 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "BetterPushLimit",
-    "ClickEventAsServer",
+    "abilities.ClickEventAsServer",
     "RemoveAnvilLimit",
     "UncapSpeedLimits",
     "abilities.LivingEntityMixin",

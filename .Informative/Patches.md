@@ -86,6 +86,9 @@ Feedback is appriciated ^^
 # Millie's Server Additions, Patch #5 - 1.3.0-beta.15
 
 **Player Abilities**
+- Fixed ability preset confirmation message being sent to the server instead of the client
+- Fixed cancelling choosing an ability preset (the `[CANCEL]` button)
+- Fixed container discarding for any and all `AbstractChestedHorse` entities (Any entities that can have chests mounted on them for storage)
 - (NEW) SQUISHY - Decreases fall and fly_into_wall damage by 75% each.
 - (NEW) BUG EATER - Can only feed on bug-like entities, slimes, magma cubes, sulfur cubes, and items like slime balls and magma creams.
 - (NEW) MAGNETIC - ??? (Check TODO)

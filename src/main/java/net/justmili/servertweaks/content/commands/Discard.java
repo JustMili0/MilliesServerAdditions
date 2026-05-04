@@ -15,6 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.equine.AbstractChestedHorse;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -104,14 +105,16 @@ public class Discard {
                                 if (!mob.getItemBySlot(slot).isEmpty()) cleared++;
                                 mob.setItemSlot(slot, ItemStack.EMPTY);
                             }
-                            // Clear horse, donkey, mule etc chest inventory
+                            // Clear horse, donkey, mule etc. chest inventory
                             if (mob instanceof AbstractChestedHorse chestedHorse && chestedHorse.hasChest()) {
-                                if (chestedHorse instanceof Container container) {
-                                    cleared += countContainer(container);
-                                    container.clearContent();
+                                for (int i = 0; i < chestedHorse.inventory.getContainerSize(); i++) {
+                                    ItemStack item = chestedHorse.inventory.getItem(i);
+                                    if (!item.isEmpty()) cleared++;
+                                    chestedHorse.inventory.setItem(i, ItemStack.EMPTY);
                                 }
+                                chestedHorse.setChest(false);
                             }
-                            // Clear other entity containers
+                            // Clear other entity containers (entities that ARE containers with no other inventory) /// TO BE TESTED
                             if (mob instanceof Container container) {
                                 cleared += countContainer(container);
                                 container.clearContent();
