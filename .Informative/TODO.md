@@ -16,7 +16,6 @@
 ## FROM TESTING PLAYER ABILITIES:
 **Not yet coded**
 - SQUISHY
-- MAGNETIC
 - BUG_EATER
 
 **Doesn't work (no changes get applied to player behavior):**
@@ -38,6 +37,7 @@
 - SLOW
 - HOPPY
 - DWARF
+- MAGNETIC
 - TOUGH
 - STRONG
 - BREATHES_UNDERWATER

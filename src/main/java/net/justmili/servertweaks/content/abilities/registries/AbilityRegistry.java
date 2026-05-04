@@ -244,7 +244,7 @@ public class AbilityRegistry {
 
                 if (distance > radius || distance < stop) continue;
 
-                item.setDeltaMovement(directionToPlayer.normalize().scale(0.3));
+                item.setDeltaMovement(directionToPlayer.normalize().scale(0.45));
             }
         }
     }
