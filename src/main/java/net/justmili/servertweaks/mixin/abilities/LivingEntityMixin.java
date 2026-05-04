@@ -2,8 +2,8 @@ package net.justmili.servertweaks.mixin.abilities;
 
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.DataManager;
-import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
 import net.justmili.servertweaks.content.abilities.Events;
+import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
 import net.justmili.servertweaks.mixin.accessors.LivingEntityAccessor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

@@ -25,9 +25,9 @@ public class WhileAfk {
 
         //Teleport the player to saved position to prevent movement
         if (FdaApiUtil.getBoolValue(serverPlayer, PlayerAttachments.IS_AFK)) {
-            double x = FdaApiUtil.getDoubleValue(serverPlayer, PlayerAttachments.AFK_X);
-            double y = FdaApiUtil.getDoubleValue(serverPlayer, PlayerAttachments.AFK_Y);
-            double z = FdaApiUtil.getDoubleValue(serverPlayer, PlayerAttachments.AFK_Z);
+            double x = FdaApiUtil.getDoubleValue(serverPlayer, PlayerAttachments.AFK_X),
+                y = FdaApiUtil.getDoubleValue(serverPlayer, PlayerAttachments.AFK_Y),
+                z = FdaApiUtil.getDoubleValue(serverPlayer, PlayerAttachments.AFK_Z);
 
             player.setDeltaMovement(Vec3.ZERO);
 

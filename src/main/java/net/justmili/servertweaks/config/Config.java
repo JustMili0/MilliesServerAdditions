@@ -6,31 +6,23 @@ import com.supermartijn642.configlib.api.IConfigBuilder;
 import java.util.function.Supplier;
 
 public class Config {
-    //Individual configs for each command.
-    public static final Supplier<Boolean> enableAfkCommand;
-    public static final Supplier<Boolean> enableScaleCommand;
-    public static final Supplier<Boolean> enableDamageToggleCommand;
-    public static final Supplier<Boolean> enableBanishCommand;
-    public static final Supplier<Boolean> enableFlyCommand;
+    public static final Supplier<Boolean>
+        enableAfkCommand, // Command on/off
+        enableScaleCommand, // Command on/off
+        enableDamageToggleCommand, // Command on/off
+        enableBanishCommand, // Command on/off
+        enableFlyCommand, // Command on/off
+        despawnMonsters, // Afk command related setting
+        limitPlayerSpeed, // Config for "UncapSpeedLimits" mixin.
+        limitElytraSpeed, // Config for "UncapSpeedLimits" mixin.
+        limitVehicleSpeed, // Config for "UncapSpeedLimits" mixin.
+        removeAnvilLimit, // Config for "RemoveAnvilLimit" mixin.
+        rightClickHarvest, // Config for "RightClickHarvest" feature.
+        playerAbilities;
 
-    //Config for "Afk" command.
-    public static final Supplier<Boolean> despawnMonsters;
-    public static final Supplier<Integer> afkCommandCooldown;
-
-    // Config for "UncapSpeedLimits" mixin.
-    public static final Supplier<Boolean> limitPlayerSpeed;
-    public static final Supplier<Boolean> limitElytraSpeed;
-    public static final Supplier<Boolean> limitVehicleSpeed;
-
-    //Config for "RemoveAnvilLimit" mixin.
-    public static final Supplier<Boolean> removeAnvilLimit;
-
-    //Config for "BetterPushLimit" mixin.
-    public static final Supplier<Integer> pistonPushLimit;
-
-    //Config for "RightClickHarvest" feature.
-    public static final Supplier<Boolean> rightClickHarvest;
-    public static final Supplier<Boolean> playerAbilities;
+    public static final Supplier<Integer>
+        afkCommandCooldown, // Afk command related setting
+        pistonPushLimit; // Config for "BetterPushLimit" mixin.
 
     static {
         IConfigBuilder builder = ConfigBuilders.newTomlConfig("servertweaks", "", true);

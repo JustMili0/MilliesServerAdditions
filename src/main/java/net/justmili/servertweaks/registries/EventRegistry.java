@@ -5,10 +5,10 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.justmili.servertweaks.mechanics.logic.Banishment;
+import net.justmili.servertweaks.core.util.ScalerUtil;
 import net.justmili.servertweaks.mechanics.features.RightClickHarvest;
-import net.justmili.servertweaks.mechanics.logic.ScaleConvert;
 import net.justmili.servertweaks.mechanics.features.WhileAfk;
+import net.justmili.servertweaks.mechanics.logic.Banishment;
 
 public class EventRegistry {
     public static void register() {
@@ -23,8 +23,7 @@ public class EventRegistry {
                 WhileAfk.onPlayerTick(player);
             }
         });
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) ->
-            ScaleConvert.onServerJoined(handler.player));
+        ServerPlayConnectionEvents.JOIN.register(ScalerUtil::convertScoreToVar);
         //PlayerEvent.PLAYER_QUIT.register(WhileDuel::onPlayerDisconnect);
         UseBlockCallback.EVENT.register(RightClickHarvest::onUseBlock);
         net.justmili.servertweaks.content.abilities.Events.registerAbilityEvents();

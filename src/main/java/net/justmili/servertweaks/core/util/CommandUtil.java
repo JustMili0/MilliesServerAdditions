@@ -7,8 +7,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permission;
 import net.minecraft.server.permissions.PermissionLevel;
 
-import java.util.function.Supplier;
-
 public class CommandUtil {
     //Fuck the new perms system, I want my numbers back
     public static boolean hasPerms(CommandSourceStack source, int level) {
@@ -23,12 +21,6 @@ public class CommandUtil {
             return false;
         }
         return true;
-    }
-
-    //For if command is disabled on the server (USE AT COMMAND REGISTRATION)
-    public static <T> boolean checkIfExpected(Supplier<T> configKey, boolean expected) {
-        //I know it's a stupid one, and pretty unnecessary, but fuck you
-        return configKey.get().equals(expected);
     }
 
     public static void sendSucc(CommandSourceStack source, String message) {

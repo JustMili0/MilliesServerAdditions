@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.justmili.servertweaks.content.abilities.DataStorage;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.justmili.servertweaks.registries.CommandRegistry;
-import net.justmili.servertweaks.registries.DimensionRegistry;
 import net.justmili.servertweaks.registries.EventRegistry;
 import net.minecraft.resources.Identifier;
 import org.apache.logging.log4j.LogManager;
@@ -17,10 +16,9 @@ public class ServerTweaks implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LOGGER.info("Initilazing Server Tweaks...");
+        LOGGER.info("Initializing Millie's Server Additions...");
         PlayerAttachments.register();
         CommandRegistry.register();
-        DimensionRegistry.register();
         EventRegistry.register();
 
         ServerLifecycleEvents.SERVER_STARTED.register(DataStorage::loadFile);
@@ -29,7 +27,6 @@ public class ServerTweaks implements ModInitializer {
     public static Identifier asResource(String path) {
         return Identifier.fromNamespaceAndPath(MODID, path);
     }
-
     public static Identifier asPath(String path) {
         return Identifier.parse(path);
     }

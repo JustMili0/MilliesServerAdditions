@@ -1,7 +1,9 @@
 package net.justmili.servertweaks.mechanics.logic;
 
-import net.justmili.servertweaks.registries.DimensionRegistry;
+import net.justmili.servertweaks.ServerTweaks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -11,23 +13,25 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.Set;
 
 public final class Banishment {
+    public static final ResourceKey<Level> BANISHMENT_WORLD = ResourceKey.create(Registries.DIMENSION, ServerTweaks.asResource("banishment"));
     private static final int HOTBAR_SLOT = 4;
 
     public static boolean onEntityHurt(LivingEntity entity, DamageSource source, float v) {
         if (!(entity instanceof ServerPlayer player)) return true;
-        return player.level().dimension() != DimensionRegistry.BANISHMENT_WORLD;
+        return player.level().dimension() != BANISHMENT_WORLD;
     }
 
     public static void onPlayerTick(Player ticking) {
         if (!(ticking instanceof ServerPlayer player)) return;
         ServerLevel level = player.level();
 
-        if (level.dimension() != DimensionRegistry.BANISHMENT_WORLD) return;
+        if (level.dimension() != BANISHMENT_WORLD) return;
 
         // Give torch so they can even see
         ItemStack stack = player.getInventory().getItem(HOTBAR_SLOT);
@@ -37,8 +41,7 @@ public final class Banishment {
 
         // Safeguard 2 - Prevent falling into the deep void if the player breaks the bedrock somehow
         if (player.getY() < -1.0) {
-            int centerX = player.blockPosition().getX();
-            int centerZ = player.blockPosition().getZ();
+            int centerX = player.blockPosition().getX(), centerZ = player.blockPosition().getZ();
 
             for (int dx = -2; dx <= 2; dx++) {
                 for (int dz = -2; dz <= 2; dz++) {
@@ -56,7 +59,7 @@ public final class Banishment {
 
     public static void onEntityLoad(Entity entity, ServerLevel level) {
         // Safeguard 3 - despawn all dropped torch item entities so player can't infinitely dupe them
-        if (level.dimension() != DimensionRegistry.BANISHMENT_WORLD) return;
+        if (level.dimension() != BANISHMENT_WORLD) return;
         if (entity instanceof ItemEntity item && item.getItem().is(Items.TORCH)) {
             entity.discard();
         }

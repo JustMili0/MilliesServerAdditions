@@ -4,8 +4,8 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 import net.justmili.servertweaks.content.abilities.registries.ModifierRegistry;
+import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 

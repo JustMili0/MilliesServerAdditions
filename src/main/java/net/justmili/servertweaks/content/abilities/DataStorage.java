@@ -6,10 +6,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.abilities.type.Ability;
-import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
 import net.justmili.servertweaks.content.abilities.registries.ModifierRegistry;
+import net.justmili.servertweaks.content.abilities.type.Ability;
+import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 

@@ -1,7 +1,10 @@
 package net.justmili.servertweaks.core.util;
 
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.scores.Objective;
@@ -13,7 +16,8 @@ import org.jspecify.annotations.Nullable;
 public class ScalerUtil {
 
     //Converts old scoreboard scuff to fresh variables (purely for my own Minecraft server)
-    public static void convertScoreToVar(ServerPlayer player) {
+    public static void convertScoreToVar(ServerGamePacketListenerImpl handler, PacketSender sender, MinecraftServer server) {
+        ServerPlayer player = handler.player;
         if (player.getAttachedOrElse(PlayerAttachments.SCALE_LOCKED, false)) return;
 
         Scoreboard board = player.level().getServer().getScoreboard();
@@ -32,8 +36,7 @@ public class ScalerUtil {
 
     //Applies calculated scale
     public static void applyScaleToPlayer(ServerPlayer player, double scale) {
-        double min = 0.1;
-        double max = 5.0;
+        double min = 0.1, max = 5.0;
         if (Double.isNaN(scale) || scale <= 0.0) scale = 1.0;
         scale = Math.max(min, Math.min(max, scale));
 

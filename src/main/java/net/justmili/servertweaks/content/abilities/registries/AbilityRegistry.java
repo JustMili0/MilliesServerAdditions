@@ -9,7 +9,6 @@ import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.core.util.ScalerUtil;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,6 +30,7 @@ import net.minecraft.world.entity.animal.golem.SnowGolem;
 import net.minecraft.world.entity.animal.parrot.Parrot;
 import net.minecraft.world.entity.animal.pig.Pig;
 import net.minecraft.world.entity.animal.wolf.Wolf;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.Slime;
@@ -52,7 +52,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -66,44 +65,45 @@ public class AbilityRegistry {
     /// Registry
     private static final Map<String, Ability> REGISTRY = new HashMap<>();
 
-    public static final Ability FIRE_IMMUNE = register(new Ability("FIRE_IMMUNE"));
-    public static final Ability LAVA_IMMUNE = register(new Ability("LAVA_IMMUNE"));
-    public static final Ability HEAT_IMMUNE = register(new Ability("HEAT_IMMUNE"));
-    public static final Ability FREEZE_IMMUNE = register(new Ability("FREEZE_IMMUNE"));
-    public static final Ability FALL_IMMUNE = register(new Ability("FALL_IMMUNE"));
-    public static final Ability HEAT_SENSITIVE = register(new HeatSensitive());
-    public static final Ability COLD_SENSITIVE = register(new ColdSensitive());
-    public static final Ability LIGHT = register(new Light());
-    public static final Ability SWIFT = register(new Swift());
-    public static final Ability SLOW = register(new Slow());
-    public static final Ability HOPPY = register(new Hoppy());
-    public static final Ability DWARF = register(new Dwarf());
-    public static final Ability SQUISHY = register(new Ability("SQUISHY")); // TODO #5
-    public static final Ability MAGNETIC = register(new Ability("MAGNETIC")); // TODO #5
-    public static final Ability TOUGH = register(new Ability("TOUGH"));
-    public static final Ability STRONG = register(new Strong());
-    public static final Ability AQUA_GRACE = register(new AquaGrace());
-    public static final Ability BREATHES_UNDERWATER = register(new BreathesUnderwater());
-    public static final Ability CANT_BREATHE_AIR = register(new CantBreatheAir());
-    public static final Ability CANT_SWIM = register(new CantSwim());                               // DOESN'T WORK
-    public static final Ability HYDROPHOBIC = register(new Hydrophobic());
-    public static final Ability HUNTED_BY_FOX = register(new HuntedByFox());                        // KINDA WORKS
-    public static final Ability HUNTED_BY_WOLF = register(new HuntedByWolf());
-    public static final Ability SCARES_CREEPERS = register(new ScaresCreepers());
-    public static final Ability SCARES_PHANTOMS = register(new ScaresPhantoms());
-    public static final Ability FRIENDS_WITH_NATURE = register(new FriendsWithNature());            // KINDA WORKS
-    public static final Ability WEAK_TO_DAMAGE = register(new Ability("WEAK_TO_DAMAGE"));     // DOESN'T WORK
-    public static final Ability NIGHT_VISION = register(new NightVision());
-    public static final Ability BURNS_IN_DAYLIGHT = register(new BurnsInDaylight());
-    public static final Ability IS_MONSTER = register(new IsMonster());
-    public static final Ability CLIMBS_WALLS = register(new Ability("CLIMBS_WALLS"));         // DOESN'T WORK
-    public static final Ability PEARLING = register(new Ability("PEARLING"));
-    public static final Ability PREDATORY = register(new Predatory());
-    public static final Ability CARNIVORE = register(new Ability("CARNIVORE"));               // KINDA WORKS
-    public static final Ability VEGETARIAN = register(new Ability("VEGETARIAN"));             // KINDA WORKS
-    public static final Ability ONLY_EATS_SWEETS = register(new Ability("ONLY_EATS_SWEETS")); // KINDA WORKS
-    public static final Ability GRASS_EATER = register(new Ability("GRASS_EATER"));
-    public static final Ability BUG_EATER = register(new Ability("BUG_EATER")); // TODO #5
+    public static final Ability
+        FIRE_IMMUNE = register(new Ability("FIRE_IMMUNE")),
+        LAVA_IMMUNE = register(new Ability("LAVA_IMMUNE")),
+        HEAT_IMMUNE = register(new Ability("HEAT_IMMUNE")),
+        FREEZE_IMMUNE = register(new Ability("FREEZE_IMMUNE")),
+        FALL_IMMUNE = register(new Ability("FALL_IMMUNE")),
+        HEAT_SENSITIVE = register(new HeatSensitive()),
+        COLD_SENSITIVE = register(new ColdSensitive()),
+        LIGHT = register(new Light()),
+        SWIFT = register(new Swift()),
+        SLOW = register(new Slow()),
+        HOPPY = register(new Hoppy()),
+        DWARF = register(new Dwarf()),
+        SQUISHY = register(new Ability("SQUISHY")), // TODO #5
+        MAGNETIC = register(new Magnetic()), // TODO #5
+        TOUGH = register(new Ability("TOUGH")),
+        STRONG = register(new Strong()),
+        AQUA_GRACE = register(new AquaGrace()),
+        BREATHES_UNDERWATER = register(new BreathesUnderwater()),
+        CANT_BREATHE_AIR = register(new CantBreatheAir()),
+        CANT_SWIM = register(new CantSwim()),                               // DOESN'T WORK
+        HYDROPHOBIC = register(new Hydrophobic()),
+        HUNTED_BY_FOX = register(new HuntedByFox()),                        // KINDA WORKS
+        HUNTED_BY_WOLF = register(new HuntedByWolf()),
+        SCARES_CREEPERS = register(new ScaresCreepers()),
+        SCARES_PHANTOMS = register(new ScaresPhantoms()),
+        FRIENDS_WITH_NATURE = register(new FriendsWithNature()),            // KINDA WORKS
+        WEAK_TO_DAMAGE = register(new Ability("WEAK_TO_DAMAGE")),     // DOESN'T WORK
+        NIGHT_VISION = register(new NightVision()),
+        BURNS_IN_DAYLIGHT = register(new BurnsInDaylight()),
+        IS_MONSTER = register(new IsMonster()),
+        CLIMBS_WALLS = register(new Ability("CLIMBS_WALLS")),         // DOESN'T WORK
+        PEARLING = register(new Ability("PEARLING")),
+        PREDATORY = register(new Predatory()),
+        CARNIVORE = register(new Ability("CARNIVORE")),               // KINDA WORKS
+        VEGETARIAN = register(new Ability("VEGETARIAN")),             // KINDA WORKS
+        ONLY_EATS_SWEETS = register(new Ability("ONLY_EATS_SWEETS")), // KINDA WORKS
+        GRASS_EATER = register(new Ability("GRASS_EATER")),
+        BUG_EATER = register(new Ability("BUG_EATER")); // TODO #5
 
     private static Ability register(Ability ability) {
         REGISTRY.put(ability.getName(), ability);
@@ -230,6 +230,25 @@ public class AbilityRegistry {
         }
     }
 
+    static class Magnetic extends TickingAbility {
+        Magnetic() { super("MAGNETIC"); }
+
+        @Override
+        public void tick(ServerPlayer player, ServerLevel level) {
+            double radius = 6.0, stop = 1.0;
+            List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, player.getBoundingBox().inflate(6.0));
+
+            for (ItemEntity item : items) {
+                Vec3 directionToPlayer = player.position().add(0, 0.5, 0).subtract(item.position());
+                double distance = directionToPlayer.length();
+
+                if (distance > radius || distance < stop) continue;
+
+                item.setDeltaMovement(directionToPlayer.normalize().scale(0.3));
+            }
+        }
+    }
+
     // TOUGH - LivingEntityMixin (knockback)
 
     static class Strong extends TickingAbility {
@@ -241,7 +260,9 @@ public class AbilityRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (level.getGameTime() % 5 != 0) return;
 
-            AttributeInstance attack = player.getAttribute(Attributes.ATTACK_DAMAGE);
+            AttributeInstance attack = player.getAttribute(Attributes.ATTACK_DAMAGE),
+                maxHp = player.getAttribute(Attributes.MAX_HEALTH);
+
             if (attack != null && attack.getModifier(AM_STRONG_DAMAGE) == null) {
                 attack.addTransientModifier(new AttributeModifier(AM_STRONG_DAMAGE, 3.0, AttributeModifier.Operation.ADD_VALUE));
             }
@@ -251,7 +272,7 @@ public class AbilityRegistry {
             int armor = player.getArmorValue();
             float targetHp = Math.max(40.0F, Math.min(100.0F, 100.0F-(armor * 3.0F)));
             if (targetHp % 2 != 0) targetHp += 1;
-            AttributeInstance maxHp = player.getAttribute(Attributes.MAX_HEALTH);
+
             if (maxHp != null) {
                 maxHp.removeModifier(AM_STRONG_HP);
                 maxHp.addPermanentModifier(new AttributeModifier(AM_STRONG_HP, targetHp-20.0, AttributeModifier.Operation.ADD_VALUE));
@@ -268,12 +289,15 @@ public class AbilityRegistry {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.isInWater()) return;
+
             DataManager.applyEffect(player, MobEffects.CONDUIT_POWER);
+
             if (level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
                 .get(Enchantments.DEPTH_STRIDER)
                 .map(h -> EnchantmentHelper.getItemEnchantmentLevel(h, player.getItemBySlot(EquipmentSlot.HEAD)) > 1)
                 .orElse(false))
                 return; // Return before granting Dolphin's Grace if player has depth strider to prevent OP swimming speeds
+
             DataManager.applyEffect(player, MobEffects.DOLPHINS_GRACE);
         }
     }
@@ -341,14 +365,12 @@ public class AbilityRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
 
-            boolean inWaterBlock = player.isInWater();
-            boolean inWaterCauldron = level.getBlockState(player.blockPosition()).is(Blocks.WATER_CAULDRON);
-
-            boolean hasHelmet = !player.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
-            boolean inWetBiome = level.getBiome(player.blockPosition()).is(DataTags.HYDROPHOBIC_HELMET_PROTECTION_EXCEPTIONS);
-            boolean inRain = player.isInRain() && (!hasHelmet || inWetBiome);
-
-            boolean inWater = inWaterBlock || inRain || inWaterCauldron;
+            boolean inWaterBlock = player.isInWater(),
+                inWaterCauldron = level.getBlockState(player.blockPosition()).is(Blocks.WATER_CAULDRON),
+                hasHelmet = !player.getItemBySlot(EquipmentSlot.HEAD).isEmpty(),
+                inWetBiome = level.getBiome(player.blockPosition()).is(DataTags.HYDROPHOBIC_HELMET_PROTECTION_EXCEPTIONS),
+                inRain = player.isInRain() && (!hasHelmet || inWetBiome),
+                inWater = inWaterBlock || inRain || inWaterCauldron;
 
             if (inWater && level.getGameTime() % 20 == 0) player.hurt(level.damageSources().magic(), 1.0F);
         }

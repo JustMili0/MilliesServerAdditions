@@ -3,24 +3,23 @@ package net.justmili.servertweaks.registries;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.commands.*;
-import net.justmili.servertweaks.core.util.CommandUtil;
 
 public class CommandRegistry {
     public static void register() {
         CommandRegistrationCallback.EVENT.register((dispatcher, commandBuildContext, environment) -> {
-            if (CommandUtil.checkIfExpected(Config.enableScaleCommand, true))
+            if (Config.enableScaleCommand.get() == true)
                 Scale.register(dispatcher, commandBuildContext, environment);
-            if (CommandUtil.checkIfExpected(Config.enableAfkCommand, true))
+            if (Config.enableAfkCommand.get() == true)
                 Afk.register(dispatcher, commandBuildContext, environment);
-            if (CommandUtil.checkIfExpected(Config.enableDamageToggleCommand, true))
+            if (Config.enableDamageToggleCommand.get() == true)
                 DamageToggle.register(dispatcher, commandBuildContext, environment);
-            if (CommandUtil.checkIfExpected(Config.enableBanishCommand, true))
+            if (Config.enableBanishCommand.get() == true)
                 Banish.register(dispatcher, commandBuildContext, environment);
             Discard.register(dispatcher, commandBuildContext, environment); // This command is not configurable.
             FillExtras.register(dispatcher, commandBuildContext, environment); // This command is not configurable.
-            if (CommandUtil.checkIfExpected(Config.enableFlyCommand, true))
+            if (Config.enableFlyCommand.get() == true)
                 Fly.register(dispatcher, commandBuildContext, environment);
-            if (CommandUtil.checkIfExpected(Config.playerAbilities, true))
+            if (Config.playerAbilities.get() == true)
                 PlayerAbilities.register(dispatcher, commandBuildContext, environment);
         });
     }

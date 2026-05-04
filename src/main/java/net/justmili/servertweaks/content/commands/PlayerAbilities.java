@@ -2,11 +2,13 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import net.justmili.servertweaks.content.abilities.DataStorage;
 import net.justmili.servertweaks.content.abilities.DataManager;
+import net.justmili.servertweaks.content.abilities.DataStorage;
+import net.justmili.servertweaks.content.abilities.arguments.AbilityArgumentType;
+import net.justmili.servertweaks.content.abilities.arguments.ModifierArgumentType;
+import net.justmili.servertweaks.content.abilities.arguments.PresetArgumentType;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
-import net.justmili.servertweaks.content.abilities.arguments.*;
 import net.justmili.servertweaks.core.util.CommandUtil;
 import net.justmili.servertweaks.core.util.FdaApiUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;

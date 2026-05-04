@@ -20,8 +20,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -51,9 +49,9 @@ public class Events {
                 }
 
                 // Reset attribute modifiers if related ability is not applied
-                AttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
-                AttributeInstance attack = player.getAttribute(Attributes.ATTACK_DAMAGE);
-                AttributeInstance maxHp = player.getAttribute(Attributes.MAX_HEALTH);
+                AttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED),
+                    attack = player.getAttribute(Attributes.ATTACK_DAMAGE),
+                    maxHp = player.getAttribute(Attributes.MAX_HEALTH);
 
                 if (!abilities.contains(AbilityRegistry.SLOW)) speed.removeModifier(AbilityRegistry.AM_SLOW_SPEED);
                 if (!abilities.contains(AbilityRegistry.STRONG)) attack.removeModifier(AbilityRegistry.AM_STRONG_DAMAGE);
@@ -157,16 +155,16 @@ public class Events {
         if (!stack.has(DataComponents.FOOD)) return false;
         Set<Ability> abilities = DataManager.getAbilities(player);
 
-        boolean carnivore = abilities.contains(AbilityRegistry.CARNIVORE);
-        boolean vegetarian = abilities.contains(AbilityRegistry.VEGETARIAN);
-        boolean sweetOnly = abilities.contains(AbilityRegistry.ONLY_EATS_SWEETS);
-        boolean grassEater = abilities.contains(AbilityRegistry.GRASS_EATER);
-        boolean canConsumeGolden = DataManager.has(player, ModifierRegistry.ADD_GOLD_FOODS_TO_DIET);
+        boolean carnivore = abilities.contains(AbilityRegistry.CARNIVORE),
+            vegetarian = abilities.contains(AbilityRegistry.VEGETARIAN),
+            sweetOnly = abilities.contains(AbilityRegistry.ONLY_EATS_SWEETS),
+            grassEater = abilities.contains(AbilityRegistry.GRASS_EATER),
+            canConsumeGolden = DataManager.has(player, ModifierRegistry.ADD_GOLD_FOODS_TO_DIET),
 
-        boolean isMeat = stack.is(DataTags.DIET_CARNIVORE);
-        boolean isVege = stack.is(DataTags.DIET_VEGETARIAN);
-        boolean isSweet = stack.is(DataTags.DIET_SWEETS);
-        boolean isGold = stack.is(DataTags.DIET_MODIFIER_GOLDEN_FOODS);
+            isMeat = stack.is(DataTags.DIET_CARNIVORE),
+            isVege = stack.is(DataTags.DIET_VEGETARIAN),
+            isSweet = stack.is(DataTags.DIET_SWEETS),
+            isGold = stack.is(DataTags.DIET_MODIFIER_GOLDEN_FOODS);
 
         if (!carnivore && !vegetarian && !sweetOnly && !grassEater) return false;
 
