@@ -15,7 +15,7 @@ public class Banish {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext, Commands.CommandSelection environment) {
         dispatcher.register(
             Commands.literal("banish")
-                .requires(src -> CommandUtil.hasPerms(src, 3))
+                .requires(src -> CommandUtil.hasPerms(src, 1))
                 .then(Commands.argument("player", EntityArgument.player())
                     .executes(context -> {
                         ServerPlayer player = EntityArgument.getPlayer(context, "player");

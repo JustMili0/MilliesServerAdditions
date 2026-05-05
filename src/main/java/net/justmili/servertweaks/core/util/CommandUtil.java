@@ -1,6 +1,5 @@
 package net.justmili.servertweaks.core.util;
 
-import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -11,16 +10,6 @@ public class CommandUtil {
     //Fuck the new perms system, I want my numbers back
     public static boolean hasPerms(CommandSourceStack source, int level) {
         return source.permissions().hasPermission(new Permission.HasCommandLevel(PermissionLevel.byId(level)));
-    }
-
-    //Prevents commands from being ran from server console
-    public static boolean checkIfPlayerExecuted(CommandContext<CommandSourceStack> context) {
-        CommandSourceStack source = context.getSource();
-        if (!(source.getEntity() instanceof ServerPlayer)) {
-            sendFail(source, "A player is required to run this command here");
-            return false;
-        }
-        return true;
     }
 
     public static void sendSucc(CommandSourceStack source, String message) {

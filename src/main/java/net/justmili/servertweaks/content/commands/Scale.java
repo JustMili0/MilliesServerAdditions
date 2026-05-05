@@ -23,9 +23,7 @@ public class Scale {
                 .then(Commands.argument("height_cm", DoubleArgumentType.doubleArg(80.0, 300.0))
                     .executes(context -> {
                         CommandSourceStack source = context.getSource();
-                        ServerPlayer player = source.getPlayer();
-
-                        if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
+                        ServerPlayer player = context.getSource().getPlayerOrException();
 
                         if (FdaApiUtil.getBoolValue(player, PlayerAttachments.SCALE_LOCKED)) {
                             CommandUtil.sendFail(source, "You can not change your height more than once");
@@ -42,12 +40,11 @@ public class Scale {
                     })
                 )
                 .then(Commands.literal("force")
-                    .requires(src -> CommandUtil.hasPerms(src, 2))
+                    .requires(src -> CommandUtil.hasPerms(src, 1))
                     .then(Commands.argument("player", EntityArgument.players())
                         .then(Commands.argument("height_cm", DoubleArgumentType.doubleArg(18.5, 2960.0))
                             .executes(context -> {
                                 CommandSourceStack source = context.getSource();
-                                if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
 
                                 double heightCm = DoubleArgumentType.getDouble(context, "height_cm");
                                 double scale = heightCm / 185.0;
@@ -64,11 +61,10 @@ public class Scale {
                     )
                 )
                 .then(Commands.literal("unlock")
-                    .requires(src -> CommandUtil.hasPerms(src, 2))
+                    .requires(src -> CommandUtil.hasPerms(src, 1))
                     .then(Commands.argument("player", EntityArgument.players())
                         .executes(context -> {
                             CommandSourceStack source = context.getSource();
-                            if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
 
                             Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "player");
                             for (ServerPlayer player : players) {
@@ -81,7 +77,7 @@ public class Scale {
                     )
                 )
                 .then(Commands.literal("reset")
-                    .requires(src -> CommandUtil.hasPerms(src, 2))
+                    .requires(src -> CommandUtil.hasPerms(src, 1))
                     .then(Commands.argument("player", EntityArgument.players())
                         .executes(context -> {
                             CommandSourceStack source = context.getSource();
@@ -98,11 +94,10 @@ public class Scale {
                     )
                 )
                 .then(Commands.literal("reset-nounlock")
-                    .requires(src -> CommandUtil.hasPerms(src, 2))
+                    .requires(src -> CommandUtil.hasPerms(src, 1))
                     .then(Commands.argument("player", EntityArgument.players())
                         .executes(context -> {
                             CommandSourceStack source = context.getSource();
-                            if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
 
                             Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "player");
                             for (ServerPlayer player : players) {

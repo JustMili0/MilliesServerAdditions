@@ -26,10 +26,9 @@ public class Afk {
         dispatcher.register(Commands.literal("afk")
             .executes(context -> {
                 CommandSourceStack source = context.getSource();
-                if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
 
                 ServerLevel world = source.getLevel();
-                ServerPlayer player = source.getPlayer();
+                ServerPlayer player = context.getSource().getPlayerOrException();
 
                 int cooldown = FdaApiUtil.getIntValue(player, PlayerAttachments.AFK_COOLDOWN);
                 if (!FdaApiUtil.getBoolValue(player, PlayerAttachments.IS_AFK) && Config.afkCommandCooldown.get() != 0 && cooldown > 0) {

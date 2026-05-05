@@ -4,12 +4,14 @@ import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.DataManager;
 import net.justmili.servertweaks.content.abilities.data.PlayerContext;
 import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.npc.villager.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,6 +32,19 @@ public class MobMixin {
 
         if (self instanceof TamableAnimal tamed && tamed.isTame()) return;
         self.setTarget(null);
+    }
+
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void servertweaks$checkNoAiName(CallbackInfo ci) {
+        Mob mob = (Mob) (Object) this;
+        if (mob.level().isClientSide()) return;
+
+        Component name = mob.getCustomName();
+        boolean shouldBeNoAi = name != null && name.getString().equals("NoAI");
+
+        if ((mob instanceof TamableAnimal || mob instanceof AbstractVillager) && (mob.isNoAi() != shouldBeNoAi)) {
+            mob.setNoAi(shouldBeNoAi);
+        }
     }
 
     // Taming context for FRIENDS_WITH_NATURE

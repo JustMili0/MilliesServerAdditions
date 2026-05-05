@@ -32,8 +32,7 @@ public class PlayerAbilities {
                         .suggests(PresetArgumentType::suggest)
                         .executes(context -> {
                             CommandSourceStack source = context.getSource();
-                            if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
-                            ServerPlayer player = source.getPlayer();
+                            ServerPlayer player = context.getSource().getPlayerOrException();
 
                             String setName = StringArgumentType.getString(context, "preset");
                             PresetArgumentType.AbilityPreset set = PresetArgumentType.getSet(setName);
@@ -54,7 +53,7 @@ public class PlayerAbilities {
                 )
 
                 .then(Commands.literal("reload")
-                    .requires(src -> CommandUtil.hasPerms(src, 2))
+                    .requires(src -> CommandUtil.hasPerms(src, 1))
                     .executes(context -> {
                         MinecraftServer server = context.getSource().getServer();
                         DataStorage.loadFile(server);
@@ -65,7 +64,7 @@ public class PlayerAbilities {
                 )
 
                 .then(Commands.literal("grant")
-                    .requires(src -> CommandUtil.hasPerms(src, 2))
+                    .requires(src -> CommandUtil.hasPerms(src, 1))
                     .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.literal("ability")
                             .then(Commands.argument("abilityOrDebuff", AbilityArgumentType.abilities())
@@ -98,7 +97,7 @@ public class PlayerAbilities {
                 )
 
                 .then(Commands.literal("revoke")
-                    .requires(src -> CommandUtil.hasPerms(src, 2))
+                    .requires(src -> CommandUtil.hasPerms(src, 1))
                     .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.literal("ability")
                             .then(Commands.argument("abilityOrDebuff", AbilityArgumentType.abilities())
@@ -146,7 +145,7 @@ public class PlayerAbilities {
                 )
 
                 .then(Commands.literal("applyPreset")
-                    .requires(src -> CommandUtil.hasPerms(src, 2))
+                    .requires(src -> CommandUtil.hasPerms(src, 4))
                     .then(Commands.argument("preset", PresetArgumentType.setSelect())
                         .suggests(PresetArgumentType::suggest)
                         .then(Commands.argument("player", EntityArgument.player())
@@ -175,7 +174,7 @@ public class PlayerAbilities {
                     )
                 )
                 .then(Commands.literal("dontApplyPreset")
-                    .requires(src -> CommandUtil.hasPerms(src, 2))
+                    .requires(src -> CommandUtil.hasPerms(src, 4))
                     .then(Commands.argument("player", EntityArgument.player())
                         .executes(context -> 1)
                     )

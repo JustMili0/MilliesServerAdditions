@@ -25,7 +25,7 @@ import java.util.List;
 
 public class Discard {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext, Commands.CommandSelection environment) {
-        dispatcher.register(Commands.literal("discard").requires(src -> CommandUtil.hasPerms(src, 2))
+        dispatcher.register(Commands.literal("discard").requires(src -> CommandUtil.hasPerms(src, 1))
             // Entity discard
             .then(Commands.argument("entity", EntityArgument.entities())
                 .executes(context -> {

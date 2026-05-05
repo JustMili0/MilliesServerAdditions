@@ -82,15 +82,34 @@ Feedback is appriciated ^^
 
 ------------------------------------------------------------------------------------------------------------------------
 
-(AWAITING COMPLETION, NOT STARTED IN THE SLIGHTEST)
 # Millie's Server Additions, Patch #5 - 1.3.0-beta.15
+**Gameplay**
+- You can now stop the AI of tamable animals and villagers by naming them `NoAI`
+
+**Commands**
+- Fixed container discarding for any and all `AbstractChestedHorse` entities (Any entities that can have chests mounted on them for storage) with `/discard inventory <entity>`
+- (Admin) Changed permission and execution requirements for most commands
+  - `/scale <force|unlock|reset|reset-nounlock>` - Permission Level Required `GAMEMASTERS (2)` -> `MODERATORS (1)`
+  - `/scale <force|unlock|reset|reset-nounlock>` - Execution Source Required `PLAYER` -> `PLAYER OR SERVER`
+  - `/abilities <reload|grant|revoke>` - Permission Level Required `GAMEMASTERS (2)` -> `MODERATORS (1)`
+  - `/fly` - Permission Level Required `ADMINS (3)` -> `MODERATORS (1)`
+  - `/fillExtras` - Permission Level Required `GAMEMASTERS (2)` -> `MODERATORS (1)`
+  - `/discard` - Permission Level Required `GAMEMASTERS (2)` -> `MODERATORS (1)`
+  - `/banish` - Permission Level Required `ADMINS (3)` -> `MODERATORS (1)`
 
 **Player Abilities**
 - Fixed ability preset confirmation message being sent to the server instead of the client
 - Fixed cancelling choosing an ability preset (the `[CANCEL]` button)
-- Fixed container discarding for any and all `AbstractChestedHorse` entities (Any entities that can have chests mounted on them for storage)
-- (NEW) SQUISHY - Decreases fall and fly_into_wall damage by 75% each. [TODO]
-- (NEW) BUG EATER - Can only feed on bug-like entities, slimes, magma cubes, sulfur cubes, and items like slime balls and magma creams. [TODO]
-- (NEW) MAGNETIC - On-ground items within 6 blocks of the player get pulled towards the player
+- (NEW) MAGNETIC - On-ground items within 6 blocks of the player get pulled towards the player to  be picked up
 
 Feedback is appriciated ^^
+
+------------------------------------------------------------------------------------------------------------------------
+
+(AWAITING COMPLETION, WIP)
+# Millie's Server Additions, Patch #6 - 1.3.0-beta.16
+
+**Player Abilities**
+- (NEW) SQUISHY - Decreases fall and fly_into_wall damage by 75% each.                                                                  [TODO]
+- (NEW) BUG EATER - Can only feed on bug-like entities, slimes, magma cubes, sulfur cubes, and items like slime balls and magma creams. [TODO]
+

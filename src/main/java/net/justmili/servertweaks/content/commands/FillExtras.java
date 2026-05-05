@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class FillExtras {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext, Commands.CommandSelection environment) {
         dispatcher.register(Commands.literal("fillExtras")
-            .requires(src -> CommandUtil.hasPerms(src, 2))
+            .requires(src -> CommandUtil.hasPerms(src, 1))
             .then(Commands.argument("from", BlockPosArgument.blockPos())
                 .then(Commands.argument("to", BlockPosArgument.blockPos())
                     .then(Commands.argument("block", BlockStateArgument.block(commandBuildContext))

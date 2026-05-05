@@ -14,17 +14,15 @@ import java.util.Collection;
 public class Fly {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext, Commands.CommandSelection environment) {
         dispatcher.register(Commands.literal("fly")
-            .requires(src -> CommandUtil.hasPerms(src, 3))
-            .executes(context -> {
-                if (!CommandUtil.checkIfPlayerExecuted(context)) return 0;
-                return toggleFly(context.getSource().getPlayer(), context.getSource());
-            })
-            .then(Commands.argument("targets", EntityArgument.players())
+            .requires(src -> CommandUtil.hasPerms(src, 1))
+            .executes(context ->
+                toggleFly(context.getSource().getPlayerOrException(), context.getSource()))
+            .then(Commands.argument("player", EntityArgument.players())
                 .executes(context -> {
-                    Collection<ServerPlayer> targets = EntityArgument.getPlayers(context, "targets");
+                    Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "player");
                     int count = 0;
-                    for (ServerPlayer target : targets) {
-                        toggleFly(target, context.getSource());
+                    for (ServerPlayer player : players) {
+                        toggleFly(player, context.getSource());
                         count++;
                     }
                     return count;
