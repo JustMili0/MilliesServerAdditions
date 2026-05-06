@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.justmili.serveradditions.ServerAdditions;
 import net.justmili.serveradditions.config.Config;
 import net.justmili.serveradditions.content.abilities.data.DataTags;
 import net.justmili.serveradditions.content.abilities.registries.AbilityRegistry;
@@ -18,6 +19,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -66,8 +68,8 @@ public class Events {
 
         UseItemCallback.EVENT.register(Events::pearling);
         UseBlockCallback.EVENT.register(Events::grassEater);
-        UseItemCallback.EVENT.register(Events::dietRestrictionsOnItem);
-        UseBlockCallback.EVENT.register(Events::dietRestrictionsOnBlock);
+        UseItemCallback.EVENT.register(Events::handleDietItemCall);
+        UseBlockCallback.EVENT.register(Events::handleDietBlockCall);
     }
 
     private static boolean specialDamageImmune(LivingEntity entity, DamageSource source, float value) {
@@ -118,14 +120,12 @@ public class Events {
     private static InteractionResult pearling(Player interacting, Level level, InteractionHand hand) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
-
-        if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
+        if (!DataManager.has(player, AbilityRegistry.PEARLING)) return InteractionResult.PASS;
 
         ItemStack pearl = new ItemStack(Items.ENDER_PEARL);
-        ItemStack heldItem = player.getItemInHand(hand);
-        if (!heldItem.is(pearl.getItem())) return InteractionResult.PASS;
+        ItemStack stack = player.getItemInHand(hand);
+        if (!stack.is(pearl.getItem())) return InteractionResult.PASS;
         if (player.getCooldowns().isOnCooldown(pearl)) return InteractionResult.PASS;
-        if (!DataManager.has(player, AbilityRegistry.PEARLING)) return InteractionResult.PASS;
 
         int slot = player.getInventory().getSelectedSlot();
         ItemStack inSlot = player.getInventory().getItem(slot);
@@ -138,52 +138,76 @@ public class Events {
         return InteractionResult.PASS;
     }
 
+    // TODO: FIX, doesn't get handled
+    private static InteractionResult bugEaterItems(ServerPlayer player, Level level, InteractionHand hand) {
+        if (level.isClientSide()) return InteractionResult.PASS;
+        if (!DataManager.has(player, AbilityRegistry.BUG_EATER)) return InteractionResult.PASS;
+
+        ServerAdditions.LOGGER.info("Priority: bugEaterItems");
+        ItemStack stack = player.getItemInHand(hand);
+        FoodData food = player.getFoodData();
+
+        if (isFull(food)) return InteractionResult.PASS;
+
+        if (stack.is(DataTags.DIET_BUG_ITEMS) && !stack.has(DataComponents.FOOD)) {
+            stack.shrink(1);
+            food.eat(3, 2.0F);
+            player.playSound(SoundEvents.GENERIC_EAT.value(), 1.0F, 1.0F+(player.getRandom().nextFloat()-player.getRandom().nextFloat()) * 0.4F);
+            sendUpdatePacket(player);
+
+            return InteractionResult.CONSUME;
+        }
+        // In-tag foods with food data handle via handleDiet* methods
+
+        return InteractionResult.PASS;
+    }
     private static InteractionResult grassEater(Player interacting, Level level, InteractionHand hand, BlockHitResult hitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
+        if (!DataManager.has(player, AbilityRegistry.GRASS_EATER)) return InteractionResult.PASS;
 
+        ServerAdditions.LOGGER.info("Priority: grassEater");
         if (!player.isShiftKeyDown()) return InteractionResult.PASS;
-        if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
         BlockPos pos = hitResult.getBlockPos();
 
-        if (!DataManager.has(player, AbilityRegistry.GRASS_EATER)) return InteractionResult.PASS;
         if (!level.getBlockState(pos).is(DataTags.DIET_FOLIAGE)) return InteractionResult.PASS;
 
         FoodData food = player.getFoodData();
-        if (!(food.getFoodLevel() < 20 || food.getSaturationLevel() < 20)) return InteractionResult.PASS;
+        if (isFull(food)) return InteractionResult.PASS;
         level.destroyBlock(pos, false);
         food.eat(2, 0.5F);
-        player.swing(InteractionHand.MAIN_HAND, true);
 
         // Update the client about eaten food
-        player.connection.send(new ClientboundSetHealthPacket(player.getHealth(), food.getFoodLevel(), food.getSaturationLevel()));
+        sendUpdatePacket(player);
 
         return InteractionResult.SUCCESS;
     }
-    private static InteractionResult dietRestrictionsOnItem(Player interacting, Level level, InteractionHand hand) { // Clicking while looking at nothing
+    private static InteractionResult handleDietItemCall(Player interacting, Level level, InteractionHand hand) { // Clicking while looking at nothing
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
 
-        if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
-
+        bugEaterItems(player, level, hand); // Handle this first
+        ServerAdditions.LOGGER.info("Priority: handleDietItemCall");
         if (isDietBlocked(player, player.getItemInHand(hand))) return InteractionResult.FAIL;
 
         return InteractionResult.PASS;
     }
-    private static InteractionResult dietRestrictionsOnBlock(Player interacting, Level level, InteractionHand hand, BlockHitResult hitResult) {
+    private static InteractionResult handleDietBlockCall(Player interacting, Level level, InteractionHand hand, BlockHitResult hitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
-
-        if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
         ItemStack stack = player.getItemInHand(hand);
         if (stack.getItem() instanceof BlockItem && !stack.has(DataComponents.FOOD)) return InteractionResult.PASS;
 
+        bugEaterItems(player, level, hand); // Handle this first
+        ServerAdditions.LOGGER.info("Priority: handleDietBlockCall");
         if (isDietBlocked(player, stack)) return InteractionResult.FAIL;
 
         return InteractionResult.PASS;
     }
+
+    // Helper methods
     private static boolean isDietBlocked(ServerPlayer player, ItemStack stack) {
         if (!stack.has(DataComponents.FOOD)) return false;
         Set<Ability> abilities = DataManager.getAbilities(player);
@@ -192,22 +216,32 @@ public class Events {
             vegetarian = abilities.contains(AbilityRegistry.VEGETARIAN),
             sweetOnly = abilities.contains(AbilityRegistry.ONLY_EATS_SWEETS),
             grassEater = abilities.contains(AbilityRegistry.GRASS_EATER),
+            bugEater = abilities.contains(AbilityRegistry.BUG_EATER),
             canConsumeGolden = DataManager.has(player, ModifierRegistry.ADD_GOLD_FOODS_TO_DIET),
 
             isMeat = stack.is(DataTags.DIET_CARNIVORE),
             isVege = stack.is(DataTags.DIET_VEGETARIAN),
             isSweet = stack.is(DataTags.DIET_SWEETS),
+            isBugLike = stack.is(DataTags.DIET_BUG_ITEMS),
             isGold = stack.is(DataTags.DIET_MODIFIER_GOLDEN_FOODS);
 
-        if (!carnivore && !vegetarian && !sweetOnly && !grassEater) return false;
+        if (!carnivore && !vegetarian && !sweetOnly && !grassEater && !bugEater) return false;
 
         if (canConsumeGolden && isGold) return false;
         if (carnivore && isMeat) return false;
         if (vegetarian && isVege) return false;
         if (sweetOnly && isSweet) return false;
+        if (bugEater && isBugLike) return false;
         // No GRASS_EATER item tag for this to check. GRASS_EATER diet is handled by grassEater interaction method.
 
         return true;
+    }
+    private static boolean isFull(FoodData playerFoodData) {
+        return playerFoodData.getFoodLevel() < 20 || playerFoodData.getSaturationLevel() < 20;
+    }
+    private static void sendUpdatePacket(ServerPlayer player) {
+        FoodData food = player.getFoodData();
+        player.connection.send(new ClientboundSetHealthPacket(player.getHealth(), food.getFoodLevel(), food.getSaturationLevel()));
     }
 
     public static boolean shouldClimb(ServerPlayer player) {

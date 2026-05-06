@@ -114,6 +114,7 @@ Feedback is appreciated ^^
 - Villagers and Tamables losing AI when named "NoAI" now has a config entry
 
 **Player Abilities**
+- Fixed being able to eat anything no matter the diet if food is held in the offhand
 - Fixed ability debuff `WEAK_TO_DAMAGE` - Now actually deals more damage
 - [TODO] Fixed ability debuff `HUNTED_BY_FOX` - Foxes now attack even if you're not crouching
 - [TODO] Fixed ability debuff `CANT_SWIM` - Players no longer can swim up higher than one block up from the (sea) floor
