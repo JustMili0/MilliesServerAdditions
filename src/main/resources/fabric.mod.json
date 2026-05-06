@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "servertweaks",
+  "id": "serveradditions",
   "version": "${mod_version}",
   "name": "Millie's Server Additions",
   "description": "",
@@ -11,14 +11,14 @@
   "license": "All-Rights-Reserved",
   "icon": "icon.png",
   "environment": "*",
-  "accessWidener": "servertweaks.accesswidener",
+  "accessWidener": "serveradditions.accesswidener",
   "entrypoints": {
     "main": [
-      "net.justmili.servertweaks.ServerTweaks"
+      "net.justmili.serveradditions.ServerAdditions"
     ]
   },
   "mixins": [
-    "servertweaks.mixins.json"
+    "serveradditions.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
