@@ -30,24 +30,6 @@ public class LivingEntityMixin {
         if (DataManager.has(player, AbilityRegistry.TOUGH)) ci.cancel();
     }
 
-    // WEAK_TO_DAMAGE
-    @Unique
-    private boolean applyDamageModifyer = false;
-
-    @Inject(method = "actuallyHurt", at = @At("HEAD"), cancellable = true)
-    private void onActuallyHurt(ServerLevel level, DamageSource source, float amount, CallbackInfo ci) {
-        if (!(Config.playerAbilities.get())) return;
-        if (applyDamageModifyer) return;
-        if (!(((LivingEntity) (Object) this) instanceof ServerPlayer player)) return;
-        if (!DataManager.has(player, AbilityRegistry.WEAK_TO_DAMAGE)) return;
-        if (source.is(DamageTypes.FALL)) return;
-
-        applyDamageModifyer = true;
-        ci.cancel();
-        ((LivingEntityAccessor) this).invokeActuallyHurt(level, source, amount * 1.25f);
-        applyDamageModifyer = false;
-    }
-
     // CANT_BREATHE_AIR
     @Inject(method = "increaseAirSupply", at = @At("HEAD"), cancellable = true)
     private void servertweaks$increaseAirSupply(int currentAir, CallbackInfoReturnable<Integer> cir) {

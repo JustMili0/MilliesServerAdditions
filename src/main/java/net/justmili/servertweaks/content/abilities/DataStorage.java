@@ -114,6 +114,6 @@ public class DataStorage {
     }
 
     private static File getFile() {
-        return new File("config/servertweaks/"+FILE_NAME);
+        return new File("config/serveradditions/"+FILE_NAME);
     }
 }

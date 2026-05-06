@@ -13,6 +13,7 @@ public class Config {
         enableBanishCommand, // Command on/off
         enableFlyCommand, // Command on/off
         despawnMonsters, // Afk command related setting
+        noAiNameTags, // Disable/enable NoAI name tags
         limitPlayerSpeed, // Config for "UncapSpeedLimits" mixin.
         limitElytraSpeed, // Config for "UncapSpeedLimits" mixin.
         limitVehicleSpeed, // Config for "UncapSpeedLimits" mixin.
@@ -25,7 +26,7 @@ public class Config {
         pistonPushLimit; // Config for "BetterPushLimit" mixin.
 
     static {
-        IConfigBuilder builder = ConfigBuilders.newTomlConfig("servertweaks", "", true);
+        IConfigBuilder builder = ConfigBuilders.newTomlConfig("serveradditions", "config", true);
 
         builder.push("Commands");
         builder.comment("Should these commands be enabled on the server?");
@@ -61,6 +62,8 @@ public class Config {
             .define("rightClickHarvest", true);
         playerAbilities = builder.comment("[EXPERIMENTAL] Allows server owners to configure player abilities for some or all members")
             .define("playerAbilities", false);
+        noAiNameTags = builder.comment("Should Villagers and Tamable mobs lose their AI when named \"NoAI\"?")
+            .define("noAiNameTags", true);
         builder.pop();
 
         builder.build();

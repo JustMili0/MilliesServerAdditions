@@ -34,8 +34,10 @@ public class MobMixin {
         self.setTarget(null);
     }
 
+    // Non-Ability but I'm not making another file for this
     @Inject(method = "tick", at = @At("HEAD"))
     private void servertweaks$checkNoAiName(CallbackInfo ci) {
+        if (!Config.noAiNameTags.get()) return;
         Mob mob = (Mob) (Object) this;
         if (mob.level().isClientSide()) return;
 

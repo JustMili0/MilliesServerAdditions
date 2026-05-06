@@ -1,13 +1,20 @@
 # What are Player Abilities?
 Player abilities are a complex ability, debuff and ability modifier system basing itself mostly on behavior found in Minecraft mobs but also based on lore of characters made by this mod creator's friends.
 
-Player abilities can be chosen by players via the `/abilities` command. They can either pick from hardcoded premade sets or send a request to permission level 2 and higher staff for a custom set.<br>
-Those sets are mainly designed around Minecraft mobs and some DnD classes and races.
-Moderators, administrators and operators can also grant or revoke abilities, debuffs and modifiers of players in-game or by editing `/config/servertweaks/player_abilities.json` file.
+Players can pick presets of abilities, ability debuffs and ability modifiers via `/abilities pickPreset <preset>`, 
+which will tell them in chat about the preset in a story telling-like way.<br>
+All presets are either based on or inspired by Minecraft mobs, DnD classes/races and real life legends or stories.<br>
+
+<br>Moderators, Administrators and Owners can grant or revoke abilities and modifiers from players via `/abilities <grant|revoke> ...` command<br>
+or by editing the `/config/serveradditions/config.toml` file.<br>
+The entire command works similarly to `/advancement` command.
+
+***You can not create your own ability presets yet as of update 1.3.0, that'll be a feature in the future updates.***
 
 Some abilities and/or debuffs can be partially or completely incompatible with each other, or they will just negate each other's effects on the player.
 
-# Why were Player Abilities added?
+
+## Why were Player Abilities added?
 They supposed to be and are a server-side custom alternative to Origins/Origins Legacy for servers managed by JustMili.
 
 ### Abilities & Ability Debuffs
@@ -25,7 +32,7 @@ LIGHT - Chicken-based | Gains Slow Falling when falling faster than 0.4 blocks/t
 SWIFT - Custom | Gains Speed 1 while sprinting.
 SLOW - Zombie-based | Permanently slowed to roughly zombie walking speed via movement speed attribute reduction.
 HOPPY - Rabbit-based | Permanent hidden Jump Boost 1.
-DWARF - Custom | Height capped at 0.75 of normal scale. Players already at or below 0.75 via /scale are unaffected. Permanent hidden Haste 2.
+DWARF - Custom | Height capped at 75% of normal scale. Players already at or below 75% via /scale are unaffected. Permanent hidden Haste 2.
 SQUISHY - Custom | Decreases fall and fly_into_wall damage by 75% each.
 MAGNETIC - Custom | On-ground items within 6 blocks of the player get pulled towards the player
 
@@ -49,7 +56,7 @@ SCARES_PHANTOMS - Cat-based | Phantoms within 16 blocks flee from the player.
 
 FRIENDS_WITH_NATURE - Custom | Overworld neutral mobs will not aggro the player and tamed pets won't defend against them.
                                Foxes within 24 blocks auto-trust the player. 100% tame chance when taming animals.
-WEAK_TO_DAMAGE - Custom | Takes 1.25x damage from all sources except fall damage.
+WEAK_TO_DAMAGE - Custom | Takes 25% more damage from all sources except fall damage.
 NIGHT_VISION - Custom | Gains hidden Night Vision only during nighttime (level.isDarkOutside()).
 
 BURNS_IN_DAYLIGHT - Undead-based | Burns in direct sunlight (requires skylight level > 8 and clear sky view) dealing 1hp per 1s. Helmet negates all burning.
@@ -62,7 +69,7 @@ PREDATORY - Custom | Smaller animals like for example chickens, fish and frogs w
 CARNIVORE - Wild Animal-based | Can only eat meat. Honey bottles, milk and other misc items are always allowed.
 VEGETARIAN - Farm Animal-based | Can only eat plant-based foods. Honey bottles, milk and other misc items are always allowed.
 ONLY_EATS_SWEETS - Custom | Can only eat sweet foods (berries, cookies, cake, pie, honey, apples, melon slices).
-GRASS_EATER - Sheep-based | Can shift-right-click any grass (tall, short, dry) or bush to eat it, gaining 2 hunger and 0.2 saturation. Consumes the block.
+GRASS_EATER - Sheep-based | Can shift-right-click any grass (tall, short, dry) or bush to eat it, gaining 2 hunger and 0.5 saturation points. Consumes the block.
 BUG_EATER - Frog-based | Can only feed on bug-like entities, slimes, magma cubes, sulfur cubes, and items like slime balls and magma creams.
 ```
 

@@ -108,8 +108,12 @@ Feedback is appriciated ^^
 
 (AWAITING COMPLETION, WIP)
 # Millie's Server Additions, Patch #6 - 1.3.0-beta.16
+**Generic**
+- Changed config file location from `config/servertweaks/common.toml` to `config/serveradditions/config.toml`
+- Villagers and Tamables losing AI when named "NoAI" now has a config entry
 
 **Player Abilities**
-- (NEW) SQUISHY - Decreases fall and fly_into_wall damage by 75% each.                                                                  [TODO]
+- Fixed ability debuff `WEAK_TO_DAMAGE`
+- (NEW) SQUISHY - Decreases `fall` and `fly_into_wall` damage by 75% each.
 - (NEW) BUG EATER - Can only feed on bug-like entities, slimes, magma cubes, sulfur cubes, and items like slime balls and magma creams. [TODO]
 

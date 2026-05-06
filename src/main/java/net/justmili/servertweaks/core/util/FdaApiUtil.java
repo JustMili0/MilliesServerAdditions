@@ -27,7 +27,7 @@ public class FdaApiUtil {
 
     //Numbers yay
     public static int getIntValue(ServerPlayer player, AttachmentType<Integer> variable) {
-        return getValue(player, variable, 0);
+        return getValue(player, variable, -1);
     }
 
     public static void setIntValue(ServerPlayer player, AttachmentType<Integer> variable, int Int) {
@@ -35,7 +35,7 @@ public class FdaApiUtil {
     }
 
     public static double getDoubleValue(ServerPlayer player, AttachmentType<Double> variable) {
-        return getValue(player, variable, 0.0);
+        return getValue(player, variable, -1.0);
     }
 
     public static void setDoubleValue(ServerPlayer player, AttachmentType<Double> variable, double Double) {
@@ -43,7 +43,7 @@ public class FdaApiUtil {
     }
 
     public static float getFloatValue(ServerPlayer player, AttachmentType<Float> variable) {
-        return getValue(player, variable, 0f);
+        return getValue(player, variable, -1.0f);
     }
 
     public static void setFloatValue(ServerPlayer player, AttachmentType<Float> variable, float Float) {
@@ -51,7 +51,7 @@ public class FdaApiUtil {
     }
 
     public static long getLongValue(ServerPlayer player, AttachmentType<Long> variable) {
-        return getValue(player, variable, 0L);
+        return getValue(player, variable, -1L);
     }
 
     public static void setLongValue(ServerPlayer player, AttachmentType<Long> variable, long Long) {

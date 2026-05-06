@@ -21,7 +21,7 @@ public class Fly {
                 .executes(context -> {
                     Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "player");
                     int count = 0;
-                    for (ServerPlayer player : players) {
+                    for (var player : players) {
                         toggleFly(player, context.getSource());
                         count++;
                     }

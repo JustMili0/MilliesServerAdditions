@@ -10,6 +10,8 @@ import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
 import net.justmili.servertweaks.content.abilities.registries.ModifierRegistry;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
+import net.justmili.servertweaks.core.util.FdaApiUtil;
+import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -35,9 +37,8 @@ import java.util.Set;
 
 public class Events {
     public static void registerAbilityEvents() {
-        if (!(Config.playerAbilities.get())) return;
         ServerTickEvents.END_SERVER_TICK.register(server -> {
-            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            for (var player : server.getPlayerList().getPlayers()) {
                 ServerLevel level = player.level();
                 Set<Ability> abilities = DataManager.getAbilities(player);
 
@@ -60,6 +61,8 @@ public class Events {
         });
 
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(Events::specialDamageImmune);
+        ServerLivingEntityEvents.ALLOW_DAMAGE.register(Events::weakToDamage);
+        ServerLivingEntityEvents.ALLOW_DAMAGE.register(Events::squishy);
 
         UseItemCallback.EVENT.register(Events::pearling);
         UseBlockCallback.EVENT.register(Events::grassEater);
@@ -78,6 +81,36 @@ public class Events {
         if (abilities.contains(AbilityRegistry.FALL_IMMUNE) && source.is(DamageTypes.FALL)) return false;
         if (abilities.contains(AbilityRegistry.BREATHES_UNDERWATER) && source.is(DamageTypes.DROWN)) return false;
         if (abilities.contains(AbilityRegistry.PEARLING) && source.is(DamageTypes.ENDER_PEARL)) return false;
+
+        return true;
+    }
+    private static boolean weakToDamage(LivingEntity entity, DamageSource source, float value) {
+        if (!(entity instanceof ServerPlayer player)) return true;
+        if (!DataManager.has(player, AbilityRegistry.WEAK_TO_DAMAGE)) return true;
+        if (!source.is(DamageTypes.FALL)) return true;
+
+        if (FdaApiUtil.getIntValue(player, PlayerAttachments.HURT_TICK) != entity.tickCount) {
+            // safeguard to make sure ALLOW_DAMAGE doesn't get called again and for this to not run recursively
+            FdaApiUtil.setIntValue(player, PlayerAttachments.HURT_TICK, entity.tickCount);
+            entity.hurt(source, value * 1.25f);
+
+            return false;
+        }
+
+        return true;
+    }
+    private static boolean squishy(LivingEntity entity, DamageSource source, float value) {
+        if (!(entity instanceof ServerPlayer player)) return true;
+        if (!DataManager.has(player, AbilityRegistry.WEAK_TO_DAMAGE)) return true;
+        if (!(source.is(DamageTypes.FALL) || source.is(DamageTypes.FLY_INTO_WALL))) return true;
+
+        if (FdaApiUtil.getIntValue(player, PlayerAttachments.HURT_TICK) != entity.tickCount) {
+            // safeguard to make sure ALLOW_DAMAGE doesn't get called again and for this to not run recursively
+            FdaApiUtil.setIntValue(player, PlayerAttachments.HURT_TICK, entity.tickCount);
+            entity.hurt(source, value * 0.75f);
+
+            return false;
+        }
 
         return true;
     }

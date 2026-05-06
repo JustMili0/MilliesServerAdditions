@@ -61,6 +61,11 @@ A more fun way to "ban" people by sending them into the f#cking shadow realm.
 
 ---- GAMEPLAY ----
 <details>
+<summary>Player Abilities [Disabled By Default]</summary>
+A rather complex system of abilities for players to choose from. Read <a href="https://github.com/JustMili0/UnF-ServerTweaks/blob/master/.Informative/Features/Abilities.md">About Abilities</a> to know more.
+</details>
+
+<details>
 <summary>Right-Click Harvest [Enabled By Default]</summary>
 Harvest full-grown crops by just right-clicking them. Bigger harvest area when using hoes. Fortune does apply when harvesting.
 </details>
@@ -84,8 +89,9 @@ Allows modifying how many blocks a single piston can push.
 </details>
 
 <details>
-<summary>Player Abilities [Disabled By Default]</summary>
-A rather complex system of abilities for players to choose from. Read <a href="https://github.com/JustMili0/UnF-ServerTweaks/blob/master/.Informative/Features/Abilities.md">About Abilities</a> to know more.
+<summary>AI-Be-Gone [Enabled By Default]</summary>
+Naming Villagers or Tamable mobs "NoAI" will shut off their AI,
+which is pretty useful if you want to reduce lag in trading halls or have a lot of pets that just sit around and do nothing.
 </details>
 
 <hr>

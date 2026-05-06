@@ -22,7 +22,7 @@ public final class Banishment {
     public static final ResourceKey<Level> BANISHMENT_WORLD = ResourceKey.create(Registries.DIMENSION, ServerTweaks.asResource("banishment"));
     private static final int HOTBAR_SLOT = 4;
 
-    public static boolean onEntityHurt(LivingEntity entity, DamageSource source, float v) {
+    public static boolean onEntityHurt(LivingEntity entity, DamageSource source, float value) {
         if (!(entity instanceof ServerPlayer player)) return true;
         return player.level().dimension() != BANISHMENT_WORLD;
     }

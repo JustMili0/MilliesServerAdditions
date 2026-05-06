@@ -79,7 +79,7 @@ public class AbilityRegistry {
         HOPPY = register(new Hoppy()),
         DWARF = register(new Dwarf()),
         SQUISHY = register(new Ability("SQUISHY")), // TODO #5
-        MAGNETIC = register(new Magnetic()), // TODO #5
+        MAGNETIC = register(new Magnetic()),
         TOUGH = register(new Ability("TOUGH")),
         STRONG = register(new Strong()),
         AQUA_GRACE = register(new AquaGrace()),
@@ -92,16 +92,16 @@ public class AbilityRegistry {
         SCARES_CREEPERS = register(new ScaresCreepers()),
         SCARES_PHANTOMS = register(new ScaresPhantoms()),
         FRIENDS_WITH_NATURE = register(new FriendsWithNature()),            // KINDA WORKS
-        WEAK_TO_DAMAGE = register(new Ability("WEAK_TO_DAMAGE")),     // DOESN'T WORK
+        WEAK_TO_DAMAGE = register(new Ability("WEAK_TO_DAMAGE")),
         NIGHT_VISION = register(new NightVision()),
         BURNS_IN_DAYLIGHT = register(new BurnsInDaylight()),
         IS_MONSTER = register(new IsMonster()),
         CLIMBS_WALLS = register(new Ability("CLIMBS_WALLS")),         // DOESN'T WORK
         PEARLING = register(new Ability("PEARLING")),
         PREDATORY = register(new Predatory()),
-        CARNIVORE = register(new Ability("CARNIVORE")),               // KINDA WORKS
-        VEGETARIAN = register(new Ability("VEGETARIAN")),             // KINDA WORKS
-        ONLY_EATS_SWEETS = register(new Ability("ONLY_EATS_SWEETS")), // KINDA WORKS
+        CARNIVORE = register(new Ability("CARNIVORE")),
+        VEGETARIAN = register(new Ability("VEGETARIAN")),
+        ONLY_EATS_SWEETS = register(new Ability("ONLY_EATS_SWEETS")),
         GRASS_EATER = register(new Ability("GRASS_EATER")),
         BUG_EATER = register(new Ability("BUG_EATER")); // TODO #5
 

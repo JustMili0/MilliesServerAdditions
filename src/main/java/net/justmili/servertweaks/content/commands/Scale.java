@@ -50,7 +50,7 @@ public class Scale {
                                 double scale = heightCm / 185.0;
 
                                 Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "player");
-                                for (ServerPlayer player : players) {
+                                for (var player : players) {
                                     applyScaleToPlayer(player, scale);
                                 }
 
@@ -67,7 +67,7 @@ public class Scale {
                             CommandSourceStack source = context.getSource();
 
                             Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "player");
-                            for (ServerPlayer player : players) {
+                            for (var player : players) {
                                 FdaApiUtil.setBoolValue(player, PlayerAttachments.SCALE_LOCKED, false);
                             }
 
@@ -83,7 +83,7 @@ public class Scale {
                             CommandSourceStack source = context.getSource();
 
                             Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "player");
-                            for (ServerPlayer player : players) {
+                            for (var player : players) {
                                 applyScaleToPlayer(player, 1.0);
                                 FdaApiUtil.setBoolValue(player, PlayerAttachments.SCALE_LOCKED, false);
                             }
@@ -100,7 +100,7 @@ public class Scale {
                             CommandSourceStack source = context.getSource();
 
                             Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "player");
-                            for (ServerPlayer player : players) {
+                            for (var player : players) {
                                 applyScaleToPlayer(player, 1.0);
                             }
 

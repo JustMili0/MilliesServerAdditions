@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 public class WhileAfk {
-    public static boolean onEntityHurt(LivingEntity entity, DamageSource source, float v) {
+    public static boolean onEntityHurt(LivingEntity entity, DamageSource source, float value) {
         if (source.getEntity() instanceof ServerPlayer player) {
             return !FdaApiUtil.getBoolValue(player, PlayerAttachments.IS_AFK);
         }

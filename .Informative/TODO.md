@@ -11,12 +11,10 @@
 
 ## FROM TESTING PLAYER ABILITIES:
 **Not yet coded**
-- SQUISHY
 - BUG_EATER
 
 **Doesn't work (no changes get applied to player behavior):**
 - CLIMBS_WALLS - Nothing happens (can't climb walls)
-- WEAK_TO_DAMAGE - Nothing happens (same damage as normal)
 - CANT_SWIM - Nothing happens (can swim as normal)
 
 **Kinda work (works for the most part)**
@@ -33,12 +31,14 @@
 - SLOW
 - HOPPY
 - DWARF
+- SQUISHY
 - MAGNETIC
 - TOUGH
 - STRONG
 - BREATHES_UNDERWATER
 - CANT_BREATHE_AIR
 - HYDROPHOBIC
+- WEAK_TO_DAMAGE
 - NIGHT_VISION
 - HUNTED_BY_WOLF
 - SCARES_CREEPERS
