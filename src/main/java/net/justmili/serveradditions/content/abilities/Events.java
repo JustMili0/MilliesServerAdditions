@@ -20,15 +20,18 @@ import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.BlockItem;
@@ -39,17 +42,16 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Set;
+import static net.justmili.serveradditions.content.abilities.DataManager.has;
 
 public class Events {
     public static void registerAbilityEvents() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (var player : server.getPlayerList().getPlayers()) {
                 ServerLevel level = player.level();
-                Set<Ability> abilities = DataManager.getAbilities(player);
 
                 // Tick all Ticking Abilities
-                for (Ability ability : abilities) {
+                for (Ability ability : DataManager.getAbilities(player)) {
                     if (ability instanceof TickingAbility tickingAbility) {
                         tickingAbility.tick(player, level);
                     }
@@ -60,9 +62,9 @@ public class Events {
                     attack = player.getAttribute(Attributes.ATTACK_DAMAGE),
                     maxHp = player.getAttribute(Attributes.MAX_HEALTH);
 
-                if (!abilities.contains(AbilityRegistry.SLOW) && !(speed == null)) speed.removeModifier(AbilityRegistry.AM_SLOW_SPEED);
-                if (!abilities.contains(AbilityRegistry.STRONG) && !(attack == null)) attack.removeModifier(AbilityRegistry.AM_STRONG_DAMAGE);
-                if (!abilities.contains(AbilityRegistry.STRONG) && !(maxHp == null)) maxHp.removeModifier(AbilityRegistry.AM_STRONG_HP);
+                if (!has(player, AbilityRegistry.SLOW) && !(speed == null)) speed.removeModifier(AbilityRegistry.AM_SLOW_SPEED);
+                if (!has(player, AbilityRegistry.STRONG) && !(attack == null)) attack.removeModifier(AbilityRegistry.AM_STRONG_DAMAGE);
+                if (!has(player, AbilityRegistry.STRONG) && !(maxHp == null)) maxHp.removeModifier(AbilityRegistry.AM_STRONG_HP);
             }
         });
 
@@ -79,21 +81,20 @@ public class Events {
 
     private static boolean specialDamageImmune(LivingEntity entity, DamageSource source, float value) {
         if (!(entity instanceof ServerPlayer player)) return true;
-        Set<Ability> abilities = DataManager.getAbilities(player);
 
-        if (abilities.contains(AbilityRegistry.FIRE_IMMUNE) && (source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE))) return false;
-        if (abilities.contains(AbilityRegistry.LAVA_IMMUNE) && source.is(DamageTypes.LAVA)) return false;
-        if (abilities.contains(AbilityRegistry.HEAT_IMMUNE) && source.is(DamageTypes.HOT_FLOOR)) return false;
-        if (abilities.contains(AbilityRegistry.FREEZE_IMMUNE) && source.is(DamageTypes.FREEZE)) return false;
-        if (abilities.contains(AbilityRegistry.FALL_IMMUNE) && source.is(DamageTypes.FALL)) return false;
-        if (abilities.contains(AbilityRegistry.BREATHES_UNDERWATER) && source.is(DamageTypes.DROWN)) return false;
-        if (abilities.contains(AbilityRegistry.PEARLING) && source.is(DamageTypes.ENDER_PEARL)) return false;
+        if (has(player, AbilityRegistry.FIRE_IMMUNE) && (source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE))) return false;
+        if (has(player, AbilityRegistry.LAVA_IMMUNE) && source.is(DamageTypes.LAVA)) return false;
+        if (has(player, AbilityRegistry.HEAT_IMMUNE) && source.is(DamageTypes.HOT_FLOOR)) return false;
+        if (has(player, AbilityRegistry.FREEZE_IMMUNE) && source.is(DamageTypes.FREEZE)) return false;
+        if (has(player, AbilityRegistry.FALL_IMMUNE) && source.is(DamageTypes.FALL)) return false;
+        if (has(player, AbilityRegistry.BREATHES_UNDERWATER) && source.is(DamageTypes.DROWN)) return false;
+        if (has(player, AbilityRegistry.PEARLING) && source.is(DamageTypes.ENDER_PEARL)) return false;
 
         return true;
     }
     private static boolean weakToDamage(LivingEntity entity, DamageSource source, float value) {
         if (!(entity instanceof ServerPlayer player)) return true;
-        if (!DataManager.has(player, AbilityRegistry.WEAK_TO_DAMAGE)) return true;
+        if (!has(player, AbilityRegistry.WEAK_TO_DAMAGE)) return true;
         if (!source.is(DamageTypes.FALL)) return true;
 
         if (FdaApiUtil.getIntValue(player, PlayerAttachments.HURT_TICK) != entity.tickCount) {
@@ -108,7 +109,7 @@ public class Events {
     }
     private static boolean squishy(LivingEntity entity, DamageSource source, float value) {
         if (!(entity instanceof ServerPlayer player)) return true;
-        if (!DataManager.has(player, AbilityRegistry.WEAK_TO_DAMAGE)) return true;
+        if (!has(player, AbilityRegistry.WEAK_TO_DAMAGE)) return true;
         if (!(source.is(DamageTypes.FALL) || source.is(DamageTypes.FLY_INTO_WALL))) return true;
 
         if (FdaApiUtil.getIntValue(player, PlayerAttachments.HURT_TICK) != entity.tickCount) {
@@ -125,7 +126,7 @@ public class Events {
     private static InteractionResult pearling(Player interacting, Level level, InteractionHand hand) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
-        if (!DataManager.has(player, AbilityRegistry.PEARLING)) return InteractionResult.PASS;
+        if (!has(player, AbilityRegistry.PEARLING)) return InteractionResult.PASS;
 
         ItemStack pearl = new ItemStack(Items.ENDER_PEARL);
         ItemStack stack = player.getItemInHand(hand);
@@ -146,7 +147,7 @@ public class Events {
     private static void bugEaterItems(Player interacting, Level level, InteractionHand hand) {
         if (level.isClientSide()) return;
         if (!(interacting instanceof ServerPlayer player)) return;
-        if (!DataManager.has(player, AbilityRegistry.BUG_EATER)) return;
+        if (!has(player, AbilityRegistry.BUG_EATER)) return;
 
         ItemStack stack = player.getItemInHand(hand);
         FoodData food = player.getFoodData();
@@ -156,7 +157,7 @@ public class Events {
         if (stack.is(DataTags.DIET_BUG_ITEMS) && !stack.has(DataComponents.FOOD)) {
             stack.shrink(1);
             food.add(3, 2.0F);
-            player.playSound(SoundEvents.GENERIC_EAT.value(), 1.0F, 1.0F+(player.getRandom().nextFloat()-player.getRandom().nextFloat()) * 0.4F);
+            playEatSound(player);
             sendUpdatePacket(player);
 
         }
@@ -165,55 +166,57 @@ public class Events {
     private static InteractionResult bugEaterEntities(Player interacting, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
-        if (!DataManager.has(player, AbilityRegistry.BUG_EATER)) return InteractionResult.PASS;
+        if (!has(player, AbilityRegistry.BUG_EATER)) return InteractionResult.PASS;
+
+        FoodData food = player.getFoodData();
+        if (isFull(food)) return InteractionResult.PASS;
 
         // Calculate saturation and nutrition
         int addNutrition = 0;
         float addSaturation = 0f;
-        if (entity.getType().is(DataTags.DIET_BUG_ENTITY_NUTRITIOUS)) addNutrition = 2;
-        if (entity.getType().is(DataTags.DIET_BUG_ENTITY_SATURATING)) addSaturation = 2f;
+        if (isType(entity, DataTags.DIET_BUG_ENTITY_NUTRITIOUS)) addNutrition = 2;
+        if (isType(entity, DataTags.DIET_BUG_ENTITY_SATURATING)) addSaturation = 2f;
         int nutrition = 3 + addNutrition;
         float saturation = 2 + addSaturation;
 
-        /*
-        THE PLAN
+        // Apply everything accordingly
+        if (isType(entity, DataTags.DIET_BUG_ENTITY_GENERIC)) {
+            if (!isBugLikeConsumable(entity)) return InteractionResult.PASS;
 
-        - Get interacted-with entity
-        - Get FoodData of player
+            entity.discard();
+            food.add(nutrition, saturation);
+            playEatSound(player);
+            sendUpdatePacket(player);
 
-        - If already full, skip further interaction
+            return InteractionResult.CONSUME;
+        } else if (isType(entity, DataTags.DIET_BUG_ENTITY_FIRE)) {
+            if (!isBugLikeConsumable(entity)) return InteractionResult.PASS;
 
-        - If entity is in tag DIET_BUG_ENTITY_GENERIC
-          - Check if it has size nbt data, if it does and is size 0 (smallest) then proceed, otherwise cancel
-          - Discard entity
-          - Feed player from nutrition and saturation values
-          - Player eating sound
-          - Send update packet
-          - return CONSUME result
-        - If entity is in tag DIET_BUG_ENTITY_FIRE
-          - Check if it has size nbt data, if it does and is size 0 (smallest) then proceed, otherwise cancel
-          - Discard entity
-          - Feed player from nutrition and saturation values
-          - Player eating sound
-          - Hurt player with fire damage (2hp)
-          - Send update packet
-          - return CONSUME result
-        - If entity is in tag DIET_BUG_ENTITY_POISON
-          - Check if it has size nbt data, if it does and is size 0 (smallest) then proceed, otherwise cancel
-          - Discard entity
-          - Feed player from nutrition and saturation values
-          - Player eating sound
-          - Apply 10s of lvl 1 poison
-          - Send update packet
-          - return CONSUME result
-         */
+            entity.discard();
+            food.add(nutrition, saturation);
+            playEatSound(player);
+            player.hurt(player.damageSources().onFire(), 2f);
+            sendUpdatePacket(player);
+
+            return InteractionResult.CONSUME;
+        } else if (isType(entity, DataTags.DIET_BUG_ENTITY_POISON)) {
+            if (!isBugLikeConsumable(entity)) return InteractionResult.PASS;
+
+            entity.discard();
+            food.add(nutrition, saturation);
+            playEatSound(player);
+            DataManager.applyEffect(player, MobEffects.POISON, 200, 0);
+            sendUpdatePacket(player);
+
+            return InteractionResult.CONSUME;
+        }
 
         return InteractionResult.PASS;
     }
     private static InteractionResult grassEater(Player interacting, Level level, InteractionHand hand, BlockHitResult hitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
-        if (!DataManager.has(player, AbilityRegistry.GRASS_EATER)) return InteractionResult.PASS;
+        if (!has(player, AbilityRegistry.GRASS_EATER)) return InteractionResult.PASS;
 
         if (!player.isShiftKeyDown()) return InteractionResult.PASS;
 
@@ -256,14 +259,13 @@ public class Events {
     // Helper methods
     private static boolean isDietBlocked(ServerPlayer player, ItemStack stack) {
         if (!stack.has(DataComponents.FOOD)) return false;
-        Set<Ability> abilities = DataManager.getAbilities(player);
 
-        boolean carnivore = abilities.contains(AbilityRegistry.CARNIVORE),
-            vegetarian = abilities.contains(AbilityRegistry.VEGETARIAN),
-            sweetOnly = abilities.contains(AbilityRegistry.ONLY_EATS_SWEETS),
-            grassEater = abilities.contains(AbilityRegistry.GRASS_EATER),
-            bugEater = abilities.contains(AbilityRegistry.BUG_EATER),
-            canConsumeGolden = DataManager.has(player, ModifierRegistry.ADD_GOLD_FOODS_TO_DIET),
+        boolean carnivore = has(player, AbilityRegistry.CARNIVORE),
+            vegetarian = has(player, AbilityRegistry.VEGETARIAN),
+            sweetOnly = has(player, AbilityRegistry.ONLY_EATS_SWEETS),
+            grassEater = has(player, AbilityRegistry.GRASS_EATER),
+            bugEater = has(player, AbilityRegistry.BUG_EATER),
+            canConsumeGolden = has(player, ModifierRegistry.ADD_GOLD_FOODS_TO_DIET),
 
             isMeat = stack.is(DataTags.DIET_CARNIVORE),
             isVege = stack.is(DataTags.DIET_VEGETARIAN),
@@ -285,14 +287,26 @@ public class Events {
     private static boolean isFull(FoodData playerFoodData) {
         return !playerFoodData.needsFood();
     }
+    private static void playEatSound(ServerPlayer player) {
+        player.playSound(SoundEvents.GENERIC_EAT.value(), 1.0F, 1.0F+(player.getRandom().nextFloat()-player.getRandom().nextFloat()) * 0.4F);
+    }
     private static void sendUpdatePacket(ServerPlayer player) {
         FoodData food = player.getFoodData();
         player.connection.send(new ClientboundSetHealthPacket(player.getHealth(), food.getFoodLevel(), food.getSaturationLevel()));
     }
+    private static boolean isType(Entity entity, TagKey<EntityType<?>> tag) {
+        return entity.getType().is(tag);
+    }
+    private static boolean isBugLikeConsumable(Entity entity) {
+        if (entity instanceof Slime slime) { /// Change to AbstractCubeMob with 26.2!
+            return slime.getSize() == 1;
+        }
+        return true;
+    }
 
     public static boolean shouldClimb(ServerPlayer player) {
         if (!(Config.playerAbilities.get())) return false;
-        if (!DataManager.has(player, AbilityRegistry.CLIMBS_WALLS)) return false;
+        if (!has(player, AbilityRegistry.CLIMBS_WALLS)) return false;
         if (player.onGround()) return false;
 
         Level level = player.level();
