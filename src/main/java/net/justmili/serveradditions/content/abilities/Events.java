@@ -3,8 +3,8 @@ package net.justmili.serveradditions.content.abilities;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.justmili.serveradditions.ServerAdditions;
 import net.justmili.serveradditions.config.Config;
 import net.justmili.serveradditions.content.abilities.data.DataTags;
 import net.justmili.serveradditions.content.abilities.registries.AbilityRegistry;
@@ -24,6 +24,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -34,6 +36,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
@@ -56,9 +60,9 @@ public class Events {
                     attack = player.getAttribute(Attributes.ATTACK_DAMAGE),
                     maxHp = player.getAttribute(Attributes.MAX_HEALTH);
 
-                if (!abilities.contains(AbilityRegistry.SLOW)) speed.removeModifier(AbilityRegistry.AM_SLOW_SPEED);
-                if (!abilities.contains(AbilityRegistry.STRONG)) attack.removeModifier(AbilityRegistry.AM_STRONG_DAMAGE);
-                if (!abilities.contains(AbilityRegistry.STRONG)) maxHp.removeModifier(AbilityRegistry.AM_STRONG_HP);
+                if (!abilities.contains(AbilityRegistry.SLOW) && !(speed == null)) speed.removeModifier(AbilityRegistry.AM_SLOW_SPEED);
+                if (!abilities.contains(AbilityRegistry.STRONG) && !(attack == null)) attack.removeModifier(AbilityRegistry.AM_STRONG_DAMAGE);
+                if (!abilities.contains(AbilityRegistry.STRONG) && !(maxHp == null)) maxHp.removeModifier(AbilityRegistry.AM_STRONG_HP);
             }
         });
 
@@ -70,6 +74,7 @@ public class Events {
         UseBlockCallback.EVENT.register(Events::grassEater);
         UseItemCallback.EVENT.register(Events::handleDietItemCall);
         UseBlockCallback.EVENT.register(Events::handleDietBlockCall);
+        UseEntityCallback.EVENT.register(Events::bugEaterEntities);
     }
 
     private static boolean specialDamageImmune(LivingEntity entity, DamageSource source, float value) {
@@ -138,26 +143,70 @@ public class Events {
         return InteractionResult.PASS;
     }
 
-    // TODO: FIX, doesn't get handled
-    private static InteractionResult bugEaterItems(ServerPlayer player, Level level, InteractionHand hand) {
-        if (level.isClientSide()) return InteractionResult.PASS;
-        if (!DataManager.has(player, AbilityRegistry.BUG_EATER)) return InteractionResult.PASS;
+    private static void bugEaterItems(Player interacting, Level level, InteractionHand hand) {
+        if (level.isClientSide()) return;
+        if (!(interacting instanceof ServerPlayer player)) return;
+        if (!DataManager.has(player, AbilityRegistry.BUG_EATER)) return;
 
-        ServerAdditions.LOGGER.info("Priority: bugEaterItems");
         ItemStack stack = player.getItemInHand(hand);
         FoodData food = player.getFoodData();
 
-        if (isFull(food)) return InteractionResult.PASS;
+        if (isFull(food)) return;
 
         if (stack.is(DataTags.DIET_BUG_ITEMS) && !stack.has(DataComponents.FOOD)) {
             stack.shrink(1);
-            food.eat(3, 2.0F);
+            food.add(3, 2.0F);
             player.playSound(SoundEvents.GENERIC_EAT.value(), 1.0F, 1.0F+(player.getRandom().nextFloat()-player.getRandom().nextFloat()) * 0.4F);
             sendUpdatePacket(player);
 
-            return InteractionResult.CONSUME;
         }
         // In-tag foods with food data handle via handleDiet* methods
+    }
+    private static InteractionResult bugEaterEntities(Player interacting, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
+        if (level.isClientSide()) return InteractionResult.PASS;
+        if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
+        if (!DataManager.has(player, AbilityRegistry.BUG_EATER)) return InteractionResult.PASS;
+
+        // Calculate saturation and nutrition
+        int addNutrition = 0;
+        float addSaturation = 0f;
+        if (entity.getType().is(DataTags.DIET_BUG_ENTITY_NUTRITIOUS)) addNutrition = 2;
+        if (entity.getType().is(DataTags.DIET_BUG_ENTITY_SATURATING)) addSaturation = 2f;
+        int nutrition = 3 + addNutrition;
+        float saturation = 2 + addSaturation;
+
+        /*
+        THE PLAN
+
+        - Get interacted-with entity
+        - Get FoodData of player
+
+        - If already full, skip further interaction
+
+        - If entity is in tag DIET_BUG_ENTITY_GENERIC
+          - Check if it has size nbt data, if it does and is size 0 (smallest) then proceed, otherwise cancel
+          - Discard entity
+          - Feed player from nutrition and saturation values
+          - Player eating sound
+          - Send update packet
+          - return CONSUME result
+        - If entity is in tag DIET_BUG_ENTITY_FIRE
+          - Check if it has size nbt data, if it does and is size 0 (smallest) then proceed, otherwise cancel
+          - Discard entity
+          - Feed player from nutrition and saturation values
+          - Player eating sound
+          - Hurt player with fire damage (2hp)
+          - Send update packet
+          - return CONSUME result
+        - If entity is in tag DIET_BUG_ENTITY_POISON
+          - Check if it has size nbt data, if it does and is size 0 (smallest) then proceed, otherwise cancel
+          - Discard entity
+          - Feed player from nutrition and saturation values
+          - Player eating sound
+          - Apply 10s of lvl 1 poison
+          - Send update packet
+          - return CONSUME result
+         */
 
         return InteractionResult.PASS;
     }
@@ -166,7 +215,6 @@ public class Events {
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (!DataManager.has(player, AbilityRegistry.GRASS_EATER)) return InteractionResult.PASS;
 
-        ServerAdditions.LOGGER.info("Priority: grassEater");
         if (!player.isShiftKeyDown()) return InteractionResult.PASS;
 
         BlockPos pos = hitResult.getBlockPos();
@@ -176,7 +224,7 @@ public class Events {
         FoodData food = player.getFoodData();
         if (isFull(food)) return InteractionResult.PASS;
         level.destroyBlock(pos, false);
-        food.eat(2, 0.5F);
+        food.add(2, 0.5F);
 
         // Update the client about eaten food
         sendUpdatePacket(player);
@@ -187,8 +235,7 @@ public class Events {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
 
-        bugEaterItems(player, level, hand); // Handle this first
-        ServerAdditions.LOGGER.info("Priority: handleDietItemCall");
+        bugEaterItems(interacting, level, hand); // Handle this first
         if (isDietBlocked(player, player.getItemInHand(hand))) return InteractionResult.FAIL;
 
         return InteractionResult.PASS;
@@ -200,8 +247,7 @@ public class Events {
         ItemStack stack = player.getItemInHand(hand);
         if (stack.getItem() instanceof BlockItem && !stack.has(DataComponents.FOOD)) return InteractionResult.PASS;
 
-        bugEaterItems(player, level, hand); // Handle this first
-        ServerAdditions.LOGGER.info("Priority: handleDietBlockCall");
+        bugEaterItems(interacting, level, hand); // Handle this first
         if (isDietBlocked(player, stack)) return InteractionResult.FAIL;
 
         return InteractionResult.PASS;
@@ -237,7 +283,7 @@ public class Events {
         return true;
     }
     private static boolean isFull(FoodData playerFoodData) {
-        return playerFoodData.getFoodLevel() < 20 || playerFoodData.getSaturationLevel() < 20;
+        return !playerFoodData.needsFood();
     }
     private static void sendUpdatePacket(ServerPlayer player) {
         FoodData food = player.getFoodData();

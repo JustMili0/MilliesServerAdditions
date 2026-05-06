@@ -22,7 +22,8 @@ public class DataTags {
         DIET_BUG_ENTITY_GENERIC = TagKey.create(Registries.ENTITY_TYPE, ServerAdditions.asResource("bug_eater/generic")),
         DIET_BUG_ENTITY_FIRE = TagKey.create(Registries.ENTITY_TYPE, ServerAdditions.asResource("bug_eater/hot")),
         DIET_BUG_ENTITY_POISON = TagKey.create(Registries.ENTITY_TYPE, ServerAdditions.asResource("bug_eater/poisonous")),
-        DIET_BUG_ENTITY_HIGH_SATURATION = TagKey.create(Registries.ENTITY_TYPE, ServerAdditions.asResource("bug_eater/high_saturation"));
+        DIET_BUG_ENTITY_NUTRITIOUS = TagKey.create(Registries.ENTITY_TYPE, ServerAdditions.asResource("bug_eater/nutritious")),
+        DIET_BUG_ENTITY_SATURATING = TagKey.create(Registries.ENTITY_TYPE, ServerAdditions.asResource("bug_eater/saturating"));
 
     public static final TagKey<Biome>
         HOT_BIOMES = TagKey.create(Registries.BIOME, ServerAdditions.asResource("hot_biomes")),
