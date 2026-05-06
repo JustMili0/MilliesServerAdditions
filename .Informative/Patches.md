@@ -113,7 +113,13 @@ Feedback is appriciated ^^
 - Villagers and Tamables losing AI when named "NoAI" now has a config entry
 
 **Player Abilities**
-- Fixed ability debuff `WEAK_TO_DAMAGE`
+- Fixed ability debuff `WEAK_TO_DAMAGE` - Now actually deals more damage
+- Fixed ability debuff `HUNTED_BY_FOX` - Foxes now attack even if you're not crouching [TODO]
+- Fixed ability debuff `CANT_SWIM` - Players no longer can swim up higher than one block up from the (sea) floor [TODO]
+- Fixed ability `FRIENDS_WITH_NATURE` - Taming chance with any animal is now 100% [TODO]
+- Fixed ability `CLIMBS_WALLS` - Now can climb walls [TODO]
 - (NEW) SQUISHY - Decreases `fall` and `fly_into_wall` damage by 75% each.
-- (NEW) BUG EATER - Can only feed on bug-like entities, slimes, magma cubes, sulfur cubes, and items like slime balls and magma creams. [TODO]
+- (NEW) BUG EATER - Can only feed on bug-like entities, slimes, magma cubes, and items like slime balls and magma creams. [TODO]
+  - With Minecraft 26.2, you'll also be able to consume sulfur cubes
+    - If you eat a sulfur cube with a special block inside it, some effect will be given (e.g. TNT = You blow up, Magma Block = Slight Fire damage)
 

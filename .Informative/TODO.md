@@ -1,14 +1,3 @@
-# TODO:
-- Fix abilities
-  - Fix kinda-working abilities
-  - Fix non-working abilities
-- Add new abilities
-  - Bug Eater
-    - For 26.2: Also can eat Sulfur Cubes but will get poisoned with nausea, but will get a lot of saturation
-  - Squishy
-
---------------------------------------------------------------------------------–--------------------------------------
-
 ## FROM TESTING PLAYER ABILITIES:
 **Not yet coded**
 - BUG_EATER
