@@ -9,5 +9,4 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface CropBlockAccessor {
     @Invoker("getAgeProperty")
     IntegerProperty invokeGetAgeProperty();
-
 }

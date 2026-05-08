@@ -50,7 +50,7 @@ Allows creative flight in survival or any other non-creative gamemode. Can be ap
 </details>
 
 <details>
-<summary>/damagetoggle [Enabled By Default]</summary>
+<summary>/damageToggle [Enabled By Default]</summary>
 Allows staff to disable individual damage types on the server. Resets after a server restart.
 </details>
 

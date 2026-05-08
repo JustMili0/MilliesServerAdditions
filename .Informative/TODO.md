@@ -1,9 +1,6 @@
 ## FROM TESTING PLAYER ABILITIES:
-**Not yet coded**
-- BUG_EATER
-
 **Doesn't work (no changes get applied to player behavior):**
-- CLIMBS_WALLS - Nothing happens (can't climb walls)
+- CLIMBS_WALLS - [Currently all related code was removed to later be reworked]
 - CANT_SWIM - Nothing happens (can swim as normal)
 
 **Kinda work (works for the most part)**
@@ -40,3 +37,4 @@
 - VEGETARIAN
 - ONLY_EATS_SWEETS
 - GRASS_EATER
+- BUG_EATER
