@@ -66,8 +66,8 @@ public class AbilityRegistry {
     private static final Map<String, Ability> REGISTRY = new HashMap<>();
 
     public static final Ability
-        FIRE_IMMUNE = register(new Ability("FIRE_IMMUNE")),
-        LAVA_IMMUNE = register(new Ability("LAVA_IMMUNE")),
+        FIRE_IMMUNE = register(new FireImmune()),
+        LAVA_IMMUNE = register(new LavaImmune()),
         HEAT_IMMUNE = register(new Ability("HEAT_IMMUNE")),
         FREEZE_IMMUNE = register(new Ability("FREEZE_IMMUNE")),
         FALL_IMMUNE = register(new Ability("FALL_IMMUNE")),
@@ -120,9 +120,27 @@ public class AbilityRegistry {
 
     /// Define ticking abilities
 
-    // FIRE_IMMUNE - AbilityEffects (specialDamageImmune)
-    // FREEZE_IMMUNE - AbilityEffects (specialDamageImmune)
-    // FALL_IMMUNE - AbilityEffects (specialDamageImmune)
+    static class FireImmune extends TickingAbility {
+        FireImmune() { super("FIRE_IMMUNE"); }
+
+        @Override
+        public void tick(ServerPlayer player, ServerLevel level) {
+            if (player.isOnFire() && !level.getBlockState(player.blockPosition()).is(Blocks.FIRE)) player.extinguishFire();
+        }
+    }
+
+    static class LavaImmune extends TickingAbility {
+        LavaImmune() { super("LAVA_IMMUNE"); }
+
+        @Override
+        public void tick(ServerPlayer player, ServerLevel level) {
+            if (player.isOnFire() && !level.getBlockState(player.blockPosition()).is(Blocks.LAVA)) player.extinguishFire();
+        }
+    }
+
+    // HEAT_IMMUNE - UseEvents ()
+    // FREEZE_IMMUNE - UseEvents (specialDamageImmune)
+    // FALL_IMMUNE - UseEvents (specialDamageImmune)
 
     static class HeatSensitive extends TickingAbility {
         HeatSensitive() {
@@ -175,7 +193,7 @@ public class AbilityRegistry {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
-            if (player.getDeltaMovement().y < -0.4) DataManager.applyEffect(player, MobEffects.SLOW_FALLING);
+            if (player.getDeltaMovement().y < -0.4 && player.fallDistance > 3) DataManager.applyEffect(player, MobEffects.SLOW_FALLING, 60, 1);
             if (player.onGround()) player.removeEffect(MobEffects.SLOW_FALLING);
         }
     }
@@ -303,7 +321,7 @@ public class AbilityRegistry {
         }
     }
 
-    // BREATHES_UNDERWATER ticking + AbilityEffects (specialDamageImmune)
+    // BREATHES_UNDERWATER ticking + UseEvents (specialDamageImmune)
     static class BreathesUnderwater extends TickingAbility {
         BreathesUnderwater() {
             super("BREATHES_UNDERWATER");
@@ -461,11 +479,11 @@ public class AbilityRegistry {
                 if (!wolf.isTame() && wolf.getTarget() == player) wolf.setTarget(null);
             }
             // Aggro prevention - MobMixin (tick) + TargetingConditionsMixin (test)
-            // 100% tame chance - TamableAnimalMixin (tame)
+            // 100% tame chance - TamableAnimalMixin (tame) // TODO: FIX
         }
     }
 
-    // WEAK_TO_DAMAGE - LivingEntityMixin (actuallyHurt)
+    // WEAK_TO_DAMAGE - UseEvents (weakToDamage)
 
     static class NightVision extends TickingAbility {
         NightVision() {
@@ -567,7 +585,7 @@ public class AbilityRegistry {
         }
     }
 
-    // CLIMBS_WALLS - LivingEntityMixin (onClimbable) + AbilityEffects (shouldClimb bool)
+    // CLIMBS_WALLS - // TODO: RE-CODE THE LOGIC
 
     private static final List<MobData> PREDATORY_FEAR = List.of(
         new MobData(Chicken.class, 8.0, 1.4),
@@ -594,8 +612,9 @@ public class AbilityRegistry {
         }
     }
 
-    // CARNIVORE - AbilityEffects (RIGHT_CLICK_BLOCK + RIGHT_CLICK_ITEM)
-    // VEGETARIAN - AbilityEffects (RIGHT_CLICK_BLOCK + RIGHT_CLICK_ITEM)
-    // ONLY_EATS_SWEETS - AbilityEffects (RIGHT_CLICK_BLOCK + RIGHT_CLICK_ITEM)
-    // GRASS_EATER - AbilityEffects (RIGHT_CLICK_BLOCK)
+    // CARNIVORE - UseEvents (handleDietItemCall & handleDietBlockCall)
+    // VEGETARIAN - UseEvents (handleDietItemCall & handleDietBlockCall)
+    // ONLY_EATS_SWEETS - UseEvents (handleDietItemCall & handleDietBlockCall)
+    // GRASS_EATER - UseEvents (grassEater)
+    // BUG_EATER - UseEvents (bugEaterItems & bugEaterEntities)
 }

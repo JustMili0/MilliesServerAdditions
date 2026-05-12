@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.justmili.serveradditions.ServerAdditions;
 import net.justmili.serveradditions.content.abilities.data.DataTags;
 import net.justmili.serveradditions.content.abilities.registries.AbilityRegistry;
 import net.justmili.serveradditions.content.abilities.registries.ModifierRegistry;
@@ -42,7 +43,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Arrays;
+import java.util.Map;
 
 import static net.justmili.serveradditions.content.abilities.DataManager.has;
 
@@ -70,7 +71,6 @@ public class UseEvents {
             }
         });
 
-        ServerLivingEntityEvents.ALLOW_DAMAGE.register(UseEvents::specialDamageImmune);
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(UseEvents::weakToDamage);
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(UseEvents::squishy);
 
@@ -81,46 +81,23 @@ public class UseEvents {
         UseEntityCallback.EVENT.register(UseEvents::bugEaterEntities);
     }
 
-    private static boolean specialDamageImmune(LivingEntity entity, DamageSource source, float value) {
-        if (!(entity instanceof ServerPlayer player)) return true;
-
-        return isImmuneTo(player, AbilityRegistry.FIRE_IMMUNE, source, DamageTypes.IN_FIRE, DamageTypes.ON_FIRE)
-                || isImmuneTo(player, AbilityRegistry.LAVA_IMMUNE, source, DamageTypes.LAVA)
-                || isImmuneTo(player, AbilityRegistry.HEAT_IMMUNE, source, DamageTypes.HOT_FLOOR)
-                || isImmuneTo(player, AbilityRegistry.FREEZE_IMMUNE, source, DamageTypes.FREEZE)
-                || isImmuneTo(player, AbilityRegistry.FALL_IMMUNE, source, DamageTypes.FALL)
-                || isImmuneTo(player, AbilityRegistry.BREATHES_UNDERWATER, source, DamageTypes.DROWN)
-                || isImmuneTo(player, AbilityRegistry.PEARLING, source, DamageTypes.ENDER_PEARL);
-    }
     private static boolean squishy(LivingEntity entity, DamageSource source, float value) {
         if (!(entity instanceof ServerPlayer player)) return true;
-        if (!has(player, AbilityRegistry.WEAK_TO_DAMAGE)) return true;
+        if (handleOtherImmunities(player, source)) return false;
+        if (!has(player, AbilityRegistry.SQUISHY)) return true;
+        ServerAdditions.LOGGER.info("Priority: squish");
         if (!(source.is(DamageTypes.FALL) || source.is(DamageTypes.FLY_INTO_WALL))) return true;
 
-        if (FdaApiUtil.getIntValue(player, PlayerAttachments.HURT_TICK) != entity.tickCount) {
-            // safeguard to make sure ALLOW_DAMAGE doesn't get called again and for this to not run recursively
-            FdaApiUtil.setIntValue(player, PlayerAttachments.HURT_TICK, entity.tickCount);
-            entity.hurt(source, value * 0.75f);
-
-            return false;
-        }
-
-        return true;
+        return recalcDamage(player, source, value, 0.75F);
     }
     private static boolean weakToDamage(LivingEntity entity, DamageSource source, float value) {
         if (!(entity instanceof ServerPlayer player)) return true;
+        if (handleOtherImmunities(player, source)) return false;
+        ServerAdditions.LOGGER.info("Priority: weakToDamage");
         if (!has(player, AbilityRegistry.WEAK_TO_DAMAGE)) return true;
         if (source.is(DamageTypes.FALL)) return true;
 
-        if (FdaApiUtil.getIntValue(player, PlayerAttachments.HURT_TICK) != entity.tickCount) {
-            // safeguard to make sure ALLOW_DAMAGE doesn't get called again and for this to not run recursively
-            FdaApiUtil.setIntValue(player, PlayerAttachments.HURT_TICK, entity.tickCount);
-            entity.hurt(source, value * 1.25f);
-
-            return false;
-        }
-
-        return true;
+        return recalcDamage(player, source, value, 0.75F);
     }
 
     private static InteractionResult pearling(Player interacting, Level level, InteractionHand hand) {
@@ -173,7 +150,7 @@ public class UseEvents {
         ItemStack stack = player.getItemInHand(hand);
         FoodData food = player.getFoodData();
 
-        if (isFull(food)) return;
+        if (!food.needsFood()) return;
 
         if (stack.is(DataTags.DIET_BUG_ITEMS) && !stack.has(DataComponents.FOOD)) {
             stack.shrink(1);
@@ -190,7 +167,7 @@ public class UseEvents {
         if (!has(player, AbilityRegistry.BUG_EATER)) return InteractionResult.PASS;
 
         FoodData food = player.getFoodData();
-        if (isFull(food)) return InteractionResult.PASS;
+        if (!food.needsFood()) return InteractionResult.PASS;
 
         // Calculate saturation and nutrition
         int addNutrition = 0;
@@ -246,7 +223,7 @@ public class UseEvents {
         if (!level.getBlockState(pos).is(DataTags.DIET_FOLIAGE)) return InteractionResult.PASS;
 
         FoodData food = player.getFoodData();
-        if (isFull(food)) return InteractionResult.PASS;
+        if (!food.needsFood()) return InteractionResult.PASS;
         level.destroyBlock(pos, false);
         food.add(2, 0.5F);
 
@@ -257,13 +234,27 @@ public class UseEvents {
     }
 
     // Helper methods/variables
-    private static boolean isImmuneTo(ServerPlayer player, Ability ability, DamageSource source, ResourceKey<DamageType>... damageTypes) {
-        return has(player, ability) && Arrays.stream(damageTypes).anyMatch(source::is);
+    private static final Map<ResourceKey<DamageType>, Ability> DAMAGE_IMMUNITY = Map.of(
+        DamageTypes.IN_FIRE, AbilityRegistry.FIRE_IMMUNE, DamageTypes.ON_FIRE, AbilityRegistry.FIRE_IMMUNE, DamageTypes.LAVA, AbilityRegistry.LAVA_IMMUNE,
+        DamageTypes.HOT_FLOOR, AbilityRegistry.HEAT_IMMUNE, DamageTypes.FREEZE, AbilityRegistry.FREEZE_IMMUNE,
+        DamageTypes.FALL, AbilityRegistry.FALL_IMMUNE, DamageTypes.ENDER_PEARL, AbilityRegistry.PEARLING,
+        DamageTypes.DROWN, AbilityRegistry.BREATHES_UNDERWATER
+    );
+    private static boolean handleOtherImmunities(ServerPlayer player, DamageSource source) {
+        Ability immunity = DAMAGE_IMMUNITY.get(source.typeHolder().unwrapKey().orElse(null));
+        return immunity != null && has(player, immunity);
+    }
+    private static boolean recalcDamage(ServerPlayer player, DamageSource source, float damageTaken, float multiplier) {
+        if (FdaApiUtil.getIntValue(player, PlayerAttachments.HURT_TICK) != player.tickCount) {
+            // safeguard to make sure ALLOW_DAMAGE doesn't get called again and for this to not run recursively
+            FdaApiUtil.setIntValue(player, PlayerAttachments.HURT_TICK, player.tickCount);
+            player.hurt(source, damageTaken * multiplier);
+
+            return false;
+        }
+        return true;
     }
 
-    private static boolean isFull(FoodData playerFoodData) {
-        return !playerFoodData.needsFood();
-    }
     private static void playEatSound(ServerPlayer player) {
         player.playSound(SoundEvents.GENERIC_EAT.value(), 1.0F, 1.0F+(player.getRandom().nextFloat()-player.getRandom().nextFloat()) * 0.4F);
     }
