@@ -109,7 +109,7 @@ Feedback is appreciated ^^
 (AWAITING COMPLETION, WIP)
 # Millie's Server Additions, Patch #6 - 1.3.0-beta.16
 **Generic**
-- [TODO] Changed project's gradle from groovy to kotlin script
+- Changed project's gradle from groovy to kotlin script
 - Changed mod id from `servertweaks` to `serveradditions`
 - Dropped dependency from SuperMartijn642's Config Lib and replaced it with my own mini config lib
 - Changed config file location from `config/servertweaks/common.toml` to `config/serveradditions/config.properties`

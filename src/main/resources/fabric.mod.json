@@ -1,27 +1,28 @@
 {
   "schemaVersion": 1,
-  "id": "serveradditions",
+  "id": "${mod_id}",
   "version": "${mod_version}",
-  "name": "Millie's Server Additions",
-  "description": "",
-  "authors": [
-    "JustMili"
-  ],
-  "contact": {},
-  "license": "All-Rights-Reserved",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": ["${mod_authors}"],
+  "contact": {
+    "issues": "",
+    "homepage": ""
+  },
+  "license": "${mod_license}",
   "environment": "*",
-  "accessWidener": "serveradditions.accesswidener",
+  "accessWidener": "${mod_id}.accesswidener",
   "entrypoints": {
     "main": [
       "net.justmili.serveradditions.ServerAdditions"
     ]
   },
   "mixins": [
-    "serveradditions.mixins.json"
+    "${mod_id}.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=${loader_version}",
-    "fabric-api": "*",
-    "minecraft": "${minecraft_version}"
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": ">=${fabric_api_version}",
+    "minecraft": "${minecraft_version_constraint}"
   }
 }
