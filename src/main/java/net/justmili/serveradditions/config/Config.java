@@ -4,7 +4,6 @@ import net.justmili.serveradditions.ServerAdditions;
 import net.justmili.serveradditions.config.lib.ConfigEntry;
 import net.justmili.serveradditions.config.lib.MConfigBuilder;
 
-
 public class Config {
     public static ConfigEntry<Boolean>
         enableAfkCommand, // Command on/off

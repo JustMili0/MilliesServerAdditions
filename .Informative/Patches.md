@@ -116,7 +116,7 @@ Feedback is appreciated ^^
 - Villagers and Tamables losing AI when named "NoAI" now has a config entry
 
 **Gameplay**
-- [TODO] Shift-right-clicking an anvil with an iron ingot can repair it by one stage with a 33% chance
+- Shift-right-clicking an anvil with an iron ingot can repair it by one stage with a 33% chance
 - [TODO] Previously incompatible enchantments such as different protection types, mending and infinity etc. are now compatible
 - [TODO] Some enchantments can now be at higher levels than vanilla
   - All protection types - up to level 5 (Vanilla: 4)

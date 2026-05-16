@@ -15,7 +15,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class AnvilRepair {
+    private static final Map<UUID, Integer> ingotFailStreak = new HashMap<>();
+    private static final Map<UUID, Integer> blockFailStreak = new HashMap<>();
+
     public static InteractionResult onUseBlock(Player interacting, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (!player.isShiftKeyDown()) return InteractionResult.PASS;
@@ -39,12 +46,23 @@ public class AnvilRepair {
             return InteractionResult.PASS;
         }
 
+        UUID uuid = player.getUUID();
+        int streak = hasBlock ? blockFailStreak.getOrDefault(uuid, 0) : ingotFailStreak.getOrDefault(uuid, 0);
+        int maxFails = hasBlock ? 2 : 3;
+
+        boolean success = streak >= maxFails || Math.random() <= chance;
+
         if (!player.isCreative()) {
             level.levelEvent(2001, blockHitResult.getBlockPos(), Block.getId(blockState));
             stack.shrink(1);
         }
 
-        if (Math.random() <= chance) {
+        if (success) {
+            (hasBlock ? blockFailStreak : ingotFailStreak).remove(uuid);
+
+            ingotFailStreak.remove(uuid);
+            blockFailStreak.remove(uuid);
+
             Block repairedBlock = (block == Blocks.DAMAGED_ANVIL) ? Blocks.CHIPPED_ANVIL : Blocks.ANVIL;
             level.setBlock(
                 blockHitResult.getBlockPos(),
@@ -56,6 +74,8 @@ public class AnvilRepair {
             );
             level.levelEvent(3005, blockHitResult.getBlockPos(), 0);
             level.playSound(null, blockHitResult.getBlockPos(), SoundEvents.ANVIL_LAND, SoundSource.BLOCKS, 0.4f, 1.8f);
+        } else {
+            (hasBlock ? blockFailStreak : ingotFailStreak).merge(uuid, 1, Integer::sum);
         }
 
         return InteractionResult.SUCCESS;
