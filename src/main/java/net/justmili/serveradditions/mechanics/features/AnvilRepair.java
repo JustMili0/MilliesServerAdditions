@@ -1,5 +1,6 @@
 package net.justmili.serveradditions.mechanics.features;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -20,9 +21,8 @@ import java.util.Map;
 import java.util.UUID;
 
 public class AnvilRepair {
-    private static final Map<UUID, Integer> repairAttemptsIngot = new HashMap<>();
-    private static final Map<UUID, Integer> repairAttemptsBlock = new HashMap<>();
-    private static final Map<UUID, Double> anvilPosition = new HashMap<>();
+    private static final Map<UUID, Integer> repairAttemptsIngot = new HashMap<>(), repairAttemptsBlock = new HashMap<>();
+    private static final Map<UUID, BlockPos> anvilPosition = new HashMap<>();
 
     public static InteractionResult onUseBlock(Player interacting, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
@@ -36,8 +36,7 @@ public class AnvilRepair {
 
         // Item checks
         ItemStack stack = player.getItemInHand(hand);
-        boolean hasIngot = stack.is(Items.IRON_INGOT);
-        boolean hasBlock = stack.is(Items.IRON_BLOCK);
+        boolean hasIngot = stack.is(Items.IRON_INGOT), hasBlock = stack.is(Items.IRON_BLOCK);
         if (!hasIngot && !hasBlock) return InteractionResult.PASS;
 
         // Roll chances
@@ -51,13 +50,11 @@ public class AnvilRepair {
         }
 
         UUID uuid = player.getUUID();
-        var blockPos = blockHitResult.getBlockPos();
-        double currentPos = blockPos.getX() + blockPos.getY() * 1e6 + blockPos.getZ() * 1e12;
         var attempts = hasBlock ? repairAttemptsBlock : repairAttemptsIngot;
-        boolean success = attempts.getOrDefault(uuid, 0) >= (hasBlock ? 2 : 3) || Math.random() <= chance;
+        var currentPos = blockHitResult.getBlockPos();
 
         // Clear map data if player moved to a different anvil
-        if (anvilPosition.getOrDefault(uuid, Double.MIN_VALUE) != currentPos) {
+        if (!currentPos.equals(anvilPosition.get(uuid))) {
             repairAttemptsIngot.remove(uuid);
             repairAttemptsBlock.remove(uuid);
             anvilPosition.put(uuid, currentPos);
@@ -69,7 +66,7 @@ public class AnvilRepair {
             stack.shrink(1);
         }
 
-        if (success) {
+        if (attempts.getOrDefault(uuid, 0) >= (hasBlock ? 2 : 3) || Math.random() <= chance) {
             // Clear map data
             repairAttemptsIngot.remove(uuid);
             repairAttemptsBlock.remove(uuid);
