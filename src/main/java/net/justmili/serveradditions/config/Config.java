@@ -19,6 +19,7 @@ public class Config {
         limitVehicleSpeed, // Config for "UncapSpeedLimits" mixin.
         removeAnvilLimit, // Config for "RemoveAnvilLimit" mixin.
         rightClickHarvest, // Config for "RightClickHarvest" feature.
+        anvilRepair,
         playerAbilities;
 
     public static ConfigEntry<Integer>
@@ -53,10 +54,12 @@ public class Config {
 
         rightClickHarvest = builder.comment("Should the player be able to harvest crops with by just right-clicking?")
             .define("rightClickHarvest", true);
-        playerAbilities = builder.comment("[EXPERIMENTAL] Allows server owners to configure player abilities for some or all members")
-            .define("playerAbilities", false);
+        anvilRepair = builder.comment("Should a player be able to fix anvils by shift-right-clicking them with iron ingots and iron blocks?")
+            .define("anvilRepair", true);
         noAiNameTags = builder.comment("Should Villagers and Tamable mobs lose their AI when named \"NoAI\"?")
             .define("noAiNameTags", true);
+        playerAbilities = builder.comment("[EXPERIMENTAL] Allows server owners to configure player abilities for some or all members")
+            .define("playerAbilities", false);
 
         builder.build();
     }

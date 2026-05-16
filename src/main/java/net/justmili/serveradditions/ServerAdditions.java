@@ -2,6 +2,7 @@ package net.justmili.serveradditions;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.justmili.serveradditions.config.Config;
 import net.justmili.serveradditions.content.abilities.DataStorage;
 import net.justmili.serveradditions.core.variables.PlayerAttachments;
 import net.justmili.serveradditions.registries.CommandRegistry;
@@ -17,6 +18,7 @@ public class ServerAdditions implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Initializing Millie's Server Additions...");
+        Config.register();
         PlayerAttachments.register();
         CommandRegistry.register();
         EventRegistry.register();

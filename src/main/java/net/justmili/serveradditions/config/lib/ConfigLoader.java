@@ -16,13 +16,13 @@ public class ConfigLoader {
     private final List<EntryInstance> entries = new ArrayList<>();
     private final Properties properties = new Properties();
 
-    ConfigLoader(String modid, String suffix, boolean createSubDirectory) {
+    ConfigLoader(String modId, String name, boolean createSubDirectory) {
         Path configDirectory = FabricLoader.getInstance().getConfigDir();
 
-        String fileName = (suffix == null || suffix.isBlank())
-            ? modid : (createSubDirectory ? suffix : modid+"-"+suffix);
+        String fileName = (name == null || name.isBlank())
+            ? modId : (createSubDirectory ? name : modId+"-"+name);
 
-        path = createSubDirectory ? configDirectory.resolve(modid).resolve(fileName+".properties")
+        path = createSubDirectory ? configDirectory.resolve(modId).resolve(fileName+".properties")
             : configDirectory.resolve(fileName+".properties");
     }
 

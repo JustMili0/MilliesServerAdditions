@@ -4,8 +4,8 @@ public class MConfigBuilder {
     private final ConfigLoader config;
     private String comment = null;
 
-    public MConfigBuilder(String modId, String suffix, boolean createSubDirectory) {
-        this.config = new ConfigLoader(modId, suffix, createSubDirectory);
+    public MConfigBuilder(String modId, String name, boolean createSubDirectory) {
+        this.config = new ConfigLoader(modId, name, createSubDirectory);
     }
 
     public MConfigBuilder comment(String comment) {

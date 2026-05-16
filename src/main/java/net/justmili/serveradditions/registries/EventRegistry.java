@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.serveradditions.config.Config;
 import net.justmili.serveradditions.content.abilities.UseEvents;
 import net.justmili.serveradditions.core.util.ScalerUtil;
+import net.justmili.serveradditions.mechanics.features.AnvilRepair;
 import net.justmili.serveradditions.mechanics.features.RightClickHarvest;
 import net.justmili.serveradditions.mechanics.features.WhileAfk;
 import net.justmili.serveradditions.mechanics.logic.Banishment;
@@ -25,6 +26,7 @@ public class EventRegistry {
         });
         ServerPlayConnectionEvents.JOIN.register(ScalerUtil::convertScoreToVar);
         UseBlockCallback.EVENT.register(RightClickHarvest::onUseBlock);
+        UseBlockCallback.EVENT.register(AnvilRepair::onUseBlock);
 
         if ((Config.playerAbilities.get())) UseEvents.registerAbilityEvents();
     }
