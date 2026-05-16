@@ -109,9 +109,24 @@ Feedback is appreciated ^^
 (AWAITING COMPLETION, WIP)
 # Millie's Server Additions, Patch #6 - 1.3.0-beta.16
 **Generic**
+- [TODO] Changed project's gradle from groovy to kotlin script
 - Changed mod id from `servertweaks` to `serveradditions`
-- Changed config file location from `config/servertweaks/common.toml` to `config/serveradditions/config.toml`
+- Dropped dependency from SuperMartijn642's Config Lib and replaced it with my own mini config lib
+- Changed config file location from `config/servertweaks/common.toml` to `config/serveradditions/config.properties`
 - Villagers and Tamables losing AI when named "NoAI" now has a config entry
+
+**Gameplay**
+- [TODO] Shift-right-clicking an anvil with an iron ingot can repair it by one stage with a 33% chance
+- [TODO] Previously incompatible enchantments such as different protection types, mending and infinity etc. are now compatible
+- [TODO] Some enchantments can now be at higher levels than vanilla
+  - All protection types - up to level 5 (Vanilla: 4)
+  - Fortune - up to level 4 (Vanilla: 3)
+  - Looting - up to level 4 (Vanilla: 3)
+  - Efficiency - up to level 8 (Vanilla: 5)
+  - Fire aspect - up to level 3 (Vanilla: 2)
+  - Frost walker - up to level 5 (Vanilla: 2)
+  - Unbreaking - up to level 5 (Vanilla: 3)
+  - ...
 
 **Player Abilities**
 - Fix and optimize damage immunity handling
@@ -119,6 +134,8 @@ Feedback is appreciated ^^
 - Made `LIGHT` less annoying to walk down the stairs with (now additionally requires 3 blocks of fall distance)
 - Fixed being able to eat anything no matter the diet if food is held in the offhand
 - Fixed ability debuff `WEAK_TO_DAMAGE` - Now actually deals more damage
+- Fixed players with `GRASS_EATER` being able to eat even at full hunger
+- Added Big Dripleaf, Small Dripleaf, Vines, Cave Vines, Glow Lichen, Ferns and Large Ferns to `GRASS_EATER`'s diet tag
 - [TODO] Fixed ability debuff `HUNTED_BY_FOX` - Foxes now attack even if you're not crouching
 - [TODO] Fixed ability debuff `CANT_SWIM` - Players no longer can swim up higher than one block up from the (sea) floor
 - [TODO] Fixed ability `FRIENDS_WITH_NATURE` - Taming chance with any animal is now 100%

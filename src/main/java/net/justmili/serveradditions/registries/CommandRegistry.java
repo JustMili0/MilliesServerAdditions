@@ -7,19 +7,19 @@ import net.justmili.serveradditions.content.commands.*;
 public class CommandRegistry {
     public static void register() {
         CommandRegistrationCallback.EVENT.register((dispatcher, commandBuildContext, environment) -> {
-            if (Config.enableScaleCommand.get() == true)
+            if (Config.enableScaleCommand.get())
                 Scale.register(dispatcher, commandBuildContext, environment);
-            if (Config.enableAfkCommand.get() == true)
+            if (Config.enableAfkCommand.get())
                 Afk.register(dispatcher, commandBuildContext, environment);
-            if (Config.enableDamageToggleCommand.get() == true)
+            if (Config.enableDamageToggleCommand.get())
                 DamageToggle.register(dispatcher, commandBuildContext, environment);
-            if (Config.enableBanishCommand.get() == true)
+            if (Config.enableBanishCommand.get())
                 Banish.register(dispatcher, commandBuildContext, environment);
             Discard.register(dispatcher, commandBuildContext, environment); // This command is not configurable.
             FillExtras.register(dispatcher, commandBuildContext, environment); // This command is not configurable.
-            if (Config.enableFlyCommand.get() == true)
+            if (Config.enableFlyCommand.get())
                 Fly.register(dispatcher, commandBuildContext, environment);
-            if (Config.playerAbilities.get() == true)
+            if (Config.playerAbilities.get())
                 PlayerAbilities.register(dispatcher, commandBuildContext, environment);
         });
     }

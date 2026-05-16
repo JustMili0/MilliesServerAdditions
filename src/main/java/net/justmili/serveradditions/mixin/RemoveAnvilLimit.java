@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AnvilMenu.class)
 public abstract class RemoveAnvilLimit {
-    //Dev note: I was fed up
+    // Dev note: I was fed up
     @Shadow
     private DataSlot cost;
 

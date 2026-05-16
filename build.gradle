@@ -36,8 +36,6 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modImplementation "maven.modrinth:supermartijn642s-config-lib:1.1.8-fabric-mc1.21.11" // Config dependency
-
     modImplementation "maven.modrinth:lithium:mc1.21.11-0.21.4-fabric"
     //modImplementation "maven.modrinth:c2me-fabric:0.3.7+alpha.0.9+1.21.11" // doesn't work cuz it wants c2me-base and idk how to add the module in
 }

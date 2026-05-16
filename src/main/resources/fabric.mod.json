@@ -9,7 +9,6 @@
   ],
   "contact": {},
   "license": "All-Rights-Reserved",
-  "icon": "icon.png",
   "environment": "*",
   "accessWidener": "serveradditions.accesswidener",
   "entrypoints": {
@@ -23,7 +22,6 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
-    "supermartijn642configlib": "*",
     "minecraft": "${minecraft_version}"
   }
 }

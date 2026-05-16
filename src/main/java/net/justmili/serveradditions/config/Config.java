@@ -1,12 +1,12 @@
 package net.justmili.serveradditions.config;
 
-import com.supermartijn642.configlib.api.ConfigBuilders;
-import com.supermartijn642.configlib.api.IConfigBuilder;
+import net.justmili.serveradditions.ServerAdditions;
+import net.justmili.serveradditions.config.lib.ConfigEntry;
+import net.justmili.serveradditions.config.lib.MConfigBuilder;
 
-import java.util.function.Supplier;
 
 public class Config {
-    public static final Supplier<Boolean>
+    public static ConfigEntry<Boolean>
         enableAfkCommand, // Command on/off
         enableScaleCommand, // Command on/off
         enableDamageToggleCommand, // Command on/off
@@ -21,30 +21,25 @@ public class Config {
         rightClickHarvest, // Config for "RightClickHarvest" feature.
         playerAbilities;
 
-    public static final Supplier<Integer>
+    public static ConfigEntry<Integer>
         afkCommandCooldown, // Afk command related setting
         pistonPushLimit; // Config for "BetterPushLimit" mixin.
 
-    static {
-        IConfigBuilder builder = ConfigBuilders.newTomlConfig("serveradditions", "config", true);
+    public static void register() {
+        MConfigBuilder builder = new MConfigBuilder(ServerAdditions.MODID, "config", true);
 
-        builder.push("Commands");
         builder.comment("Should these commands be enabled on the server?");
         enableAfkCommand = builder.define("enableAfkCommand", true);
         enableScaleCommand = builder.define("enableScaleCommand", true);
         enableDamageToggleCommand = builder.define("enableDamageToggleCommand", true);
         enableBanishCommand = builder.define("enableBanishCommand", true);
         enableFlyCommand = builder.define("enableFlyCommand", true);
-        builder.pop();
 
-        builder.push("AFK-Command-Specific");
         despawnMonsters = builder.comment("Should \"wild\" monsters despawn around the player when coming out of AFK?")
             .define("despawnMonsters", true);
         afkCommandCooldown = builder.comment("Amount of time between the AFK command can be used again")
             .define("afkCommandCooldown", 6000, 0, Integer.MAX_VALUE-255);
-        builder.pop();
 
-        builder.push("Mixins");
         limitPlayerSpeed = builder.comment("Should the server stop the player from moving too fast and print \"Player moved too fast!\" warn when on foot?")
             .define("limitPlayerSpeed", true);
         limitElytraSpeed = builder.comment("Should the server stop the player from flying too fast and print \"Player moved too fast!\" warn when on elytra?")
@@ -55,18 +50,14 @@ public class Config {
             .define("removeAnvilLimit", true);
         pistonPushLimit = builder.comment("How many blocks should the piston be able to push?")
             .define("pistonPushLimit", 12, 0, 511);
-        builder.pop();
 
-        builder.push("Features");
         rightClickHarvest = builder.comment("Should the player be able to harvest crops with by just right-clicking?")
             .define("rightClickHarvest", true);
         playerAbilities = builder.comment("[EXPERIMENTAL] Allows server owners to configure player abilities for some or all members")
             .define("playerAbilities", false);
         noAiNameTags = builder.comment("Should Villagers and Tamable mobs lose their AI when named \"NoAI\"?")
             .define("noAiNameTags", true);
-        builder.pop();
 
         builder.build();
     }
-
 }
