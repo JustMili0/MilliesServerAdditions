@@ -156,12 +156,12 @@ public class PlayerAbilities {
                                 String setName = StringArgumentType.getString(context, "preset");
                                 PresetArgumentType.AbilityPreset set = PresetArgumentType.getSet(setName);
                                 if (set == null) {
-                                    CommandUtil.sendFail(source, "Unknown ability preset: "+setName);
+                                    CommandUtil.sendFail(source, "§cUnknown ability preset: "+setName);
                                     return 0;
                                 }
 
                                 if (FdaApiUtil.getBoolValue(player, PlayerAttachments.PICKED_PRESET)) {
-                                    CommandUtil.sendFail(source, "You have already picked an ability preset.");
+                                    CommandUtil.sendTo(player, "§cYou have already picked an ability preset.");
                                     return 0;
                                 }
 

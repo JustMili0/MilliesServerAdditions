@@ -66,7 +66,7 @@ public class AnvilRepair {
             stack.shrink(1);
         }
 
-        if (attempts.getOrDefault(uuid, 0) >= (hasBlock ? 2 : 3) || Math.random() <= chance) {
+        if (attempts.getOrDefault(uuid, 0) >= 2 || Math.random() <= chance) {
             // Clear map data
             repairAttemptsIngot.remove(uuid);
             repairAttemptsBlock.remove(uuid);

@@ -2,6 +2,10 @@ plugins {
     alias(libs.plugins.fabric.loom)
 }
 
+base {
+    archivesName.set("${rootProject.property("archives_base_name")}-${rootProject.property("mod_version")}+mc${libs.versions.minecraft.get()}")
+}
+
 loom {
     accessWidenerPath = file("src/main/resources/${rootProject.property("mod_id")}.accesswidener")
 }
@@ -22,7 +26,7 @@ dependencies {
 
     modImplementation("com.terraformersmc:modmenu:${rootProject.property("mod_menu")}") // Mod menu
     modImplementation("maven.modrinth:lithium:mc1.21.11-0.21.4-fabric") // Just for performance
-    include(modImplementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${libs.versions.mixinsquared.get()}")!!)!!)
+    //include(modImplementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${libs.versions.mixinsquared.get()}")!!)!!)
 }
 
 tasks.processResources {

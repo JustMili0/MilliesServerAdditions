@@ -85,7 +85,7 @@ public class UseEvents {
         if (!(entity instanceof ServerPlayer player)) return true;
         if (handleOtherImmunities(player, source)) return false;
         if (!has(player, AbilityRegistry.SQUISHY)) return true;
-        ServerAdditions.LOGGER.info("Priority: squish");
+
         if (!(source.is(DamageTypes.FALL) || source.is(DamageTypes.FLY_INTO_WALL))) return true;
 
         return recalcDamage(player, source, value, 0.75F);
@@ -93,7 +93,7 @@ public class UseEvents {
     private static boolean weakToDamage(LivingEntity entity, DamageSource source, float value) {
         if (!(entity instanceof ServerPlayer player)) return true;
         if (handleOtherImmunities(player, source)) return false;
-        ServerAdditions.LOGGER.info("Priority: weakToDamage");
+
         if (!has(player, AbilityRegistry.WEAK_TO_DAMAGE)) return true;
         if (source.is(DamageTypes.FALL)) return true;
 
