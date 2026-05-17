@@ -20,7 +20,10 @@ public class CommandUtil {
         source.sendFailure(Component.literal(message));
     }
 
-    public static void sendTo(ServerPlayer player, String message) {
+    public static void sendFailTo(ServerPlayer player, String message) {
+        player.sendSystemMessage(Component.literal("§c"+message));
+    }
+    public static void sendOkTo(ServerPlayer player, String message) {
         player.sendSystemMessage(Component.literal(message));
     }
 }

@@ -156,18 +156,18 @@ public class PlayerAbilities {
                                 String setName = StringArgumentType.getString(context, "preset");
                                 PresetArgumentType.AbilityPreset set = PresetArgumentType.getSet(setName);
                                 if (set == null) {
-                                    CommandUtil.sendFail(source, "§cUnknown ability preset: "+setName);
+                                    CommandUtil.sendFailTo(player, "Unknown ability preset: "+setName);
                                     return 0;
                                 }
 
                                 if (FdaApiUtil.getBoolValue(player, PlayerAttachments.PICKED_PRESET)) {
-                                    CommandUtil.sendTo(player, "§cYou have already picked an ability preset.");
+                                    CommandUtil.sendFailTo(player, "You have already picked an ability preset.");
                                     return 0;
                                 }
 
                                 DataManager.applySet(player.getUUID(), set, source.getServer());
                                 FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, true);
-                                CommandUtil.sendTo(player, "Applied the "+setName+" preset!");
+                                CommandUtil.sendOkTo(player, "Applied the "+setName+" preset!");
                                 return 1;
                             })
                         )
@@ -176,7 +176,7 @@ public class PlayerAbilities {
                 .then(Commands.literal("dontApplyPreset")
                     .requires(src -> CommandUtil.hasPerms(src, 4))
                     .then(Commands.argument("player", EntityArgument.player())
-                        .executes(context -> 1)
+                        .executes(context -> 0)
                     )
                 )
         );

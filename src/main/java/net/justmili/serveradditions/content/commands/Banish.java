@@ -29,7 +29,7 @@ public class Banish {
 
                         player.teleportTo(banishmentLevel, 0.5, 2.0, 0.5, Relative.DELTA, player.getYRot(), player.getXRot(), true);
 
-                        CommandUtil.sendTo(player,
+                        CommandUtil.sendOkTo(player,
                             """
                                 You have been banished.
                                 There is no way out - no death or portal can ever save you.

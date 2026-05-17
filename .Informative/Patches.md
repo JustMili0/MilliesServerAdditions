@@ -136,6 +136,7 @@ Feedback is appreciated ^^
 - Fixed ability debuff `WEAK_TO_DAMAGE` - Now actually deals more damage
 - Fixed players with `GRASS_EATER` being able to eat even at full hunger
 - Added Big Dripleaf, Small Dripleaf, Vines, Cave Vines, Glow Lichen, Ferns and Large Ferns to `GRASS_EATER`'s diet tag
+- Added `canine` ability preset
 - [TODO] Fixed ability debuff `HUNTED_BY_FOX` - Foxes now attack even if you're not crouching
 - [TODO] Fixed ability debuff `CANT_SWIM` - Players no longer can swim up higher than one block up from the (sea) floor
 - [TODO] Fixed ability `FRIENDS_WITH_NATURE` - Taming chance with any animal is now 100%
