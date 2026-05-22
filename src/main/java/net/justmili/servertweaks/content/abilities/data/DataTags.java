@@ -12,11 +12,11 @@ public class DataTags {
     public static final TagKey<Item>
         DIET_CARNIVORE = TagKey.create(Registries.ITEM, ServerTweaks.asResource("diets/carnivore")),
         DIET_VEGETARIAN = TagKey.create(Registries.ITEM, ServerTweaks.asResource("diets/vegetarian")),
-        DIET_SWEETS = TagKey.create(Registries.ITEM, ServerTweaks.asResource("diets/sweets")),
-        DIET_BUG_ITEMS = TagKey.create(Registries.ITEM, ServerTweaks.asResource("diets/bug_eater")),
+        DIET_SWEETS = TagKey.create(Registries.ITEM, ServerTweaks.asResource("diets/saccharivore")),
+        DIET_BUG_ITEMS = TagKey.create(Registries.ITEM, ServerTweaks.asResource("diets/insectivore")),
         DIET_MODIFIER_GOLDEN_FOODS = TagKey.create(Registries.ITEM, ServerTweaks.asResource("diets/modifier_golden_foods"));
 
-    public static final TagKey<Block> DIET_FOLIAGE = TagKey.create(Registries.BLOCK, ServerTweaks.asResource("diets/foliage"));
+    public static final TagKey<Block> DIET_FOLIAGE = TagKey.create(Registries.BLOCK, ServerTweaks.asResource("diets/herbivore"));
 
     public static final TagKey<EntityType<?>>
         DIET_BUG_ENTITY_GENERIC = TagKey.create(Registries.ENTITY_TYPE, ServerTweaks.asResource("bug_eater/generic")),

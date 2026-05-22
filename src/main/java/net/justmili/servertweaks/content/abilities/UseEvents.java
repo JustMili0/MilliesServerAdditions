@@ -45,7 +45,6 @@ import net.minecraft.world.phys.EntityHitResult;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
-import java.util.WeakHashMap;
 
 import static net.justmili.servertweaks.content.abilities.DataManager.has;
 

@@ -1,0 +1,16 @@
+{
+  "tag.item.servertweaks.diets.carnivore": "Carnivore Diet",
+  "tag.item.servertweaks.diets.vegetarian": "Vegetarian Diet",
+  "tag.item.servertweaks.diets.saccharivore": "Sweets-Only Diet",
+  "tag.item.servertweaks.diets.insectivore": "Insectivore Diet",
+  "tag.item.servertweaks.diets.modifier_golden_foods": "Diet Modifier - Golden Foods",
+  "tag.block.servertweaks.diets.herbivore": "Herbivore Diet",
+  "tag.biome.servertweaks.hydrophobic_helmet_exceptions": "Helmet Rain Protection Biome Exceptions For Hydrophobic Ability Debuff",
+  "tag.biome.servertweaks.hot_biomes": "Biomes Affecting \"Heat Sensitive\"",
+  "tag.biome.servertweaks.cold_biomes": "Biomes Affecting \"Cold Sensitive\"",
+  "tag.entity_type.servertweaks.insectivore.generic": "Insectivore Diet - Generic",
+  "tag.entity_type.servertweaks.insectivore.hot": "Insectivore Diet - Hot",
+  "tag.entity_type.servertweaks.insectivore.poisonous": "Insectivore Diet - Poisonous",
+  "tag.entity_type.servertweaks.insectivore.nutritious": "Insectivore Diet - Nutritious",
+  "tag.entity_type.servertweaks.insectivore.saturating": "Insectivore Diet - Saturating"
+}
