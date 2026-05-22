@@ -15,6 +15,7 @@ import net.justmili.servertweaks.core.util.FdaApiUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -44,6 +45,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import static net.justmili.servertweaks.content.abilities.DataManager.has;
 
@@ -94,6 +96,7 @@ public class UseEvents {
         UseItemCallback.EVENT.register(UseEvents::handleDietItemCall);
         UseBlockCallback.EVENT.register(UseEvents::handleDietBlockCall);
         UseEntityCallback.EVENT.register(UseEvents::bugEaterEntities);
+        UseEntityCallback.EVENT.register(UseEvents::bovid);
     }
 
     private static boolean squishy(LivingEntity entity, DamageSource source, float value) {
@@ -125,15 +128,45 @@ public class UseEvents {
         if (!stack.is(pearl.getItem())) return InteractionResult.PASS;
         if (player.getCooldowns().isOnCooldown(pearl)) return InteractionResult.PASS;
 
-        int slot = player.getInventory().getSelectedSlot();
-        ItemStack inSlot = player.getInventory().getItem(slot);
+        ItemStack inSlot = player.getInventory().getItem(player.getInventory().getSelectedSlot());
         if (inSlot.isEmpty()) {
-            player.getInventory().setItem(slot, pearl);
+            player.setItemInHand(hand, pearl);
         } else {
             player.getInventory().add(pearl); // Just in case
         }
 
         return InteractionResult.PASS;
+    }
+
+    private static InteractionResult bovid(Player interacting, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
+        if (level.isClientSide()) return InteractionResult.PASS;
+        if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
+        if (!(interacting instanceof ServerPlayer milking)) return InteractionResult.PASS;
+        if (!(entity instanceof ServerPlayer milked)) return InteractionResult.PASS;
+        if (!has(milked, AbilityRegistry.BOVID)) return InteractionResult.PASS;
+
+        if (milked.getUUID().equals("66774f1e-99de-4f1b-8293-906ca3488549") // Funny hardcoded thing
+            && !milking.getUUID().equals("19c3c783-9359-4311-98bf-79a6d361362d")) return InteractionResult.PASS;
+
+        ItemStack stack = milking.getItemInHand(hand);
+        if (!stack.is(Items.BUCKET)) return InteractionResult.PASS;
+
+        // Prevent double processing
+        int currentTick = milking.tickCount;
+        if (FdaApiUtil.getIntValue(milking, PlayerAttachments.MILK_TICK) == currentTick) return InteractionResult.CONSUME;
+        FdaApiUtil.setIntValue(milking, PlayerAttachments.MILK_TICK, currentTick);
+
+        ItemStack milkBucket = new ItemStack(Items.MILK_BUCKET);
+        milkBucket.set(DataComponents.CUSTOM_NAME, Component.literal(milked.getName().getString() + "'s Milk").withStyle(style -> style.withItalic(false)));
+        if (stack.getCount() == 1) {
+            milking.setItemInHand(hand, milkBucket);
+        } else {
+            stack.shrink(1);
+            milking.getInventory().add(milkBucket);
+        }
+        milking.containerMenu.broadcastFullState();
+
+        return InteractionResult.CONSUME;
     }
 
     private static InteractionResult handleDietItemCall(Player interacting, Level level, InteractionHand hand) { // Clicking while looking at nothing

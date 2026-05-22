@@ -25,5 +25,6 @@ public final class PlayerAttachments {
         AFK_Z = createPersistentValue("afk_z", 0.0, Codec.DOUBLE);
     public static final AttachmentType<Integer>
         AFK_COOLDOWN = createPersistentValue("afk_cooldown", Config.afkCommandCooldown.get(), Codec.INT),
-        HURT_TICK = createValue("hurt_tick", -1, Codec.INT);
+        HURT_TICK = createValue("hurt_tick", -1, Codec.INT),
+        MILK_TICK = createValue("milk_tick", -1, Codec.INT);
 }

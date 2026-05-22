@@ -149,9 +149,9 @@ Feedback is appreciated ^^
 - [TODO] Fixed ability debuff `cant_swim` - Players no longer can swim up higher than one block up from the (sea) floor
 - [TODO] Fixed ability `child_of_nature` - Taming chance with any animal is now 100%
 - [TODO] Fixed ability `climbs_walls` - Now can actually climb walls
-- [TODO] (NEW) BOVID - Can be milked with a bucket by other players
-- (NEW) SQUISHY - Decreases `fall` and `fly_into_wall` damage by 75% each
-- (NEW) BUG EATER - Can only feed on bug-like entities, slimes, magma cubes, and items like slime balls and magma creams
+- (NEW) Bovid - Can be milked with a bucket by other players
+- (NEW) Squishy - Decreases `fall` and `fly_into_wall` damage by 75% each
+- (NEW) Insectivore - Can only feed on bug-like entities, slimes, magma cubes, and items like slime balls and magma creams
   - With Minecraft 26.2, you'll also be able to consume sulfur cubes
     - If you eat a sulfur cube with a special block inside it, some effect will be given (e.g. TNT = You blow up, Magma Block = Slight Fire damage)
 

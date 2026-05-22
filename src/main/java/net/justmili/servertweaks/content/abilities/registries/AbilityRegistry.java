@@ -99,6 +99,7 @@ public class AbilityRegistry {
         CLIMBS_WALLS = register(new Ability("climbs_walls")),     // DOESN'T WORK, No code implemented yet
         PEARLING = register(new Ability("pearling")),
         PREDATORY = register(new Predatory()),
+        BOVID = register(new Ability("bovid")), // Handled in UseEvents.bovid(...)
         CARNIVORE = register(new Ability("carnivore")), // Handled by dietary methods in UseEvents
         VEGETARIAN = register(new Ability("vegetarian")), // Handled by dietary methods in UseEvents
         SACCHARIVORE = register(new Ability("saccharivore")), // Handled by dietary methods in UseEvents
