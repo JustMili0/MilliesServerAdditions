@@ -110,9 +110,8 @@ Feedback is appreciated ^^
 # Millie's Server Additions, Patch #6 - 1.3.0-beta.16
 **Generic**
 - Changed project's gradle from groovy to kotlin script
-- Changed mod id from `servertweaks` to `serveradditions`
 - Dropped dependency from SuperMartijn642's Config Lib and replaced it with my own mini config lib
-- Changed config file location from `config/servertweaks/common.toml` to `config/serveradditions/config.properties`
+- Changed config file location from `config/servertweaks/common.toml` to `config/servertweaks/config.properties`
 - Villagers and Tamables losing AI when named "NoAI" now has a config entry
 
 **Gameplay**
@@ -127,22 +126,32 @@ Feedback is appreciated ^^
   - Frost walker - up to level 5 (Vanilla: 2)
   - Unbreaking - up to level 5 (Vanilla: 3)
   - ...
+- [TODO] Added ability to leash players
+
+**Commands**
+- [TODO] `/scale` now has configurable min-max values in the config
 
 **Player Abilities**
+- Abilities now are stored in lowercase instead of uppercase, e.g. `fire_immune` instead of `FIRE_IMMUNE`
+- Renamed some abilities
+    - `FRIENDS_WITH_NATURE` -> `child_of_nature`
+    - `GRASS_EATER` -> `herbivore`
+    - `ONLY_EATS_SWEETS` -> `saccharivore`
 - Fix and optimize damage immunity handling
-- `FIRE_IMMUNE` and `LAVA_IMMUNE` now automatically get extinguished
-- Made `LIGHT` less annoying to walk down the stairs with (now additionally requires 3 blocks of fall distance)
+- `fire_immune` and `lava_immune` now automatically get extinguished
+- Made `light` less annoying to walk down the stairs with (now additionally requires 3 blocks of fall distance)
 - Fixed being able to eat anything no matter the diet if food is held in the offhand
-- Fixed ability debuff `WEAK_TO_DAMAGE` - Now actually deals more damage
-- Fixed players with `GRASS_EATER` being able to eat even at full hunger
-- Added Big Dripleaf, Small Dripleaf, Vines, Cave Vines, Glow Lichen, Ferns and Large Ferns to `GRASS_EATER`'s diet tag
+- Fixed ability debuff `weak_to_damage` - Now actually deals more damage
+- Fixed players with `herbivore` being able to eat even at full hunger
+- Added Big Dripleaf, Small Dripleaf, Vines, Cave Vines, Glow Lichen, Ferns and Large Ferns to `herbivore`'s diet tag
 - Added `canine` ability preset
-- [TODO] Fixed ability debuff `HUNTED_BY_FOX` - Foxes now attack even if you're not crouching
-- [TODO] Fixed ability debuff `CANT_SWIM` - Players no longer can swim up higher than one block up from the (sea) floor
-- [TODO] Fixed ability `FRIENDS_WITH_NATURE` - Taming chance with any animal is now 100%
-- [TODO] Fixed ability `CLIMBS_WALLS` - Now can actually climb walls
-- (NEW) SQUISHY - Decreases `fall` and `fly_into_wall` damage by 75% each.
-- (NEW) BUG EATER - Can only feed on bug-like entities, slimes, magma cubes, and items like slime balls and magma creams.
+- [TODO] Fixed ability debuff `hunted_by_fox` - Foxes now attack even if you're not crouching
+- [TODO] Fixed ability debuff `cant_swim` - Players no longer can swim up higher than one block up from the (sea) floor
+- [TODO] Fixed ability `child_of_nature` - Taming chance with any animal is now 100%
+- [TODO] Fixed ability `climbs_walls` - Now can actually climb walls
+- [TODO] (NEW) BOVID - Can be milked with a bucket by other players
+- (NEW) SQUISHY - Decreases `fall` and `fly_into_wall` damage by 75% each
+- (NEW) BUG EATER - Can only feed on bug-like entities, slimes, magma cubes, and items like slime balls and magma creams
   - With Minecraft 26.2, you'll also be able to consume sulfur cubes
     - If you eat a sulfur cube with a special block inside it, some effect will be given (e.g. TNT = You blow up, Magma Block = Slight Fire damage)
 

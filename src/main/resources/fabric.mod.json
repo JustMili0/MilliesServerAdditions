@@ -14,7 +14,7 @@
   "accessWidener": "${mod_id}.accesswidener",
   "entrypoints": {
     "main": [
-      "net.justmili.serveradditions.ServerAdditions"
+      "net.justmili.servertweaks.ServerTweaks"
     ]
   },
   "mixins": [
