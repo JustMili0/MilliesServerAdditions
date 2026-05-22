@@ -10,6 +10,7 @@ import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
 import net.justmili.servertweaks.content.abilities.registries.ModifierRegistry;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
+import net.justmili.servertweaks.core.util.CommandUtil;
 import net.justmili.servertweaks.core.util.FdaApiUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.minecraft.core.BlockPos;
@@ -68,16 +69,19 @@ public class UseEvents {
                 if (!has(player, AbilityRegistry.STRONG) && attack != null) attack.removeModifier(AbilityRegistry.AM_STRONG_DAMAGE);
                 if (!has(player, AbilityRegistry.STRONG) && maxHp != null) maxHp.removeModifier(AbilityRegistry.AM_STRONG_HP);
 
-                // Check if player is in player_abilities.json but has no abilities/modifiers
-                if ((DataStorage.playerAbilities.containsKey(player.getUUID())
-                    || DataStorage.playerModifiers.containsKey(player.getUUID()))
-                    && (DataManager.getAbilities(player).isEmpty()
-                    && DataManager.getModifiers(player).isEmpty())) {
+                // Change to: Check if player has presets locked;
+                // If yes but has no abilities or modifiers then clear them from the file and unlock preset picking
+                // As well as inform the player that they have to pick their preset/class again
+                if (FdaApiUtil.getBoolValue(player, PlayerAttachments.PICKED_PRESET)
+                    && DataManager.getAbilities(player).isEmpty()
+                    && DataManager.getModifiers(player).isEmpty()) {
 
                     // Remove from file
                     DataManager.clearPlayer(player);
                     // Unlock preset picking
                     FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, false);
+                    // Inform player
+                    CommandUtil.sendFailTo(player, "Your ability preset data was invalid or missing. Please pick your ability preset again");
                 }
             }
         });

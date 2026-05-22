@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ServerTweaks implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(ServerTweaks.class);
-    public static final String MODID = "serveradditions";
+    public static final String MODID = "servertweaks";
 
     @Override
     public void onInitialize() {
