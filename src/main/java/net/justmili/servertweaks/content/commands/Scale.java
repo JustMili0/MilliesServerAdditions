@@ -2,7 +2,7 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
-import net.justmili.servertweaks.core.util.CommandUtil;
+import net.justmili.libs.utils.CommandUtil;
 import net.justmili.servertweaks.core.util.FdaApiUtil;
 import net.justmili.servertweaks.core.util.ScalerUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
@@ -35,7 +35,7 @@ public class Scale {
                         ScalerUtil.applyScaleToPlayer(player, scale);
                         FdaApiUtil.setBoolValue(player, PlayerAttachments.SCALE_LOCKED, true);
 
-                        CommandUtil.sendSucc(source, String.format("Your irl-to-game scale is %.3f (%.1f cm). It is now locked", scale, heightCm));
+                        CommandUtil.sendOk(source, String.format("Your irl-to-game scale is %.3f (%.1f cm). It is now locked", scale, heightCm));
                         return 1;
                     })
                 )
@@ -54,7 +54,7 @@ public class Scale {
                                     applyScaleToPlayer(player, scale);
                                 }
 
-                                CommandUtil.sendSucc(source, String.format("Applied scale %.3f (%.1f cm) to %d player(s)", scale, heightCm, players.size()));
+                                CommandUtil.sendOk(source, String.format("Applied scale %.3f (%.1f cm) to %d player(s)", scale, heightCm, players.size()));
                                 return players.size();
                             })
                         )
@@ -71,7 +71,7 @@ public class Scale {
                                 FdaApiUtil.setBoolValue(player, PlayerAttachments.SCALE_LOCKED, false);
                             }
 
-                            CommandUtil.sendSucc(source, String.format("Unlocked scale modification for %d player(s)", players.size()));
+                            CommandUtil.sendOk(source, String.format("Unlocked scale modification for %d player(s)", players.size()));
                             return players.size();
                         })
                     )
@@ -88,7 +88,7 @@ public class Scale {
                                 FdaApiUtil.setBoolValue(player, PlayerAttachments.SCALE_LOCKED, false);
                             }
 
-                            CommandUtil.sendSucc(source, String.format("Reset scale and unlocked scale modifications for %d player(s)", players.size()));
+                            CommandUtil.sendOk(source, String.format("Reset scale and unlocked scale modifications for %d player(s)", players.size()));
                             return players.size();
                         })
                     )
@@ -104,7 +104,7 @@ public class Scale {
                                 applyScaleToPlayer(player, 1.0);
                             }
 
-                            CommandUtil.sendSucc(source, String.format("Reset scale for %d player(s)", players.size()));
+                            CommandUtil.sendOk(source, String.format("Reset scale for %d player(s)", players.size()));
                             return players.size();
                         })
                     )

@@ -1,8 +1,8 @@
 package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.justmili.libs.utils.CommandUtil;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.core.util.CommandUtil;
 import net.justmili.servertweaks.core.util.FdaApiUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.minecraft.ChatFormatting;
@@ -60,7 +60,7 @@ public class Afk {
                         despawnNearbyMonsters(player);
                     }
 
-                    CommandUtil.sendSucc(source, "You are no longer AFK");
+                    CommandUtil.sendOk(source, "You are no longer AFK");
                 } else {
                     //Set position at which command was executed at
                     //Add to team and set IS_AFK to true
@@ -72,7 +72,7 @@ public class Afk {
                     scoreboard.addPlayerToTeam(player.getScoreboardName(), team);
                     FdaApiUtil.setBoolValue(player, PlayerAttachments.IS_AFK, true);
 
-                    CommandUtil.sendSucc(source, "You are now AFK");
+                    CommandUtil.sendOk(source, "You are now AFK");
                 }
 
                 return 1;

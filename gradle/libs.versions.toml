@@ -4,7 +4,7 @@ minecraft = "1.21.11"
 # https://fabricmc.net/develop
 fabric_loader = "0.19.2"
 fabric_api = "0.141.4+1.21.11"
-fabric_loom = "1.15-SNAPSHOT"
+fabric_loom = "1.16-SNAPSHOT"
 
 # https://github.com/Bawnorton/MixinSquared/releases
 mixinsquared = "0.3.3"

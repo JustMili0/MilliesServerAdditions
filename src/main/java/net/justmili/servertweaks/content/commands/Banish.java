@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.justmili.servertweaks.core.util.CommandUtil;
+import net.justmili.libs.utils.CommandUtil;
 import net.justmili.servertweaks.registries.DimRegistry;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;

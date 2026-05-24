@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.justmili.servertweaks.core.util.CommandUtil;
+import net.justmili.libs.utils.CommandUtil;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -49,9 +49,9 @@ public class Discard {
                     // One or multiple? Send message
                     if (entities.size() == 1) {
                         Entity only = entities.iterator().next();
-                        CommandUtil.sendSucc(source, "Discarded "+only.getName().getString());
+                        CommandUtil.sendOk(source, "Discarded "+only.getName().getString());
                     } else {
-                        CommandUtil.sendSucc(source, "Discarded "+entities.size()+" entities");
+                        CommandUtil.sendOk(source, "Discarded "+entities.size()+" entities");
                     }
                     return entities.size();
                 })
@@ -76,7 +76,7 @@ public class Discard {
                     level.removeBlock(pos, false);
 
                     // Send message
-                    CommandUtil.sendSucc(source, "Discarded "+blockId+" from "+formatPos(pos));
+                    CommandUtil.sendOk(source, "Discarded "+blockId+" from "+formatPos(pos));
                     return 1;
                 })
             )
@@ -121,7 +121,7 @@ public class Discard {
                         }
 
                         // Send message
-                        CommandUtil.sendSucc(source, "Discarded "+cleared+" item(s) from "+entity.getName().getString()+"'s inventory");
+                        CommandUtil.sendOk(source, "Discarded "+cleared+" item(s) from "+entity.getName().getString()+"'s inventory");
                         return cleared;
                     })
                 )
@@ -151,7 +151,7 @@ public class Discard {
                         }
 
                         // Send message
-                        CommandUtil.sendSucc(source, "Discarded "+cleared+" item(s) from "+blockId+"'s inventory at "+formatPos(pos));
+                        CommandUtil.sendOk(source, "Discarded "+cleared+" item(s) from "+blockId+"'s inventory at "+formatPos(pos));
                         return cleared;
                     })
                 )

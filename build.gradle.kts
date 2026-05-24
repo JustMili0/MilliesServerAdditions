@@ -24,6 +24,8 @@ dependencies {
     modImplementation(libs.fabric.loader.get())
     modImplementation(libs.fabric.api.get())
 
+    modImplementation("maven.modrinth:millies-config-n-utils:${rootProject.property("config_lib")}")
+
     modImplementation("com.terraformersmc:modmenu:${rootProject.property("mod_menu")}") // Mod menu
     modImplementation("maven.modrinth:lithium:mc1.21.11-0.21.4-fabric") // Just for performance
     //include(modImplementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${libs.versions.mixinsquared.get()}")!!)!!)

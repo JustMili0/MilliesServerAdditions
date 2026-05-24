@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.justmili.servertweaks.core.util.CommandUtil;
+import net.justmili.libs.utils.CommandUtil;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -39,7 +39,7 @@ public class Fly {
 
         player.onUpdateAbilities();
 
-        CommandUtil.sendSucc(source, (abilities.mayfly ? "Enabled" : "Disabled")+" creative flight for "+player.getName().getString());
+        CommandUtil.sendOk(source, (abilities.mayfly ? "Enabled" : "Disabled")+" creative flight for "+player.getName().getString());
         return 1;
     }
 }

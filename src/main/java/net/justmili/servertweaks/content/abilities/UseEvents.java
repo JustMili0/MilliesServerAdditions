@@ -5,12 +5,12 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.justmili.libs.utils.CommandUtil;
 import net.justmili.servertweaks.content.abilities.data.DataTags;
 import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
 import net.justmili.servertweaks.content.abilities.registries.ModifierRegistry;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
-import net.justmili.servertweaks.core.util.CommandUtil;
 import net.justmili.servertweaks.core.util.FdaApiUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.minecraft.core.BlockPos;
@@ -45,6 +45,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
+import java.util.UUID;
 
 import static net.justmili.servertweaks.content.abilities.DataManager.has;
 
@@ -144,8 +145,8 @@ public class UseEvents {
         if (!(entity instanceof ServerPlayer milked)) return InteractionResult.PASS;
         if (!has(milked, AbilityRegistry.BOVID)) return InteractionResult.PASS;
 
-        if (milked.getUUID().equals("66774f1e-99de-4f1b-8293-906ca3488549") // Funny hardcoded thing
-            && !milking.getUUID().equals("19c3c783-9359-4311-98bf-79a6d361362d")) return InteractionResult.PASS;
+        if (milked.getUUID().equals(UUID.fromString("66774f1e-99de-4f1b-8293-906ca3488549")) // Funny hardcoded thing
+            && !milking.getUUID().equals(UUID.fromString("19c3c783-9359-4311-98bf-79a6d361362d"))) return InteractionResult.PASS;
 
         ItemStack stack = milking.getItemInHand(hand);
         if (!stack.is(Items.BUCKET)) return InteractionResult.PASS;
@@ -182,7 +183,7 @@ public class UseEvents {
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
 
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.getItem() instanceof BlockItem && !stack.has(DataComponents.FOOD)) return InteractionResult.PASS;
+        if (stack.getItem() instanceof BlockItem && stack.has(DataComponents.FOOD)) return InteractionResult.PASS;
 
         bugEaterItems(interacting, level, hand); // Handle this first
         if (isDietBlocked(player, stack)) return InteractionResult.FAIL;

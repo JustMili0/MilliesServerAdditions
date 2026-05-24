@@ -2,6 +2,7 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import net.justmili.libs.utils.CommandUtil;
 import net.justmili.servertweaks.content.abilities.DataManager;
 import net.justmili.servertweaks.content.abilities.DataStorage;
 import net.justmili.servertweaks.content.abilities.arguments.AbilityArgumentType;
@@ -9,7 +10,6 @@ import net.justmili.servertweaks.content.abilities.arguments.ModifierArgumentTyp
 import net.justmili.servertweaks.content.abilities.arguments.PresetArgumentType;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
-import net.justmili.servertweaks.core.util.CommandUtil;
 import net.justmili.servertweaks.core.util.FdaApiUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.minecraft.commands.CommandBuildContext;
@@ -58,7 +58,7 @@ public class PlayerAbilities {
                         MinecraftServer server = context.getSource().getServer();
                         DataStorage.loadFile(server);
 
-                        CommandUtil.sendSucc(context.getSource(), "Reloaded Player Abilities");
+                        CommandUtil.sendOk(context.getSource(), "Reloaded Player Abilities");
                         return 1;
                     })
                 )
@@ -75,7 +75,7 @@ public class PlayerAbilities {
 
                                     DataManager.grantAbility(player, ability);
 
-                                    CommandUtil.sendSucc(context.getSource(), "Granted ability "+ability.getName()+" to player "+player.getName().getString());
+                                    CommandUtil.sendOk(context.getSource(), "Granted ability "+ability.getName()+" to player "+player.getName().getString());
 
                                     return 1;
                                 })
@@ -88,7 +88,7 @@ public class PlayerAbilities {
                                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                     AbilityModifier modifier = ModifierArgumentType.getModifier(context, "modifier");
                                     DataManager.grantModifier(player, modifier);
-                                    CommandUtil.sendSucc(context.getSource(), "Granted ability modifier "+modifier.getName()+" to player "+player.getName().getString());
+                                    CommandUtil.sendOk(context.getSource(), "Granted ability modifier "+modifier.getName()+" to player "+player.getName().getString());
                                     return 1;
                                 })
                             )
@@ -108,7 +108,7 @@ public class PlayerAbilities {
 
                                     DataManager.revokeAbility(player, ability);
 
-                                    CommandUtil.sendSucc(context.getSource(), "Removed ability "+ability.getName()+" from player "+player.getName().getString());
+                                    CommandUtil.sendOk(context.getSource(), "Removed ability "+ability.getName()+" from player "+player.getName().getString());
 
                                     return 1;
                                 })
@@ -123,7 +123,7 @@ public class PlayerAbilities {
 
                                     DataManager.revokeModifier(player, modifier);
 
-                                    CommandUtil.sendSucc(context.getSource(), "Removed ability modifier "+modifier.getName()+" from player "+player.getName().getString());
+                                    CommandUtil.sendOk(context.getSource(), "Removed ability modifier "+modifier.getName()+" from player "+player.getName().getString());
 
                                     return 1;
                                 })
@@ -136,7 +136,7 @@ public class PlayerAbilities {
                                 DataManager.clearPlayer(player);
                                 FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, false);
 
-                                CommandUtil.sendSucc(context.getSource(), "Deleted player abilities profile of "+player.getName().getString());
+                                CommandUtil.sendOk(context.getSource(), "Deleted player abilities profile of "+player.getName().getString());
 
                                 return 1;
                             })

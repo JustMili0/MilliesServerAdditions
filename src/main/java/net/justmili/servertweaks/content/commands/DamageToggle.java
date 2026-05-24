@@ -5,7 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.justmili.servertweaks.core.util.CommandUtil;
+import net.justmili.libs.utils.CommandUtil;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -49,7 +49,7 @@ public class DamageToggle {
                     .executes(context -> {
                         List<String> disabled = damageDisabled.entrySet().stream()
                             .filter(Map.Entry::getValue).map(entry -> entry.getKey().toString()).toList();
-                        CommandUtil.sendSucc(context.getSource(), disabled.isEmpty()
+                        CommandUtil.sendOk(context.getSource(), disabled.isEmpty()
                             ? "No damage types are currently disabled."
                             : "Disabled damage types: " + String.join(", ", disabled));
                         return 1;
@@ -58,14 +58,14 @@ public class DamageToggle {
                 .then(Commands.literal("enableAll")
                     .executes(context -> {
                         damageDisabled.replaceAll((id, bool) -> false);
-                        CommandUtil.sendSucc(context.getSource(), "All damage types enabled.");
+                        CommandUtil.sendOk(context.getSource(), "All damage types enabled.");
                         return 1;
                     })
                 )
                 .then(Commands.literal("disableAll")
                     .executes(context -> {
                         damageDisabled.replaceAll((id, bool) -> true);
-                        CommandUtil.sendSucc(context.getSource(), "All damage types disabled.");
+                        CommandUtil.sendOk(context.getSource(), "All damage types disabled.");
                         return 1;
                     })
                 )
@@ -95,13 +95,13 @@ public class DamageToggle {
     private static int setDamage(CommandContext<CommandSourceStack> context, boolean disable) {
         Identifier id = IdentifierArgument.getId(context, "type");
         damageDisabled.put(id, disable);
-        CommandUtil.sendSucc(context.getSource(), "Damage type '" + id + "' is now " + (disable ? "disabled" : "enabled"));
+        CommandUtil.sendOk(context.getSource(), "Damage type '" + id + "' is now " + (disable ? "disabled" : "enabled"));
         return 1;
     }
 
     private static int getStatus(CommandContext<CommandSourceStack> context) {
         Identifier id = IdentifierArgument.getId(context, "type");
-        CommandUtil.sendSucc(context.getSource(), "Damage type '" + id + "' is " + (damageDisabled.getOrDefault(id, false) ? "disabled" : "enabled"));
+        CommandUtil.sendOk(context.getSource(), "Damage type '" + id + "' is " + (damageDisabled.getOrDefault(id, false) ? "disabled" : "enabled"));
         return 1;
     }
 }
