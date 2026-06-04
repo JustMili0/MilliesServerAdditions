@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AnvilMenu.class)
 public abstract class RemoveAnvilLimit {
-    // Dev note: I was fed up
+    // Dev note: I was fed up with the limit
     @Shadow
     private DataSlot cost;
 
@@ -23,16 +23,9 @@ public abstract class RemoveAnvilLimit {
         return Integer.MAX_VALUE;
     }
 
-    @ModifyConstant(method = "createResult", constant = @Constant(intValue = 39))
-    private int removeClamp(int i) {
-        if (!Config.removeAnvilLimit.get()) return i;
-        return Integer.MAX_VALUE-1;
-    }
-
     @Inject(method = "createResult", at = @At("RETURN"))
-    private void clampVisibleCost(CallbackInfo ci) {
-        if (!Config.removeAnvilLimit.get() && this.cost.get() >= 40) {
-            this.cost.set(39);
-        }
+    private void clampCost(CallbackInfo ci) {
+        if (!Config.removeAnvilLimit.get()) return;
+        if (this.cost.get() > 39) this.cost.set(39);
     }
 }

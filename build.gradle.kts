@@ -20,7 +20,10 @@ repositories {
 
 dependencies {
     minecraft(libs.minecraft.get())
-    mappings(loom.officialMojangMappings())
+    mappings(loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${libs.versions.minecraft.get()}:${libs.versions.parchment.get()}@zip")
+    })
     modImplementation(libs.fabric.loader.get())
     modImplementation(libs.fabric.api.get())
 
