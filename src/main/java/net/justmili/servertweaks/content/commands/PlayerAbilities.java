@@ -2,7 +2,7 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import net.justmili.libs.utils.CommandUtil;
+import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.servertweaks.content.abilities.DataManager;
 import net.justmili.servertweaks.content.abilities.DataStorage;
 import net.justmili.servertweaks.content.abilities.arguments.AbilityArgumentType;

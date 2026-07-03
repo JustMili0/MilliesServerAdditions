@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.justmili.libs.utils.CommandUtil;
+import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.servertweaks.content.abilities.data.DataTags;
 import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
 import net.justmili.servertweaks.content.abilities.registries.ModifierRegistry;

@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.justmili.libs.utils.CommandUtil;
+import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.core.util.FdaApiUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;

@@ -2,7 +2,7 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
-import net.justmili.libs.utils.CommandUtil;
+import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.servertweaks.core.util.FdaApiUtil;
 import net.justmili.servertweaks.core.util.ScalerUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;

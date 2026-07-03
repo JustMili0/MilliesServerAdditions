@@ -1,8 +1,9 @@
 package net.justmili.servertweaks.config;
 
-import net.justmili.libs.config.FileType;
-import net.justmili.libs.config.build.ConfigEntry;
-import net.justmili.libs.config.build.MConfigBuilder;
+import net.justmili.libs.v1.config.ConfigType;
+import net.justmili.libs.v1.config.FileType;
+import net.justmili.libs.v1.config.MConfigBuilder;
+import net.justmili.libs.v1.config.entry.ConfigEntry;
 import net.justmili.servertweaks.ServerTweaks;
 
 public class Config {
@@ -27,7 +28,7 @@ public class Config {
         pistonPushLimit; // Config for "BetterPushLimit" mixin.
 
     public static void register() {
-        MConfigBuilder builder = new MConfigBuilder(ServerTweaks.MODID, "config", FileType.PROPERTIES, true);
+        MConfigBuilder builder = new MConfigBuilder(ServerTweaks.MODID, ConfigType.SERVER, FileType.PROPERTIES, true);
 
         builder.comment("Should these commands be enabled on the server?");
         enableAfkCommand = builder.define("enableAfkCommand", true);
