@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.justmili.libs.v1.utils.CommandUtil;
+import net.justmili.libs.v1.utils.EntityUtil;
 import net.justmili.servertweaks.content.abilities.data.DataTags;
 import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
 import net.justmili.servertweaks.content.abilities.registries.ModifierRegistry;
@@ -251,7 +252,7 @@ public class UseEvents {
             entity.discard();
             food.add(nutrition, saturation);
             playEatSound(player);
-            DataManager.applyEffect(player, MobEffects.POISON, 200, 0);
+            EntityUtil.applyEffect(player, MobEffects.POISON, 200, 0);
             sendUpdatePacket(player);
 
             return InteractionResult.CONSUME;
@@ -332,7 +333,7 @@ public class UseEvents {
         // No GRASS_EATER item tag for this to check. GRASS_EATER diet is handled by grassEater interaction method.
     }
     private static boolean isType(Entity entity, TagKey<EntityType<?>> tag) {
-        return entity.getType().is(tag);
+        return entity.is(tag);
     }
     private static boolean isBugLikeConsumable(Entity entity) {
         if (entity instanceof Slime slime) { /// Change to AbstractCubeMob with 26.2!

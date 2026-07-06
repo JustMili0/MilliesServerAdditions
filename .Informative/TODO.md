@@ -1,3 +1,6 @@
+## TODO
+See Patches.md for most of the TODO
+
 ## FROM TESTING PLAYER ABILITIES:
 **Doesn't work (no changes get applied to player behavior):**
 - CLIMBS_WALLS - [Currently all related code was removed to later be reworked]

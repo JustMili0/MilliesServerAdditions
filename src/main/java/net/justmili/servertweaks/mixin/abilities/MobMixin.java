@@ -13,6 +13,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.npc.villager.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -51,13 +52,13 @@ public class MobMixin {
 
     // Taming context for CHILD_OF_NATURE
     @Inject(method = "interact", at = @At("HEAD"))
-    private void setContext(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+    private void setContext(Player player, InteractionHand hand, Vec3 location, CallbackInfoReturnable<InteractionResult> cir) {
         if (!(Config.playerAbilities.get())) return;
         if ((Object) this instanceof TamableAnimal) PlayerContext.set(player);
     }
 
     @Inject(method = "interact", at = @At("RETURN"))
-    private void clearContext(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+    private void clearContext(Player player, InteractionHand hand, Vec3 location, CallbackInfoReturnable<InteractionResult> cir) {
         if (!(Config.playerAbilities.get())) return;
         if ((Object) this instanceof TamableAnimal) PlayerContext.set(null);
     }

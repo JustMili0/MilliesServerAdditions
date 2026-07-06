@@ -54,6 +54,8 @@ Pearling - Enderman-based | Ender Pearls never get used up when thrown.
 
 Predatory - Custom | Smaller animals like for example chickens, fish and frogs will run away from the player.
 Bovid - Cow-based | Allows the player to be milked with a bucket.
+Iron Belly - Custom | Prevents getting Poison and Hunger effect from eating rotten or raw (vanilla) foods. Can be negated with Weakness effect.
+
 Carnivore - Wild Animal-based | Can only eat meat. Honey bottles, milk and other misc items are always allowed.
 Vegetarian - Farm Animal-based | Can only eat plant-based foods. Honey bottles, milk and other misc items are always allowed.
 Saccharivore - Custom | Can only eat sweet foods (berries, cookies, cake, pie, honey, apples, melon slices).

@@ -125,6 +125,7 @@ Feedback is appreciated ^^
   - Fire aspect - up to level 3 (Vanilla: 2)
   - Frost walker - up to level 5 (Vanilla: 2)
   - Unbreaking - up to level 5 (Vanilla: 3)
+  - Multishot - up to level 2 (Vanilla: 1)
   - ...
 - [TODO] Added ability to leash players
 
@@ -151,6 +152,7 @@ Feedback is appreciated ^^
 - [TODO] Fixed ability `climbs_walls` - Now can actually climb walls
 - (NEW) Bovid - Can be milked with a bucket by other players
 - (NEW) Squishy - Decreases `fall` and `fly_into_wall` damage by 75% each
+- [TODO] (NEW) Iron Belly - Prevents getting Poison and Hunger effect from eating rotten or raw (vanilla) foods. Can be negated with Weakness effect.
 - (NEW) Insectivore - Can only feed on bug-like entities, slimes, magma cubes, and items like slime balls and magma creams
   - With Minecraft 26.2, you'll also be able to consume sulfur cubes
     - If you eat a sulfur cube with a special block inside it, some effect will be given (e.g. TNT = You blow up, Magma Block = Slight Fire damage)

@@ -1,9 +1,9 @@
 package net.justmili.servertweaks.content.abilities.registries;
 
+import net.justmili.libs.v1.data.MobData;
+import net.justmili.libs.v1.utils.EntityUtil;
 import net.justmili.servertweaks.ServerTweaks;
-import net.justmili.servertweaks.content.abilities.DataManager;
 import net.justmili.servertweaks.content.abilities.data.DataTags;
-import net.justmili.servertweaks.content.abilities.data.MobData;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.core.util.ScalerUtil;
@@ -190,7 +190,7 @@ public class AbilityRegistry {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
-            if (player.getDeltaMovement().y < -0.4 && player.fallDistance > 3) DataManager.applyEffect(player, MobEffects.SLOW_FALLING, 60, 1);
+            if (player.getDeltaMovement().y < -0.4 && player.fallDistance > 3) EntityUtil.applyEffect(player, MobEffects.SLOW_FALLING, 60, 1);
             if (player.onGround()) player.removeEffect(MobEffects.SLOW_FALLING);
         }
     }
@@ -202,7 +202,7 @@ public class AbilityRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            if (player.isSprinting()) DataManager.applyEffect(player, MobEffects.SPEED, 30, 0);
+            if (player.isSprinting()) EntityUtil.applyEffect(player, MobEffects.SPEED, 30, 0);
         }
     }
 
@@ -228,7 +228,7 @@ public class AbilityRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            DataManager.applyEffect(player, MobEffects.JUMP_BOOST);
+            EntityUtil.applyEffect(player, MobEffects.JUMP_BOOST, 100, 0);
         }
     }
 
@@ -241,7 +241,7 @@ public class AbilityRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             AttributeInstance scale = ScalerUtil.getScale(player);
             if (scale != null && scale.getBaseValue() > 0.75) ScalerUtil.setScale(player, 0.75);
-            DataManager.applyEffect(player, MobEffects.HASTE, 1);
+            EntityUtil.applyEffect(player, MobEffects.HASTE, 100, 1);
         }
     }
 
@@ -304,7 +304,7 @@ public class AbilityRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.isInWater()) return;
 
-            DataManager.applyEffect(player, MobEffects.CONDUIT_POWER);
+            EntityUtil.applyEffect(player, MobEffects.CONDUIT_POWER, 100, 0);
 
             if (level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
                 .get(Enchantments.DEPTH_STRIDER)
@@ -312,7 +312,7 @@ public class AbilityRegistry {
                 .orElse(false))
                 return; // Return before granting Dolphin's Grace if player has depth strider to prevent OP swimming speeds
 
-            DataManager.applyEffect(player, MobEffects.DOLPHINS_GRACE);
+            EntityUtil.applyEffect(player, MobEffects.DOLPHINS_GRACE, 100, 0);
         }
     }
 
@@ -325,7 +325,7 @@ public class AbilityRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
 
-            if (player.isInWater()) DataManager.applyEffect(player, MobEffects.WATER_BREATHING, 30, 0);
+            if (player.isInWater()) EntityUtil.applyEffect(player, MobEffects.WATER_BREATHING, 30, 0);
         }
     }
 
@@ -396,7 +396,7 @@ public class AbilityRegistry {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
-            for (Fox fox : DataManager.getNearby(player, Fox.class, 12.0)) {
+            for (Fox fox : EntityUtil.getNearby(player, Fox.class, 12.0)) {
                 if (((FoxAccessor) fox).invokeTrusts(player)) continue;
                 if (fox.getTarget() == null) fox.setTarget(player);
             }
@@ -411,7 +411,7 @@ public class AbilityRegistry {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
-            for (Wolf wolf : DataManager.getNearby(player, Wolf.class, 16.0)) {
+            for (Wolf wolf : EntityUtil.getNearby(player, Wolf.class, 16.0)) {
                 if (wolf.isTame()) continue;
                 if (wolf.getTarget() == null) wolf.setTarget(player);
             }
@@ -427,7 +427,7 @@ public class AbilityRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
 
-            for (Creeper creeper : DataManager.getNearby(player, Creeper.class, 8.0)) {
+            for (Creeper creeper : EntityUtil.getNearby(player, Creeper.class, 8.0)) {
                 creeper.setTarget(null);
                 creeper.getNavigation().moveTo(
                     creeper.getX()+(creeper.getX()-player.getX()),
@@ -446,7 +446,7 @@ public class AbilityRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
 
-            for (Phantom phantom : DataManager.getNearby(player, Phantom.class, 16.0)) {
+            for (Phantom phantom : EntityUtil.getNearby(player, Phantom.class, 16.0)) {
                 phantom.setTarget(null);
                 phantom.getNavigation().moveTo(
                     phantom.getX()+(phantom.getX()-player.getX()),
@@ -463,12 +463,12 @@ public class AbilityRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            for (Fox fox : DataManager.getNearby(player, Fox.class, 24.0)) {
+            for (Fox fox : EntityUtil.getNearby(player, Fox.class, 24.0)) {
                 FoxAccessor accessor = (FoxAccessor) fox;
                 if (accessor.invokeTrusts(player)) continue;
                 accessor.invokeAddTrustedEntity(player);
             }
-            for (Wolf wolf : DataManager.getNearby(player, Wolf.class, 24.0)) {
+            for (Wolf wolf : EntityUtil.getNearby(player, Wolf.class, 24.0)) {
                 if (!wolf.isTame() && wolf.getTarget() == player) wolf.setTarget(null);
             }
             // Aggro prevention - MobMixin (tick) + TargetingConditionsMixin (test)
@@ -483,7 +483,7 @@ public class AbilityRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            if (level.isDarkOutside()) DataManager.applyEffect(player, MobEffects.NIGHT_VISION, 320, 0);
+            if (level.isDarkOutside()) EntityUtil.applyEffect(player, MobEffects.NIGHT_VISION, 320, 0);
         }
     }
 
@@ -533,7 +533,7 @@ public class AbilityRegistry {
 
             // Ignore
             Set<UUID> stillNearby = new HashSet<>();
-            DataManager.executeForNearby(player, MONSTER_IGNORE, (mob, data) -> {
+            EntityUtil.executeForNearby(player, MONSTER_IGNORE, (mob, data) -> {
                 UUID id = mob.getUUID();
                 stillNearby.add(id);
 
@@ -559,7 +559,7 @@ public class AbilityRegistry {
             });
 
             // Fear
-            DataManager.executeForNearby(player, MONSTER_FEAR, (mob, data) ->
+            EntityUtil.executeForNearby(player, MONSTER_FEAR, (mob, data) ->
                 mob.getNavigation().moveTo(
                     mob.getX()+(mob.getX()-player.getX()),
                     mob.getY(),
@@ -569,7 +569,7 @@ public class AbilityRegistry {
             );
 
             // Attack
-            DataManager.executeForNearby(player, MONSTER_AGGRO, (mob, data) -> {
+            EntityUtil.executeForNearby(player, MONSTER_AGGRO, (mob, data) -> {
                     if (mob.getTarget() != player) mob.setTarget(player);
                 }
             );
@@ -590,7 +590,7 @@ public class AbilityRegistry {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            DataManager.executeForNearby(player, PREDATORY_FEAR, (mob, data) ->
+            EntityUtil.executeForNearby(player, PREDATORY_FEAR, (mob, data) ->
                 mob.getNavigation().moveTo(
                     mob.getX()+(mob.getX()-player.getX()),
                     mob.getY(),
