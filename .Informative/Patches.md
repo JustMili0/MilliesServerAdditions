@@ -109,10 +109,13 @@ Feedback is appreciated ^^
 (AWAITING COMPLETION, WIP)
 # Millie's Server Additions, Patch #6 - 1.3.0-beta.16
 **Generic**
+- Updated to Minecraft 26.1.2
 - Changed project's buildscript from Groovy to Kotlin
 - Dropped dependency from SuperMartijn642's Config Lib and replaced it with my own mini config lib
+- [TODO] Completely reworked Player Abilities code to be more CPU and Memory efficient
 - Changed config file location and split into `config\servertweaks\common.toml` into `config\servertweaks\server.properties` and `config\servertweaks\mixins.properties`
 - Renamed config key `removeAnvilLimit` to `disableAnvilLimit`
+- All `limit----Speed` config keys are now false by default
 - Villagers and Tamables losing AI when named "NoAI" now has a config entry
 
 **Gameplay**
@@ -133,7 +136,7 @@ Feedback is appreciated ^^
 - [TODO] Added ability to leash players
 
 **Commands**
-- [TODO] `/scale` now has configurable min-max values in the config
+- `/scale` now has configurable min-max values in the config
 
 **Player Abilities**
 - Abilities now are stored in lowercase instead of uppercase, e.g. `fire_immune` instead of `FIRE_IMMUNE`
@@ -160,5 +163,10 @@ Feedback is appreciated ^^
 - (NEW) Insectivore - Can only feed on bug-like entities, slimes, magma cubes, and items like slime balls and magma creams
   - With Minecraft 26.2, you'll also be able to consume sulfur cubes
     - If you eat a sulfur cube with a special block inside it, some effect will be given (e.g. TNT = You blow up, Magma Block = Slight Fire damage)
+
+**Bug Fixes**
+- (Player Abilities) Fixed issues `carnivore`, `vegeterian`, `saccharivore`, `herbivore` and `insectivore`
+  - [TODO] Fixed placing and picking up fish in and from buckets
+  - [TODO] Fixed opening chests and interacting with workstation blocks being blocked when holding a non-in-diet item 
 
 Feedback is appreciated ^^

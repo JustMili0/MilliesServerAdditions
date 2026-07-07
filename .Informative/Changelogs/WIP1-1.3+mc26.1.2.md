@@ -44,7 +44,7 @@
 - Removed `/daycount` command
 - Removed `/duel` command
 
-### ***TECHNICAL CHANGES***
+### ***BUG FIXES/TECHNICAL CHANGES***
 - Removed "[ServerTweaks] " prefix from all messages sent by the mod
 
 ### ***DEV STUFF***

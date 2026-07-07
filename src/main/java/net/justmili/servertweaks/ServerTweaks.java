@@ -2,6 +2,7 @@ package net.justmili.servertweaks;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.justmili.libs.v1.utils.ResourceUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.DataStorage;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
@@ -19,8 +20,8 @@ public class ServerTweaks implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Initializing Millie's Server Additions...");
-
         Config.register();
+
         PlayerAttachments.register();
         DimRegistry.register();
         CommandRegistry.register();
@@ -30,9 +31,6 @@ public class ServerTweaks implements ModInitializer {
     }
 
     public static Identifier asResource(String path) {
-        return Identifier.fromNamespaceAndPath(MODID, path);
-    }
-    public static Identifier asPath(String path) {
-        return Identifier.parse(path);
+        return ResourceUtil.parse(MODID, path);
     }
 }

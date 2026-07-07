@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.libs.v1.utils.FdaApiUtil;
+import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.core.util.ScalerUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.minecraft.commands.CommandBuildContext;
@@ -20,7 +21,7 @@ public class Scale {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext, Commands.CommandSelection environment) {
         dispatcher.register(
             Commands.literal("scale")
-                .then(Commands.argument("height_cm", DoubleArgumentType.doubleArg(80.0, 300.0))
+                .then(Commands.argument("height_cm", DoubleArgumentType.doubleArg(Config.scaleMinHeight.get(), Config.scaleMaxHeight.get()))
                     .executes(context -> {
                         CommandSourceStack source = context.getSource();
                         ServerPlayer player = context.getSource().getPlayerOrException();

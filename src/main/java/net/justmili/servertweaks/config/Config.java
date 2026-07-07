@@ -28,6 +28,8 @@ public class Config {
 
     public static ConfigEntry<Integer> // Feature/Command config
         afkCommandCooldown;
+    public static ConfigEntry<Double>
+        scaleMinHeight, scaleMaxHeight;
     public static ConfigEntry<Integer> // Mixin Features
         pistonPushLimit;
 
@@ -48,6 +50,10 @@ public class Config {
             .define("despawnMonsters", true);
         afkCommandCooldown = server.comment("Amount of time between the AFK command can be used again")
             .define("afkCommandCooldown", 6000, 0, Integer.MAX_VALUE-255);
+
+        server.comment("What should be the min-max height values (In centimeters) for the \"/scale\" command?");
+        scaleMinHeight = server.define("scaleMinHeight", 80.0, 18.5, 2960.0);
+        scaleMaxHeight = server.define("scaleMaxHeight", 300.0, 18.5, 2960.0);
 
         rightClickHarvest = server.comment("Should the player be able to harvest crops with by just right-clicking?")
             .define("rightClickHarvest", true);
