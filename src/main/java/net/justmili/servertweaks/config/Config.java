@@ -24,7 +24,8 @@ public class Config {
         limitVehicleSpeed,
         noAiNameTags,
         enableHigherEnchants,
-        disableAnvilLimit;
+        disableAnvilLimit,
+        allowMixEnchantments;
 
     public static ConfigEntry<Integer> // Feature/Command config
         afkCommandCooldown;
@@ -77,6 +78,8 @@ public class Config {
             .define("limitVehicleSpeed", false);
         disableAnvilLimit = mixins.comment("Should the server clamp the max anvil cost to 39 levels if at or over, to prevent \"Too Expensive\"?")
             .define("disableAnvilLimit", true);
+        allowMixEnchantments = mixins.comment("Should previously incompatible enchantments be able to be combined?")
+            .define("allowMixEnchantments", false);
         pistonPushLimit = mixins.comment("How many blocks should the piston be able to push?")
             .define("pistonPushLimit", 12, 0, 511);
 

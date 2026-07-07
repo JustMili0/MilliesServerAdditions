@@ -19,12 +19,12 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AnvilMenu.class)
-public abstract class ChangeAnvilLogic extends ItemCombinerMenu {
+public abstract class ModifyAnvilLimits extends ItemCombinerMenu {
     @Final @Shadow
     private DataSlot cost;
 
-    public ChangeAnvilLogic(@Nullable MenuType<?> menuType, int containerId, Inventory inventory,
-                            ContainerLevelAccess access, ItemCombinerMenuSlotDefinition itemInputSlots) {
+    public ModifyAnvilLimits(@Nullable MenuType<?> menuType, int containerId, Inventory inventory,
+                             ContainerLevelAccess access, ItemCombinerMenuSlotDefinition itemInputSlots) {
         super(menuType, containerId, inventory, access, itemInputSlots);
     }
 

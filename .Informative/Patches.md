@@ -120,7 +120,7 @@ Feedback is appreciated ^^
 
 **Gameplay**
 - Shift-right-clicking an anvil with an iron ingot can repair it by one stage with a 33% chance
-- [TODO] Previously incompatible enchantments such as different protection types, mending and infinity etc. are now compatible
+- Previously incompatible enchantments such as different protection types, mending and infinity etc. are now compatible
 - Some enchantments can now be at higher levels than vanilla
   - All protection types - up to level 5 (Vanilla: 4)
   - Sharpness - up to level 6 (Vanilla: 5)
