@@ -56,7 +56,6 @@ public class MobMixin {
         if (!(Config.playerAbilities.get())) return;
         if ((Object) this instanceof TamableAnimal) PlayerContext.set(player);
     }
-
     @Inject(method = "interact", at = @At("RETURN"))
     private void clearContext(Player player, InteractionHand hand, Vec3 location, CallbackInfoReturnable<InteractionResult> cir) {
         if (!(Config.playerAbilities.get())) return;

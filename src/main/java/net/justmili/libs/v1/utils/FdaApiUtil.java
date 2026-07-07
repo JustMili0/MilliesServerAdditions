@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.core.util;
+package net.justmili.libs.v1.utils;
 
 import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;

@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.mechanics.features;
+package net.justmili.servertweaks.content.mechanics.features;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;

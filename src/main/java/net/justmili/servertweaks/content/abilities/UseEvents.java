@@ -7,12 +7,12 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.libs.v1.utils.EntityUtil;
-import net.justmili.servertweaks.content.abilities.data.DataTags;
+import net.justmili.libs.v1.utils.FdaApiUtil;
+import net.justmili.servertweaks.registries.TagRegistry;
 import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
 import net.justmili.servertweaks.content.abilities.registries.ModifierRegistry;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
-import net.justmili.servertweaks.core.util.FdaApiUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -201,7 +201,7 @@ public class UseEvents {
 
         if (!food.needsFood()) return;
 
-        if (stack.is(DataTags.DIET_BUG_ITEMS) && !stack.has(DataComponents.FOOD)) {
+        if (stack.is(TagRegistry.DIET_BUG_ITEMS) && !stack.has(DataComponents.FOOD)) {
             stack.shrink(1);
             food.add(3, 2.0F);
             playEatSound(player);
@@ -221,13 +221,13 @@ public class UseEvents {
         // Calculate saturation and nutrition
         int addNutrition = 0;
         float addSaturation = 0f;
-        if (isType(entity, DataTags.DIET_BUG_ENTITY_NUTRITIOUS)) addNutrition = 2;
-        if (isType(entity, DataTags.DIET_BUG_ENTITY_SATURATING)) addSaturation = 2f;
+        if (isType(entity, TagRegistry.DIET_BUG_ENTITY_NUTRITIOUS)) addNutrition = 2;
+        if (isType(entity, TagRegistry.DIET_BUG_ENTITY_SATURATING)) addSaturation = 2f;
         int nutrition = 3 + addNutrition;
         float saturation = 2 + addSaturation;
 
         // Apply everything accordingly
-        if (isType(entity, DataTags.DIET_BUG_ENTITY_GENERIC)) {
+        if (isType(entity, TagRegistry.DIET_BUG_ENTITY_GENERIC)) {
             if (!isBugLikeConsumable(entity)) return InteractionResult.PASS;
 
             entity.discard();
@@ -236,7 +236,7 @@ public class UseEvents {
             sendUpdatePacket(player);
 
             return InteractionResult.CONSUME;
-        } else if (isType(entity, DataTags.DIET_BUG_ENTITY_FIRE)) {
+        } else if (isType(entity, TagRegistry.DIET_BUG_ENTITY_FIRE)) {
             if (!isBugLikeConsumable(entity)) return InteractionResult.PASS;
 
             entity.discard();
@@ -246,7 +246,7 @@ public class UseEvents {
             sendUpdatePacket(player);
 
             return InteractionResult.CONSUME;
-        } else if (isType(entity, DataTags.DIET_BUG_ENTITY_POISON)) {
+        } else if (isType(entity, TagRegistry.DIET_BUG_ENTITY_POISON)) {
             if (!isBugLikeConsumable(entity)) return InteractionResult.PASS;
 
             entity.discard();
@@ -269,7 +269,7 @@ public class UseEvents {
         if (!player.isShiftKeyDown()) return InteractionResult.PASS;
 
         BlockPos pos = hitResult.getBlockPos();
-        if (!level.getBlockState(pos).is(DataTags.DIET_FOLIAGE)) return InteractionResult.PASS;
+        if (!level.getBlockState(pos).is(TagRegistry.DIET_FOLIAGE)) return InteractionResult.PASS;
 
         FoodData food = player.getFoodData();
         if (!food.needsFood()) return InteractionResult.PASS;
@@ -317,11 +317,11 @@ public class UseEvents {
             bugEater = has(player, AbilityRegistry.INSECTIVORE),
             canConsumeGolden = has(player, ModifierRegistry.CAN_EAT_GOLDEN_FOOD),
 
-            isMeat = stack.is(DataTags.DIET_CARNIVORE),
-            isVege = stack.is(DataTags.DIET_VEGETARIAN),
-            isSweet = stack.is(DataTags.DIET_SWEETS),
-            isBugLike = stack.is(DataTags.DIET_BUG_ITEMS),
-            isGold = stack.is(DataTags.DIET_MODIFIER_GOLDEN_FOODS);
+            isMeat = stack.is(TagRegistry.DIET_CARNIVORE),
+            isVege = stack.is(TagRegistry.DIET_VEGETARIAN),
+            isSweet = stack.is(TagRegistry.DIET_SWEETS),
+            isBugLike = stack.is(TagRegistry.DIET_BUG_ITEMS),
+            isGold = stack.is(TagRegistry.DIET_MODIFIER_GOLDEN_FOODS);
 
         if (!carnivore && !vegetarian && !sweetOnly && !grassEater && !bugEater) return false;
 

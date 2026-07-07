@@ -7,61 +7,76 @@ import net.justmili.libs.v1.config.entry.ConfigEntry;
 import net.justmili.servertweaks.ServerTweaks;
 
 public class Config {
-    public static ConfigEntry<Boolean>
-        enableAfkCommand, // Command on/off
-        enableScaleCommand, // Command on/off
-        enableDamageToggleCommand, // Command on/off
-        enableBanishCommand, // Command on/off
-        enableFlyCommand, // Command on/off
-        despawnMonsters, // Afk command related setting
-        noAiNameTags, // Disable/enable NoAI name tags
-        limitPlayerSpeed, // Config for "UncapSpeedLimits" mixin.
-        limitElytraSpeed, // Config for "UncapSpeedLimits" mixin.
-        limitVehicleSpeed, // Config for "UncapSpeedLimits" mixin.
-        removeAnvilLimit, // Config for "RemoveAnvilLimit" mixin.
-        rightClickHarvest, // Config for "RightClickHarvest" feature.
-        anvilRepair,
+    public static ConfigEntry<Boolean> // Commands
+        enableAfkCommand,
+        enableScaleCommand,
+        enableDamageToggleCommand,
+        enableBanishCommand,
+        enableFlyCommand,
+        despawnMonsters;
+    public static ConfigEntry<Boolean> // Features
+        rightClickHarvest,
+        enableAnvilRepair,
         playerAbilities;
+    public static ConfigEntry<Boolean> // Mixin Features
+        limitPlayerSpeed,
+        limitElytraSpeed,
+        limitVehicleSpeed,
+        noAiNameTags,
+        enableHigherEnchants,
+        disableAnvilLimit;
 
-    public static ConfigEntry<Integer>
-        afkCommandCooldown, // Afk command related setting
-        pistonPushLimit; // Config for "BetterPushLimit" mixin.
+    public static ConfigEntry<Integer> // Feature/Command config
+        afkCommandCooldown;
+    public static ConfigEntry<Integer> // Mixin Features
+        pistonPushLimit;
 
     public static void register() {
-        MConfigBuilder builder = new MConfigBuilder(ServerTweaks.MODID, ConfigType.SERVER, FileType.PROPERTIES, true);
+        MConfigBuilder server = new MConfigBuilder(ServerTweaks.MODID, ConfigType.SERVER, FileType.PROPERTIES, true);
+        MConfigBuilder mixins = new MConfigBuilder(ServerTweaks.MODID, ConfigType.MIXINS, FileType.PROPERTIES, true);
 
-        builder.comment("Should these commands be enabled on the server?");
-        enableAfkCommand = builder.define("enableAfkCommand", true);
-        enableScaleCommand = builder.define("enableScaleCommand", true);
-        enableDamageToggleCommand = builder.define("enableDamageToggleCommand", true);
-        enableBanishCommand = builder.define("enableBanishCommand", true);
-        enableFlyCommand = builder.define("enableFlyCommand", true);
+        // Features/Commands
+        server.comment("Should these commands and features be enabled on the server?");
 
-        despawnMonsters = builder.comment("Should \"wild\" monsters despawn around the player when coming out of AFK?")
+        enableAfkCommand = server.define("enableAfkCommand", true);
+        enableScaleCommand = server.define("enableScaleCommand", true);
+        enableDamageToggleCommand = server.define("enableDamageToggleCommand", true);
+        enableBanishCommand = server.define("enableBanishCommand", true);
+        enableFlyCommand = server.define("enableFlyCommand", true);
+
+        despawnMonsters = server.comment("Should \"wild\" monsters despawn around the player when coming out of AFK?")
             .define("despawnMonsters", true);
-        afkCommandCooldown = builder.comment("Amount of time between the AFK command can be used again")
+        afkCommandCooldown = server.comment("Amount of time between the AFK command can be used again")
             .define("afkCommandCooldown", 6000, 0, Integer.MAX_VALUE-255);
 
-        limitPlayerSpeed = builder.comment("Should the server stop the player from moving too fast and print \"Player moved too fast!\" warn when on foot?")
-            .define("limitPlayerSpeed", true);
-        limitElytraSpeed = builder.comment("Should the server stop the player from flying too fast and print \"Player moved too fast!\" warn when on elytra?")
-            .define("limitElytraSpeed", false);
-        limitVehicleSpeed = builder.comment("Should the server stop the player from going too fast and print \"Player moved too fast!\" warn when in/on vehicle?")
-            .define("limitVehicleSpeed", true);
-        removeAnvilLimit = builder.comment("Should the server clamp the max anvil cost to 39 levels if at or over, to prevent \"Too Expensive\"?")
-            .define("removeAnvilLimit", true);
-        pistonPushLimit = builder.comment("How many blocks should the piston be able to push?")
-            .define("pistonPushLimit", 12, 0, 511);
-
-        rightClickHarvest = builder.comment("Should the player be able to harvest crops with by just right-clicking?")
+        rightClickHarvest = server.comment("Should the player be able to harvest crops with by just right-clicking?")
             .define("rightClickHarvest", true);
-        anvilRepair = builder.comment("Should a player be able to fix anvils by shift-right-clicking them with iron ingots and iron blocks?")
+        enableAnvilRepair = server.comment("Should a player be able to fix anvils by shift-right-clicking them with iron ingots and iron blocks?")
             .define("anvilRepair", true);
-        noAiNameTags = builder.comment("Should Villagers and Tamable mobs lose their AI when named \"NoAI\"?")
-            .define("noAiNameTags", true);
-        playerAbilities = builder.comment("[EXPERIMENTAL] Allows server owners to configure player abilities for some or all members")
+        playerAbilities = server.comment("[EXPERIMENTAL] Allows server owners to configure player abilities for some or all members")
             .define("playerAbilities", false);
 
-        builder.build();
+        server.build();
+
+        // Mixins
+        mixins.comment("Should these mixins apply on the server?");
+
+        enableHigherEnchants =  server.define("enableHigherEnchantmentLevels", true);
+
+        limitPlayerSpeed = mixins.comment("Should the server stop the player from moving too fast and print \"Player moved too fast!\" warn when on foot?")
+            .define("limitPlayerSpeed", false);
+        limitElytraSpeed = mixins.comment("Should the server stop the player from flying too fast and print \"Player moved too fast!\" warn when on elytra?")
+            .define("limitElytraSpeed", false);
+        limitVehicleSpeed = mixins.comment("Should the server stop the player from going too fast and print \"Player moved too fast!\" warn when in/on vehicle?")
+            .define("limitVehicleSpeed", false);
+        disableAnvilLimit = mixins.comment("Should the server clamp the max anvil cost to 39 levels if at or over, to prevent \"Too Expensive\"?")
+            .define("disableAnvilLimit", true);
+        pistonPushLimit = mixins.comment("How many blocks should the piston be able to push?")
+            .define("pistonPushLimit", 12, 0, 511);
+
+        noAiNameTags = mixins.comment("Should Villagers and Tamable mobs lose their AI when named \"NoAI\"?")
+            .define("noAiNameTags", true);
+
+        mixins.build();
     }
 }

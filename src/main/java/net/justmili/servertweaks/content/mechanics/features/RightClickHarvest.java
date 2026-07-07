@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.mechanics.features;
+package net.justmili.servertweaks.content.mechanics.features;
 
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.DataManager;

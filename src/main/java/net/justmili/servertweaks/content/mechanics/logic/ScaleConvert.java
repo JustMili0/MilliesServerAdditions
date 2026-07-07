@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.mechanics.logic;
+package net.justmili.servertweaks.content.mechanics.logic;
 
 import net.minecraft.server.level.ServerPlayer;
 

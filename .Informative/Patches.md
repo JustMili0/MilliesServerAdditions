@@ -109,24 +109,27 @@ Feedback is appreciated ^^
 (AWAITING COMPLETION, WIP)
 # Millie's Server Additions, Patch #6 - 1.3.0-beta.16
 **Generic**
-- Changed project's gradle from groovy to kotlin script
+- Changed project's buildscript from Groovy to Kotlin
 - Dropped dependency from SuperMartijn642's Config Lib and replaced it with my own mini config lib
-- Changed config file location from `config/servertweaks/common.toml` to `config/servertweaks/config.properties`
+- Changed config file location and split into `config\servertweaks\common.toml` into `config\servertweaks\server.properties` and `config\servertweaks\mixins.properties`
+- Renamed config key `removeAnvilLimit` to `disableAnvilLimit`
 - Villagers and Tamables losing AI when named "NoAI" now has a config entry
 
 **Gameplay**
 - Shift-right-clicking an anvil with an iron ingot can repair it by one stage with a 33% chance
 - [TODO] Previously incompatible enchantments such as different protection types, mending and infinity etc. are now compatible
-- [TODO] Some enchantments can now be at higher levels than vanilla
+- Some enchantments can now be at higher levels than vanilla
   - All protection types - up to level 5 (Vanilla: 4)
-  - Fortune - up to level 4 (Vanilla: 3)
+  - Sharpness - up to level 6 (Vanilla: 5)
+  - Smite - up to level 6 (Vanilla: 5)
+  - Bane of Arthropods - up to level 5 (Vanilla: 4)
   - Looting - up to level 4 (Vanilla: 3)
-  - Efficiency - up to level 8 (Vanilla: 5)
-  - Fire aspect - up to level 3 (Vanilla: 2)
+  - Lunge - up to level 5 (Vanilla: 3)
+  - Efficiency - up to level 6 (Vanilla: 5)
+  - Feather Falling - up to level 5 (Vanilla: 4)
   - Frost walker - up to level 5 (Vanilla: 2)
   - Unbreaking - up to level 5 (Vanilla: 3)
   - Multishot - up to level 2 (Vanilla: 1)
-  - ...
 - [TODO] Added ability to leash players
 
 **Commands**
@@ -145,6 +148,7 @@ Feedback is appreciated ^^
 - Fixed ability debuff `weak_to_damage` - Now actually deals more damage
 - Fixed players with `herbivore` being able to eat even at full hunger
 - Added Big Dripleaf, Small Dripleaf, Vines, Cave Vines, Glow Lichen, Ferns and Large Ferns to `herbivore`'s diet tag
+- Removed Jungle and its variants from tag `hot_biomes`
 - Added `canine` ability preset
 - [TODO] Fixed ability debuff `hunted_by_fox` - Foxes now attack even if you're not crouching
 - [TODO] Fixed ability debuff `cant_swim` - Players no longer can swim up higher than one block up from the (sea) floor

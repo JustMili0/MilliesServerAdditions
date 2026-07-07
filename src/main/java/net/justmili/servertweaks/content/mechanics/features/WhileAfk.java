@@ -1,7 +1,7 @@
-package net.justmili.servertweaks.mechanics.features;
+package net.justmili.servertweaks.content.mechanics.features;
 
+import net.justmili.libs.v1.utils.FdaApiUtil;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.core.util.FdaApiUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;

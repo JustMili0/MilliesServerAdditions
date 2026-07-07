@@ -4,14 +4,11 @@ import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.justmili.servertweaks.config.Config;
 
-import static net.justmili.servertweaks.core.util.FdaApiUtil.createPersistentValue;
-import static net.justmili.servertweaks.core.util.FdaApiUtil.createValue;
+import static net.justmili.libs.v1.utils.FdaApiUtil.createPersistentValue;
+import static net.justmili.libs.v1.utils.FdaApiUtil.createValue;
 
-@SuppressWarnings({"UnstableApiUsage", "NullableProblems"})
+@SuppressWarnings({"NullableProblems"})
 public final class PlayerAttachments {
-    private PlayerAttachments() {
-    }
-
     public static void register() {
     }
 

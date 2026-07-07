@@ -3,7 +3,7 @@ package net.justmili.servertweaks.content.abilities.registries;
 import net.justmili.libs.v1.data.MobData;
 import net.justmili.libs.v1.utils.EntityUtil;
 import net.justmili.servertweaks.ServerTweaks;
-import net.justmili.servertweaks.content.abilities.data.DataTags;
+import net.justmili.servertweaks.registries.TagRegistry;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.core.util.ScalerUtil;
@@ -149,7 +149,7 @@ public class AbilityRegistry {
             if (!player.gameMode.isSurvival()) return;
             if (level.getGameTime() % 20 != 0) return;
 
-            if (!level.getBiome(player.blockPosition()).is(DataTags.HOT_BIOMES)) return;
+            if (!level.getBiome(player.blockPosition()).is(TagRegistry.HOT_BIOMES)) return;
             if (!(level.canSeeSky(player.blockPosition())
                 && level.getBrightness(LightLayer.SKY, player.blockPosition()) >= 8)
                 || level.isDarkOutside()
@@ -168,7 +168,7 @@ public class AbilityRegistry {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
-            if (!level.getBiome(player.blockPosition()).is(DataTags.COLD_BIOMES)) return;
+            if (!level.getBiome(player.blockPosition()).is(TagRegistry.COLD_BIOMES)) return;
             if (player.getItemBySlot(EquipmentSlot.HEAD).is(Items.LEATHER_HELMET)
                 && player.getItemBySlot(EquipmentSlot.CHEST).is(Items.LEATHER_CHESTPLATE)
                 && player.getItemBySlot(EquipmentSlot.LEGS).is(Items.LEATHER_LEGGINGS)
@@ -380,7 +380,7 @@ public class AbilityRegistry {
             boolean inWaterBlock = player.isInWater(),
                 inWaterCauldron = level.getBlockState(player.blockPosition()).is(Blocks.WATER_CAULDRON),
                 hasHelmet = !player.getItemBySlot(EquipmentSlot.HEAD).isEmpty(),
-                inWetBiome = level.getBiome(player.blockPosition()).is(DataTags.HYDROPHOBIC_HELMET_EXCEPTIONS),
+                inWetBiome = level.getBiome(player.blockPosition()).is(TagRegistry.HYDROPHOBIC_HELMET_EXCEPTIONS),
                 inRain = player.isInRain() && (!hasHelmet || inWetBiome),
                 inWater = inWaterBlock || inRain || inWaterCauldron;
 

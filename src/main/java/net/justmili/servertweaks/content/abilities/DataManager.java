@@ -6,7 +6,10 @@ import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 import static net.justmili.servertweaks.content.abilities.DataStorage.*;
 

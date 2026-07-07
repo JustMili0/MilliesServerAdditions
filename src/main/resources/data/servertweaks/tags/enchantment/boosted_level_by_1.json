@@ -1,0 +1,14 @@
+{
+  "values": [
+    "minecraft:protection",
+    "minecraft:fire_protection",
+    "minecraft:projectile_protection",
+    "minecraft:blast_protection",
+    "minecraft:sharpness",
+    "minecraft:smite",
+    "minecraft:bane_of_arthropods",
+    "minecraft:looting",
+    "minecraft:efficiency",
+    "minecraft:feather_falling"
+  ]
+}
