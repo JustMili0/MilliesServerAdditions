@@ -1,5 +1,6 @@
 package net.justmili.servertweaks.content.mechanics.features;
 
+import net.justmili.servertweaks.config.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -25,6 +26,7 @@ public class AnvilRepair {
     private static final Map<UUID, BlockPos> anvilPosition = new HashMap<>();
 
     public static InteractionResult onUseBlock(Player interacting, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
+        if (!Config.enableAnvilRepair.get()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (!player.isShiftKeyDown()) return InteractionResult.PASS;
 
