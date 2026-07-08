@@ -8,12 +8,12 @@ import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.libs.v1.utils.EntityUtil;
 import net.justmili.libs.v1.utils.FdaApiUtil;
-import net.justmili.servertweaks.registries.TagRegistry;
 import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
 import net.justmili.servertweaks.content.abilities.registries.ModifierRegistry;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
+import net.justmili.servertweaks.registries.TagRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -37,10 +37,10 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import org.jspecify.annotations.Nullable;
@@ -116,7 +116,7 @@ public class UseEvents {
         if (!has(player, AbilityRegistry.WEAK_TO_DAMAGE)) return true;
         if (source.is(DamageTypes.FALL)) return true;
 
-        return recalcDamage(player, source, value, 0.75F);
+        return recalcDamage(player, source, value, 1.75F);
     }
 
     private static InteractionResult pearling(Player interacting, Level level, InteractionHand hand) {
@@ -184,7 +184,38 @@ public class UseEvents {
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
 
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.getItem() instanceof BlockItem && stack.has(DataComponents.FOOD)) return InteractionResult.PASS;
+        Block block = level.getBlockState(hitResult.getBlockPos()).getBlock();
+
+        // TODO: FIX - This is so fucking annoyingly confusing trying to account for every single thing a player can do
+        // Fuckery to properly diet-block while allowing planting and harvesting
+//        if (stack.getItem() instanceof BlockItem blockItem) {
+//            Block blockItemBlock = blockItem.getBlock();
+//            if ((!blockItemBlock.equals(block)
+//                || (block instanceof FarmlandBlock && blockItemBlock instanceof CropBlock))
+//                // Don't do anything for berries because rn I can't figure it the fuck out
+//                && stack.has(DataComponents.FOOD)
+//            ) return InteractionResult.PASS;
+//        }
+
+        // Fix trying to RC anything with non-diet item in hand being blocked
+        if (block instanceof AbstractChestBlock<?>
+            || block instanceof CraftingTableBlock
+            || block instanceof CrafterBlock
+            || block instanceof AbstractFurnaceBlock
+            || block instanceof ComposterBlock
+            || block instanceof AnvilBlock
+            || block instanceof CampfireBlock
+            || block instanceof SoulFireBlock
+            || block instanceof EnchantingTableBlock
+            || block instanceof SignBlock
+            || block instanceof HangingSignBlock
+            || block instanceof DecoratedPotBlock
+            || block instanceof ShelfBlock
+            || block instanceof BellBlock
+            || block instanceof BeaconBlock
+            || block instanceof NoteBlock
+            || block.defaultBlockState().is(TagRegistry.DIET_FIX_CUSTOM_FUNCTIONAL_BLOCKS)
+        ) return InteractionResult.PASS;
 
         bugEaterItems(interacting, level, hand); // Handle this first
         if (isDietBlocked(player, stack)) return InteractionResult.FAIL;
@@ -308,7 +339,7 @@ public class UseEvents {
         player.playSound(SoundEvents.GENERIC_EAT.value(), 1.0F, 1.0F+(player.getRandom().nextFloat()-player.getRandom().nextFloat()) * 0.4F);
     }
     private static boolean isDietBlocked(ServerPlayer player, ItemStack stack) {
-        if (!stack.has(DataComponents.FOOD)) return false;
+        if (!stack.has(DataComponents.FOOD) /*|| stack.has(DataComponents.BUCKET_ENTITY_DATA)*/) return false;
 
         boolean carnivore = has(player, AbilityRegistry.CARNIVORE),
             vegetarian = has(player, AbilityRegistry.VEGETARIAN),

@@ -19,7 +19,9 @@ public class TagRegistry {
         DIET_BUG_ITEMS = createTag(Registries.ITEM, "diets/insectivore"),
         DIET_MODIFIER_GOLDEN_FOODS = createTag(Registries.ITEM, "diets/modifier_golden_foods");
 
-    public static final TagKey<Block> DIET_FOLIAGE = createTag(Registries.BLOCK, "diets/herbivore");
+    public static final TagKey<Block>
+        DIET_FOLIAGE = createTag(Registries.BLOCK, "diets/herbivore"),
+        DIET_FIX_CUSTOM_FUNCTIONAL_BLOCKS = createTag(Registries.BLOCK, "diets/fix_custom_functional_blocks");
 
     public static final TagKey<EntityType<?>>
         DIET_BUG_ENTITY_GENERIC = createTag(Registries.ENTITY_TYPE, "bug_eater/generic"),

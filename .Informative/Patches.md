@@ -132,7 +132,7 @@ Feedback is appreciated ^^
   - Feather Falling - up to level 5 (Vanilla: 4)
   - Frost walker - up to level 5 (Vanilla: 2)
   - Unbreaking - up to level 5 (Vanilla: 3)
-  - Multishot - up to level 2 (Vanilla: 1)
+  - Multishot - up to level 3 (Vanilla: 1)
 - [TODO] Added ability to leash players
 
 **Commands**
@@ -150,6 +150,10 @@ Feedback is appreciated ^^
 - Fixed being able to eat anything no matter the diet if food is held in the offhand
 - Fixed ability debuff `weak_to_damage` - Now actually deals more damage
 - Fixed players with `herbivore` being able to eat even at full hunger
+- Fixed placing and picking up fish in and from buckets as `carnivore`, `vegeterian`, `saccharivore`, `herbivore` and `insectivore`
+- Fixed opening chests and interacting with workstation blocks being blocked when holding a non-in-diet item
+  - Also added `diets/fix_custom_functional_blocks.json` block tag for better mod compatibility
+- [TODO] Fixed blocking non-diet items while allowing to plant and harvest
 - Added Big Dripleaf, Small Dripleaf, Vines, Cave Vines, Glow Lichen, Ferns and Large Ferns to `herbivore`'s diet tag
 - Removed Jungle and its variants from tag `hot_biomes`
 - Added `canine` ability preset
@@ -163,10 +167,5 @@ Feedback is appreciated ^^
 - (NEW) Insectivore - Can only feed on bug-like entities, slimes, magma cubes, and items like slime balls and magma creams
   - With Minecraft 26.2, you'll also be able to consume sulfur cubes
     - If you eat a sulfur cube with a special block inside it, some effect will be given (e.g. TNT = You blow up, Magma Block = Slight Fire damage)
-
-**Bug Fixes**
-- (Player Abilities) Fixed issues `carnivore`, `vegeterian`, `saccharivore`, `herbivore` and `insectivore`
-  - [TODO] Fixed placing and picking up fish in and from buckets
-  - [TODO] Fixed opening chests and interacting with workstation blocks being blocked when holding a non-in-diet item 
 
 Feedback is appreciated ^^

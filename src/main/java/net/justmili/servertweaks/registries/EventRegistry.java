@@ -7,11 +7,11 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.UseEvents;
-import net.justmili.servertweaks.core.util.ScalerUtil;
 import net.justmili.servertweaks.content.mechanics.features.AnvilRepair;
 import net.justmili.servertweaks.content.mechanics.features.RightClickHarvest;
 import net.justmili.servertweaks.content.mechanics.features.WhileAfk;
 import net.justmili.servertweaks.content.mechanics.logic.Banishment;
+import net.justmili.servertweaks.core.util.ScalerUtil;
 
 public class EventRegistry {
     public static void register() {
