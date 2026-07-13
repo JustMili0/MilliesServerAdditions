@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.mixin.abilities;
 
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.abilities.DataManager;
+import net.justmili.servertweaks.content.abilities.manage.AbilityManager;
 import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,7 +19,7 @@ public class LivingEntityMixin {
         if (!(Config.playerAbilities.get())) return;
         LivingEntity self = (LivingEntity) (Object) this;
         if (!(self instanceof ServerPlayer player)) return;
-        if (DataManager.has(player, AbilityRegistry.TOUGH)) ci.cancel();
+        if (AbilityManager.has(player, AbilityRegistry.TOUGH)) ci.cancel();
     }
 
     // CANT_BREATHE_AIR
@@ -27,7 +27,7 @@ public class LivingEntityMixin {
     private void increaseAirSupply(int currentAir, CallbackInfoReturnable<Integer> cir) {
         if (!(Config.playerAbilities.get())) return;
         if (!((LivingEntity) (Object) this instanceof ServerPlayer player)) return;
-        if (!DataManager.has(player, AbilityRegistry.CANT_BREATHE_AIR)) return;
+        if (!AbilityManager.has(player, AbilityRegistry.CANT_BREATHE_AIR)) return;
         if (!player.isInWater()) cir.setReturnValue(currentAir);
     }
 }

@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.abilities.UseEvents;
+import net.justmili.servertweaks.content.abilities.manage.UseEvents;
 import net.justmili.servertweaks.content.mechanics.features.AnvilRepair;
 import net.justmili.servertweaks.content.mechanics.features.RightClickHarvest;
 import net.justmili.servertweaks.content.mechanics.features.WhileAfk;

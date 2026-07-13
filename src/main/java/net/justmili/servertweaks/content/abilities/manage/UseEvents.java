@@ -1,10 +1,11 @@
-package net.justmili.servertweaks.content.abilities;
+package net.justmili.servertweaks.content.abilities.manage;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.libs.v1.utils.EntityUtil;
 import net.justmili.libs.v1.utils.FdaApiUtil;
@@ -22,6 +23,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -37,6 +39,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -48,7 +51,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.UUID;
 
-import static net.justmili.servertweaks.content.abilities.DataManager.has;
+import static net.justmili.servertweaks.content.abilities.manage.AbilityManager.has;
 
 public class UseEvents {
     public static void registerAbilityEvents() {
@@ -57,7 +60,7 @@ public class UseEvents {
                 ServerLevel level = player.level();
 
                 // Tick all Ticking Abilities
-                for (Ability ability : DataManager.getAbilities(player)) {
+                for (Ability ability : AbilityManager.getAbilities(player)) {
                     if (ability instanceof TickingAbility tickingAbility) {
                         tickingAbility.tick(player, level);
                     }
@@ -68,19 +71,19 @@ public class UseEvents {
                     attack = player.getAttribute(Attributes.ATTACK_DAMAGE),
                     maxHp = player.getAttribute(Attributes.MAX_HEALTH);
 
-                if (!has(player, AbilityRegistry.SLOW) && speed != null) speed.removeModifier(AbilityRegistry.AM_SLOW_SPEED);
-                if (!has(player, AbilityRegistry.STRONG) && attack != null) attack.removeModifier(AbilityRegistry.AM_STRONG_DAMAGE);
-                if (!has(player, AbilityRegistry.STRONG) && maxHp != null) maxHp.removeModifier(AbilityRegistry.AM_STRONG_HP);
+                if (!has(player, AbilityRegistry.SLOW) && speed != null) speed.removeModifier(AbilityRegistry.AR_SLOW_SPEED);
+                if (!has(player, AbilityRegistry.STRONG) && attack != null) attack.removeModifier(AbilityRegistry.AR_STRONG_DAMAGE);
+                if (!has(player, AbilityRegistry.STRONG) && maxHp != null) maxHp.removeModifier(AbilityRegistry.AR_STRONG_HP);
 
                 // Change to: Check if player has presets locked;
                 // If yes but has no abilities or modifiers then clear them from the file and unlock preset picking
                 // As well as inform the player that they have to pick their preset/class again
                 if (FdaApiUtil.getBoolValue(player, PlayerAttachments.PICKED_PRESET)
-                    && DataManager.getAbilities(player).isEmpty()
-                    && DataManager.getModifiers(player).isEmpty()) {
+                    && AbilityManager.getAbilities(player).isEmpty()
+                    && AbilityManager.getModifiers(player).isEmpty()) {
 
                     // Remove from file
-                    DataManager.clearPlayer(player);
+                    AbilityManager.clearPlayer(player);
                     // Unlock preset picking
                     FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, false);
                     // Inform player
@@ -184,18 +187,15 @@ public class UseEvents {
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
 
         ItemStack stack = player.getItemInHand(hand);
-        Block block = level.getBlockState(hitResult.getBlockPos()).getBlock();
+        var state = level.getBlockState(hitResult.getBlockPos());
+        var block = state.getBlock();
 
-        // TODO: FIX - This is so fucking annoyingly confusing trying to account for every single thing a player can do
         // Fuckery to properly diet-block while allowing planting and harvesting
-//        if (stack.getItem() instanceof BlockItem blockItem) {
-//            Block blockItemBlock = blockItem.getBlock();
-//            if ((!blockItemBlock.equals(block)
-//                || (block instanceof FarmlandBlock && blockItemBlock instanceof CropBlock))
-//                // Don't do anything for berries because rn I can't figure it the fuck out
-//                && stack.has(DataComponents.FOOD)
-//            ) return InteractionResult.PASS;
-//        }
+        if (stack.getItem() instanceof BlockItem) {
+            if (stack.is(ConventionalItemTags.CROPS) && state.is(BlockTags.GROWS_CROPS)) return InteractionResult.PASS;
+            if (stack.is(ConventionalItemTags.BERRY_FOODS) && state.is(BlockTags.SUPPORTS_VEGETATION)) return InteractionResult.PASS;
+            //
+        }
 
         // Fix trying to RC anything with non-diet item in hand being blocked
         if (block instanceof AbstractChestBlock<?>
@@ -214,7 +214,7 @@ public class UseEvents {
             || block instanceof BellBlock
             || block instanceof BeaconBlock
             || block instanceof NoteBlock
-            || block.defaultBlockState().is(TagRegistry.DIET_FIX_CUSTOM_FUNCTIONAL_BLOCKS)
+            || block.defaultBlockState().is(TagRegistry.DIET_ALLOW_BLOCK_INTERACTION)
         ) return InteractionResult.PASS;
 
         bugEaterItems(interacting, level, hand); // Handle this first

@@ -1,15 +1,21 @@
 package net.justmili.servertweaks.content.abilities.type;
 
+import net.justmili.servertweaks.ServerTweaks;
+import net.minecraft.resources.Identifier;
+
 import java.util.Objects;
 
 public class AbilityModifier {
-    private final String name;
+    private final Identifier name;
 
-    public AbilityModifier(String name) {
+    public AbilityModifier(Identifier name) {
         this.name = name;
     }
+    public AbilityModifier(String name) {
+        this.name = ServerTweaks.asResource(name);
+    }
 
-    public String getName() {
+    public Identifier getName() {
         return name;
     }
 
@@ -27,6 +33,6 @@ public class AbilityModifier {
 
     @Override
     public String toString() {
-        return name;
+        return name.toString();
     }
 }

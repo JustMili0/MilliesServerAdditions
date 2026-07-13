@@ -11,8 +11,6 @@
     "abilities.ClickEventAsServer",
     "abilities.LivingEntityMixin",
     "abilities.MobMixin",
-    "abilities.TamableAnimalMixin",
-    "abilities.TargetingConditionsMixin",
     "accessors.CropBlockAccessor",
     "accessors.FoxAccessor"
   ],

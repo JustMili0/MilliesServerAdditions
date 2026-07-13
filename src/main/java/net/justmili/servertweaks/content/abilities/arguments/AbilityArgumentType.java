@@ -8,6 +8,7 @@ import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.resources.Identifier;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -17,10 +18,12 @@ public class AbilityArgumentType {
     }
 
     public static Ability getAbility(CommandContext<CommandSourceStack> context, String argName) {
-        return AbilityRegistry.byName(StringArgumentType.getString(context, argName));
+        Identifier id = Identifier.tryParse(StringArgumentType.getString(context, argName));
+        if (id == null) return null;
+        return AbilityRegistry.byId(id);
     }
 
     public static CompletableFuture<Suggestions> suggest(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggest(AbilityRegistry.getNames(), builder);
+        return SharedSuggestionProvider.suggest(AbilityRegistry.getIds().stream().map(Identifier::toString), builder);
     }
 }

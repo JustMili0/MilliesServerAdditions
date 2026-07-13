@@ -4,13 +4,14 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.libs.v1.utils.FdaApiUtil;
-import net.justmili.servertweaks.content.abilities.DataManager;
-import net.justmili.servertweaks.content.abilities.DataStorage;
+import net.justmili.servertweaks.content.abilities.manage.AbilityManager;
+import net.justmili.servertweaks.content.abilities.manage.FileManager;
 import net.justmili.servertweaks.content.abilities.arguments.AbilityArgumentType;
 import net.justmili.servertweaks.content.abilities.arguments.ModifierArgumentType;
 import net.justmili.servertweaks.content.abilities.arguments.PresetArgumentType;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
+import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -35,7 +36,7 @@ public class PlayerAbilities {
                             ServerPlayer player = context.getSource().getPlayerOrException();
 
                             String setName = StringArgumentType.getString(context, "preset");
-                            PresetArgumentType.AbilityPreset set = PresetArgumentType.getSet(setName);
+                            AbilityPreset set = PresetArgumentType.getSet(setName);
                             if (set == null) {
                                 CommandUtil.sendFail(source, "Unknown ability preset: "+setName);
                                 return 0;
@@ -56,7 +57,7 @@ public class PlayerAbilities {
                     .requires(src -> CommandUtil.hasPerms(src, 1))
                     .executes(context -> {
                         MinecraftServer server = context.getSource().getServer();
-                        DataStorage.loadFile(server);
+                        FileManager.loadFile(server);
 
                         CommandUtil.sendOk(context.getSource(), "Reloaded Player Abilities");
                         return 1;
@@ -73,9 +74,9 @@ public class PlayerAbilities {
                                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                     Ability ability = AbilityArgumentType.getAbility(context, "abilityOrDebuff");
 
-                                    DataManager.grantAbility(player, ability);
+                                    AbilityManager.grantAbility(player, ability);
 
-                                    CommandUtil.sendOk(context.getSource(), "Granted ability "+ability.getName()+" to player "+player.getName().getString());
+                                    CommandUtil.sendOk(context.getSource(), "Granted ability "+ability.getId()+" to player "+player.getName().getString());
 
                                     return 1;
                                 })
@@ -87,7 +88,7 @@ public class PlayerAbilities {
                                 .executes(context -> {
                                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                     AbilityModifier modifier = ModifierArgumentType.getModifier(context, "modifier");
-                                    DataManager.grantModifier(player, modifier);
+                                    AbilityManager.grantModifier(player, modifier);
                                     CommandUtil.sendOk(context.getSource(), "Granted ability modifier "+modifier.getName()+" to player "+player.getName().getString());
                                     return 1;
                                 })
@@ -106,9 +107,9 @@ public class PlayerAbilities {
                                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                     Ability ability = AbilityArgumentType.getAbility(context, "abilityOrDebuff");
 
-                                    DataManager.revokeAbility(player, ability);
+                                    AbilityManager.revokeAbility(player, ability);
 
-                                    CommandUtil.sendOk(context.getSource(), "Removed ability "+ability.getName()+" from player "+player.getName().getString());
+                                    CommandUtil.sendOk(context.getSource(), "Removed ability "+ability.getId()+" from player "+player.getName().getString());
 
                                     return 1;
                                 })
@@ -121,7 +122,7 @@ public class PlayerAbilities {
                                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                     AbilityModifier modifier = ModifierArgumentType.getModifier(context, "modifier");
 
-                                    DataManager.revokeModifier(player, modifier);
+                                    AbilityManager.revokeModifier(player, modifier);
 
                                     CommandUtil.sendOk(context.getSource(), "Removed ability modifier "+modifier.getName()+" from player "+player.getName().getString());
 
@@ -133,7 +134,7 @@ public class PlayerAbilities {
                             .executes(context -> {
                                 ServerPlayer player = EntityArgument.getPlayer(context, "player");
 
-                                DataManager.clearPlayer(player);
+                                AbilityManager.clearPlayer(player);
                                 FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, false);
 
                                 CommandUtil.sendOk(context.getSource(), "Deleted player abilities profile of "+player.getName().getString());
@@ -154,7 +155,7 @@ public class PlayerAbilities {
                                 ServerPlayer player = EntityArgument.getPlayer(context, "player");
 
                                 String setName = StringArgumentType.getString(context, "preset");
-                                PresetArgumentType.AbilityPreset set = PresetArgumentType.getSet(setName);
+                                AbilityPreset set = PresetArgumentType.getSet(setName);
                                 if (set == null) {
                                     CommandUtil.sendFailTo(player, "Unknown ability preset: "+setName);
                                     return 0;
@@ -165,7 +166,7 @@ public class PlayerAbilities {
                                     return 0;
                                 }
 
-                                DataManager.applySet(player.getUUID(), set, source.getServer());
+                                AbilityManager.applySet(player.getUUID(), set, source.getServer());
                                 FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, true);
                                 CommandUtil.sendOkTo(player, "Applied the "+setName+" preset!");
                                 return 1;

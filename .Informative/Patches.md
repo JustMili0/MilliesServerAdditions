@@ -152,7 +152,7 @@ Feedback is appreciated ^^
 - Fixed players with `herbivore` being able to eat even at full hunger
 - Fixed placing and picking up fish in and from buckets as `carnivore`, `vegeterian`, `saccharivore`, `herbivore` and `insectivore`
 - Fixed opening chests and interacting with workstation blocks being blocked when holding a non-in-diet item
-  - Also added `diets/fix_custom_functional_blocks.json` block tag for better mod compatibility
+  - Added `diets/allow_block_interaction.json` block tag to except blocks from getting interactions blocked
 - [TODO] Fixed blocking non-diet items while allowing to plant and harvest
 - Added Big Dripleaf, Small Dripleaf, Vines, Cave Vines, Glow Lichen, Ferns and Large Ferns to `herbivore`'s diet tag
 - Removed Jungle and its variants from tag `hot_biomes`

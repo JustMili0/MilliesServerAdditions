@@ -1,32 +1,38 @@
 package net.justmili.servertweaks.content.abilities.type;
 
+import net.justmili.servertweaks.ServerTweaks;
+import net.minecraft.resources.Identifier;
+
 import java.util.Objects;
 
 public class Ability {
-    private final String name;
+    private final Identifier id;
 
-    public Ability(String name) {
-        this.name = name;
+    public Ability(Identifier id) {
+        this.id = id;
+    }
+    public Ability(String id) {
+        this.id = ServerTweaks.asResource(id);
     }
 
-    public String getName() {
-        return name;
+    public Identifier getId() {
+        return id;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Ability ability)) return false;
-        return Objects.equals(name, ability.name);
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Ability ability)) return false;
+        return Objects.equals(id, ability.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
-        return name;
+        return id.toString();
     }
 }

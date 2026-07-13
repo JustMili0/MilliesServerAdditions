@@ -1,8 +1,8 @@
-package net.justmili.servertweaks.content.abilities;
+package net.justmili.servertweaks.content.abilities.manage;
 
-import net.justmili.servertweaks.content.abilities.arguments.PresetArgumentType;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
+import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -11,10 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import static net.justmili.servertweaks.content.abilities.DataStorage.*;
+import static net.justmili.servertweaks.content.abilities.manage.FileManager.*;
 
-@SuppressWarnings("unchecked")
-public class DataManager {
+public class AbilityManager {
     // Ability and Modifier management
     public static Set<Ability> getAbilities(ServerPlayer player) {
         return playerAbilities.getOrDefault(player.getUUID(), Collections.emptySet());
@@ -43,7 +42,7 @@ public class DataManager {
     public static boolean has(ServerPlayer player, Ability ability) { return getAbilities(player).contains(ability); }
     public static boolean has(ServerPlayer player, AbilityModifier modifier) { return getModifiers(player).contains(modifier); }
 
-    public static void applySet(UUID uuid, PresetArgumentType.AbilityPreset set, MinecraftServer server) {
+    public static void applySet(UUID uuid, AbilityPreset set, MinecraftServer server) {
         playerAbilities.put(uuid, new HashSet<>(set.abilities()));
         playerModifiers.put(uuid, new HashSet<>(set.modifiers()));
         saveFile(server);

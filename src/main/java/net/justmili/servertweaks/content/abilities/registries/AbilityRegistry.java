@@ -58,69 +58,79 @@ import java.util.stream.Collectors;
 public class AbilityRegistry {
     /// Extra Ability variables
     private static final Map<UUID, List<WrappedGoal>> storedGoals = new HashMap<>();
-    public static final Identifier AM_SLOW_SPEED = ServerTweaks.asResource("slow_speed");
-    public static final Identifier AM_STRONG_HP = ServerTweaks.asResource("strong_health");
-    public static final Identifier AM_STRONG_DAMAGE = ServerTweaks.asResource("strong_damage");
+    public static final Identifier AR_SLOW_SPEED = ServerTweaks.asResource("slow_speed");
+    public static final Identifier AR_STRONG_HP = ServerTweaks.asResource("strong_health");
+    public static final Identifier AR_STRONG_DAMAGE = ServerTweaks.asResource("strong_damage");
 
     /// Registry
-    private static final Map<String, Ability> REGISTRY = new HashMap<>();
+    private static final Map<Identifier, Ability> REGISTRY = new HashMap<>();
 
     public static final Ability
-        FIRE_IMMUNE = register(new FireImmune()), // Mainly handled in UseEvents.handleOtherImmunities(...)
-        LAVA_IMMUNE = register(new LavaImmune()), // Mainly handled in UseEvents.handleOtherImmunities(...)
-        HEAT_IMMUNE = register(new Ability("heat_immune")), // Mainly handled in UseEvents.handleOtherImmunities(...)
-        FREEZE_IMMUNE = register(new Ability("freeze_immune")), // Mainly handled in UseEvents.handleOtherImmunities(...)
-        FALL_IMMUNE = register(new Ability("fall_immune")), // Mainly handled in UseEvents.handleOtherImmunities(...)
-        HEAT_SENSITIVE = register(new HeatSensitive()),
-        COLD_SENSITIVE = register(new ColdSensitive()),
-        LIGHT = register(new Light()),
-        SWIFT = register(new Swift()),
-        SLOW = register(new Slow()),
-        HOPPY = register(new Hoppy()),
-        DWARF = register(new Dwarf()),
-        SQUISHY = register(new Ability("squishy")), // Handled in UseEvents.squishy(...)
-        MAGNETIC = register(new Magnetic()),
-        TOUGH = register(new Ability("tough")), // Handled through LivingEntityMixin
-        STRONG = register(new Strong()),
-        AQUA_GRACE = register(new AquaGrace()),
-        BREATHES_UNDERWATER = register(new BreathesUnderwater()), // Handled by ticking and UseEvents.handleOtherImmunities(...)
-        CANT_BREATHE_AIR = register(new CantBreatheAir()), // Handled by ticking and LivingEntityMixin
-        CANT_SWIM = register(new CantSwim()),                           // DOESN'T WORK
-        HYDROPHOBIC = register(new Hydrophobic()),
-        HUNTED_BY_FOX = register(new HuntedByFox()),                    // KINDA WORKS
-        HUNTED_BY_WOLF = register(new HuntedByWolf()),
-        SCARES_CREEPERS = register(new ScaresCreepers()),
-        SCARES_PHANTOMS = register(new ScaresPhantoms()),
-        CHILD_OF_NATURE = register(new ChildOfNature()),                // KINDA WORKS
-        WEAK_TO_DAMAGE = register(new Ability("weak_to_damage")), // Handled in UseEvents.weakToDamage(...)
-        NIGHT_VISION = register(new NightVision()),
-        BURNS_IN_DAYLIGHT = register(new BurnsInDaylight()),
-        IS_MONSTER = register(new IsMonster()),
-        CLIMBS_WALLS = register(new Ability("climbs_walls")),     // DOESN'T WORK, No code implemented yet
-        PEARLING = register(new Ability("pearling")),
-        PREDATORY = register(new Predatory()),
-        BOVID = register(new Ability("bovid")), // Handled in UseEvents.bovid(...)
-        CARNIVORE = register(new Ability("carnivore")), // Handled by dietary methods in UseEvents
-        VEGETARIAN = register(new Ability("vegetarian")), // Handled by dietary methods in UseEvents
-        SACCHARIVORE = register(new Ability("saccharivore")), // Handled by dietary methods in UseEvents
-        HERBIVORE = register(new Ability("herbivore")), // Handled by dietary methods in UseEvents
+        FIRE_IMMUNE, LAVA_IMMUNE,HEAT_IMMUNE,FREEZE_IMMUNE,FALL_IMMUNE,
+        HEAT_SENSITIVE,COLD_SENSITIVE,
+        LIGHT, SWIFT, SLOW, HOPPY, DWARF, SQUISHY, MAGNETIC, TOUGH, STRONG,
+        AQUA_GRACE, BREATHES_UNDERWATER, CANT_BREATHE_AIR, CANT_SWIM, HYDROPHOBIC,
+        HUNTED_BY_FOX, HUNTED_BY_WOLF, SCARES_CREEPERS, SCARES_PHANTOMS,
+        CHILD_OF_NATURE, WEAK_TO_DAMAGE, NIGHT_VISION,
+        BURNS_IN_DAYLIGHT, IS_MONSTER, CLIMBS_WALLS, PEARLING,
+        PREDATORY, BOVID, CARNIVORE, VEGETARIAN, SACCHARIVORE, HERBIVORE, INSECTIVORE;
+
+    static {
+        FIRE_IMMUNE = register(new FireImmune()); // Mainly handled in UseEvents.handleOtherImmunities(...)
+        LAVA_IMMUNE = register(new LavaImmune()); // Mainly handled in UseEvents.handleOtherImmunities(...)
+        HEAT_IMMUNE = register(new Ability("heat_immune")); // Mainly handled in UseEvents.handleOtherImmunities(...)
+        FREEZE_IMMUNE = register(new Ability("freeze_immune")); // Mainly handled in UseEvents.handleOtherImmunities(...)
+        FALL_IMMUNE = register(new Ability("fall_immune")); // Mainly handled in UseEvents.handleOtherImmunities(...)
+        HEAT_SENSITIVE = register(new HeatSensitive());
+        COLD_SENSITIVE = register(new ColdSensitive());
+        LIGHT = register(new Light());
+        SWIFT = register(new Swift());
+        SLOW = register(new Slow());
+        HOPPY = register(new Hoppy());
+        DWARF = register(new Dwarf());
+        SQUISHY = register(new Ability("squishy")); // Handled in UseEvents.squishy(...)
+        MAGNETIC = register(new Magnetic());
+        TOUGH = register(new Ability("tough")); // Handled through LivingEntityMixin
+        STRONG = register(new Strong());
+        AQUA_GRACE = register(new AquaGrace());
+        BREATHES_UNDERWATER = register(new BreathesUnderwater()); // Handled by ticking and UseEvents.handleOtherImmunities(...)
+        CANT_BREATHE_AIR = register(new CantBreatheAir()); // Handled by ticking and LivingEntityMixin
+        CANT_SWIM = register(new CantSwim());                           // DOESN'T WORK, No code implemented yet
+        HYDROPHOBIC = register(new Hydrophobic());
+        HUNTED_BY_FOX = register(new HuntedByFox());                    // KINDA WORKS
+        HUNTED_BY_WOLF = register(new HuntedByWolf());
+        SCARES_CREEPERS = register(new ScaresCreepers());
+        SCARES_PHANTOMS = register(new ScaresPhantoms());
+        CHILD_OF_NATURE = register(new ChildOfNature());                // DOESN'T WORK, No code implemented yet
+        WEAK_TO_DAMAGE = register(new Ability("weak_to_damage")); // Handled in UseEvents.weakToDamage(...)
+        NIGHT_VISION = register(new NightVision());
+        BURNS_IN_DAYLIGHT = register(new BurnsInDaylight());
+        IS_MONSTER = register(new IsMonster());
+        CLIMBS_WALLS = register(new Ability("climbs_walls"));     // DOESN'T WORK, No code implemented yet
+        PEARLING = register(new Ability("pearling"));
+        PREDATORY = register(new Predatory());
+        BOVID = register(new Ability("bovid")); // Handled in UseEvents.bovid(...)
+        CARNIVORE = register(new Ability("carnivore")); // Handled by dietary methods in UseEvents
+        VEGETARIAN = register(new Ability("vegetarian")); // Handled by dietary methods in UseEvents
+        SACCHARIVORE = register(new Ability("saccharivore")); // Handled by dietary methods in UseEvents
+        HERBIVORE = register(new Ability("herbivore")); // Handled by dietary methods in UseEvents
         INSECTIVORE = register(new Ability("insectivore")); // Handled by dietary methods in UseEvents
+    }
 
     private static Ability register(Ability ability) {
-        REGISTRY.put(ability.getName(), ability);
+        REGISTRY.put(ability.getId(), ability);
         return ability;
     }
 
-    public static Set<String> getNames() {
+    public static Set<Identifier> getIds() {
         return REGISTRY.keySet();
     }
 
-    public static @Nullable Ability byName(String name) {
-        return REGISTRY.get(name);
+    public static @Nullable Ability byId(Identifier id) {
+        return REGISTRY.get(id);
     }
 
     /// Define ticking abilities
-
     static class FireImmune extends TickingAbility {
         FireImmune() { super("fire_immune"); }
 
@@ -215,8 +225,8 @@ public class AbilityRegistry {
         public void tick(ServerPlayer player, ServerLevel level) {
             AttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
 
-            if (speed.getModifier(AM_SLOW_SPEED) == null) {
-                speed.addTransientModifier(new AttributeModifier(AM_SLOW_SPEED, -0.32, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+            if (speed.getModifier(AR_SLOW_SPEED) == null) {
+                speed.addTransientModifier(new AttributeModifier(AR_SLOW_SPEED, -0.32, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
             }
         }
     }
@@ -277,19 +287,19 @@ public class AbilityRegistry {
             AttributeInstance attack = player.getAttribute(Attributes.ATTACK_DAMAGE),
                 maxHp = player.getAttribute(Attributes.MAX_HEALTH);
 
-            if (attack != null && attack.getModifier(AM_STRONG_DAMAGE) == null) {
-                attack.addTransientModifier(new AttributeModifier(AM_STRONG_DAMAGE, 3.0, AttributeModifier.Operation.ADD_VALUE));
+            if (attack != null && attack.getModifier(AR_STRONG_DAMAGE) == null) {
+                attack.addTransientModifier(new AttributeModifier(AR_STRONG_DAMAGE, 3.0, AttributeModifier.Operation.ADD_VALUE));
             }
 
             if (!player.gameMode.isSurvival()) return;
 
             int armor = player.getArmorValue();
-            float targetHp = Math.max(40.0F, Math.min(100.0F, 100.0F-(armor * 3.0F)));
+            float targetHp = Math.clamp(100.0F - (armor * 3.0F), 40.0F, 100.0F);
             if (targetHp % 2 != 0) targetHp += 1;
 
             if (maxHp != null) {
-                maxHp.removeModifier(AM_STRONG_HP);
-                maxHp.addPermanentModifier(new AttributeModifier(AM_STRONG_HP, targetHp-20.0, AttributeModifier.Operation.ADD_VALUE));
+                maxHp.removeModifier(AR_STRONG_HP);
+                maxHp.addPermanentModifier(new AttributeModifier(AR_STRONG_HP, targetHp-20.0, AttributeModifier.Operation.ADD_VALUE));
                 if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
             }
         }

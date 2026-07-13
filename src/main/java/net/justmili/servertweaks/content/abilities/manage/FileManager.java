@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.content.abilities;
+package net.justmili.servertweaks.content.abilities.manage;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,6 +10,7 @@ import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
 import net.justmili.servertweaks.content.abilities.registries.ModifierRegistry;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -17,7 +18,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class DataStorage {
+public class FileManager {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String FILE_NAME = "player_abilities.json";
     public static final Map<UUID, Set<Ability>> playerAbilities = new LinkedHashMap<>();
@@ -49,9 +50,16 @@ public class DataStorage {
                 Set<Ability> abilities = new LinkedHashSet<>();
                 if (object.has("abilities")) {
                     for (var element : object.getAsJsonArray("abilities")) {
-                        Ability ability = AbilityRegistry.byName(element.getAsString());
+                        String raw = element.getAsString();
+                        Identifier id = Identifier.tryParse(raw);
+                        if (id == null) {
+                            ServerTweaks.LOGGER.warn("Invalid ability id '{}', skipping", raw);
+                            continue;
+                        }
+
+                        Ability ability = AbilityRegistry.byId(id);
                         if (ability == null) {
-                            ServerTweaks.LOGGER.warn("Unknown ability '{}', skipping", element.getAsString());
+                            ServerTweaks.LOGGER.warn("Unknown ability '{}', skipping", raw);
                             continue;
                         }
                         abilities.add(ability);
@@ -60,9 +68,16 @@ public class DataStorage {
                 Set<AbilityModifier> modifiers = new LinkedHashSet<>();
                 if (object.has("ability_modifiers")) {
                     for (var element : object.getAsJsonArray("ability_modifiers")) {
-                        AbilityModifier modifier = ModifierRegistry.byName(element.getAsString());
+                        String raw = element.getAsString();
+                        Identifier id = Identifier.tryParse(raw);
+                        if (id == null) {
+                            ServerTweaks.LOGGER.warn("Invalid modifier id '{}', skipping", raw);
+                            continue;
+                        }
+
+                        AbilityModifier modifier = ModifierRegistry.byId(id);
                         if (modifier == null) {
-                            ServerTweaks.LOGGER.warn("Unknown modifier '{}', skipping", element.getAsString());
+                            ServerTweaks.LOGGER.warn("Unknown modifier '{}', skipping", raw);
                             continue;
                         }
                         modifiers.add(modifier);
@@ -90,12 +105,12 @@ public class DataStorage {
 
             JsonArray abilitiesArr = new JsonArray();
             Set<Ability> abilities = playerAbilities.getOrDefault(uuid, Collections.emptySet());
-            abilities.stream().map(Ability::getName).sorted().forEach(abilitiesArr::add);
+            abilities.stream().map(Ability::getId).map(Identifier::toString).sorted().forEach(abilitiesArr::add);
             playerObj.add("abilities", abilitiesArr);
 
             JsonArray modifiersArr = new JsonArray();
             Set<AbilityModifier> modifiers = playerModifiers.getOrDefault(uuid, Collections.emptySet());
-            modifiers.stream().map(AbilityModifier::getName).sorted().forEach(modifiersArr::add);
+            modifiers.stream().map(AbilityModifier::getName).map(Identifier::toString).sorted().forEach(modifiersArr::add);
             playerObj.add("ability_modifiers", modifiersArr);
 
             root.add(uuid.toString(), playerObj);

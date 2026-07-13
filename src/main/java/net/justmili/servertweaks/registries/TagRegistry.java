@@ -21,7 +21,7 @@ public class TagRegistry {
 
     public static final TagKey<Block>
         DIET_FOLIAGE = createTag(Registries.BLOCK, "diets/herbivore"),
-        DIET_FIX_CUSTOM_FUNCTIONAL_BLOCKS = createTag(Registries.BLOCK, "diets/fix_custom_functional_blocks");
+        DIET_ALLOW_BLOCK_INTERACTION = createTag(Registries.BLOCK, "diets/allow_block_interaction");
 
     public static final TagKey<EntityType<?>>
         DIET_BUG_ENTITY_GENERIC = createTag(Registries.ENTITY_TYPE, "bug_eater/generic"),

@@ -1,6 +1,6 @@
 package net.justmili.servertweaks.content.abilities.registries;
 
-import net.justmili.servertweaks.content.abilities.arguments.PresetArgumentType.AbilityPreset;
+import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
 
 import java.util.HashMap;
 import java.util.Map;
