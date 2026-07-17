@@ -1,0 +1,33 @@
+{
+  "values": [
+    "minecraft:chest",
+    "minecraft:trapped_chest",
+    "minecraft:ender_chest",
+    "minecraft:crafting_table",
+    "minecraft:furnace",
+    "minecraft:blast_furnace",
+    "minecraft:smoker",
+    "#minecraft:anvil",
+    "minecraft:loom",
+    "minecraft:cartography_table",
+    "minecraft:smithing_table",
+    "minecraft:grindstone",
+    "minecraft:lectern",
+    "minecraft:crafter",
+    "minecraft:composter",
+    "minecraft:barrel",
+    "minecraft:hopper",
+    "minecraft:dispenser",
+    "minecraft:dropper",
+    "#minecraft:campfires",
+    "minecraft:enchanting_table",
+    "minecraft:chiseled_bookshelf",
+    "#minecraft:all_signs",
+    "#minecraft:flower_pots",
+    "minecraft:decorated_pot",
+    "#minecraft:wooden_shelves",
+    "minecraft:bell",
+    "minecraft:beacon",
+    "minecraft:note_block"
+  ]
+}

@@ -198,24 +198,7 @@ public class UseEvents {
         }
 
         // Fix trying to RC anything with non-diet item in hand being blocked
-        if (block instanceof AbstractChestBlock<?>
-            || block instanceof CraftingTableBlock
-            || block instanceof CrafterBlock
-            || block instanceof AbstractFurnaceBlock
-            || block instanceof ComposterBlock
-            || block instanceof AnvilBlock
-            || block instanceof CampfireBlock
-            || block instanceof SoulFireBlock
-            || block instanceof EnchantingTableBlock
-            || block instanceof SignBlock
-            || block instanceof HangingSignBlock
-            || block instanceof DecoratedPotBlock
-            || block instanceof ShelfBlock
-            || block instanceof BellBlock
-            || block instanceof BeaconBlock
-            || block instanceof NoteBlock
-            || block.defaultBlockState().is(TagRegistry.DIET_ALLOW_BLOCK_INTERACTION)
-        ) return InteractionResult.PASS;
+        if (block.defaultBlockState().is(TagRegistry.DIET_ALLOW_BLOCK_INTERACTION)) return InteractionResult.PASS;
 
         bugEaterItems(interacting, level, hand); // Handle this first
         if (isDietBlocked(player, stack)) return InteractionResult.FAIL;
