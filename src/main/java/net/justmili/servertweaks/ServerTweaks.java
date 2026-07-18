@@ -4,6 +4,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.justmili.libs.v1.utils.ResourceUtil;
 import net.justmili.servertweaks.config.Config;
+import net.justmili.servertweaks.content.abilities.Abilities;
+import net.justmili.servertweaks.content.abilities.Modifiers;
+import net.justmili.servertweaks.content.abilities.Presets;
 import net.justmili.servertweaks.content.abilities.core.FileManager;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.justmili.servertweaks.registries.CommandRegistry;
@@ -26,6 +29,10 @@ public class ServerTweaks implements ModInitializer {
         DimRegistry.register();
         CommandRegistry.register();
         EventRegistry.register();
+
+        Abilities.init();
+        Modifiers.init();
+        Presets.init();
 
         ServerLifecycleEvents.SERVER_STARTED.register(FileManager::loadFile);
     }

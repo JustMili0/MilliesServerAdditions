@@ -51,7 +51,6 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -73,6 +72,7 @@ public class Abilities {
         BURNS_IN_DAYLIGHT, IS_MONSTER, CLIMBS_WALLS, PEARLING,
         PREDATORY, BOVID, CARNIVORE, VEGETARIAN, SACCHARIVORE, HERBIVORE, INSECTIVORE;
 
+    public static void init() {}
     static {
         FIRE_IMMUNE = register(new FireImmune()); // Mainly handled in UseEvents.handleOtherImmunities(...)
         LAVA_IMMUNE = register(new LavaImmune()); // Mainly handled in UseEvents.handleOtherImmunities(...)
