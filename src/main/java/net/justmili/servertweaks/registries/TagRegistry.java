@@ -23,6 +23,10 @@ public class TagRegistry {
         DIET_FOLIAGE = createTag(Registries.BLOCK, "diets/herbivore"),
         DIET_ALLOW_BLOCK_INTERACTION = createTag(Registries.BLOCK, "diets/allow_block_interaction");
 
+    public static final TagKey<Block> /// Temporary for 1.21.11, will be gone by 26.1+
+        GROWS_CROPS = createTag(Registries.BLOCK, "grows_crops"),
+        SUPPORTS_VEGETATION = createTag(Registries.BLOCK, "supports_vegetation");
+
     public static final TagKey<EntityType<?>>
         DIET_BUG_ENTITY_GENERIC = createTag(Registries.ENTITY_TYPE, "bug_eater/generic"),
         DIET_BUG_ENTITY_FIRE = createTag(Registries.ENTITY_TYPE, "bug_eater/hot"),

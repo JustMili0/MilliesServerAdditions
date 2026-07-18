@@ -189,9 +189,9 @@ public class AbilityEvents {
         var block = state.getBlock();
 
         // Fuckery to properly diet-block while allowing planting and harvesting
-        if (stack.getItem() instanceof BlockItem) {
-            if (stack.is(ConventionalItemTags.CROPS) && state.is(BlockTags.GROWS_CROPS)) return InteractionResult.PASS;
-            if (stack.is(ConventionalItemTags.BERRY_FOODS) && state.is(BlockTags.SUPPORTS_VEGETATION)) return InteractionResult.PASS;
+        if (stack.getItem() instanceof BlockItem) {         /// Change TagRegistry to BlockTags with 26.1+
+            if (stack.is(ConventionalItemTags.CROPS) && state.is(TagRegistry.GROWS_CROPS)) return InteractionResult.PASS;
+            if (stack.is(ConventionalItemTags.BERRY_FOODS) && state.is(TagRegistry.SUPPORTS_VEGETATION)) return InteractionResult.PASS;
             //
         }
 
@@ -345,7 +345,7 @@ public class AbilityEvents {
         // No GRASS_EATER item tag for this to check. GRASS_EATER diet is handled by grassEater interaction method.
     }
     private static boolean isType(Entity entity, TagKey<EntityType<?>> tag) {
-        return entity.is(tag);
+        return entity.getType().is(tag);
     }
     private static boolean isBugLikeConsumable(Entity entity) {
         if (entity instanceof Slime slime) { /// Change to AbstractCubeMob with 26.2!
