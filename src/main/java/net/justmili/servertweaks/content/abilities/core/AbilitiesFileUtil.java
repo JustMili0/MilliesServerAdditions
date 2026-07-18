@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.content.abilities.manage;
+package net.justmili.servertweaks.content.abilities.core;
 
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
@@ -11,9 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import static net.justmili.servertweaks.content.abilities.manage.FileManager.*;
+import static net.justmili.servertweaks.content.abilities.core.FileManager.*;
 
-public class AbilityManager {
+public class AbilitiesFileUtil {
     // Ability and Modifier management
     public static Set<Ability> getAbilities(ServerPlayer player) {
         return playerAbilities.getOrDefault(player.getUUID(), Collections.emptySet());
@@ -39,15 +39,19 @@ public class AbilityManager {
         saveFile(player.level().getServer());
     }
 
-    public static boolean has(ServerPlayer player, Ability ability) { return getAbilities(player).contains(ability); }
-    public static boolean has(ServerPlayer player, AbilityModifier modifier) { return getModifiers(player).contains(modifier); }
+    public static boolean has(ServerPlayer player, Ability ability) {
+        return getAbilities(player).contains(ability);
+    }
+    public static boolean has(ServerPlayer player, AbilityModifier modifier) {
+        return getModifiers(player).contains(modifier);
+    }
 
-    public static void applySet(UUID uuid, AbilityPreset set, MinecraftServer server) {
-        playerAbilities.put(uuid, new HashSet<>(set.abilities()));
-        playerModifiers.put(uuid, new HashSet<>(set.modifiers()));
+    public static void applyPreset(UUID uuid, AbilityPreset preset, MinecraftServer server) {
+        playerAbilities.put(uuid, new HashSet<>(preset.getAbilities()));
+        playerModifiers.put(uuid, new HashSet<>(preset.getModifiers()));
         saveFile(server);
     }
-    public static void clearPlayer(ServerPlayer player) {
+    public static void clearPlayerProfile(ServerPlayer player) {
         UUID uuid = player.getUUID();
         MinecraftServer server = player.level().getServer();
         playerAbilities.remove(uuid);

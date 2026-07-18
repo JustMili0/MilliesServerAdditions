@@ -1,14 +1,13 @@
-package net.justmili.servertweaks.content.abilities.registries;
+package net.justmili.servertweaks.content.abilities;
 
+import net.justmili.servertweaks.ServerTweaks;
+import net.justmili.servertweaks.content.abilities.core.RegistryMaps;
 import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
+import net.minecraft.resources.Identifier;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
-public class PresetRegistry {
-    public static final Map<String, AbilityPreset> REGISTRY = new HashMap<>();
-
+public class Presets {
     static {
         register(new AbilityPreset(
             "custom",
@@ -23,13 +22,13 @@ public class PresetRegistry {
                 "and are extra fast when sprinting. They are carnivores, meaning they can only eat meat, can't exactly swim up in water to not drown"+
                 "and untamed wolves turn aggressive towards them unprovoked.",
             Set.of(
-                AbilityRegistry.SCARES_CREEPERS,
-                AbilityRegistry.SCARES_PHANTOMS,
-                AbilityRegistry.HUNTED_BY_WOLF,
-                AbilityRegistry.FALL_IMMUNE,
-                AbilityRegistry.CARNIVORE,
-                AbilityRegistry.CANT_SWIM,
-                AbilityRegistry.SWIFT
+                Abilities.SCARES_CREEPERS,
+                Abilities.SCARES_PHANTOMS,
+                Abilities.HUNTED_BY_WOLF,
+                Abilities.FALL_IMMUNE,
+                Abilities.CARNIVORE,
+                Abilities.CANT_SWIM,
+                Abilities.SWIFT
             ),
             Set.of()
         ));
@@ -41,12 +40,12 @@ public class PresetRegistry {
                 "since they again don't have a physical form and dreams are their domain.\n"+
                 "They also are rather weak, taking 1.25x more damage than normal, can't swim up in water, can only eat sweets if not bound to a host, and animals love them.",
             Set.of(
-                AbilityRegistry.SCARES_CREEPERS,
-                AbilityRegistry.SCARES_PHANTOMS,
-                AbilityRegistry.WEAK_TO_DAMAGE,
-                AbilityRegistry.SACCHARIVORE,
-                AbilityRegistry.CHILD_OF_NATURE,
-                AbilityRegistry.CANT_SWIM
+                Abilities.SCARES_CREEPERS,
+                Abilities.SCARES_PHANTOMS,
+                Abilities.WEAK_TO_DAMAGE,
+                Abilities.SACCHARIVORE,
+                Abilities.CHILD_OF_NATURE,
+                Abilities.CANT_SWIM
             ),
             Set.of()
             // Ability set approved by Flufaye the dreamweaver Vtuber herself :3
@@ -58,16 +57,16 @@ public class PresetRegistry {
                 "Bunnies also can't freeze in the cold thanks to their thick fur, " +
                 "but they're also hunted by wildlife such as wolves and foxes.",
             Set.of(
-                AbilityRegistry.HUNTED_BY_WOLF,
-                AbilityRegistry.HUNTED_BY_FOX,
-                AbilityRegistry.VEGETARIAN,
-                AbilityRegistry.HERBIVORE,
-                AbilityRegistry.FREEZE_IMMUNE,
-                AbilityRegistry.HOPPY,
-                AbilityRegistry.SWIFT
+                Abilities.HUNTED_BY_WOLF,
+                Abilities.HUNTED_BY_FOX,
+                Abilities.VEGETARIAN,
+                Abilities.HERBIVORE,
+                Abilities.FREEZE_IMMUNE,
+                Abilities.HOPPY,
+                Abilities.SWIFT
             ),
             Set.of(
-                ModifierRegistry.CAN_EAT_GOLDEN_FOOD
+                Modifiers.CAN_EAT_GOLDEN_FOOD
             )
         ));
         register(new AbilityPreset( // aka Wolf
@@ -77,12 +76,12 @@ public class PresetRegistry {
                 "Canines also can't freeze in the cold thanks to their thick fur, " +
                 "but only feed on meat of other animals as they are carnivores.",
             Set.of(
-                AbilityRegistry.HUNTED_BY_WOLF,
-                AbilityRegistry.CARNIVORE,
-                AbilityRegistry.SWIFT,
-                AbilityRegistry.PREDATORY,
-                AbilityRegistry.TOUGH,
-                AbilityRegistry.FREEZE_IMMUNE
+                Abilities.HUNTED_BY_WOLF,
+                Abilities.CARNIVORE,
+                Abilities.SWIFT,
+                Abilities.PREDATORY,
+                Abilities.TOUGH,
+                Abilities.FREEZE_IMMUNE
             ),
             Set.of()
         ));
@@ -91,7 +90,7 @@ public class PresetRegistry {
             "\nVillagers are scared of monsters, in result they will flee. Iron Golems and Snow Golems will attack unprovoked as they see you as a threat, " +
                 "but other monsters such as pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack.",
             Set.of(
-                AbilityRegistry.IS_MONSTER
+                Abilities.IS_MONSTER
             ),
             Set.of(
             )
@@ -102,10 +101,10 @@ public class PresetRegistry {
                 "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
                 "Undead also burn in daylight and can not swim up in water but because they don't need air to live, they can breathe underwater.",
             Set.of(
-                AbilityRegistry.IS_MONSTER,
-                AbilityRegistry.BURNS_IN_DAYLIGHT,
-                AbilityRegistry.CANT_SWIM,
-                AbilityRegistry.BREATHES_UNDERWATER
+                Abilities.IS_MONSTER,
+                Abilities.BURNS_IN_DAYLIGHT,
+                Abilities.CANT_SWIM,
+                Abilities.BREATHES_UNDERWATER
             ),
             Set.of(
             )
@@ -117,12 +116,12 @@ public class PresetRegistry {
                 "Zombies also burn in daylight and can not swim up in water but because they don't need air to live, they can breathe underwater. " +
                 "They also are rather slow and can only eat meat to sustain their hunger.",
             Set.of(
-                AbilityRegistry.IS_MONSTER,
-                AbilityRegistry.BURNS_IN_DAYLIGHT,
-                AbilityRegistry.CANT_SWIM,
-                AbilityRegistry.SLOW,
-                AbilityRegistry.CARNIVORE,
-                AbilityRegistry.BREATHES_UNDERWATER
+                Abilities.IS_MONSTER,
+                Abilities.BURNS_IN_DAYLIGHT,
+                Abilities.CANT_SWIM,
+                Abilities.SLOW,
+                Abilities.CARNIVORE,
+                Abilities.BREATHES_UNDERWATER
             ),
             Set.of(
             )
@@ -135,14 +134,14 @@ public class PresetRegistry {
                 "and are though to knock back due to them being heavier from all the water in their body." +
                 "They also are rather slow, but can feed on pretty much anything like meat, vegetables and fruits or land and underwater foliage.",
             Set.of(
-                AbilityRegistry.IS_MONSTER,
-                AbilityRegistry.BURNS_IN_DAYLIGHT,
-                AbilityRegistry.SLOW,
-                AbilityRegistry.CARNIVORE,
-                AbilityRegistry.VEGETARIAN,
-                AbilityRegistry.HERBIVORE,
-                AbilityRegistry.BREATHES_UNDERWATER,
-                AbilityRegistry.TOUGH
+                Abilities.IS_MONSTER,
+                Abilities.BURNS_IN_DAYLIGHT,
+                Abilities.SLOW,
+                Abilities.CARNIVORE,
+                Abilities.VEGETARIAN,
+                Abilities.HERBIVORE,
+                Abilities.BREATHES_UNDERWATER,
+                Abilities.TOUGH
             ),
             Set.of(
             )
@@ -155,11 +154,11 @@ public class PresetRegistry {
                 "They can not swim up in water but because they don't need air to live, they can breathe underwater. " +
                 "They also are rather slow and can only eat meat to sustain their hunger.",
             Set.of(
-                AbilityRegistry.IS_MONSTER,
-                AbilityRegistry.SLOW,
-                AbilityRegistry.CARNIVORE,
-                AbilityRegistry.COLD_SENSITIVE,
-                AbilityRegistry.HEAT_IMMUNE
+                Abilities.IS_MONSTER,
+                Abilities.SLOW,
+                Abilities.CARNIVORE,
+                Abilities.COLD_SENSITIVE,
+                Abilities.HEAT_IMMUNE
             ),
             Set.of(
             )
@@ -168,11 +167,11 @@ public class PresetRegistry {
             "golem",
             "\nTough and strong, but slow and heavy but durable enough to survive any fall.",
             Set.of(
-                AbilityRegistry.TOUGH,
-                AbilityRegistry.STRONG,
-                AbilityRegistry.SLOW,
-                AbilityRegistry.CANT_SWIM,
-                AbilityRegistry.FALL_IMMUNE
+                Abilities.TOUGH,
+                Abilities.STRONG,
+                Abilities.SLOW,
+                Abilities.CANT_SWIM,
+                Abilities.FALL_IMMUNE
             ),
             Set.of(
             )
@@ -183,15 +182,15 @@ public class PresetRegistry {
                 "They are strong and tough, but are sensitive to cold and repulsed by water. Netherborn are also carnivores, " +
                 "and their presence alone scares away Phantoms.",
             Set.of(
-                AbilityRegistry.LAVA_IMMUNE,
-                AbilityRegistry.FIRE_IMMUNE,
-                AbilityRegistry.HEAT_IMMUNE,
-                AbilityRegistry.STRONG,
-                AbilityRegistry.TOUGH,
-                AbilityRegistry.HYDROPHOBIC,
-                AbilityRegistry.COLD_SENSITIVE,
-                AbilityRegistry.CARNIVORE,
-                AbilityRegistry.SCARES_PHANTOMS
+                Abilities.LAVA_IMMUNE,
+                Abilities.FIRE_IMMUNE,
+                Abilities.HEAT_IMMUNE,
+                Abilities.STRONG,
+                Abilities.TOUGH,
+                Abilities.HYDROPHOBIC,
+                Abilities.COLD_SENSITIVE,
+                Abilities.CARNIVORE,
+                Abilities.SCARES_PHANTOMS
             ),
             Set.of(
             )
@@ -200,11 +199,11 @@ public class PresetRegistry {
             "galline",
             "\nGallines are bird-like creatures. They are light and swift, they feed on plants and foliage, but are hunted by foxes in the wild.",
             Set.of(
-                AbilityRegistry.HUNTED_BY_FOX,
-                AbilityRegistry.VEGETARIAN,
-                AbilityRegistry.HERBIVORE,
-                AbilityRegistry.LIGHT,
-                AbilityRegistry.SWIFT
+                Abilities.HUNTED_BY_FOX,
+                Abilities.VEGETARIAN,
+                Abilities.HERBIVORE,
+                Abilities.LIGHT,
+                Abilities.SWIFT
             ),
             Set.of(
             )
@@ -215,13 +214,13 @@ public class PresetRegistry {
                 "being able to breathe in water but suffocating on the surface. Aquarians can not be in hot climates, or they'll become fish soufflé." +
                 "They primarily feed on meat and underwater or surface foliage.",
             Set.of(
-                AbilityRegistry.AQUA_GRACE,
-                AbilityRegistry.BREATHES_UNDERWATER,
-                AbilityRegistry.CANT_BREATHE_AIR,
-                AbilityRegistry.CARNIVORE,
-                AbilityRegistry.HERBIVORE,
-                AbilityRegistry.STRONG,
-                AbilityRegistry.HEAT_SENSITIVE
+                Abilities.AQUA_GRACE,
+                Abilities.BREATHES_UNDERWATER,
+                Abilities.CANT_BREATHE_AIR,
+                Abilities.CARNIVORE,
+                Abilities.HERBIVORE,
+                Abilities.STRONG,
+                Abilities.HEAT_SENSITIVE
             ),
             Set.of(
             )
@@ -233,11 +232,11 @@ public class PresetRegistry {
                 "Arachnidians are rather agile, meaning they can jump high and can scale any solid wall. " +
                 "They are also strict carnivores, feeding only on the meat of their prey.",
             Set.of(
-                AbilityRegistry.CLIMBS_WALLS,
-                AbilityRegistry.IS_MONSTER,
-                AbilityRegistry.CARNIVORE,
-                AbilityRegistry.HOPPY,
-                AbilityRegistry.PREDATORY
+                Abilities.CLIMBS_WALLS,
+                Abilities.IS_MONSTER,
+                Abilities.CARNIVORE,
+                Abilities.HOPPY,
+                Abilities.PREDATORY
             ),
             Set.of(
             )
@@ -250,10 +249,10 @@ public class PresetRegistry {
                 "Enderians are aquagenic, getting hurt from getting in contact with water, though a helmet will protect them from rain. " +
                 "They are also immune to cold, since they are native to the endless cold End and can infinitely use any Ender Pearls they get their hands on.",
                 Set.of(
-                AbilityRegistry.PEARLING,
-                AbilityRegistry.HYDROPHOBIC,
-                AbilityRegistry.IS_MONSTER,
-                AbilityRegistry.FREEZE_IMMUNE
+                Abilities.PEARLING,
+                Abilities.HYDROPHOBIC,
+                Abilities.IS_MONSTER,
+                Abilities.FREEZE_IMMUNE
             ),
             Set.of(
             )
@@ -264,10 +263,10 @@ public class PresetRegistry {
                 "and are equally at home on land and underwater, being able to breathe in water and on surface. " +
                 "Amphibians are carnivores with a very particular palate, feeding exclusively on bugs, slimes and magma cubes.",
             Set.of(
-                AbilityRegistry.INSECTIVORE,
-                AbilityRegistry.CARNIVORE,
-                AbilityRegistry.HOPPY,
-                AbilityRegistry.BREATHES_UNDERWATER
+                Abilities.INSECTIVORE,
+                Abilities.CARNIVORE,
+                Abilities.HOPPY,
+                Abilities.BREATHES_UNDERWATER
             ),
             Set.of(
             )
@@ -279,11 +278,11 @@ public class PresetRegistry {
                 "Their squishy body absorbs most of the impacts from falls and collisions, keeping them mostly unharmed. " +
                 "Unexplainably they are carnivores, but also are sensitive to cold and freezing in cold biomes.",
             Set.of(
-                AbilityRegistry.HOPPY,
-                AbilityRegistry.IS_MONSTER,
-                AbilityRegistry.CARNIVORE,
-                AbilityRegistry.COLD_SENSITIVE,
-                AbilityRegistry.SQUISHY
+                Abilities.HOPPY,
+                Abilities.IS_MONSTER,
+                Abilities.CARNIVORE,
+                Abilities.COLD_SENSITIVE,
+                Abilities.SQUISHY
             ),
             Set.of(
             )
@@ -296,13 +295,13 @@ public class PresetRegistry {
                 "Like their gelatinous cousins they are unexplainably carnivores, but unlike them, they are immune to fire and heat, " +
                 "though sensitive to cold and not entirely immune to lava.",
             Set.of(
-                AbilityRegistry.FIRE_IMMUNE,
-                AbilityRegistry.HEAT_IMMUNE,
-                AbilityRegistry.HOPPY,
-                AbilityRegistry.IS_MONSTER,
-                AbilityRegistry.CARNIVORE,
-                AbilityRegistry.COLD_SENSITIVE,
-                AbilityRegistry.SQUISHY
+                Abilities.FIRE_IMMUNE,
+                Abilities.HEAT_IMMUNE,
+                Abilities.HOPPY,
+                Abilities.IS_MONSTER,
+                Abilities.CARNIVORE,
+                Abilities.COLD_SENSITIVE,
+                Abilities.SQUISHY
             ),
             Set.of(
             )
@@ -314,26 +313,19 @@ public class PresetRegistry {
                 "you're immune to block heat like magma, not lava or fire, you're immune to freezing and " +
                 "animals love you, and you're a vegetarian.)",
             Set.of(
-                AbilityRegistry.DWARF,
-                AbilityRegistry.HEAT_IMMUNE,
-                AbilityRegistry.FREEZE_IMMUNE,
-                AbilityRegistry.CHILD_OF_NATURE,
-                AbilityRegistry.VEGETARIAN
+                Abilities.DWARF,
+                Abilities.HEAT_IMMUNE,
+                Abilities.FREEZE_IMMUNE,
+                Abilities.CHILD_OF_NATURE,
+                Abilities.VEGETARIAN
             ),
             Set.of(
-                ModifierRegistry.CAN_EAT_GOLDEN_FOOD
+                Modifiers.CAN_EAT_GOLDEN_FOOD
             )
         ));
     }
 
-    public static void register(AbilityPreset set) {
-        REGISTRY.put(set.name(), set);
-    }
-
-    public static Map<String, AbilityPreset> getSets() {
-        return REGISTRY;
-    }
-    public static Set<String> getNames() {
-        return PresetRegistry.getSets().keySet();
+    public static void register(AbilityPreset preset) {
+        RegistryMaps.PRESETS.put(preset.getId(), preset);
     }
 }

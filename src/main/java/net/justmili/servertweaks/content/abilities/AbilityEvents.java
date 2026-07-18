@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.content.abilities.manage;
+package net.justmili.servertweaks.content.abilities;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -9,10 +9,9 @@ import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.libs.v1.utils.EntityUtil;
 import net.justmili.libs.v1.utils.FdaApiUtil;
-import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
-import net.justmili.servertweaks.content.abilities.registries.ModifierRegistry;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
+import net.justmili.servertweaks.content.abilities.core.AbilitiesFileUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.justmili.servertweaks.registries.TagRegistry;
 import net.minecraft.core.BlockPos;
@@ -43,7 +42,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import org.jspecify.annotations.Nullable;
@@ -51,16 +49,16 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.UUID;
 
-import static net.justmili.servertweaks.content.abilities.manage.AbilityManager.has;
+import static net.justmili.servertweaks.content.abilities.core.AbilitiesFileUtil.has;
 
-public class UseEvents {
+public class AbilityEvents {
     public static void registerAbilityEvents() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (var player : server.getPlayerList().getPlayers()) {
                 ServerLevel level = player.level();
 
                 // Tick all Ticking Abilities
-                for (Ability ability : AbilityManager.getAbilities(player)) {
+                for (Ability ability : AbilitiesFileUtil.getAbilities(player)) {
                     if (ability instanceof TickingAbility tickingAbility) {
                         tickingAbility.tick(player, level);
                     }
@@ -71,19 +69,19 @@ public class UseEvents {
                     attack = player.getAttribute(Attributes.ATTACK_DAMAGE),
                     maxHp = player.getAttribute(Attributes.MAX_HEALTH);
 
-                if (!has(player, AbilityRegistry.SLOW) && speed != null) speed.removeModifier(AbilityRegistry.AR_SLOW_SPEED);
-                if (!has(player, AbilityRegistry.STRONG) && attack != null) attack.removeModifier(AbilityRegistry.AR_STRONG_DAMAGE);
-                if (!has(player, AbilityRegistry.STRONG) && maxHp != null) maxHp.removeModifier(AbilityRegistry.AR_STRONG_HP);
+                if (!AbilitiesFileUtil.has(player, Abilities.SLOW) && speed != null) speed.removeModifier(Abilities.AR_SLOW_SPEED);
+                if (!has(player, Abilities.STRONG) && attack != null) attack.removeModifier(Abilities.AR_STRONG_DAMAGE);
+                if (!has(player, Abilities.STRONG) && maxHp != null) maxHp.removeModifier(Abilities.AR_STRONG_HP);
 
                 // Change to: Check if player has presets locked;
                 // If yes but has no abilities or modifiers then clear them from the file and unlock preset picking
                 // As well as inform the player that they have to pick their preset/class again
                 if (FdaApiUtil.getBoolValue(player, PlayerAttachments.PICKED_PRESET)
-                    && AbilityManager.getAbilities(player).isEmpty()
-                    && AbilityManager.getModifiers(player).isEmpty()) {
+                    && AbilitiesFileUtil.getAbilities(player).isEmpty()
+                    && AbilitiesFileUtil.getModifiers(player).isEmpty()) {
 
                     // Remove from file
-                    AbilityManager.clearPlayer(player);
+                    AbilitiesFileUtil.clearPlayerProfile(player);
                     // Unlock preset picking
                     FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, false);
                     // Inform player
@@ -92,21 +90,21 @@ public class UseEvents {
             }
         });
 
-        ServerLivingEntityEvents.ALLOW_DAMAGE.register(UseEvents::weakToDamage);
-        ServerLivingEntityEvents.ALLOW_DAMAGE.register(UseEvents::squishy);
+        ServerLivingEntityEvents.ALLOW_DAMAGE.register(AbilityEvents::weakToDamage);
+        ServerLivingEntityEvents.ALLOW_DAMAGE.register(AbilityEvents::squishy);
 
-        UseItemCallback.EVENT.register(UseEvents::pearling);
-        UseBlockCallback.EVENT.register(UseEvents::grassEater);
-        UseItemCallback.EVENT.register(UseEvents::handleDietItemCall);
-        UseBlockCallback.EVENT.register(UseEvents::handleDietBlockCall);
-        UseEntityCallback.EVENT.register(UseEvents::bugEaterEntities);
-        UseEntityCallback.EVENT.register(UseEvents::bovid);
+        UseItemCallback.EVENT.register(AbilityEvents::pearling);
+        UseBlockCallback.EVENT.register(AbilityEvents::grassEater);
+        UseItemCallback.EVENT.register(AbilityEvents::handleDietItemCall);
+        UseBlockCallback.EVENT.register(AbilityEvents::handleDietBlockCall);
+        UseEntityCallback.EVENT.register(AbilityEvents::bugEaterEntities);
+        UseEntityCallback.EVENT.register(AbilityEvents::bovid);
     }
 
     private static boolean squishy(LivingEntity entity, DamageSource source, float value) {
         if (!(entity instanceof ServerPlayer player)) return true;
         if (handleOtherImmunities(player, source)) return false;
-        if (!has(player, AbilityRegistry.SQUISHY)) return true;
+        if (!has(player, Abilities.SQUISHY)) return true;
 
         if (!(source.is(DamageTypes.FALL) || source.is(DamageTypes.FLY_INTO_WALL))) return true;
 
@@ -116,7 +114,7 @@ public class UseEvents {
         if (!(entity instanceof ServerPlayer player)) return true;
         if (handleOtherImmunities(player, source)) return false;
 
-        if (!has(player, AbilityRegistry.WEAK_TO_DAMAGE)) return true;
+        if (!has(player, Abilities.WEAK_TO_DAMAGE)) return true;
         if (source.is(DamageTypes.FALL)) return true;
 
         return recalcDamage(player, source, value, 1.75F);
@@ -125,7 +123,7 @@ public class UseEvents {
     private static InteractionResult pearling(Player interacting, Level level, InteractionHand hand) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
-        if (!has(player, AbilityRegistry.PEARLING)) return InteractionResult.PASS;
+        if (!has(player, Abilities.PEARLING)) return InteractionResult.PASS;
 
         ItemStack pearl = new ItemStack(Items.ENDER_PEARL);
         ItemStack stack = player.getItemInHand(hand);
@@ -147,7 +145,7 @@ public class UseEvents {
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer milking)) return InteractionResult.PASS;
         if (!(entity instanceof ServerPlayer milked)) return InteractionResult.PASS;
-        if (!has(milked, AbilityRegistry.BOVID)) return InteractionResult.PASS;
+        if (!has(milked, Abilities.BOVID)) return InteractionResult.PASS;
 
         if (milked.getUUID().equals(UUID.fromString("66774f1e-99de-4f1b-8293-906ca3488549")) // Funny hardcoded thing
             && !milking.getUUID().equals(UUID.fromString("19c3c783-9359-4311-98bf-79a6d361362d"))) return InteractionResult.PASS;
@@ -208,7 +206,7 @@ public class UseEvents {
     private static void bugEaterItems(Player interacting, Level level, InteractionHand hand) {
         if (level.isClientSide()) return;
         if (!(interacting instanceof ServerPlayer player)) return;
-        if (!has(player, AbilityRegistry.INSECTIVORE)) return;
+        if (!has(player, Abilities.INSECTIVORE)) return;
 
         ItemStack stack = player.getItemInHand(hand);
         FoodData food = player.getFoodData();
@@ -227,7 +225,7 @@ public class UseEvents {
     private static InteractionResult bugEaterEntities(Player interacting, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
-        if (!has(player, AbilityRegistry.INSECTIVORE)) return InteractionResult.PASS;
+        if (!has(player, Abilities.INSECTIVORE)) return InteractionResult.PASS;
 
         FoodData food = player.getFoodData();
         if (!food.needsFood()) return InteractionResult.PASS;
@@ -278,7 +276,7 @@ public class UseEvents {
     private static InteractionResult grassEater(Player interacting, Level level, InteractionHand hand, BlockHitResult hitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
-        if (!has(player, AbilityRegistry.HERBIVORE)) return InteractionResult.PASS;
+        if (!has(player, Abilities.HERBIVORE)) return InteractionResult.PASS;
 
         if (!player.isShiftKeyDown()) return InteractionResult.PASS;
 
@@ -298,10 +296,10 @@ public class UseEvents {
 
     // Helper methods/variables
     private static final Map<ResourceKey<DamageType>, Ability> DAMAGE_IMMUNITY = Map.of(
-        DamageTypes.IN_FIRE, AbilityRegistry.FIRE_IMMUNE, DamageTypes.ON_FIRE, AbilityRegistry.FIRE_IMMUNE, DamageTypes.LAVA, AbilityRegistry.LAVA_IMMUNE,
-        DamageTypes.HOT_FLOOR, AbilityRegistry.HEAT_IMMUNE, DamageTypes.FREEZE, AbilityRegistry.FREEZE_IMMUNE,
-        DamageTypes.FALL, AbilityRegistry.FALL_IMMUNE, DamageTypes.ENDER_PEARL, AbilityRegistry.PEARLING,
-        DamageTypes.DROWN, AbilityRegistry.BREATHES_UNDERWATER
+        DamageTypes.IN_FIRE, Abilities.FIRE_IMMUNE, DamageTypes.ON_FIRE, Abilities.FIRE_IMMUNE, DamageTypes.LAVA, Abilities.LAVA_IMMUNE,
+        DamageTypes.HOT_FLOOR, Abilities.HEAT_IMMUNE, DamageTypes.FREEZE, Abilities.FREEZE_IMMUNE,
+        DamageTypes.FALL, Abilities.FALL_IMMUNE, DamageTypes.ENDER_PEARL, Abilities.PEARLING,
+        DamageTypes.DROWN, Abilities.BREATHES_UNDERWATER
     );
     private static boolean handleOtherImmunities(ServerPlayer player, DamageSource source) {
         Ability immunity = DAMAGE_IMMUNITY.get(source.typeHolder().unwrapKey().orElse(null));
@@ -324,12 +322,12 @@ public class UseEvents {
     private static boolean isDietBlocked(ServerPlayer player, ItemStack stack) {
         if (!stack.has(DataComponents.FOOD) /*|| stack.has(DataComponents.BUCKET_ENTITY_DATA)*/) return false;
 
-        boolean carnivore = has(player, AbilityRegistry.CARNIVORE),
-            vegetarian = has(player, AbilityRegistry.VEGETARIAN),
-            sweetOnly = has(player, AbilityRegistry.SACCHARIVORE),
-            grassEater = has(player, AbilityRegistry.HERBIVORE),
-            bugEater = has(player, AbilityRegistry.INSECTIVORE),
-            canConsumeGolden = has(player, ModifierRegistry.CAN_EAT_GOLDEN_FOOD),
+        boolean carnivore = has(player, Abilities.CARNIVORE),
+            vegetarian = has(player, Abilities.VEGETARIAN),
+            sweetOnly = has(player, Abilities.SACCHARIVORE),
+            grassEater = has(player, Abilities.HERBIVORE),
+            bugEater = has(player, Abilities.INSECTIVORE),
+            canConsumeGolden = AbilitiesFileUtil.has(player, Modifiers.CAN_EAT_GOLDEN_FOOD),
 
             isMeat = stack.is(TagRegistry.DIET_CARNIVORE),
             isVege = stack.is(TagRegistry.DIET_VEGETARIAN),

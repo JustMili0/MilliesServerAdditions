@@ -1,8 +1,9 @@
-package net.justmili.servertweaks.content.abilities.registries;
+package net.justmili.servertweaks.content.abilities;
 
 import net.justmili.libs.v1.data.MobData;
 import net.justmili.libs.v1.utils.EntityUtil;
 import net.justmili.servertweaks.ServerTweaks;
+import net.justmili.servertweaks.content.abilities.core.RegistryMaps;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.core.util.ScalerUtil;
@@ -55,15 +56,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class AbilityRegistry {
+public class Abilities {
     /// Extra Ability variables
     private static final Map<UUID, List<WrappedGoal>> storedGoals = new HashMap<>();
     public static final Identifier AR_SLOW_SPEED = ServerTweaks.asResource("slow_speed");
     public static final Identifier AR_STRONG_HP = ServerTweaks.asResource("strong_health");
     public static final Identifier AR_STRONG_DAMAGE = ServerTweaks.asResource("strong_damage");
-
-    /// Registry
-    private static final Map<Identifier, Ability> REGISTRY = new HashMap<>();
 
     public static final Ability
         FIRE_IMMUNE, LAVA_IMMUNE,HEAT_IMMUNE,FREEZE_IMMUNE,FALL_IMMUNE,
@@ -118,16 +116,8 @@ public class AbilityRegistry {
     }
 
     private static Ability register(Ability ability) {
-        REGISTRY.put(ability.getId(), ability);
+        RegistryMaps.ABILITIES.put(ability.getId(), ability);
         return ability;
-    }
-
-    public static Set<Identifier> getIds() {
-        return REGISTRY.keySet();
-    }
-
-    public static @Nullable Ability byId(Identifier id) {
-        return REGISTRY.get(id);
     }
 
     /// Define ticking abilities

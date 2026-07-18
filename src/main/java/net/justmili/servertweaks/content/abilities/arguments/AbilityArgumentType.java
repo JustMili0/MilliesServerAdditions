@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
+import net.justmili.servertweaks.content.abilities.core.RegistryMaps;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -20,10 +20,10 @@ public class AbilityArgumentType {
     public static Ability getAbility(CommandContext<CommandSourceStack> context, String argName) {
         Identifier id = Identifier.tryParse(StringArgumentType.getString(context, argName));
         if (id == null) return null;
-        return AbilityRegistry.byId(id);
+        return RegistryMaps.byAbilityId(id);
     }
 
     public static CompletableFuture<Suggestions> suggest(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggest(AbilityRegistry.getIds().stream().map(Identifier::toString), builder);
+        return SharedSuggestionProvider.suggest(RegistryMaps.getAsString(RegistryMaps.ABILITIES), builder);
     }
 }

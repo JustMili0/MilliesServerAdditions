@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.content.abilities.manage;
+package net.justmili.servertweaks.content.abilities.core;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -6,8 +6,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.abilities.registries.AbilityRegistry;
-import net.justmili.servertweaks.content.abilities.registries.ModifierRegistry;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 import net.minecraft.resources.Identifier;
@@ -57,7 +55,7 @@ public class FileManager {
                             continue;
                         }
 
-                        Ability ability = AbilityRegistry.byId(id);
+                        Ability ability = RegistryMaps.byAbilityId(id);
                         if (ability == null) {
                             ServerTweaks.LOGGER.warn("Unknown ability '{}', skipping", raw);
                             continue;
@@ -75,7 +73,7 @@ public class FileManager {
                             continue;
                         }
 
-                        AbilityModifier modifier = ModifierRegistry.byId(id);
+                        AbilityModifier modifier = RegistryMaps.byModifierId(id);
                         if (modifier == null) {
                             ServerTweaks.LOGGER.warn("Unknown modifier '{}', skipping", raw);
                             continue;
@@ -110,7 +108,7 @@ public class FileManager {
 
             JsonArray modifiersArr = new JsonArray();
             Set<AbilityModifier> modifiers = playerModifiers.getOrDefault(uuid, Collections.emptySet());
-            modifiers.stream().map(AbilityModifier::getName).map(Identifier::toString).sorted().forEach(modifiersArr::add);
+            modifiers.stream().map(AbilityModifier::getId).map(Identifier::toString).sorted().forEach(modifiersArr::add);
             playerObj.add("ability_modifiers", modifiersArr);
 
             root.add(uuid.toString(), playerObj);

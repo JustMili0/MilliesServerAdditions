@@ -6,33 +6,33 @@ import net.minecraft.resources.Identifier;
 import java.util.Objects;
 
 public class AbilityModifier {
-    private final Identifier name;
+    private final Identifier id;
 
-    public AbilityModifier(Identifier name) {
-        this.name = name;
+    public AbilityModifier(Identifier id) {
+        this.id = id;
     }
-    public AbilityModifier(String name) {
-        this.name = ServerTweaks.asResource(name);
+    public AbilityModifier(String id) {
+        this.id = ServerTweaks.asResource(id);
     }
 
-    public Identifier getName() {
-        return name;
+    public Identifier getId() {
+        return id;
     }
 
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (!(object instanceof AbilityModifier modifier)) return false;
-        return Objects.equals(name, modifier.name);
+        return Objects.equals(id, modifier.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
-        return name.toString();
+        return id.toString();
     }
 }

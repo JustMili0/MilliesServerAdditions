@@ -1,4 +1,5 @@
 ## TODO
+- Update TODO with new names and formatting
 See Patches.md for most of the TODO
 
 ## FROM TESTING PLAYER ABILITIES:
@@ -8,7 +9,7 @@ See Patches.md for most of the TODO
 
 **Kinda work (works for the most part)**
 - HUNTED_BY_FOX - Foxes are too scared to approach and attack unless the player is crouching
-- FRIENDS_WITH_NATURE - Calms down neutral animals such as wolves, bees etc. but the tame roll chance still isn't always-taming
+- FRIENDS_WITH_NATURE - [Currently all related code was removed to later be reworked]
 
 **Do work (works as intended):**
 - FIRE_IMMUNE
