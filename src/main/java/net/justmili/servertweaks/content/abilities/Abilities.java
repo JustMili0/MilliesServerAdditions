@@ -3,13 +3,12 @@ package net.justmili.servertweaks.content.abilities;
 import net.justmili.libs.v1.data.MobData;
 import net.justmili.libs.v1.utils.EntityUtil;
 import net.justmili.servertweaks.ServerTweaks;
-import net.justmili.servertweaks.content.abilities.core.RegistryMaps;
+import net.justmili.servertweaks.content.abilities.core.Registries;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.core.util.ScalerUtil;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.justmili.servertweaks.registries.TagRegistry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -55,12 +54,40 @@ import net.minecraft.world.phys.Vec3;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static net.justmili.libs.v1.utils.AttributeUtil.*;
+
 public class Abilities {
     /// Extra Ability variables
-    private static final Map<UUID, List<WrappedGoal>> storedGoals = new HashMap<>();
     public static final Identifier AR_SLOW_SPEED = ServerTweaks.asResource("slow_speed");
     public static final Identifier AR_STRONG_HP = ServerTweaks.asResource("strong_health");
     public static final Identifier AR_STRONG_DAMAGE = ServerTweaks.asResource("strong_damage");
+    private static final Map<UUID, List<WrappedGoal>> STORED_GOALS = new HashMap<>();
+    private static final List<MobData> MONSTER_IGNORE = List.of(
+        new MobData(Pillager.class, 64.0, 0),
+        new MobData(Vindicator.class, 32.0, 0),
+        new MobData(Evoker.class, 16.0, 0),
+        new MobData(Witch.class, 16.0, 0),
+        new MobData(Zombie.class, 48.0, 0),
+        new MobData(Husk.class, 48.0, 0),
+        new MobData(Drowned.class, 48.0, 0),
+        new MobData(Skeleton.class, 24.0, 0),
+        new MobData(Parched.class, 24.0, 0),
+        new MobData(Slime.class, 16.0, 0)
+    );
+    private static final List<MobData> MONSTER_FEAR = List.of(
+        new MobData(Villager.class, 16.0, 0)
+    );
+    private static final List<MobData> MONSTER_AGGRO = List.of(
+        new MobData(IronGolem.class, 16.0, 0),
+        new MobData(SnowGolem.class, 24.0, 0)
+    );
+    private static final List<MobData> PREDATORY_FEAR = List.of(
+        new MobData(Chicken.class, 8.0, 1.4),
+        new MobData(Parrot.class, 12.0, 1.25),
+        new MobData(Frog.class, 12.0, 2.0),
+        new MobData(Salmon.class, 6.0, 1.25),
+        new MobData(Pig.class,  8.0, 1.25)
+    );
 
     public static final Ability
         FIRE_IMMUNE, LAVA_IMMUNE,HEAT_IMMUNE,FREEZE_IMMUNE,FALL_IMMUNE,
@@ -74,11 +101,11 @@ public class Abilities {
 
     public static void init() {}
     static {
-        FIRE_IMMUNE = register(new FireImmune()); // Mainly handled in UseEvents.handleOtherImmunities(...)
-        LAVA_IMMUNE = register(new LavaImmune()); // Mainly handled in UseEvents.handleOtherImmunities(...)
-        HEAT_IMMUNE = register(new Ability("heat_immune")); // Mainly handled in UseEvents.handleOtherImmunities(...)
-        FREEZE_IMMUNE = register(new Ability("freeze_immune")); // Mainly handled in UseEvents.handleOtherImmunities(...)
-        FALL_IMMUNE = register(new Ability("fall_immune")); // Mainly handled in UseEvents.handleOtherImmunities(...)
+        FIRE_IMMUNE = register(new FireImmune()); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
+        LAVA_IMMUNE = register(new LavaImmune()); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
+        HEAT_IMMUNE = register(new Ability("heat_immune")); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
+        FREEZE_IMMUNE = register(new Ability("freeze_immune")); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
+        FALL_IMMUNE = register(new Ability("fall_immune")); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
         HEAT_SENSITIVE = register(new HeatSensitive());
         COLD_SENSITIVE = register(new ColdSensitive());
         LIGHT = register(new Light());
@@ -86,12 +113,12 @@ public class Abilities {
         SLOW = register(new Slow());
         HOPPY = register(new Hoppy());
         DWARF = register(new Dwarf());
-        SQUISHY = register(new Ability("squishy")); // Handled in UseEvents.squishy(...)
+        SQUISHY = register(new Ability("squishy")); // Handled in AbilityEvents.squishy(...)
         MAGNETIC = register(new Magnetic());
         TOUGH = register(new Ability("tough")); // Handled through LivingEntityMixin
         STRONG = register(new Strong());
         AQUA_GRACE = register(new AquaGrace());
-        BREATHES_UNDERWATER = register(new BreathesUnderwater()); // Handled by ticking and UseEvents.handleOtherImmunities(...)
+        BREATHES_UNDERWATER = register(new BreathesUnderwater()); // Handled by ticking and AbilityEvents.handleOtherImmunities(...)
         CANT_BREATHE_AIR = register(new CantBreatheAir()); // Handled by ticking and LivingEntityMixin
         CANT_SWIM = register(new CantSwim());                           // DOESN'T WORK, No code implemented yet
         HYDROPHOBIC = register(new Hydrophobic());
@@ -99,24 +126,24 @@ public class Abilities {
         HUNTED_BY_WOLF = register(new HuntedByWolf());
         SCARES_CREEPERS = register(new ScaresCreepers());
         SCARES_PHANTOMS = register(new ScaresPhantoms());
-        CHILD_OF_NATURE = register(new ChildOfNature());                // DOESN'T WORK, No code implemented yet
-        WEAK_TO_DAMAGE = register(new Ability("weak_to_damage")); // Handled in UseEvents.weakToDamage(...)
+        CHILD_OF_NATURE = register(new ChildOfNature());                // KINDA WORKS, no code for taming tho
+        WEAK_TO_DAMAGE = register(new Ability("weak_to_damage")); // Handled in AbilityEvents.weakToDamage(...)
         NIGHT_VISION = register(new NightVision());
         BURNS_IN_DAYLIGHT = register(new BurnsInDaylight());
         IS_MONSTER = register(new IsMonster());
         CLIMBS_WALLS = register(new Ability("climbs_walls"));     // DOESN'T WORK, No code implemented yet
         PEARLING = register(new Ability("pearling"));
         PREDATORY = register(new Predatory());
-        BOVID = register(new Ability("bovid")); // Handled in UseEvents.bovid(...)
-        CARNIVORE = register(new Ability("carnivore")); // Handled by dietary methods in UseEvents
-        VEGETARIAN = register(new Ability("vegetarian")); // Handled by dietary methods in UseEvents
-        SACCHARIVORE = register(new Ability("saccharivore")); // Handled by dietary methods in UseEvents
-        HERBIVORE = register(new Ability("herbivore")); // Handled by dietary methods in UseEvents
-        INSECTIVORE = register(new Ability("insectivore")); // Handled by dietary methods in UseEvents
+        BOVID = register(new Ability("bovid")); // Handled in AbilityEvents.bovid(...)
+        CARNIVORE = register(new Ability("carnivore")); // Handled by dietary methods in AbilityEvents
+        VEGETARIAN = register(new Ability("vegetarian")); // Handled by dietary methods in AbilityEvents
+        SACCHARIVORE = register(new Ability("saccharivore")); // Handled by dietary methods in AbilityEvents
+        HERBIVORE = register(new Ability("herbivore")); // Handled by dietary methods in AbilityEvents
+        INSECTIVORE = register(new Ability("insectivore")); // Handled by dietary methods in AbilityEvents
     }
 
     private static Ability register(Ability ability) {
-        RegistryMaps.ABILITIES.put(ability.getId(), ability);
+        Registries.ABILITIES.put(ability.getId(), ability);
         return ability;
     }
 
@@ -214,10 +241,7 @@ public class Abilities {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             AttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
-
-            if (speed.getModifier(AR_SLOW_SPEED) == null) {
-                speed.addTransientModifier(new AttributeModifier(AR_SLOW_SPEED, -0.32, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-            }
+            addOrUpdate(speed, newModifier(AR_SLOW_SPEED, -0.32, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }
     }
 
@@ -274,24 +298,19 @@ public class Abilities {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (level.getGameTime() % 5 != 0) return;
 
-            AttributeInstance attack = player.getAttribute(Attributes.ATTACK_DAMAGE),
-                maxHp = player.getAttribute(Attributes.MAX_HEALTH);
+            AttributeInstance attack = getAttribute(player, Attributes.ATTACK_DAMAGE), maxHp = getAttribute(player, Attributes.MAX_HEALTH);
 
-            if (attack != null && attack.getModifier(AR_STRONG_DAMAGE) == null) {
-                attack.addTransientModifier(new AttributeModifier(AR_STRONG_DAMAGE, 3.0, AttributeModifier.Operation.ADD_VALUE));
-            }
+            addOrUpdate(attack, newModifier(AR_STRONG_DAMAGE, 3, AttributeModifier.Operation.ADD_VALUE));
 
+            // Don't apply past this point
             if (!player.gameMode.isSurvival()) return;
 
             int armor = player.getArmorValue();
             float targetHp = Math.clamp(100.0F - (armor * 3.0F), 40.0F, 100.0F);
             if (targetHp % 2 != 0) targetHp += 1;
 
-            if (maxHp != null) {
-                maxHp.removeModifier(AR_STRONG_HP);
-                maxHp.addPermanentModifier(new AttributeModifier(AR_STRONG_HP, targetHp-20.0, AttributeModifier.Operation.ADD_VALUE));
-                if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
-            }
+            addOrReplace(maxHp, newModifier(AR_STRONG_HP, targetHp-20.0, AttributeModifier.Operation.ADD_VALUE));
+            if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
         }
     }
 
@@ -306,11 +325,9 @@ public class Abilities {
 
             EntityUtil.applyEffect(player, MobEffects.CONDUIT_POWER, 100, 0);
 
-            if (level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
-                .get(Enchantments.DEPTH_STRIDER)
-                .map(h -> EnchantmentHelper.getItemEnchantmentLevel(h, player.getItemBySlot(EquipmentSlot.HEAD)) > 1)
-                .orElse(false))
-                return; // Return before granting Dolphin's Grace if player has depth strider to prevent OP swimming speeds
+            if (level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT).get(Enchantments.DEPTH_STRIDER)
+                .map(enchant -> EnchantmentHelper.getItemEnchantmentLevel(enchant, player.getItemBySlot(EquipmentSlot.HEAD)) > 1)
+                .orElse(false)) return; // Return before granting Dolphin's Grace if player has depth strider to prevent OP swimming speeds
 
             EntityUtil.applyEffect(player, MobEffects.DOLPHINS_GRACE, 100, 0);
         }
@@ -364,7 +381,7 @@ public class Abilities {
             if (!player.isInWater()) return;
 
             Vec3 delta = player.getDeltaMovement();
-            if (delta.y > 0) player.setDeltaMovement(delta.x, -0.1, delta.z);
+            if (delta.y > 0) player.setDeltaMovement(delta.x, -1, delta.z);
         }
     }
 
@@ -471,8 +488,7 @@ public class Abilities {
             for (Wolf wolf : EntityUtil.getNearby(player, Wolf.class, 24.0)) {
                 if (!wolf.isTame() && wolf.getTarget() == player) wolf.setTarget(null);
             }
-            // Aggro prevention - MobMixin (tick) + TargetingConditionsMixin (test)
-            // 100% tame chance - TamableAnimalMixin (tame) // TODO: FIX
+            // TODO: Code 100% taming success rate
         }
     }
 
@@ -503,25 +519,6 @@ public class Abilities {
         }
     }
 
-    private static final List<MobData> MONSTER_IGNORE = List.of(
-        new MobData(Pillager.class, 64.0, 0),
-        new MobData(Vindicator.class, 32.0, 0),
-        new MobData(Evoker.class, 16.0, 0),
-        new MobData(Witch.class, 16.0, 0),
-        new MobData(Zombie.class, 48.0, 0),
-        new MobData(Husk.class, 48.0, 0),
-        new MobData(Drowned.class, 48.0, 0),
-        new MobData(Skeleton.class, 24.0, 0),
-        new MobData(Parched.class, 24.0, 0),
-        new MobData(Slime.class, 16.0, 0)
-    );
-    private static final List<MobData> MONSTER_FEAR = List.of(
-        new MobData(Villager.class, 16.0, 0)
-    );
-    private static final List<MobData> MONSTER_AGGRO = List.of(
-        new MobData(IronGolem.class, 16.0, 0),
-        new MobData(SnowGolem.class, 24.0, 0)
-    );
     static class IsMonster extends TickingAbility {
         IsMonster() {
             super("is_monster");
@@ -537,17 +534,17 @@ public class Abilities {
                 UUID id = mob.getUUID();
                 stillNearby.add(id);
 
-                if (!storedGoals.containsKey(id)) {
+                if (!STORED_GOALS.containsKey(id)) {
                     List<WrappedGoal> removed = mob.targetSelector.getAvailableGoals()
                         .stream().filter(goal -> goal.getGoal() instanceof NearestAttackableTargetGoal<?>).collect(Collectors.toList());
 
                     removed.forEach(goal -> mob.targetSelector.removeGoal(goal.getGoal()));
-                    storedGoals.put(id, removed);
+                    STORED_GOALS.put(id, removed);
 
                     mob.setTarget(null);
                 }
             });
-            storedGoals.entrySet().removeIf(entry -> {
+            STORED_GOALS.entrySet().removeIf(entry -> {
                 if (stillNearby.contains(entry.getKey())) return false;
                 Entity entity = level.getEntity(entry.getKey());
 
@@ -564,7 +561,7 @@ public class Abilities {
                     mob.getX()+(mob.getX()-player.getX()),
                     mob.getY(),
                     mob.getZ()+(mob.getZ()-player.getZ()),
-                    data.speed()
+                    data.runSpeed()
                 )
             );
 
@@ -576,13 +573,6 @@ public class Abilities {
         }
     }
 
-    private static final List<MobData> PREDATORY_FEAR = List.of(
-        new MobData(Chicken.class, 8.0, 1.4),
-        new MobData(Parrot.class, 12.0, 1.25),
-        new MobData(Frog.class, 12.0, 2.0),
-        new MobData(Salmon.class, 6.0, 1.25),
-        new MobData(Pig.class,  8.0, 1.25)
-    );
     static class Predatory extends TickingAbility {
         Predatory() {
             super("predatory");
@@ -595,7 +585,7 @@ public class Abilities {
                     mob.getX()+(mob.getX()-player.getX()),
                     mob.getY(),
                     mob.getZ()+(mob.getZ()-player.getZ()),
-                    data.speed()
+                    data.runSpeed()
                 )
             );
         }

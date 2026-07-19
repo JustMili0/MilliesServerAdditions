@@ -1,7 +1,6 @@
 package net.justmili.servertweaks.mixin.abilities;
 
 import net.justmili.servertweaks.config.Config;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.npc.villager.AbstractVillager;
@@ -19,7 +18,7 @@ public class MobMixin {
         Mob mob = (Mob) (Object) this;
         if (mob.level().isClientSide()) return;
 
-        Component name = mob.getCustomName();
+        var name = mob.getCustomName();
         boolean shouldBeNoAi = name != null && name.getString().equals("NoAI");
 
         if ((mob instanceof TamableAnimal || mob instanceof AbstractVillager) && (mob.isNoAi() != shouldBeNoAi)) {

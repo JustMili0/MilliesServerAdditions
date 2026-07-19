@@ -9,7 +9,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -37,7 +36,7 @@ public class AnvilRepair {
         if (block == Blocks.ANVIL) return InteractionResult.PASS;
 
         // Item checks
-        ItemStack stack = player.getItemInHand(hand);
+        var stack = player.getItemInHand(hand);
         boolean hasIngot = stack.is(Items.IRON_INGOT), hasBlock = stack.is(Items.IRON_BLOCK);
         if (!hasIngot && !hasBlock) return InteractionResult.PASS;
 

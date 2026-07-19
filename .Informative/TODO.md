@@ -1,44 +1,44 @@
 ## TODO
-- Update TODO with new names and formatting
 See Patches.md for most of the TODO
 
 ## FROM TESTING PLAYER ABILITIES:
 **Doesn't work (no changes get applied to player behavior):**
-- CLIMBS_WALLS - [Currently all related code was removed to later be reworked]
-- CANT_SWIM - Nothing happens (can swim as normal)
+- climbs_walls - [Currently all related code was removed to later be reworked]
+- cant_swim - Nothing happens (can swim as normal)
 
 **Kinda work (works for the most part)**
-- HUNTED_BY_FOX - Foxes are too scared to approach and attack unless the player is crouching
-- FRIENDS_WITH_NATURE - [Currently all related code was removed to later be reworked]
+- hunted_by_fox - Foxes are too scared to approach and attack unless the player is crouching
+- child_of_nature - [Taming chance code has not be implemented yet]
 
 **Do work (works as intended):**
-- FIRE_IMMUNE
-- FREEZE_IMMUNE
-- FALL_IMMUNE
-- AQUA_GRACE
-- LIGHT
-- SWIFT
-- SLOW
-- HOPPY
-- DWARF
-- SQUISHY
-- MAGNETIC
-- TOUGH
-- STRONG
-- BREATHES_UNDERWATER
-- CANT_BREATHE_AIR
-- HYDROPHOBIC
-- WEAK_TO_DAMAGE
-- NIGHT_VISION
-- HUNTED_BY_WOLF
-- SCARES_CREEPERS
-- SCARES_PHANTOMS
-- BURNS_IN_DAYLIGHT
-- IS_MONSTER
-- PEARLING
-- PREDATORY
-- CARNIVORE
-- VEGETARIAN
-- ONLY_EATS_SWEETS
-- GRASS_EATER
-- BUG_EATER
+- fire_immune
+- freeze_immune
+- fall_immune
+- aqua_grace
+- light
+- swift
+- slow
+- hoppy
+- dwarf
+- squishy
+- magnetic
+- tough
+- strong
+- breathes_underwater
+- cant_breathe_air
+- hydrophobic
+- weak_to_damage
+- night_vision
+- hunted_by_wolf
+- scares_creepers
+- scares_phantoms
+- burns_in_daylight
+- is_monster
+- pearling
+- predatory
+- bovid
+- carnivore
+- vegetarian
+- saccharivore
+- herbivore
+- bug_eater

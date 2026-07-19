@@ -1,14 +1,9 @@
 package net.justmili.servertweaks.content.abilities;
 
-import net.justmili.servertweaks.ServerTweaks;
-import net.justmili.servertweaks.content.abilities.core.RegistryMaps;
+import net.justmili.servertweaks.content.abilities.core.Registries;
 import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
-import net.minecraft.resources.Identifier;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Stream;
 
 public class Presets {
     public static void init() {}
@@ -330,6 +325,6 @@ public class Presets {
     }
 
     public static void register(AbilityPreset preset) {
-        RegistryMaps.PRESETS.put(preset.getId(), preset);
+        Registries.PRESETS.put(preset.getId(), preset);
     }
 }

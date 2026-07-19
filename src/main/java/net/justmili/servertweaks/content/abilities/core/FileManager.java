@@ -55,7 +55,7 @@ public class FileManager {
                             continue;
                         }
 
-                        Ability ability = RegistryMaps.byAbilityId(id);
+                        Ability ability = Registries.byAbilityId(id);
                         if (ability == null) {
                             ServerTweaks.LOGGER.warn("Unknown ability '{}', skipping", raw);
                             continue;
@@ -73,7 +73,7 @@ public class FileManager {
                             continue;
                         }
 
-                        AbilityModifier modifier = RegistryMaps.byModifierId(id);
+                        AbilityModifier modifier = Registries.byModifierId(id);
                         if (modifier == null) {
                             ServerTweaks.LOGGER.warn("Unknown modifier '{}', skipping", raw);
                             continue;

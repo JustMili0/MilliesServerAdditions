@@ -17,8 +17,7 @@ public class LivingEntityMixin {
     @Inject(method = "knockback", at = @At("HEAD"), cancellable = true)
     private void knockback(double strength, double x, double z, CallbackInfo ci) {
         if (!(Config.playerAbilities.get())) return;
-        LivingEntity self = (LivingEntity) (Object) this;
-        if (!(self instanceof ServerPlayer player)) return;
+        if (!((LivingEntity) (Object) this instanceof ServerPlayer player)) return;
         if (AbilitiesFileUtil.has(player, Abilities.TOUGH)) ci.cancel();
     }
 

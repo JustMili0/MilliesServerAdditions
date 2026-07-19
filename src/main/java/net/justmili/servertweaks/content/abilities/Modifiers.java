@@ -1,6 +1,6 @@
 package net.justmili.servertweaks.content.abilities;
 
-import net.justmili.servertweaks.content.abilities.core.RegistryMaps;
+import net.justmili.servertweaks.content.abilities.core.Registries;
 import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 
 public class Modifiers {
@@ -12,7 +12,7 @@ public class Modifiers {
     }
 
     private static AbilityModifier register(AbilityModifier modifier) {
-        RegistryMaps.MODIFIERS.put(modifier.getId(), modifier);
+        Registries.MODIFIERS.put(modifier.getId(), modifier);
         return modifier;
     }
 }

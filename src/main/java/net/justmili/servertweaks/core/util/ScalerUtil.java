@@ -1,16 +1,15 @@
 package net.justmili.servertweaks.core.util;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.justmili.libs.v1.utils.AttributeUtil;
+import net.justmili.libs.v1.utils.FdaApiUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.scores.Objective;
-import net.minecraft.world.scores.ScoreAccess;
 import net.minecraft.world.scores.ScoreHolder;
-import net.minecraft.world.scores.Scoreboard;
 import org.jspecify.annotations.Nullable;
 
 public class ScalerUtil {
@@ -18,18 +17,18 @@ public class ScalerUtil {
     //Converts old scoreboard scuff to fresh variables (purely for my own Minecraft server)
     public static void convertScoreToVar(ServerGamePacketListenerImpl handler, PacketSender sender, MinecraftServer server) {
         ServerPlayer player = handler.player;
-        if (player.getAttachedOrElse(PlayerAttachments.SCALE_LOCKED, false)) return;
+        if (FdaApiUtil.getBoolValue(player, PlayerAttachments.SCALE_LOCKED)) return;
 
-        Scoreboard board = player.level().getServer().getScoreboard();
-        Objective objective = board.getObjective("scaleLocked");
+        var board = player.level().getServer().getScoreboard();
+        var objective = board.getObjective("scaleLocked");
         if (objective == null) return;
 
-        ScoreHolder holder = ScoreHolder.forNameOnly(player.getScoreboardName());
-        ScoreAccess score = board.getOrCreatePlayerScore(holder, objective);
+        var holder = ScoreHolder.forNameOnly(player.getScoreboardName());
+        var score = board.getOrCreatePlayerScore(holder, objective);
 
         // Migrate value
         if (score.get() > 0) {
-            player.setAttached(PlayerAttachments.SCALE_LOCKED, true);
+            FdaApiUtil.setBoolValue(player, PlayerAttachments.SCALE_LOCKED, true);
             board.resetSinglePlayerScore(holder, objective);
         }
     }
@@ -38,7 +37,7 @@ public class ScalerUtil {
     public static void applyScaleToPlayer(ServerPlayer player, double scale) {
         double min = 0.1, max = 5.0;
         if (Double.isNaN(scale) || scale <= 0.0) scale = 1.0;
-        scale = Math.max(min, Math.min(max, scale));
+        scale = Math.clamp(scale, min, max);
 
         if (getScale(player) != null) {
             setScale(player, scale);
@@ -47,7 +46,7 @@ public class ScalerUtil {
     }
 
     public static @Nullable AttributeInstance getScale(ServerPlayer player) {
-        return player.getAttribute(Attributes.SCALE);
+        return AttributeUtil.getAttribute(player, Attributes.SCALE);
     }
 
     public static void setScale(ServerPlayer player, double scale) {

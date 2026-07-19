@@ -84,7 +84,7 @@ public final class RightClickHarvest {
         List<ItemStack> drops = getDrops(level, pos, state, player, tool);
         removeOneSeed(drops, new ItemStack(cropBlock.asItem()));
 
-        IntegerProperty ageProp = ((CropBlockAccessor) cropBlock).invokeGetAgeProperty();
+        var ageProp = ((CropBlockAccessor) cropBlock).invokeGetAgeProperty();
         level.setBlock(pos, state.setValue(ageProp, 0), Block.UPDATE_ALL);
         for (ItemStack drop : drops) Block.popResource(level, pos, drop);
 

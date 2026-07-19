@@ -11,7 +11,6 @@ import net.justmili.libs.v1.utils.EntityUtil;
 import net.justmili.libs.v1.utils.FdaApiUtil;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
-import net.justmili.servertweaks.content.abilities.core.AbilitiesFileUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.justmili.servertweaks.registries.TagRegistry;
 import net.minecraft.core.BlockPos;
@@ -22,7 +21,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -49,7 +47,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.UUID;
 
-import static net.justmili.servertweaks.content.abilities.core.AbilitiesFileUtil.has;
+import static net.justmili.servertweaks.content.abilities.core.AbilitiesFileUtil.*;
 
 public class AbilityEvents {
     public static void registerAbilityEvents() {
@@ -58,7 +56,7 @@ public class AbilityEvents {
                 ServerLevel level = player.level();
 
                 // Tick all Ticking Abilities
-                for (Ability ability : AbilitiesFileUtil.getAbilities(player)) {
+                for (Ability ability : getAbilities(player)) {
                     if (ability instanceof TickingAbility tickingAbility) {
                         tickingAbility.tick(player, level);
                     }
@@ -69,21 +67,21 @@ public class AbilityEvents {
                     attack = player.getAttribute(Attributes.ATTACK_DAMAGE),
                     maxHp = player.getAttribute(Attributes.MAX_HEALTH);
 
-                if (!AbilitiesFileUtil.has(player, Abilities.SLOW) && speed != null) speed.removeModifier(Abilities.AR_SLOW_SPEED);
+                if (!has(player, Abilities.SLOW) && speed != null) speed.removeModifier(Abilities.AR_SLOW_SPEED);
                 if (!has(player, Abilities.STRONG) && attack != null) attack.removeModifier(Abilities.AR_STRONG_DAMAGE);
                 if (!has(player, Abilities.STRONG) && maxHp != null) maxHp.removeModifier(Abilities.AR_STRONG_HP);
 
                 // Change to: Check if player has presets locked;
                 // If yes but has no abilities or modifiers then clear them from the file and unlock preset picking
                 // As well as inform the player that they have to pick their preset/class again
-                if (FdaApiUtil.getBoolValue(player, PlayerAttachments.PICKED_PRESET)
-                    && AbilitiesFileUtil.getAbilities(player).isEmpty()
-                    && AbilitiesFileUtil.getModifiers(player).isEmpty()) {
+                if (FdaApiUtil.getBoolValue(player, PlayerAttachments.HAS_PICKED_PRESET)
+                    && getAbilities(player).isEmpty()
+                    && getModifiers(player).isEmpty()) {
 
                     // Remove from file
-                    AbilitiesFileUtil.clearPlayerProfile(player);
+                    clearPlayerProfile(player);
                     // Unlock preset picking
-                    FdaApiUtil.setBoolValue(player, PlayerAttachments.PICKED_PRESET, false);
+                    FdaApiUtil.setBoolValue(player, PlayerAttachments.HAS_PICKED_PRESET, false);
                     // Inform player
                     CommandUtil.sendFailTo(player, "Your ability preset data was invalid or missing. Please pick your ability preset again");
                 }
@@ -327,7 +325,7 @@ public class AbilityEvents {
             sweetOnly = has(player, Abilities.SACCHARIVORE),
             grassEater = has(player, Abilities.HERBIVORE),
             bugEater = has(player, Abilities.INSECTIVORE),
-            canConsumeGolden = AbilitiesFileUtil.has(player, Modifiers.CAN_EAT_GOLDEN_FOOD),
+            canConsumeGolden = has(player, Modifiers.CAN_EAT_GOLDEN_FOOD),
 
             isMeat = stack.is(TagRegistry.DIET_CARNIVORE),
             isVege = stack.is(TagRegistry.DIET_VEGETARIAN),

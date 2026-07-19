@@ -1,6 +1,5 @@
 package net.justmili.servertweaks.content.abilities.core;
 
-import net.justmili.servertweaks.content.abilities.Presets;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
@@ -12,13 +11,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class RegistryMaps {
+public class Registries {
     public static final Map<Identifier, Ability> ABILITIES = new HashMap<>();
     public static final Map<Identifier, AbilityModifier> MODIFIERS = new HashMap<>();
     public static final Map<Identifier, AbilityPreset> PRESETS = new HashMap<>();
 
     public static Map<Identifier, Ability> getAbilities() {
-        return RegistryMaps.ABILITIES;
+        return Registries.ABILITIES;
     }
     public static @Nullable Ability byAbilityId(Identifier id) {
         return ABILITIES.get(id);
@@ -28,7 +27,7 @@ public class RegistryMaps {
     }
 
     public static Map<Identifier, AbilityModifier> getModifiers() {
-        return RegistryMaps.MODIFIERS;
+        return Registries.MODIFIERS;
     }
     public static @Nullable AbilityModifier byModifierId(Identifier id) {
         return MODIFIERS.get(id);
@@ -38,7 +37,7 @@ public class RegistryMaps {
     }
 
     public static Map<Identifier, AbilityPreset> getPresets() {
-        return RegistryMaps.PRESETS;
+        return Registries.PRESETS;
     }
     public static @Nullable AbilityPreset byPresetId(Identifier id) {
         return PRESETS.get(id);
