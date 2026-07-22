@@ -68,7 +68,8 @@ public class Config {
         // Mixins
         mixins.comment("Should these mixins apply on the server?");
 
-        enableHigherEnchants =  server.define("enableHigherEnchantmentLevels", true);
+        enableHigherEnchants =  mixins.comment("Should some enchantments (controlled by enchantment tags) have a higher max value than Vanilla intended?")
+            .define("enableHigherEnchantmentLevels", false);
 
         limitPlayerSpeed = mixins.comment("Should the server stop the player from moving too fast and print \"Player moved too fast!\" warn when on foot?")
             .define("limitPlayerSpeed", false);
