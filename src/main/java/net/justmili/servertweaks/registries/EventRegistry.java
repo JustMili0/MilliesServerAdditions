@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.AbilityEvents;
 import net.justmili.servertweaks.content.mechanics.features.AnvilRepair;
+import net.justmili.servertweaks.content.mechanics.features.ArmedArmorStands;
 import net.justmili.servertweaks.content.mechanics.features.RightClickHarvest;
 import net.justmili.servertweaks.content.mechanics.features.WhileAfk;
 import net.justmili.servertweaks.content.mechanics.logic.Banishment;
@@ -17,14 +18,16 @@ public class EventRegistry {
     public static void register() {
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(Banishment::onEntityHurt);
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(WhileAfk::onEntityHurt);
-        ServerEntityEvents.ENTITY_LOAD.register(Banishment::onEntityLoad);
+        ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
+            ArmedArmorStands.onEntityLoad(entity);
+            Banishment.onEntityLoad(entity,  level);
+        });
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (var player : server.getPlayerList().getPlayers()) {
                 Banishment.onPlayerTick(player);
                 WhileAfk.onPlayerTick(player);
             }
         });
-        ServerPlayConnectionEvents.JOIN.register(ScalerUtil::convertScoreToVar);
         UseBlockCallback.EVENT.register(RightClickHarvest::onUseBlock);
         UseBlockCallback.EVENT.register(AnvilRepair::onUseBlock);
 

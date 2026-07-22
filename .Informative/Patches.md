@@ -134,6 +134,7 @@ Feedback is appreciated ^^
   - Unbreaking - up to level 5 (Vanilla: 3)
   - Multishot - up to level 3 (Vanilla: 1)
 - [TODO] Added ability to leash players
+- Armor Stands named "display" will be given arms
 
 **Commands**
 - `/scale` now has configurable min-max values in the config
