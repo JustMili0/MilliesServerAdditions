@@ -1,7 +1,6 @@
 {
   "has_skylight": false,
   "has_ceiling": false,
-  "has_ender_dragon_fight": false,
   "coordinate_scale": 1,
   "ambient_light": 0,
   "has_fixed_time": true,
