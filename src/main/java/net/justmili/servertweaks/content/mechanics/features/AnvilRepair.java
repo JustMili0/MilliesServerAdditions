@@ -7,7 +7,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -24,21 +23,21 @@ public class AnvilRepair {
     private static final Map<UUID, Integer> repairAttemptsIngot = new HashMap<>(), repairAttemptsBlock = new HashMap<>();
     private static final Map<UUID, BlockPos> anvilPosition = new HashMap<>();
 
-    public static InteractionResult onUseBlock(Player interacting, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
-        if (!Config.enableAnvilRepair.get()) return InteractionResult.PASS;
-        if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
-        if (!player.isShiftKeyDown()) return InteractionResult.PASS;
+    public static void onUseBlock(Player interacting, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
+        if (!Config.enableAnvilRepair.get()) return;
+        if (!(interacting instanceof ServerPlayer player)) return;
+        if (!player.isShiftKeyDown()) return;
 
         // Block checks
         var blockState = level.getBlockState(blockHitResult.getBlockPos());
-        if (!blockState.is(BlockTags.ANVIL)) return InteractionResult.PASS;
+        if (!blockState.is(BlockTags.ANVIL)) return;
         Block block = blockState.getBlock();
-        if (block == Blocks.ANVIL) return InteractionResult.PASS;
+        if (block == Blocks.ANVIL) return;
 
         // Item checks
         var stack = player.getItemInHand(hand);
         boolean hasIngot = stack.is(Items.IRON_INGOT), hasBlock = stack.is(Items.IRON_BLOCK);
-        if (!hasIngot && !hasBlock) return InteractionResult.PASS;
+        if (!hasIngot && !hasBlock) return;
 
         // Roll chances
         double chance;
@@ -47,7 +46,7 @@ public class AnvilRepair {
         } else if (block == Blocks.DAMAGED_ANVIL) {
             chance = hasBlock ? 0.80 : 0.25;
         } else {
-            return InteractionResult.PASS;
+            return;
         }
 
         UUID uuid = player.getUUID();
@@ -90,6 +89,5 @@ public class AnvilRepair {
             attempts.merge(uuid, 1, Integer::sum);
         }
 
-        return InteractionResult.SUCCESS;
     }
 }

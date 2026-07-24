@@ -1,6 +1,5 @@
 package net.justmili.servertweaks.content.abilities.type;
 
-import net.justmili.servertweaks.ServerTweaks;
 import net.minecraft.resources.Identifier;
 
 import java.util.Set;
@@ -17,12 +16,6 @@ public class AbilityPreset {
         this.abilities = abilities;
         this.modifiers = modifiers;
     }
-    public AbilityPreset(String id, String description, Set<Ability> abilities, Set<AbilityModifier> modifiers) {
-        this.id = ServerTweaks.asResource(id);
-        this.description = description;
-        this.abilities = abilities;
-        this.modifiers = modifiers;
-    }
 
     public Identifier getId() {
         return id;
@@ -30,7 +23,6 @@ public class AbilityPreset {
     public String getDesc() {
         return description;
     }
-
     public Set<Ability> getAbilities() {
         return abilities;
     }

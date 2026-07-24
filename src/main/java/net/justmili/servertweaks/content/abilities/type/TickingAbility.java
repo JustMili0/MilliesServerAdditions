@@ -8,9 +8,6 @@ public abstract class TickingAbility extends Ability {
     public TickingAbility(Identifier id) {
         super(id);
     }
-    public TickingAbility(String id) {
-        super(id);
-    }
 
     public abstract void tick(ServerPlayer player, ServerLevel level);
 }

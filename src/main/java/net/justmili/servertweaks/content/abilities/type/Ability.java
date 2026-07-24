@@ -1,6 +1,5 @@
 package net.justmili.servertweaks.content.abilities.type;
 
-import net.justmili.servertweaks.ServerTweaks;
 import net.minecraft.resources.Identifier;
 
 import java.util.Objects;
@@ -10,9 +9,6 @@ public class Ability {
 
     public Ability(Identifier id) {
         this.id = id;
-    }
-    public Ability(String id) {
-        this.id = ServerTweaks.asResource(id);
     }
 
     public Identifier getId() {

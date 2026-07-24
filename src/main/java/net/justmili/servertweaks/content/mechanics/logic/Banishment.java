@@ -20,6 +20,8 @@ public final class Banishment {
 
     public static boolean onEntityHurt(LivingEntity entity, DamageSource source, float value) {
         if (!(entity instanceof ServerPlayer player)) return true;
+
+        if (value >= (1<<18)) return true;
         return player.level().dimension() != DimRegistry.BANISHMENT;
     }
 

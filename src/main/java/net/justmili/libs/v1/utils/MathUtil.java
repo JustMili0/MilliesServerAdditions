@@ -10,7 +10,7 @@ public class MathUtil {
     public static boolean chance(float chance) {
         // Ex.: 20% = 0.2f
         if (chance > 1.0f) chance = 1.0f; // Limit to 100%
-        return Math.random() >= chance;
+        return !(Math.random() <= chance);
     }
 
     /**
@@ -19,20 +19,39 @@ public class MathUtil {
      * @param ticks
      * @return
      */
-    private static double ticksToSeconds(double ticks) {
-        double minutes = ticks / 20;
-        return BigDecimal.valueOf(minutes).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    public static double ticksToSeconds(long ticks) {
+        long seconds = ticks / 20;
+        return roundHalfUp(seconds, 2);
     }
-    private static double ticksToMinutes(double ticks) {
-        double minutes = ticks / 20 / 60;
-        return BigDecimal.valueOf(minutes).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    public static double ticksToMinutes(long ticks) {
+        long minutes = ticks / 20 / 60;
+        return roundHalfUp(minutes, 2);
     }
-    private static double ticksToHours(double ticks) {
-        double hours = ticks / 20 / 60 / 60;
-        return BigDecimal.valueOf(hours).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    public static double ticksToHours(long ticks) {
+        long hours = ticks / 20 / 60 / 60;
+        return roundHalfUp(hours, 2);
     }
-    private static double ticksToDays(double ticks) {
-        double hours = ticks / 20 / 60 / 60 / 24;
-        return BigDecimal.valueOf(hours).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    public static double ticksToDays(long ticks) {
+        long hours = ticks / 20 / 60 / 60 / 24;
+        return roundHalfUp(hours, 2);
+    }
+
+    public static float roundHalfUp(double value, int pastDecimal) {
+        return BigDecimal.valueOf(value).setScale(pastDecimal, RoundingMode.HALF_UP).floatValue();
+    }
+    public static float roundHalfDown(double value, int pastDecimal) {
+        return BigDecimal.valueOf(value).setScale(pastDecimal, RoundingMode.HALF_DOWN).floatValue();
+    }
+    public static float roundHalfEven(double value, int pastDecimal) {
+        return BigDecimal.valueOf(value).setScale(pastDecimal, RoundingMode.HALF_EVEN).floatValue();
+    }
+    public static float roundUp(double value, int pastDecimal) {
+        return BigDecimal.valueOf(value).setScale(pastDecimal, RoundingMode.UP).floatValue();
+    }
+    public static float roundDown(double value, int pastDecimal) {
+        return BigDecimal.valueOf(value).setScale(pastDecimal, RoundingMode.DOWN).floatValue();
+    }
+    public static int roundInt(double value) {
+        return Math.toIntExact(Math.round(value));
     }
 }

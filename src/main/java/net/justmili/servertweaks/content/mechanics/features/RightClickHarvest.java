@@ -16,7 +16,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
@@ -25,13 +24,13 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 
 public final class RightClickHarvest {
-    public static InteractionResult onUseBlock(Player interacting, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
-        if (!Config.rightClickHarvest.get()) return InteractionResult.PASS;
-        if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
-        if (level.isClientSide()) return InteractionResult.PASS;
-        if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
-        if (player.isSpectator()) return InteractionResult.PASS;
-        if (AbilitiesFileUtil.getAbilities(player).contains(Abilities.HERBIVORE) && player.isShiftKeyDown()) return InteractionResult.PASS;
+    public static void onUseBlock(Player interacting, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
+        if (!Config.rightClickHarvest.get()) return;
+        if (!(interacting instanceof ServerPlayer player)) return;
+        if (level.isClientSide()) return;
+        if (hand != InteractionHand.MAIN_HAND) return;
+        if (player.isSpectator()) return;
+        if (AbilitiesFileUtil.getAbilities(player).contains(Abilities.HERBIVORE) && player.isShiftKeyDown()) return;
 
         BlockPos pos = blockHitResult.getBlockPos();
         BlockState state = level.getBlockState(pos);
@@ -40,7 +39,7 @@ public final class RightClickHarvest {
 
         switch (block) {
             case CropBlock cropBlock -> {
-                if (!harvestCrop(player, (ServerLevel) level, pos, state, cropBlock)) return InteractionResult.PASS;
+                if (!harvestCrop(player, (ServerLevel) level, pos, state, cropBlock)) return;
                 if (hoeHeld) {
                     for (BlockPos near : BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 0, 1))) {
                         if (near.equals(pos)) continue;
@@ -51,7 +50,7 @@ public final class RightClickHarvest {
                 }
             }
             case NetherWartBlock netherWartBlock -> {
-                if (!harvestNetherWart(player, (ServerLevel) level, pos, state)) return InteractionResult.PASS;
+                if (!harvestNetherWart(player, (ServerLevel) level, pos, state)) return;
                 if (hoeHeld) {
                     for (BlockPos near : BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 0, 1))) {
                         if (near.equals(pos)) continue;
@@ -62,19 +61,19 @@ public final class RightClickHarvest {
                 }
             }
             case CocoaBlock cocoaBlock -> {
-                if (!harvestCocoa(player, (ServerLevel) level, pos, state)) return InteractionResult.PASS;
+                if (!harvestCocoa(player, (ServerLevel) level, pos, state)) return;
             }
             case SugarCaneBlock sugarCaneBlock -> {
-                return harvestSugarCane(player, (ServerLevel) level, pos);
+                harvestSugarCane(player, (ServerLevel) level, pos);
+                return;
             }
             default -> {
-                return InteractionResult.PASS;
+                return;
             }
         }
 
         player.swing(InteractionHand.MAIN_HAND, true);
         damageHoeIfHeld(player, player.getMainHandItem(), (ServerLevel) level);
-        return InteractionResult.SUCCESS;
     }
 
     private static boolean harvestCrop(ServerPlayer player, ServerLevel level, BlockPos pos, BlockState state, CropBlock cropBlock) {

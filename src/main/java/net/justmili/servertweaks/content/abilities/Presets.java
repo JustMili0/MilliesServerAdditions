@@ -1,22 +1,25 @@
 package net.justmili.servertweaks.content.abilities;
 
+import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.core.Registries;
 import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
+import net.minecraft.resources.Identifier;
 
 import java.util.Set;
 
 public class Presets {
     public static void init() {}
+
     static {
         register(new AbilityPreset(
-            "custom",
+            id("custom"),
             "\nContact any online staff that you'd like a custom set. Your chosen abilities, debuffs and ability modifiers "+
                 "will be reviewed by staff and implemented if it's compliant with server's ability creation guidelines if there are any.",
             Set.of(),
             Set.of()
         ));
         register(new AbilityPreset( // aka Cat
-            "feline",
+            id("feline"),
             "\nFelines can mimic the hissing of a creeper and screeching of phantoms, scaring them away; they are also immune to fall damage"+
                 "and are extra fast when sprinting. They are carnivores, meaning they can only eat meat, can't exactly swim up in water to not drown"+
                 "and untamed wolves turn aggressive towards them unprovoked.",
@@ -32,7 +35,7 @@ public class Presets {
             Set.of()
         ));
         register(new AbilityPreset(
-            "dreamweaver",
+            id("dreamweaver"),
             "\nDreamweavers are creatures that create dreams for their hosts, they can take an appearance of a cat-moth hybrid, sometimes humanoid; "+
                 "though normally they don't have a physical form. "+
                 "A dreamweaver scares away creepers due to their cat characteristics, scares away phantoms because they don't need to sleep, " +
@@ -50,7 +53,7 @@ public class Presets {
             // Ability set approved by Flufaye the dreamweaver Vtuber herself :3
         ));
         register(new AbilityPreset(
-            "bunny",
+            id("bunny"),
             "\nBunnies are swift and agile, giving them speed and ability to jump pretty high. " +
                 "They feed on fruits and vegetables as well as foliage such as grass or bushes but can not eat. " +
                 "Bunnies also can't freeze in the cold thanks to their thick fur, " +
@@ -69,7 +72,7 @@ public class Presets {
             )
         ));
         register(new AbilityPreset( // aka Wolf
-            "canine",
+            id("canine"),
             "\nCanines are territorial and predatory animals, being attacked by other canines and scaring away smaller animals. " +
                 "They are rather tough, not being able to be knocked back as much but also swift thanks to their heavy, muscular build." +
                 "Canines also can't freeze in the cold thanks to their thick fur, " +
@@ -85,7 +88,7 @@ public class Presets {
             Set.of()
         ));
         register(new AbilityPreset(
-            "monster_generic",
+            id("monster_generic"),
             "\nVillagers are scared of monsters, in result they will flee. Iron Golems and Snow Golems will attack unprovoked as they see you as a threat, " +
                 "but other monsters such as pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack.",
             Set.of(
@@ -95,7 +98,7 @@ public class Presets {
             )
         ));
         register(new AbilityPreset(
-            "undead_generic",
+            id("undead_generic"),
             "\nThe undead are monsters. Villagers flee from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
                 "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
                 "Undead also burn in daylight and can not swim up in water but because they don't need air to live, they can breathe underwater.",
@@ -109,7 +112,7 @@ public class Presets {
             )
         ));
         register(new AbilityPreset(
-            "zombie",
+            id("zombie"),
             "\nZombies are undead monsters. Villagers flee from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
                 "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
                 "Zombies also burn in daylight and can not swim up in water but because they don't need air to live, they can breathe underwater. " +
@@ -126,7 +129,7 @@ public class Presets {
             )
         ));
         register(new AbilityPreset(
-            "drowned",
+            id("drowned"),
             "\nDrowned are undead monsters. Villagers flee from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
                 "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
                 "Drowned also burn in daylight, they live underwater and don't need air meaning they can breathe underwater " +
@@ -146,7 +149,7 @@ public class Presets {
             )
         ));
         register(new AbilityPreset(
-            "husk",
+            id("husk"),
             "\nHusks are undead monsters. Villagers flee from them, Iron Golems and Snow Golems will attack unprovoked, but other monsters such as " +
                 "pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
                 "Unlike most undead, Husks don't burn in daylight and are immune to heat, but are sensitive to the cold. " +
@@ -163,7 +166,7 @@ public class Presets {
             )
         ));
         register(new AbilityPreset( // aka Iron Golem
-            "golem",
+            id("golem"),
             "\nTough and strong, but slow and heavy but durable enough to survive any fall.",
             Set.of(
                 Abilities.TOUGH,
@@ -176,7 +179,7 @@ public class Presets {
             )
         ));
         register(new AbilityPreset( // aka Nether Mob
-            "netherborn",
+            id("netherborn"),
             "\nNetherborn are creatures from the depths of the Nether. Native to it, they are immune to all hellish heat. " +
                 "They are strong and tough, but are sensitive to cold and repulsed by water. Netherborn are also carnivores, " +
                 "and their presence alone scares away Phantoms.",
@@ -195,7 +198,7 @@ public class Presets {
             )
         ));
         register(new AbilityPreset( // aka Chicken
-            "galline",
+            id("galline"),
             "\nGallines are bird-like creatures. They are light and swift, they feed on plants and foliage, but are hunted by foxes in the wild.",
             Set.of(
                 Abilities.HUNTED_BY_FOX,
@@ -208,7 +211,7 @@ public class Presets {
             )
         ));
         register(new AbilityPreset( // aka Fish
-            "aquarian",
+            id("aquarian"),
             "\nAquarians are aquatic beings native to oceans. They are strong and gracefully fast underwater, " +
                 "being able to breathe in water but suffocating on the surface. Aquarians can not be in hot climates, or they'll become fish soufflé." +
                 "They primarily feed on meat and underwater or surface foliage.",
@@ -225,7 +228,7 @@ public class Presets {
             )
         ));
         register(new AbilityPreset( // aka Spider
-            "arachnidian",
+            id("arachnidian"),
             "\nArachnidians are humanoid spider creatures. They are considered monsters, meaning Villagers will flee from them, " +
                 "Iron Golems and Snow Golems will attack unprovoked, but pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
                 "Arachnidians are rather agile, meaning they can jump high and can scale any solid wall. " +
@@ -241,7 +244,7 @@ public class Presets {
             )
         ));
         register(new AbilityPreset( // aka Enderman
-            "enderian",
+            id("enderian"),
             "\nEnderians are creatures come from the far End islands. Due to their uncanny and creepy appearance, they are often seen as monsters, " +
                 "meaning Villagers will flee from them, Iron Golems and Snow Golems will attack unprovoked, " +
                 "but pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
@@ -257,7 +260,7 @@ public class Presets {
             )
         ));
         register(new AbilityPreset( // aka Frog
-            "amphibian",
+            id("amphibian"),
             "\nAmphibians are creatures native to swamps and lush wetlands. They are agile hoppers, able to jump quite high, " +
                 "and are equally at home on land and underwater, being able to breathe in water and on surface. " +
                 "Amphibians are carnivores with a very particular palate, feeding exclusively on bugs, slimes and magma cubes.",
@@ -271,7 +274,7 @@ public class Presets {
             )
         ));
         register(new AbilityPreset( // aka Slime
-            "gelatinous",
+            id("gelatinous"),
             "\nThe Gelatinous are bouncy, slime-like creatures. They are monsters, meaning Villagers will flee from them, " +
                 "Iron Golems and Snow Golems will attack unprovoked, but pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
                 "Their squishy body absorbs most of the impacts from falls and collisions, keeping them mostly unharmed. " +
@@ -287,7 +290,7 @@ public class Presets {
             )
         ));
         register(new AbilityPreset( // aka Magma Cube
-            "pryogelatinous",
+            id("pryogelatinous"),
             "\nThe Pryogelatinous are bouncy, magmatic slime-like creatures native to the Nether. They are monsters, meaning Villagers will flee from them, " +
                 "Iron Golems and Snow Golems will attack unprovoked, but pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
                 "Their squishy body absorbs most of the impacts from falls and collisions, keeping them mostly unharmed. " +
@@ -306,7 +309,7 @@ public class Presets {
             )
         ));
         register(new AbilityPreset(
-            "dwarf",
+            id("dwarf"),
             "\nI AM A DWARF AND I'M DIGGING A HOLE, DIGGY DIGGY HOLE, DIGGY DIGGY HOLE!\n\n" +
                 "(You get permanent haste 2, you're short, " +
                 "you're immune to block heat like magma, not lava or fire, you're immune to freezing and " +
@@ -324,6 +327,9 @@ public class Presets {
         ));
     }
 
+    private static Identifier id(String id) {
+        return ServerTweaks.asResource(id);
+    }
     public static void register(AbilityPreset preset) {
         Registries.PRESETS.put(preset.getId(), preset);
     }

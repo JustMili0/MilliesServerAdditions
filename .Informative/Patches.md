@@ -112,7 +112,7 @@ Feedback is appreciated ^^
 - Updated to Minecraft 26.1.2
 - Changed project's buildscript from Groovy to Kotlin
 - Dropped dependency from SuperMartijn642's Config Lib and replaced it with my own mini config lib
-- [TODO] Completely reworked Player Abilities code to be more CPU and Memory efficient
+- Reworked registries for player abilities
 - Changed config file location and split into `config\servertweaks\common.toml` into `config\servertweaks\server.properties` and `config\servertweaks\mixins.properties`
 - Renamed config key `removeAnvilLimit` to `disableAnvilLimit`
 - All `limit----Speed` config keys are now false by default
@@ -135,6 +135,9 @@ Feedback is appreciated ^^
   - Multishot - up to level 3 (Vanilla: 1)
 - [TODO] Added ability to leash players
 - Armor Stands named "display" will be given arms
+- You can now duplicate enchantment books (at a level cost) by shift-right-clicking with an enchanted book in your offhand and a regular book in your main on an Enchantment Table
+- You can now die in the Banishment dimension (if the damage you've been delt is more than 2^18)
+  - Added so `/kill` actually works in there
 
 **Commands**
 - `/scale` now has configurable min-max values in the config

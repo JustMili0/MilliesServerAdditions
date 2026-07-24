@@ -4,15 +4,15 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.AbilityEvents;
-import net.justmili.servertweaks.content.mechanics.features.AnvilRepair;
-import net.justmili.servertweaks.content.mechanics.features.ArmedArmorStands;
-import net.justmili.servertweaks.content.mechanics.features.RightClickHarvest;
-import net.justmili.servertweaks.content.mechanics.features.WhileAfk;
+import net.justmili.servertweaks.content.mechanics.features.*;
 import net.justmili.servertweaks.content.mechanics.logic.Banishment;
-import net.justmili.servertweaks.core.util.ScalerUtil;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
 
 public class EventRegistry {
     public static void register() {
@@ -28,8 +28,12 @@ public class EventRegistry {
                 WhileAfk.onPlayerTick(player);
             }
         });
-        UseBlockCallback.EVENT.register(RightClickHarvest::onUseBlock);
-        UseBlockCallback.EVENT.register(AnvilRepair::onUseBlock);
+        UseBlockCallback.EVENT.register((Player player, Level level, InteractionHand hand, BlockHitResult hitResult) -> {
+            RightClickHarvest.onUseBlock(player, level, hand, hitResult);
+            AnvilRepair.onUseBlock(player, level, hand, hitResult);
+            EnchantDuplication.onUseBlock(player, level, hand, hitResult);
+            return InteractionResult.PASS;
+        });
 
         if ((Config.playerAbilities.get())) AbilityEvents.registerAbilityEvents();
     }

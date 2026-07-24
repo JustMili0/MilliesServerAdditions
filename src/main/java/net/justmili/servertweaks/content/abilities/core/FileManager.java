@@ -51,7 +51,7 @@ public class FileManager {
                         String raw = element.getAsString();
                         Identifier id = Identifier.tryParse(raw);
                         if (id == null) {
-                            ServerTweaks.LOGGER.warn("Invalid ability id '{}', skipping", raw);
+                            ServerTweaks.LOGGER.warn("Invalid ability getId '{}', skipping", raw);
                             continue;
                         }
 
@@ -69,7 +69,7 @@ public class FileManager {
                         String raw = element.getAsString();
                         Identifier id = Identifier.tryParse(raw);
                         if (id == null) {
-                            ServerTweaks.LOGGER.warn("Invalid modifier id '{}', skipping", raw);
+                            ServerTweaks.LOGGER.warn("Invalid modifier getId '{}', skipping", raw);
                             continue;
                         }
 

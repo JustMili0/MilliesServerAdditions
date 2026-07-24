@@ -17,6 +17,7 @@ public class Config {
     public static ConfigEntry<Boolean> // Features
         rightClickHarvest,
         enableAnvilRepair,
+        enableEnchantDuplication,
         playerAbilities;
     public static ConfigEntry<Boolean> // Mixin Features
         limitPlayerSpeed,
@@ -60,6 +61,8 @@ public class Config {
             .define("rightClickHarvest", true);
         enableAnvilRepair = server.comment("Should a player be able to fix anvils by shift-right-clicking them with iron ingots and iron blocks?")
             .define("anvilRepair", true);
+        enableEnchantDuplication = server.comment("")
+            .define("enableEnchantDuplication", true);
         playerAbilities = server.comment("[EXPERIMENTAL] Allows server owners to configure player abilities for some or all members")
             .define("playerAbilities", false);
 

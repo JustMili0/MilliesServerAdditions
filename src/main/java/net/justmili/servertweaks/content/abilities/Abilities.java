@@ -57,6 +57,8 @@ import java.util.stream.Collectors;
 import static net.justmili.libs.v1.utils.AttributeUtil.*;
 
 public class Abilities {
+    public static void init() {}
+
     /// Extra Ability variables
     public static final Identifier AR_SLOW_SPEED = ServerTweaks.asResource("slow_speed");
     public static final Identifier AR_STRONG_HP = ServerTweaks.asResource("strong_health");
@@ -99,13 +101,12 @@ public class Abilities {
         BURNS_IN_DAYLIGHT, IS_MONSTER, CLIMBS_WALLS, PEARLING,
         PREDATORY, BOVID, CARNIVORE, VEGETARIAN, SACCHARIVORE, HERBIVORE, INSECTIVORE;
 
-    public static void init() {}
     static {
         FIRE_IMMUNE = register(new FireImmune()); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
         LAVA_IMMUNE = register(new LavaImmune()); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
-        HEAT_IMMUNE = register(new Ability("heat_immune")); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
-        FREEZE_IMMUNE = register(new Ability("freeze_immune")); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
-        FALL_IMMUNE = register(new Ability("fall_immune")); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
+        HEAT_IMMUNE = register(new Ability(id("heat_immune"))); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
+        FREEZE_IMMUNE = register(new Ability(id("freeze_immune"))); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
+        FALL_IMMUNE = register(new Ability(id("fall_immune"))); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
         HEAT_SENSITIVE = register(new HeatSensitive());
         COLD_SENSITIVE = register(new ColdSensitive());
         LIGHT = register(new Light());
@@ -113,9 +114,9 @@ public class Abilities {
         SLOW = register(new Slow());
         HOPPY = register(new Hoppy());
         DWARF = register(new Dwarf());
-        SQUISHY = register(new Ability("squishy")); // Handled in AbilityEvents.squishy(...)
+        SQUISHY = register(new Ability(id("squishy"))); // Handled in AbilityEvents.squishy(...)
         MAGNETIC = register(new Magnetic());
-        TOUGH = register(new Ability("tough")); // Handled through LivingEntityMixin
+        TOUGH = register(new Ability(id("tough"))); // Handled through LivingEntityMixin
         STRONG = register(new Strong());
         AQUA_GRACE = register(new AquaGrace());
         BREATHES_UNDERWATER = register(new BreathesUnderwater()); // Handled by ticking and AbilityEvents.handleOtherImmunities(...)
@@ -127,21 +128,24 @@ public class Abilities {
         SCARES_CREEPERS = register(new ScaresCreepers());
         SCARES_PHANTOMS = register(new ScaresPhantoms());
         CHILD_OF_NATURE = register(new ChildOfNature());                // KINDA WORKS, no code for taming tho
-        WEAK_TO_DAMAGE = register(new Ability("weak_to_damage")); // Handled in AbilityEvents.weakToDamage(...)
+        WEAK_TO_DAMAGE = register(new Ability(id("weak_to_damage"))); // Handled in AbilityEvents.weakToDamage(...)
         NIGHT_VISION = register(new NightVision());
         BURNS_IN_DAYLIGHT = register(new BurnsInDaylight());
         IS_MONSTER = register(new IsMonster());
-        CLIMBS_WALLS = register(new Ability("climbs_walls"));     // DOESN'T WORK, No code implemented yet
-        PEARLING = register(new Ability("pearling"));
+        CLIMBS_WALLS = register(new Ability(id("climbs_walls")));     // DOESN'T WORK, No code implemented yet
+        PEARLING = register(new Ability(id("pearling")));
         PREDATORY = register(new Predatory());
-        BOVID = register(new Ability("bovid")); // Handled in AbilityEvents.bovid(...)
-        CARNIVORE = register(new Ability("carnivore")); // Handled by dietary methods in AbilityEvents
-        VEGETARIAN = register(new Ability("vegetarian")); // Handled by dietary methods in AbilityEvents
-        SACCHARIVORE = register(new Ability("saccharivore")); // Handled by dietary methods in AbilityEvents
-        HERBIVORE = register(new Ability("herbivore")); // Handled by dietary methods in AbilityEvents
-        INSECTIVORE = register(new Ability("insectivore")); // Handled by dietary methods in AbilityEvents
+        BOVID = register(new Ability(id("bovid"))); // Handled in AbilityEvents.bovid(...)
+        CARNIVORE = register(new Ability(id("carnivore"))); // Handled by dietary methods in AbilityEvents
+        VEGETARIAN = register(new Ability(id("vegetarian"))); // Handled by dietary methods in AbilityEvents
+        SACCHARIVORE = register(new Ability(id("saccharivore"))); // Handled by dietary methods in AbilityEvents
+        HERBIVORE = register(new Ability(id("herbivore"))); // Handled by dietary methods in AbilityEvents
+        INSECTIVORE = register(new Ability(id("insectivore"))); // Handled by dietary methods in AbilityEvents
     }
 
+    private static Identifier id(String id) {
+        return ServerTweaks.asResource(id);
+    }
     private static Ability register(Ability ability) {
         Registries.ABILITIES.put(ability.getId(), ability);
         return ability;
@@ -149,7 +153,7 @@ public class Abilities {
 
     /// Define ticking abilities
     static class FireImmune extends TickingAbility {
-        FireImmune() { super("fire_immune"); }
+        FireImmune() { super(id("fire_immune")); }
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
@@ -158,7 +162,7 @@ public class Abilities {
     }
 
     static class LavaImmune extends TickingAbility {
-        LavaImmune() { super("lava_immune"); }
+        LavaImmune() { super(id("lava_immune")); }
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
@@ -168,7 +172,7 @@ public class Abilities {
 
     static class HeatSensitive extends TickingAbility {
         HeatSensitive() {
-            super("heat_sensitive");
+            super(id("heat_sensitive"));
         }
 
         @Override
@@ -189,7 +193,7 @@ public class Abilities {
 
     static class ColdSensitive extends TickingAbility {
         ColdSensitive() {
-            super("cold_sensitive");
+            super(id("cold_sensitive"));
         }
 
         @Override
@@ -211,7 +215,7 @@ public class Abilities {
 
     static class Light extends TickingAbility {
         Light() {
-            super("light");
+            super(id("light"));
         }
 
         @Override
@@ -224,7 +228,7 @@ public class Abilities {
 
     static class Swift extends TickingAbility {
         Swift() {
-            super("swift");
+            super(id("swift"));
         }
 
         @Override
@@ -235,7 +239,7 @@ public class Abilities {
 
     static class Slow extends TickingAbility {
         Slow() {
-            super("slow");
+            super(id("slow"));
         }
 
         @Override
@@ -247,7 +251,7 @@ public class Abilities {
 
     static class Hoppy extends TickingAbility {
         Hoppy() {
-            super("hoppy");
+            super(id("hoppy"));
         }
 
         @Override
@@ -258,7 +262,7 @@ public class Abilities {
 
     static class Dwarf extends TickingAbility {
         Dwarf() {
-            super("dwarf");
+            super(id("dwarf"));
         }
 
         @Override
@@ -270,7 +274,7 @@ public class Abilities {
     }
 
     static class Magnetic extends TickingAbility {
-        Magnetic() { super("magnetic"); }
+        Magnetic() { super(id("magnetic")); }
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
@@ -291,7 +295,7 @@ public class Abilities {
 
     static class Strong extends TickingAbility {
         Strong() {
-            super("strong");
+            super(id("strong"));
         }
 
         @Override
@@ -316,7 +320,7 @@ public class Abilities {
 
     static class AquaGrace extends TickingAbility {
         AquaGrace() {
-            super("aqua_grace");
+            super(id("aqua_grace"));
         }
 
         @Override
@@ -335,7 +339,7 @@ public class Abilities {
 
     static class BreathesUnderwater extends TickingAbility {
         BreathesUnderwater() {
-            super("breathes_underwater");
+            super(id("breathes_underwater"));
         }
 
         @Override
@@ -348,7 +352,7 @@ public class Abilities {
 
     static class CantBreatheAir extends TickingAbility {
         CantBreatheAir() {
-            super("cant_breathe_air");
+            super(id("cant_breathe_air"));
         }
 
         @Override
@@ -372,7 +376,7 @@ public class Abilities {
 
     static class CantSwim extends TickingAbility {
         CantSwim() {
-            super("cant_swim");
+            super(id("cant_swim"));
         }
 
         @Override
@@ -387,7 +391,7 @@ public class Abilities {
 
     static class Hydrophobic extends TickingAbility {
         Hydrophobic() {
-            super("hydrophobic");
+            super(id("hydrophobic"));
         }
 
         @Override
@@ -407,7 +411,7 @@ public class Abilities {
 
     static class HuntedByFox extends TickingAbility {
         HuntedByFox() {
-            super("hunted_by_fox");
+            super(id("hunted_by_fox"));
         }
 
         @Override
@@ -422,7 +426,7 @@ public class Abilities {
 
     static class HuntedByWolf extends TickingAbility {
         HuntedByWolf() {
-            super("hunted_by_wolf");
+            super(id("hunted_by_wolf"));
         }
 
         @Override
@@ -437,7 +441,7 @@ public class Abilities {
 
     static class ScaresCreepers extends TickingAbility {
         ScaresCreepers() {
-            super("scares_creepers");
+            super(id("scares_creepers"));
         }
 
         @Override
@@ -456,7 +460,7 @@ public class Abilities {
 
     static class ScaresPhantoms extends TickingAbility {
         ScaresPhantoms() {
-            super("scares_phantoms");
+            super(id("scares_phantoms"));
         }
 
         @Override
@@ -475,7 +479,7 @@ public class Abilities {
 
     static class ChildOfNature extends TickingAbility {
         ChildOfNature() {
-            super("child_of_nature");
+            super(id("child_of_nature"));
         }
 
         @Override
@@ -494,7 +498,7 @@ public class Abilities {
 
     static class NightVision extends TickingAbility {
         NightVision() {
-            super("night_vision");
+            super(id("night_vision"));
         }
 
         @Override
@@ -505,7 +509,7 @@ public class Abilities {
 
     static class BurnsInDaylight extends TickingAbility {
         BurnsInDaylight() {
-            super("burns_in_daylight");
+            super(id("burns_in_daylight"));
         }
 
         @Override
@@ -521,7 +525,7 @@ public class Abilities {
 
     static class IsMonster extends TickingAbility {
         IsMonster() {
-            super("is_monster");
+            super(id("is_monster"));
         }
 
         @Override
@@ -575,7 +579,7 @@ public class Abilities {
 
     static class Predatory extends TickingAbility {
         Predatory() {
-            super("predatory");
+            super(id("predatory"));
         }
 
         @Override
