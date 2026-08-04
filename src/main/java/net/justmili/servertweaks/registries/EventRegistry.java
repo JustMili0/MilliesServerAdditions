@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.AbilityEvents;
 import net.justmili.servertweaks.content.mechanics.features.*;
-import net.justmili.servertweaks.content.mechanics.logic.Banishment;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -20,7 +19,7 @@ public class EventRegistry {
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(WhileAfk::onEntityHurt);
         ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
             ArmedArmorStands.onEntityLoad(entity);
-            Banishment.onEntityLoad(entity,  level);
+            Banishment.onEntityLoad(entity, level);
         });
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (var player : server.getPlayerList().getPlayers()) {

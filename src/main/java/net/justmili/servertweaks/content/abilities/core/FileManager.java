@@ -10,7 +10,6 @@ import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -55,7 +54,7 @@ public class FileManager {
                             continue;
                         }
 
-                        Ability ability = Registries.byAbilityId(id);
+                        var ability = Registries.byAbilityId(id);
                         if (ability == null) {
                             ServerTweaks.LOGGER.warn("Unknown ability '{}', skipping", raw);
                             continue;
@@ -73,7 +72,7 @@ public class FileManager {
                             continue;
                         }
 
-                        AbilityModifier modifier = Registries.byModifierId(id);
+                        var modifier = Registries.byModifierId(id);
                         if (modifier == null) {
                             ServerTweaks.LOGGER.warn("Unknown modifier '{}', skipping", raw);
                             continue;
@@ -98,7 +97,7 @@ public class FileManager {
         for (UUID uuid : allUuids) {
             JsonObject playerObj = new JsonObject();
 
-            ServerPlayer online = server.getPlayerList().getPlayer(uuid);
+            var online = server.getPlayerList().getPlayer(uuid);
             if (online != null) playerObj.addProperty("name", online.getName().getString());
 
             JsonArray abilitiesArr = new JsonArray();
@@ -127,6 +126,6 @@ public class FileManager {
     }
 
     private static File getFile() {
-        return new File("config/"+ServerTweaks.MODID+"/"+FILE_NAME);
+        return new File("config/" + ServerTweaks.MODID + "/" + FILE_NAME);
     }
 }

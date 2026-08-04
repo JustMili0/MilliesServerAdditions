@@ -8,12 +8,11 @@ import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.libs.v1.utils.EntityUtil;
-import net.justmili.libs.v1.utils.FdaApiUtil;
+import net.justmili.libs.v1.utils.FdaUtil;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.justmili.servertweaks.registries.TagRegistry;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
@@ -21,6 +20,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -35,7 +35,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -74,14 +73,14 @@ public class AbilityEvents {
                 // Change to: Check if player has presets locked;
                 // If yes but has no abilities or modifiers then clear them from the file and unlock preset picking
                 // As well as inform the player that they have to pick their preset/class again
-                if (FdaApiUtil.getBoolValue(player, PlayerAttachments.HAS_PICKED_PRESET)
+                if (FdaUtil.getBool(player, PlayerAttachments.HAS_PICKED_PRESET)
                     && getAbilities(player).isEmpty()
                     && getModifiers(player).isEmpty()) {
 
                     // Remove from file
                     clearPlayerProfile(player);
                     // Unlock preset picking
-                    FdaApiUtil.setBoolValue(player, PlayerAttachments.HAS_PICKED_PRESET, false);
+                    FdaUtil.set(player, PlayerAttachments.HAS_PICKED_PRESET, false);
                     // Inform player
                     CommandUtil.sendFailTo(player, "Your ability preset data was invalid or missing. Please pick your ability preset again");
                 }
@@ -108,6 +107,7 @@ public class AbilityEvents {
 
         return recalcDamage(player, source, value, 0.75F);
     }
+
     private static boolean weakToDamage(LivingEntity entity, DamageSource source, float value) {
         if (!(entity instanceof ServerPlayer player)) return true;
         if (handleOtherImmunities(player, source)) return false;
@@ -153,8 +153,8 @@ public class AbilityEvents {
 
         // Prevent double processing
         int currentTick = milking.tickCount;
-        if (FdaApiUtil.getIntValue(milking, PlayerAttachments.MILK_TICK) == currentTick) return InteractionResult.CONSUME;
-        FdaApiUtil.setIntValue(milking, PlayerAttachments.MILK_TICK, currentTick);
+        if (FdaUtil.getInt(milking, PlayerAttachments.MILK_TICK) == currentTick) return InteractionResult.CONSUME;
+        FdaUtil.set(milking, PlayerAttachments.MILK_TICK, currentTick);
 
         ItemStack milkBucket = new ItemStack(Items.MILK_BUCKET);
         milkBucket.set(DataComponents.CUSTOM_NAME, Component.literal(milked.getName().getString() + "'s Milk").withStyle(style -> style.withItalic(false)));
@@ -178,18 +178,19 @@ public class AbilityEvents {
 
         return InteractionResult.PASS;
     }
+
     private static InteractionResult handleDietBlockCall(Player interacting, Level level, InteractionHand hand, BlockHitResult hitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
 
-        ItemStack stack = player.getItemInHand(hand);
+        var stack = player.getItemInHand(hand);
         var state = level.getBlockState(hitResult.getBlockPos());
         var block = state.getBlock();
 
         // Fuckery to properly diet-block while allowing planting and harvesting
-        if (stack.getItem() instanceof BlockItem) {         /// Change TagRegistry to BlockTags with 26.1+
-            if (stack.is(ConventionalItemTags.CROPS) && state.is(TagRegistry.GROWS_CROPS)) return InteractionResult.PASS;
-            if (stack.is(ConventionalItemTags.BERRY_FOODS) && state.is(TagRegistry.SUPPORTS_VEGETATION)) return InteractionResult.PASS;
+        if (stack.getItem() instanceof BlockItem) {
+            if (stack.is(ConventionalItemTags.CROPS) && state.is(BlockTags.GROWS_CROPS)) return InteractionResult.PASS;
+            if (stack.is(ConventionalItemTags.BERRY_FOODS) && state.is(BlockTags.SUPPORTS_VEGETATION)) return InteractionResult.PASS;
             //
         }
 
@@ -201,13 +202,14 @@ public class AbilityEvents {
 
         return InteractionResult.PASS;
     }
+
     private static void bugEaterItems(Player interacting, Level level, InteractionHand hand) {
         if (level.isClientSide()) return;
         if (!(interacting instanceof ServerPlayer player)) return;
         if (!has(player, Abilities.INSECTIVORE)) return;
 
-        ItemStack stack = player.getItemInHand(hand);
-        FoodData food = player.getFoodData();
+        var stack = player.getItemInHand(hand);
+        var food = player.getFoodData();
 
         if (!food.needsFood()) return;
 
@@ -220,12 +222,13 @@ public class AbilityEvents {
         }
         // In-tag foods with food data handle via handleDiet* methods
     }
+
     private static InteractionResult bugEaterEntities(Player interacting, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (!has(player, Abilities.INSECTIVORE)) return InteractionResult.PASS;
 
-        FoodData food = player.getFoodData();
+        var food = player.getFoodData();
         if (!food.needsFood()) return InteractionResult.PASS;
 
         // Calculate saturation and nutrition
@@ -278,10 +281,10 @@ public class AbilityEvents {
 
         if (!player.isShiftKeyDown()) return InteractionResult.PASS;
 
-        BlockPos pos = hitResult.getBlockPos();
+        var pos = hitResult.getBlockPos();
         if (!level.getBlockState(pos).is(TagRegistry.DIET_FOLIAGE)) return InteractionResult.PASS;
 
-        FoodData food = player.getFoodData();
+        var food = player.getFoodData();
         if (!food.needsFood()) return InteractionResult.PASS;
         level.destroyBlock(pos, false);
         food.add(2, 0.5F);
@@ -299,15 +302,17 @@ public class AbilityEvents {
         DamageTypes.FALL, Abilities.FALL_IMMUNE, DamageTypes.ENDER_PEARL, Abilities.PEARLING,
         DamageTypes.DROWN, Abilities.BREATHES_UNDERWATER
     );
+
     private static boolean handleOtherImmunities(ServerPlayer player, DamageSource source) {
         Ability immunity = DAMAGE_IMMUNITY.get(source.typeHolder().unwrapKey().orElse(null));
         return immunity != null && has(player, immunity);
     }
+
     private static boolean recalcDamage(ServerPlayer player, DamageSource source, float damageTaken, float multiplier) {
-        if (FdaApiUtil.getIntValue(player, PlayerAttachments.HURT_TICK) != player.tickCount) {
+        if (FdaUtil.getInt(player, PlayerAttachments.HURT_TICK) != player.tickCount) {
             // safeguard to make sure ALLOW_DAMAGE doesn't get called again and for this to not run recursively
-            FdaApiUtil.setIntValue(player, PlayerAttachments.HURT_TICK, player.tickCount);
-            player.hurt(source, damageTaken * multiplier);
+            FdaUtil.set(player, PlayerAttachments.HURT_TICK, player.tickCount);
+            player.hurtServer(player.level(), source, damageTaken * multiplier); // TODO: See if hurt or hurtServer works
 
             return false;
         }
@@ -315,8 +320,9 @@ public class AbilityEvents {
     }
 
     private static void playEatSound(ServerPlayer player) {
-        player.playSound(SoundEvents.GENERIC_EAT.value(), 1.0F, 1.0F+(player.getRandom().nextFloat()-player.getRandom().nextFloat()) * 0.4F);
+        player.playSound(SoundEvents.GENERIC_EAT.value(), 1.0F, 1.0F + (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.4F);
     }
+
     private static boolean isDietBlocked(ServerPlayer player, ItemStack stack) {
         if (!stack.has(DataComponents.FOOD) /*|| stack.has(DataComponents.BUCKET_ENTITY_DATA)*/) return false;
 
@@ -342,8 +348,9 @@ public class AbilityEvents {
             (!bugEater || !isBugLike);
         // No GRASS_EATER item tag for this to check. GRASS_EATER diet is handled by grassEater interaction method.
     }
+
     private static boolean isType(Entity entity, TagKey<EntityType<?>> tag) {
-        return entity.getType().is(tag);
+        return entity.is(tag);
     }
     private static boolean isBugLikeConsumable(Entity entity) {
         if (entity instanceof Slime slime) { /// Change to AbstractCubeMob with 26.2!
@@ -351,8 +358,9 @@ public class AbilityEvents {
         }
         return true;
     }
+
     private static void sendUpdatePacket(ServerPlayer player) {
-        FoodData food = player.getFoodData();
+        var food = player.getFoodData();
         player.connection.send(new ClientboundSetHealthPacket(player.getHealth(), food.getFoodLevel(), food.getSaturationLevel()));
     }
 }

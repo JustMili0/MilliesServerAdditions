@@ -15,7 +15,7 @@ public class MobMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     private void checkNoAiName(CallbackInfo ci) {
         if (!Config.noAiNameTags.get()) return;
-        Mob mob = (Mob) (Object) this;
+        var mob = (Mob) (Object) this;
         if (mob.level().isClientSide()) return;
 
         var name = mob.getCustomName();

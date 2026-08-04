@@ -31,8 +31,7 @@ public class DamageToggle {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
         if (!eventRegistered) {
             eventRegistered = true;
-            ServerLivingEntityEvents.ALLOW_DAMAGE.register(
-                (LivingEntity entity, DamageSource source, float amount) -> {
+            ServerLivingEntityEvents.ALLOW_DAMAGE.register((LivingEntity _, DamageSource source, float _) -> {
                     for (Map.Entry<Identifier, Boolean> entry : damageDisabled.entrySet()) {
                         if (!entry.getValue()) continue;
                         if (source.is(ResourceKey.create(Registries.DAMAGE_TYPE, entry.getKey()))) return false;
@@ -49,8 +48,7 @@ public class DamageToggle {
                     .executes(context -> {
                         List<String> disabled = damageDisabled.entrySet().stream()
                             .filter(Map.Entry::getValue).map(entry -> entry.getKey().toString()).toList();
-                        CommandUtil.sendOk(context.getSource(), disabled.isEmpty()
-                            ? "No damage types are currently disabled."
+                        CommandUtil.sendOk(context.getSource(), disabled.isEmpty()? "No damage types are currently disabled."
                             : "Disabled damage types: " + String.join(", ", disabled));
                         return 1;
                     })
@@ -95,13 +93,13 @@ public class DamageToggle {
     private static int setDamage(CommandContext<CommandSourceStack> context, boolean disable) {
         Identifier id = IdentifierArgument.getId(context, "type");
         damageDisabled.put(id, disable);
-        CommandUtil.sendOk(context.getSource(), "Damage type '" + id + "' is now " + (disable ? "disabled" : "enabled"));
+        CommandUtil.sendOk(context.getSource(), "Damage type '" + id + "' is now " + (disable? "disabled" : "enabled"));
         return 1;
     }
 
     private static int getStatus(CommandContext<CommandSourceStack> context) {
         Identifier id = IdentifierArgument.getId(context, "type");
-        CommandUtil.sendOk(context.getSource(), "Damage type '" + id + "' is " + (damageDisabled.getOrDefault(id, false) ? "disabled" : "enabled"));
+        CommandUtil.sendOk(context.getSource(), "Damage type '" + id + "' is " + (damageDisabled.getOrDefault(id, false)? "disabled" : "enabled"));
         return 1;
     }
 }

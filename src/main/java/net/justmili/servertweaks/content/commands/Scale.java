@@ -3,7 +3,7 @@ package net.justmili.servertweaks.content.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import net.justmili.libs.v1.utils.CommandUtil;
-import net.justmili.libs.v1.utils.FdaApiUtil;
+import net.justmili.libs.v1.utils.FdaUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.core.util.ScalerUtil;
 import net.justmili.servertweaks.core.variables.PlayerAttachments;
@@ -11,9 +11,6 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.server.level.ServerPlayer;
-
-import java.util.Collection;
 
 import static net.justmili.servertweaks.core.util.ScalerUtil.applyScaleToPlayer;
 
@@ -23,10 +20,10 @@ public class Scale {
             Commands.literal("scale")
                 .then(Commands.argument("height_cm", DoubleArgumentType.doubleArg(Config.scaleMinHeight.get(), Config.scaleMaxHeight.get()))
                     .executes(context -> {
-                        CommandSourceStack source = context.getSource();
-                        ServerPlayer player = context.getSource().getPlayerOrException();
+                        var source = context.getSource();
+                        var player = context.getSource().getPlayerOrException();
 
-                        if (FdaApiUtil.getBoolValue(player, PlayerAttachments.SCALE_LOCKED)) {
+                        if (FdaUtil.getBool(player, PlayerAttachments.SCALE_LOCKED)) {
                             CommandUtil.sendFail(source, "You can not change your height more than once");
                             return 0;
                         }
@@ -34,7 +31,7 @@ public class Scale {
                         double heightCm = DoubleArgumentType.getDouble(context, "height_cm");
                         double scale = heightCm / 185.0;
                         ScalerUtil.applyScaleToPlayer(player, scale);
-                        FdaApiUtil.setBoolValue(player, PlayerAttachments.SCALE_LOCKED, true);
+                        FdaUtil.set(player, PlayerAttachments.SCALE_LOCKED, true);
 
                         CommandUtil.sendOk(source, String.format("Your irl-to-game scale is %.3f (%.1f cm). It is now locked", scale, heightCm));
                         return 1;
@@ -45,15 +42,13 @@ public class Scale {
                     .then(Commands.argument("player", EntityArgument.players())
                         .then(Commands.argument("height_cm", DoubleArgumentType.doubleArg(18.5, 2960.0))
                             .executes(context -> {
-                                CommandSourceStack source = context.getSource();
+                                var source = context.getSource();
 
                                 double heightCm = DoubleArgumentType.getDouble(context, "height_cm");
                                 double scale = heightCm / 185.0;
 
-                                Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "player");
-                                for (var player : players) {
-                                    applyScaleToPlayer(player, scale);
-                                }
+                                var players = EntityArgument.getPlayers(context, "player");
+                                for (var player : players) applyScaleToPlayer(player, scale);
 
                                 CommandUtil.sendOk(source, String.format("Applied scale %.3f (%.1f cm) to %d player(s)", scale, heightCm, players.size()));
                                 return players.size();
@@ -65,12 +60,10 @@ public class Scale {
                     .requires(src -> CommandUtil.hasPerms(src, 1))
                     .then(Commands.argument("player", EntityArgument.players())
                         .executes(context -> {
-                            CommandSourceStack source = context.getSource();
+                            var source = context.getSource();
 
-                            Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "player");
-                            for (var player : players) {
-                                FdaApiUtil.setBoolValue(player, PlayerAttachments.SCALE_LOCKED, false);
-                            }
+                            var players = EntityArgument.getPlayers(context, "player");
+                            for (var player : players) FdaUtil.set(player, PlayerAttachments.SCALE_LOCKED, false);
 
                             CommandUtil.sendOk(source, String.format("Unlocked scale modification for %d player(s)", players.size()));
                             return players.size();
@@ -81,12 +74,12 @@ public class Scale {
                     .requires(src -> CommandUtil.hasPerms(src, 1))
                     .then(Commands.argument("player", EntityArgument.players())
                         .executes(context -> {
-                            CommandSourceStack source = context.getSource();
+                            var source = context.getSource();
 
-                            Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "player");
+                            var players = EntityArgument.getPlayers(context, "player");
                             for (var player : players) {
                                 applyScaleToPlayer(player, 1.0);
-                                FdaApiUtil.setBoolValue(player, PlayerAttachments.SCALE_LOCKED, false);
+                                FdaUtil.set(player, PlayerAttachments.SCALE_LOCKED, false);
                             }
 
                             CommandUtil.sendOk(source, String.format("Reset scale and unlocked scale modifications for %d player(s)", players.size()));
@@ -98,12 +91,10 @@ public class Scale {
                     .requires(src -> CommandUtil.hasPerms(src, 1))
                     .then(Commands.argument("player", EntityArgument.players())
                         .executes(context -> {
-                            CommandSourceStack source = context.getSource();
+                            var source = context.getSource();
 
-                            Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "player");
-                            for (var player : players) {
-                                applyScaleToPlayer(player, 1.0);
-                            }
+                            var players = EntityArgument.getPlayers(context, "player");
+                            for (var player : players) applyScaleToPlayer(player, 1.0);
 
                             CommandUtil.sendOk(source, String.format("Reset scale for %d player(s)", players.size()));
                             return players.size();

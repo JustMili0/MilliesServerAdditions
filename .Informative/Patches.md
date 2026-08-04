@@ -115,7 +115,7 @@ Feedback is appreciated ^^
 - Reworked registries for player abilities
 - Changed config file location and split into `config\servertweaks\common.toml` into `config\servertweaks\server.properties` and `config\servertweaks\mixins.properties`
 - Renamed config key `removeAnvilLimit` to `disableAnvilLimit`
-- All `limit----Speed` config keys are now false by default
+- All `limit*****Speed` config keys are now false by default
 - Villagers and Tamables losing AI when named "NoAI" now has a config entry
 
 **Gameplay**

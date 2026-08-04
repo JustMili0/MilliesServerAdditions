@@ -31,7 +31,7 @@ public class AnvilRepair {
         // Block checks
         var blockState = level.getBlockState(blockHitResult.getBlockPos());
         if (!blockState.is(BlockTags.ANVIL)) return;
-        Block block = blockState.getBlock();
+        var block = blockState.getBlock();
         if (block == Blocks.ANVIL) return;
 
         // Item checks
@@ -42,15 +42,15 @@ public class AnvilRepair {
         // Roll chances
         double chance;
         if (block == Blocks.CHIPPED_ANVIL) {
-            chance = hasBlock ? 1.0 : 0.33;
+            chance = hasBlock? 1.0 : 0.33;
         } else if (block == Blocks.DAMAGED_ANVIL) {
-            chance = hasBlock ? 0.80 : 0.25;
+            chance = hasBlock? 0.80 : 0.25;
         } else {
             return;
         }
 
-        UUID uuid = player.getUUID();
-        var attempts = hasBlock ? repairAttemptsBlock : repairAttemptsIngot;
+        var uuid = player.getUUID();
+        var attempts = hasBlock? repairAttemptsBlock : repairAttemptsIngot;
         var currentPos = blockHitResult.getBlockPos();
 
         // Clear map data if player moved to a different anvil
@@ -73,7 +73,7 @@ public class AnvilRepair {
             anvilPosition.remove(uuid);
 
             // Set new block
-            Block repairedBlock = (block == Blocks.DAMAGED_ANVIL) ? Blocks.CHIPPED_ANVIL : Blocks.ANVIL;
+            var repairedBlock = (block == Blocks.DAMAGED_ANVIL)? Blocks.CHIPPED_ANVIL : Blocks.ANVIL;
             level.setBlock(
                 blockHitResult.getBlockPos(),
                 repairedBlock.defaultBlockState().setValue(

@@ -20,7 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AnvilMenu.class)
 public abstract class ModifyAnvilLimits extends ItemCombinerMenu {
-    @Final @Shadow
+    @Final
+    @Shadow
     private DataSlot cost;
 
     public ModifyAnvilLimits(@Nullable MenuType<?> menuType, int containerId, Inventory inventory,

@@ -16,8 +16,8 @@ public class ClickEventAsServer {
             var player = ((ServerGamePacketListenerImpl) (Object) this).player;
             var server = player.level().getServer();
 
-            CommandSourceStack source = server.createCommandSourceStack().withEntity(player).withLevel(player.level());
-            ParseResults<CommandSourceStack> parseResults = server.getCommands().getDispatcher().parse(command, source);
+            var source = server.createCommandSourceStack().withEntity(player).withLevel(player.level());
+            var parseResults = server.getCommands().getDispatcher().parse(command, source);
             server.getCommands().performCommand(parseResults, command);
 
             ci.cancel();

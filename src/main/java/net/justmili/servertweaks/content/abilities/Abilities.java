@@ -16,7 +16,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
@@ -49,7 +48,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -57,7 +55,8 @@ import java.util.stream.Collectors;
 import static net.justmili.libs.v1.utils.AttributeUtil.*;
 
 public class Abilities {
-    public static void init() {}
+    public static void init() {
+    }
 
     /// Extra Ability variables
     public static final Identifier AR_SLOW_SPEED = ServerTweaks.asResource("slow_speed");
@@ -88,12 +87,12 @@ public class Abilities {
         new MobData(Parrot.class, 12.0, 1.25),
         new MobData(Frog.class, 12.0, 2.0),
         new MobData(Salmon.class, 6.0, 1.25),
-        new MobData(Pig.class,  8.0, 1.25)
+        new MobData(Pig.class, 8.0, 1.25)
     );
 
     public static final Ability
-        FIRE_IMMUNE, LAVA_IMMUNE,HEAT_IMMUNE,FREEZE_IMMUNE,FALL_IMMUNE,
-        HEAT_SENSITIVE,COLD_SENSITIVE,
+        FIRE_IMMUNE, LAVA_IMMUNE, HEAT_IMMUNE, FREEZE_IMMUNE, FALL_IMMUNE,
+        HEAT_SENSITIVE, COLD_SENSITIVE,
         LIGHT, SWIFT, SLOW, HOPPY, DWARF, SQUISHY, MAGNETIC, TOUGH, STRONG,
         AQUA_GRACE, BREATHES_UNDERWATER, CANT_BREATHE_AIR, CANT_SWIM, HYDROPHOBIC,
         HUNTED_BY_FOX, HUNTED_BY_WOLF, SCARES_CREEPERS, SCARES_PHANTOMS,
@@ -146,6 +145,7 @@ public class Abilities {
     private static Identifier id(String id) {
         return ServerTweaks.asResource(id);
     }
+
     private static Ability register(Ability ability) {
         Registries.ABILITIES.put(ability.getId(), ability);
         return ability;
@@ -153,7 +153,9 @@ public class Abilities {
 
     /// Define ticking abilities
     static class FireImmune extends TickingAbility {
-        FireImmune() { super(id("fire_immune")); }
+        FireImmune() {
+            super(id("fire_immune"));
+        }
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
@@ -162,7 +164,9 @@ public class Abilities {
     }
 
     static class LavaImmune extends TickingAbility {
-        LavaImmune() { super(id("lava_immune")); }
+        LavaImmune() {
+            super(id("lava_immune"));
+        }
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
@@ -207,7 +211,7 @@ public class Abilities {
             // Completely cancel any effects if player has full leather armor.
             // Still applies freezing overlays but stops damage when armor isn't full leather. It is an intended side effect.
 
-            int targetTime = player.getTicksRequiredToFreeze()+20;
+            int targetTime = player.getTicksRequiredToFreeze() + 20;
             player.setTicksFrozen(targetTime);
             player.getEntityData().set(Entity.DATA_TICKS_FROZEN, targetTime, true);
         }
@@ -244,7 +248,7 @@ public class Abilities {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            AttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
+            var speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
             addOrUpdate(speed, newModifier(AR_SLOW_SPEED, -0.32, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }
     }
@@ -267,14 +271,16 @@ public class Abilities {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            AttributeInstance scale = ScalerUtil.getScale(player);
+            var scale = ScalerUtil.getScale(player);
             if (scale != null && scale.getBaseValue() > 0.75) ScalerUtil.setScale(player, 0.75);
             EntityUtil.applyEffect(player, MobEffects.HASTE, 100, 1);
         }
     }
 
     static class Magnetic extends TickingAbility {
-        Magnetic() { super(id("magnetic")); }
+        Magnetic() {
+            super(id("magnetic"));
+        }
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
@@ -284,7 +290,7 @@ public class Abilities {
             for (ItemEntity item : items) {
                 if (!item.onGround()) return;
 
-                Vec3 directionToPlayer = player.position().add(0, 0.5, 0).subtract(item.position());
+                var directionToPlayer = player.position().add(0, 0.5, 0).subtract(item.position());
                 double distance = directionToPlayer.length();
                 if (distance > radius || distance < stop) continue;
 
@@ -302,7 +308,8 @@ public class Abilities {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (level.getGameTime() % 5 != 0) return;
 
-            AttributeInstance attack = getAttribute(player, Attributes.ATTACK_DAMAGE), maxHp = getAttribute(player, Attributes.MAX_HEALTH);
+            var attack = getAttribute(player, Attributes.ATTACK_DAMAGE);
+            var maxHp = getAttribute(player, Attributes.MAX_HEALTH);
 
             addOrUpdate(attack, newModifier(AR_STRONG_DAMAGE, 3, AttributeModifier.Operation.ADD_VALUE));
 
@@ -313,7 +320,7 @@ public class Abilities {
             float targetHp = Math.clamp(100.0F - (armor * 3.0F), 40.0F, 100.0F);
             if (targetHp % 2 != 0) targetHp += 1;
 
-            addOrReplace(maxHp, newModifier(AR_STRONG_HP, targetHp-20.0, AttributeModifier.Operation.ADD_VALUE));
+            addOrReplace(maxHp, newModifier(AR_STRONG_HP, targetHp - 20.0, AttributeModifier.Operation.ADD_VALUE));
             if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
         }
     }
@@ -362,10 +369,10 @@ public class Abilities {
             if (player.isInWater() || player.hasEffect(MobEffects.WATER_BREATHING)) {
                 // Restore air when in water
                 if (player.getAirSupply() < player.getMaxAirSupply())
-                    player.setAirSupply(player.getAirSupply()+4);
+                    player.setAirSupply(player.getAirSupply() + 4);
             } else {
                 // Drain air on land
-                player.setAirSupply(player.getAirSupply()-1);
+                player.setAirSupply(player.getAirSupply() - 1);
                 if (player.getAirSupply() <= -20) {
                     player.setAirSupply(1);
                     player.hurt(level.damageSources().drown(), 1.0F);
@@ -384,7 +391,7 @@ public class Abilities {
             if (!player.gameMode.isSurvival()) return;
             if (!player.isInWater()) return;
 
-            Vec3 delta = player.getDeltaMovement();
+            var delta = player.getDeltaMovement();
             if (delta.y > 0) player.setDeltaMovement(delta.x, -1, delta.z);
         }
     }
@@ -451,9 +458,9 @@ public class Abilities {
             for (Creeper creeper : EntityUtil.getNearby(player, Creeper.class, 8.0)) {
                 creeper.setTarget(null);
                 creeper.getNavigation().moveTo(
-                    creeper.getX()+(creeper.getX()-player.getX()),
+                    creeper.getX() + (creeper.getX() - player.getX()),
                     creeper.getY(),
-                    creeper.getZ()+(creeper.getZ()-player.getZ()), 1.2);
+                    creeper.getZ() + (creeper.getZ() - player.getZ()), 1.2);
             }
         }
     }
@@ -470,9 +477,9 @@ public class Abilities {
             for (Phantom phantom : EntityUtil.getNearby(player, Phantom.class, 16.0)) {
                 phantom.setTarget(null);
                 phantom.getNavigation().moveTo(
-                    phantom.getX()+(phantom.getX()-player.getX()),
-                    phantom.getY()+8,
-                    phantom.getZ()+(phantom.getZ()-player.getZ()), 1.2);
+                    phantom.getX() + (phantom.getX() - player.getX()),
+                    phantom.getY() + 8,
+                    phantom.getZ() + (phantom.getZ() - player.getZ()), 1.2);
             }
         }
     }
@@ -485,7 +492,7 @@ public class Abilities {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             for (Fox fox : EntityUtil.getNearby(player, Fox.class, 24.0)) {
-                FoxAccessor accessor = (FoxAccessor) fox;
+                var accessor = (FoxAccessor) fox;
                 if (accessor.invokeTrusts(player)) continue;
                 accessor.invokeAddTrustedEntity(player);
             }
@@ -535,22 +542,22 @@ public class Abilities {
             // Ignore
             Set<UUID> stillNearby = new HashSet<>();
             EntityUtil.executeForNearby(player, MONSTER_IGNORE, (mob, data) -> {
-                UUID id = mob.getUUID();
-                stillNearby.add(id);
+                var uuid = mob.getUUID();
+                stillNearby.add(uuid);
 
-                if (!STORED_GOALS.containsKey(id)) {
+                if (!STORED_GOALS.containsKey(uuid)) {
                     List<WrappedGoal> removed = mob.targetSelector.getAvailableGoals()
                         .stream().filter(goal -> goal.getGoal() instanceof NearestAttackableTargetGoal<?>).collect(Collectors.toList());
 
                     removed.forEach(goal -> mob.targetSelector.removeGoal(goal.getGoal()));
-                    STORED_GOALS.put(id, removed);
+                    STORED_GOALS.put(uuid, removed);
 
                     mob.setTarget(null);
                 }
             });
             STORED_GOALS.entrySet().removeIf(entry -> {
                 if (stillNearby.contains(entry.getKey())) return false;
-                Entity entity = level.getEntity(entry.getKey());
+                var entity = level.getEntity(entry.getKey());
 
                 if (entity instanceof Mob mob) {
                     entry.getValue().forEach(goal -> mob.targetSelector.addGoal(goal.getPriority(), goal.getGoal()));
@@ -562,9 +569,9 @@ public class Abilities {
             // Fear
             EntityUtil.executeForNearby(player, MONSTER_FEAR, (mob, data) ->
                 mob.getNavigation().moveTo(
-                    mob.getX()+(mob.getX()-player.getX()),
+                    mob.getX() + (mob.getX() - player.getX()),
                     mob.getY(),
-                    mob.getZ()+(mob.getZ()-player.getZ()),
+                    mob.getZ() + (mob.getZ() - player.getZ()),
                     data.runSpeed()
                 )
             );
@@ -586,9 +593,9 @@ public class Abilities {
         public void tick(ServerPlayer player, ServerLevel level) {
             EntityUtil.executeForNearby(player, PREDATORY_FEAR, (mob, data) ->
                 mob.getNavigation().moveTo(
-                    mob.getX()+(mob.getX()-player.getX()),
+                    mob.getX() + (mob.getX() - player.getX()),
                     mob.getY(),
-                    mob.getZ()+(mob.getZ()-player.getZ()),
+                    mob.getZ() + (mob.getZ() - player.getZ()),
                     data.runSpeed()
                 )
             );

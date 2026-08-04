@@ -18,6 +18,7 @@ public class AbilitiesFileUtil {
     public static Set<Ability> getAbilities(ServerPlayer player) {
         return playerAbilities.getOrDefault(player.getUUID(), Collections.emptySet());
     }
+
     public static void grantAbility(ServerPlayer player, Ability ability) {
         if (ability == null) {
             CommandUtil.sendFailTo(player, "Unknown player ability");
@@ -26,6 +27,7 @@ public class AbilitiesFileUtil {
         playerAbilities.computeIfAbsent(player.getUUID(), uuid -> new HashSet<>()).add(ability);
         saveFile(player.level().getServer());
     }
+
     public static void revokeAbility(ServerPlayer player, Ability ability) {
         if (ability == null) {
             CommandUtil.sendFailTo(player, "Unknown player ability");
@@ -38,6 +40,7 @@ public class AbilitiesFileUtil {
     public static Set<AbilityModifier> getModifiers(ServerPlayer player) {
         return playerModifiers.getOrDefault(player.getUUID(), Collections.emptySet());
     }
+
     public static void grantModifier(ServerPlayer player, AbilityModifier modifier) {
         if (modifier == null) {
             CommandUtil.sendFailTo(player, "Unknown ability modifier");
@@ -46,6 +49,7 @@ public class AbilitiesFileUtil {
         playerModifiers.computeIfAbsent(player.getUUID(), uuid -> new HashSet<>()).add(modifier);
         saveFile(player.level().getServer());
     }
+
     public static void revokeModifier(ServerPlayer player, AbilityModifier modifier) {
         if (modifier == null) {
             CommandUtil.sendFailTo(player, "Unknown ability modifier");
@@ -62,6 +66,7 @@ public class AbilitiesFileUtil {
         }
         return getAbilities(player).contains(ability);
     }
+
     public static boolean has(ServerPlayer player, AbilityModifier modifier) {
         if (modifier == null) {
             CommandUtil.sendFailTo(player, "Unknown ability modifier");
@@ -80,6 +85,7 @@ public class AbilitiesFileUtil {
         playerModifiers.put(uuid, new HashSet<>(preset.getModifiers()));
         saveFile(server);
     }
+
     public static void clearPlayerProfile(ServerPlayer player) {
         var uuid = player.getUUID();
         MinecraftServer server = player.level().getServer();

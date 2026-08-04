@@ -1,5 +1,6 @@
-package net.justmili.servertweaks.content.mechanics.logic;
+package net.justmili.servertweaks.content.mechanics.features;
 
+import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.registries.DimRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -19,20 +20,22 @@ public final class Banishment {
     private static final int HOTBAR_SLOT = 4;
 
     public static boolean onEntityHurt(LivingEntity entity, DamageSource source, float value) {
+        if (!Config.enableBanishCommand.get()) return true;
         if (!(entity instanceof ServerPlayer player)) return true;
 
-        if (value >= (1<<18)) return true;
+        if (value >= (1 << 18)) return true;
         return player.level().dimension() != DimRegistry.BANISHMENT;
     }
 
     public static void onPlayerTick(Player ticking) {
+        if (!Config.enableBanishCommand.get()) return;
         if (!(ticking instanceof ServerPlayer player)) return;
-        ServerLevel level = player.level();
+        var level = player.level();
 
         if (level.dimension() != DimRegistry.BANISHMENT) return;
 
         // Give torch so they can even see
-        ItemStack stack = player.getInventory().getItem(HOTBAR_SLOT);
+        var stack = player.getInventory().getItem(HOTBAR_SLOT);
         if (stack.isEmpty()) {
             player.getInventory().setItem(HOTBAR_SLOT, new ItemStack(Items.TORCH));
         }
@@ -43,10 +46,8 @@ public final class Banishment {
 
             for (int dx = -2; dx <= 2; dx++) {
                 for (int dz = -2; dz <= 2; dz++) {
-                    BlockPos pos = new BlockPos(centerX+dx, 0, centerZ+dz);
-                    if (!level.getBlockState(pos).is(Blocks.BEDROCK)) {
-                        level.setBlock(pos, Blocks.BEDROCK.defaultBlockState(), 3);
-                    }
+                    var pos = new BlockPos(centerX + dx, 0, centerZ + dz);
+                    if (!level.getBlockState(pos).is(Blocks.BEDROCK)) level.setBlock(pos, Blocks.BEDROCK.defaultBlockState(), 3);
                 }
             }
             player.teleportTo(level, player.getX(), 3.0, player.getZ(), Set.of(), player.getYRot(), player.getXRot(), true);
@@ -57,9 +58,8 @@ public final class Banishment {
 
     public static void onEntityLoad(Entity entity, ServerLevel level) {
         // Safeguard 3 - despawn all dropped torch item entities so player can't infinitely dupe them
+        if (!Config.enableBanishCommand.get()) return;
         if (level.dimension() != DimRegistry.BANISHMENT) return;
-        if (entity instanceof ItemEntity item && item.getItem().is(Items.TORCH)) {
-            entity.discard();
-        }
+        if (entity instanceof ItemEntity item && item.getItem().is(Items.TORCH)) entity.discard();
     }
 }

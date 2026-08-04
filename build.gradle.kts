@@ -20,17 +20,13 @@ repositories {
 
 dependencies {
     minecraft(libs.minecraft.get())
-    mappings(loom.layered {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${libs.versions.minecraft.get()}:${libs.versions.parchment.get()}@zip")
-    })
-    modImplementation(libs.fabric.loader.get())
-    modImplementation(libs.fabric.api.get())
+    implementation(libs.fabric.loader.get())
+    implementation(libs.fabric.api.get())
 
-    //modImplementation("maven.modrinth:millies-core-libs:${rootProject.property("config_lib")}")
+    //implementation("maven.modrinth:millies-core-libs:${rootProject.property("config_lib")}")
 
-    modImplementation("com.terraformersmc:modmenu:${rootProject.property("mod_menu")}") // Mod menu
-    modImplementation("maven.modrinth:lithium:mc1.21.11-0.21.4-fabric") // Just for performance
+    implementation("com.terraformersmc:modmenu:${rootProject.property("mod_menu")}") // Mod menu
+    implementation("maven.modrinth:lithium:mc26.1.2-0.24.7-fabric") // Just for performance
     //include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${libs.versions.mixinsquared.get()}")!!)!!)
 }
 
@@ -51,12 +47,12 @@ tasks.processResources {
 }
 
 tasks.withType<JavaCompile>().configureEach {
-    options.release = 21
+    options.release = 25
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 tasks.jar {

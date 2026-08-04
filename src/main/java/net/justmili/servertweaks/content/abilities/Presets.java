@@ -8,20 +8,21 @@ import net.minecraft.resources.Identifier;
 import java.util.Set;
 
 public class Presets {
-    public static void init() {}
+    public static void init() {
+    }
 
     static {
         register(new AbilityPreset(
             id("custom"),
-            "\nContact any online staff that you'd like a custom set. Your chosen abilities, debuffs and ability modifiers "+
+            "\nContact any online staff that you'd like a custom set. Your chosen abilities, debuffs and ability modifiers " +
                 "will be reviewed by staff and implemented if it's compliant with server's ability creation guidelines if there are any.",
             Set.of(),
             Set.of()
         ));
         register(new AbilityPreset( // aka Cat
             id("feline"),
-            "\nFelines can mimic the hissing of a creeper and screeching of phantoms, scaring them away; they are also immune to fall damage"+
-                "and are extra fast when sprinting. They are carnivores, meaning they can only eat meat, can't exactly swim up in water to not drown"+
+            "\nFelines can mimic the hissing of a creeper and screeching of phantoms, scaring them away; they are also immune to fall damage" +
+                "and are extra fast when sprinting. They are carnivores, meaning they can only eat meat, can't exactly swim up in water to not drown" +
                 "and untamed wolves turn aggressive towards them unprovoked.",
             Set.of(
                 Abilities.SCARES_CREEPERS,
@@ -36,10 +37,10 @@ public class Presets {
         ));
         register(new AbilityPreset(
             id("dreamweaver"),
-            "\nDreamweavers are creatures that create dreams for their hosts, they can take an appearance of a cat-moth hybrid, sometimes humanoid; "+
-                "though normally they don't have a physical form. "+
+            "\nDreamweavers are creatures that create dreams for their hosts, they can take an appearance of a cat-moth hybrid, sometimes humanoid; " +
+                "though normally they don't have a physical form. " +
                 "A dreamweaver scares away creepers due to their cat characteristics, scares away phantoms because they don't need to sleep, " +
-                "since they again don't have a physical form and dreams are their domain.\n"+
+                "since they again don't have a physical form and dreams are their domain.\n" +
                 "They also are rather weak, taking 1.25x more damage than normal, can't swim up in water, can only eat sweets if not bound to a host, and animals love them.",
             Set.of(
                 Abilities.SCARES_CREEPERS,
@@ -47,7 +48,8 @@ public class Presets {
                 Abilities.WEAK_TO_DAMAGE,
                 Abilities.SACCHARIVORE,
                 Abilities.CHILD_OF_NATURE,
-                Abilities.CANT_SWIM
+                Abilities.CANT_SWIM,
+                Abilities.LIGHT
             ),
             Set.of()
             // Ability set approved by Flufaye the dreamweaver Vtuber herself :3
@@ -222,7 +224,8 @@ public class Presets {
                 Abilities.CARNIVORE,
                 Abilities.HERBIVORE,
                 Abilities.STRONG,
-                Abilities.HEAT_SENSITIVE
+                Abilities.HEAT_SENSITIVE,
+                Abilities.SLOW
             ),
             Set.of(
             )
@@ -250,7 +253,7 @@ public class Presets {
                 "but pillagers, zombies (and variants), skeletons (and variants), and slimes will not attack. " +
                 "Enderians are aquagenic, getting hurt from getting in contact with water, though a helmet will protect them from rain. " +
                 "They are also immune to cold, since they are native to the endless cold End and can infinitely use any Ender Pearls they get their hands on.",
-                Set.of(
+            Set.of(
                 Abilities.PEARLING,
                 Abilities.HYDROPHOBIC,
                 Abilities.IS_MONSTER,
@@ -330,6 +333,7 @@ public class Presets {
     private static Identifier id(String id) {
         return ServerTweaks.asResource(id);
     }
+
     public static void register(AbilityPreset preset) {
         Registries.PRESETS.put(preset.getId(), preset);
     }

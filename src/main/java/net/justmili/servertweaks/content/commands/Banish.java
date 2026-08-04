@@ -7,8 +7,6 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Relative;
 
 public class Banish {
@@ -18,9 +16,9 @@ public class Banish {
                 .requires(src -> CommandUtil.hasPerms(src, 1))
                 .then(Commands.argument("player", EntityArgument.player())
                     .executes(context -> {
-                        ServerPlayer player = EntityArgument.getPlayer(context, "player");
-                        CommandSourceStack source = context.getSource();
-                        ServerLevel banishmentLevel = source.getServer().getLevel(DimRegistry.BANISHMENT);
+                        var player = EntityArgument.getPlayer(context, "player");
+                        var source = context.getSource();
+                        var banishmentLevel = source.getServer().getLevel(DimRegistry.BANISHMENT);
 
                         if (banishmentLevel == null) {
                             CommandUtil.sendFail(source, "Banishment dimension is not loaded");

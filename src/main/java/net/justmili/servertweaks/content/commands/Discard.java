@@ -8,7 +8,6 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
@@ -17,7 +16,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.equine.AbstractChestedHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,13 +28,13 @@ public class Discard {
             .then(Commands.argument("entity", EntityArgument.entities())
                 .executes(context -> {
                     Collection<? extends Entity> entities = EntityArgument.getEntities(context, "entity");
-                    CommandSourceStack source = context.getSource();
+                    var source = context.getSource();
 
                     // Get players, and prevent players from being discarded
                     List<Entity> players = new ArrayList<>(entities.stream().filter(e -> e instanceof Player).toList());
                     if (!players.isEmpty()) {
                         for (Entity player : players) {
-                            CommandUtil.sendFail(source, "Can't discard entity "+player.getType().toShortString());
+                            CommandUtil.sendFail(source, "Can't discard entity " + player.getType().toShortString());
                         }
                         return 0;
                     }
@@ -49,9 +47,9 @@ public class Discard {
                     // One or multiple? Send message
                     if (entities.size() == 1) {
                         Entity only = entities.iterator().next();
-                        CommandUtil.sendOk(source, "Discarded "+only.getName().getString());
+                        CommandUtil.sendOk(source, "Discarded " + only.getName().getString());
                     } else {
-                        CommandUtil.sendOk(source, "Discarded "+entities.size()+" entities");
+                        CommandUtil.sendOk(source, "Discarded " + entities.size() + " entities");
                     }
                     return entities.size();
                 })
@@ -60,10 +58,10 @@ public class Discard {
             // Block discard
             .then(Commands.argument("block", BlockPosArgument.blockPos())
                 .executes(context -> {
-                    BlockPos pos = BlockPosArgument.getLoadedBlockPos(context, "block");
-                    ServerLevel level = context.getSource().getLevel();
-                    BlockEntity blockEntity = level.getBlockEntity(pos);
-                    CommandSourceStack source = context.getSource();
+                    var pos = BlockPosArgument.getLoadedBlockPos(context, "block");
+                    var level = context.getSource().getLevel();
+                    var blockEntity = level.getBlockEntity(pos);
+                    var source = context.getSource();
 
                     // Get block name
                     String blockId = level.getBlockState(pos).getBlock().getName().getString();
@@ -76,7 +74,7 @@ public class Discard {
                     level.removeBlock(pos, false);
 
                     // Send message
-                    CommandUtil.sendOk(source, "Discarded "+blockId+" from "+formatPos(pos));
+                    CommandUtil.sendOk(source, "Discarded " + blockId + " from " + formatPos(pos));
                     return 1;
                 })
             )
@@ -88,7 +86,7 @@ public class Discard {
                 .then(Commands.argument("entity", EntityArgument.entity())
                     .executes(context -> {
                         Entity entity = EntityArgument.getEntity(context, "entity");
-                        CommandSourceStack source = context.getSource();
+                        var source = context.getSource();
                         int cleared = 0;
 
                         // Players, clear everything, even carried items
@@ -121,16 +119,16 @@ public class Discard {
                         }
 
                         // Send message
-                        CommandUtil.sendOk(source, "Discarded "+cleared+" item(s) from "+entity.getName().getString()+"'s inventory");
+                        CommandUtil.sendOk(source, "Discarded " + cleared + " item(s) from " + entity.getName().getString() + "'s inventory");
                         return cleared;
                     })
                 )
                 .then(Commands.argument("block", BlockPosArgument.blockPos())
                     .executes(context -> {
-                        BlockPos pos = BlockPosArgument.getLoadedBlockPos(context, "block");
-                        ServerLevel level = context.getSource().getLevel();
-                        BlockEntity blockEntity = level.getBlockEntity(pos);
-                        CommandSourceStack source = context.getSource();
+                        var pos = BlockPosArgument.getLoadedBlockPos(context, "block");
+                        var level = context.getSource().getLevel();
+                        var blockEntity = level.getBlockEntity(pos);
+                        var source = context.getSource();
 
                         // Get block name
                         String blockId = level.getBlockState(pos).getBlock().getName().getString();
@@ -146,12 +144,12 @@ public class Discard {
                             clearable.clearContent();
                         } else {
                             // ...No? Fail.
-                            CommandUtil.sendFail(source, "Could not clear "+blockId+". Block is not a container");
+                            CommandUtil.sendFail(source, "Could not clear " + blockId + ". Block is not a container");
                             return 0;
                         }
 
                         // Send message
-                        CommandUtil.sendOk(source, "Discarded "+cleared+" item(s) from "+blockId+"'s inventory at "+formatPos(pos));
+                        CommandUtil.sendOk(source, "Discarded " + cleared + " item(s) from " + blockId + "'s inventory at " + formatPos(pos));
                         return cleared;
                     })
                 )
@@ -169,6 +167,6 @@ public class Discard {
     }
 
     private static String formatPos(BlockPos pos) {
-        return pos.getX()+" "+pos.getY()+" "+pos.getZ();
+        return pos.getX() + " " + pos.getY() + " " + pos.getZ();
     }
 }
