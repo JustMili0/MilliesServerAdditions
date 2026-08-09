@@ -30,7 +30,7 @@ public class Config {
 
     public static ConfigEntry<Integer> // Feature/Command config
         afkCommandCooldown;
-    public static ConfigEntry<Double>
+    public static ConfigEntry<Float>
         scaleMinHeight, scaleMaxHeight;
     public static ConfigEntry<Integer> // Mixin Features
         pistonPushLimit;
@@ -43,9 +43,9 @@ public class Config {
         server.comment("Should these commands and features be enabled on the server?");
 
         enableAfkCommand = server.define("enableAfkCommand", true);
-        enableScaleCommand = server.define("enableScaleCommand", true);
+        enableScaleCommand = server.define("enableScaleCommand", false);
         enableDamageToggleCommand = server.define("enableDamageToggleCommand", true);
-        enableBanishCommand = server.define("enableBanishCommand", true);
+        enableBanishCommand = server.define("enableBanishCommand", false);
         enableFlyCommand = server.define("enableFlyCommand", true);
 
         despawnMonsters = server.comment("Should \"wild\" monsters despawn around the player when coming out of AFK?")
@@ -54,8 +54,8 @@ public class Config {
             .define("afkCommandCooldown", 6000, 0, Integer.MAX_VALUE-255);
 
         server.comment("What should be the min-max height values (In centimeters) for the \"/scale\" command?");
-        scaleMinHeight = server.define("scaleMinHeight", 80.0, 18.5, 2960.0);
-        scaleMaxHeight = server.define("scaleMaxHeight", 300.0, 18.5, 2960.0);
+        scaleMinHeight = server.define("scaleMinHeight", 80f, 18.5f, 2960f);
+        scaleMaxHeight = server.define("scaleMaxHeight", 300f, 18.5f, 2960f);
 
         rightClickHarvest = server.comment("Should the player be able to harvest crops with by just right-clicking?")
             .define("rightClickHarvest", true);

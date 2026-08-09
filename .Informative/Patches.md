@@ -116,6 +116,7 @@ Feedback is appreciated ^^
 - Changed config file location and split into `config\servertweaks\common.toml` into `config\servertweaks\server.properties` and `config\servertweaks\mixins.properties`
 - Renamed config key `removeAnvilLimit` to `disableAnvilLimit`
 - All `limit*****Speed` config keys are now false by default
+- `enableScaleCommand` and `enableBanishCommand` config keys are now false by default
 - Villagers and Tamables losing AI when named "NoAI" now has a config entry
 
 **Gameplay**
@@ -141,6 +142,11 @@ Feedback is appreciated ^^
 
 **Commands**
 - `/scale` now has configurable min-max values in the config
+- Added `/ghostblock` command, for creating ghost blocks on the server
+  - `create clientbound <players> <coordinates>` creates a client-sided ghost block at specified coordinates for player(s) that does not exist on the server but does on client
+  - `create serverbound <player> <coordinates>` creates a server-sided ghost block at specified coordinates for player that doesn't exist on client but does on server
+- Patched one-hit mace exploit with `/afk`
+- `/afk` now uses Vec3 rather than individual x, y and z coordinates
 
 **Player Abilities**
 - Abilities now are stored in lowercase instead of uppercase, e.g. `fire_immune` instead of `FIRE_IMMUNE`
@@ -157,7 +163,7 @@ Feedback is appreciated ^^
 - Fixed placing and picking up fish in and from buckets as `carnivore`, `vegeterian`, `saccharivore`, `herbivore` and `insectivore`
 - Fixed opening chests and interacting with workstation blocks being blocked when holding a non-in-diet item
   - Added `diets/allow_block_interaction.json` block tag to except blocks from getting interactions blocked
-- [TODO] Fixed blocking non-diet items while allowing to plant and harvest
+- [WIP] Fixed blocking non-diet items while allowing to plant and harvest
 - Added Big Dripleaf, Small Dripleaf, Vines, Cave Vines, Glow Lichen, Ferns and Large Ferns to `herbivore`'s diet tag
 - Removed Jungle and its variants from tag `hot_biomes`
 - Added `canine` ability preset

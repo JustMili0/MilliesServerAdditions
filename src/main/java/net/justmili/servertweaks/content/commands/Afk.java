@@ -3,8 +3,10 @@ package net.justmili.servertweaks.content.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.libs.v1.utils.FdaUtil;
+import net.justmili.libs.v1.utils.MathUtil;
+import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.core.variables.PlayerAttachments;
+import net.justmili.servertweaks.variables.PlayerAttachments;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -18,24 +20,24 @@ import net.minecraft.world.scores.Team;
 public class Afk {
     private static final String AFK_PLAYERS = "afk_players";
 
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext, Commands.CommandSelection environment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
         dispatcher.register(Commands.literal("afk")
             .executes(context -> {
                 var source = context.getSource();
 
-                var world = source.getLevel();
+                var level = source.getLevel();
                 var player = context.getSource().getPlayerOrException();
 
                 int cooldown = FdaUtil.getInt(player, PlayerAttachments.AFK_COOLDOWN);
                 if (!FdaUtil.getBool(player, PlayerAttachments.IS_AFK) && Config.afkCommandCooldown.get() != 0 && cooldown > 0) {
-                    CommandUtil.sendFail(source, "You must wait " + (cooldown / 20) + "s before using this command again");
+                    CommandUtil.sendFail(source, "You must wait " + MathUtil.ticksToSeconds(cooldown) + "s before using this command again");
                     return 0;
                 }
 
-                var scoreboard = world.getScoreboard();
+                var scoreboard = level.getScoreboard();
                 var team = scoreboard.getPlayerTeam(AFK_PLAYERS);
 
-                //Create team if it doesn't exist
+                // Create team if it doesn't exist
                 if (team == null) {
                     team = scoreboard.addPlayerTeam(AFK_PLAYERS);
                     team.setNameTagVisibility(Team.Visibility.ALWAYS);
@@ -43,27 +45,23 @@ public class Afk {
                     team.setColor(ChatFormatting.GRAY);
                 }
 
-                if (FdaUtil.get(player, PlayerAttachments.IS_AFK)) {
-                    //Remove from team and set IS_AFK to false
+                if (FdaUtil.getBool(player, PlayerAttachments.IS_AFK)) {
+                    // Remove from team and set IS_AFK to false
                     scoreboard.removePlayerFromTeam(player.getScoreboardName(), team);
                     FdaUtil.set(player, PlayerAttachments.IS_AFK, false);
 
-                    //Reset command cooldown
+                    // Reset command cooldown
                     FdaUtil.set(player, PlayerAttachments.AFK_COOLDOWN, Config.afkCommandCooldown.get());
 
-                    //If enabled, despawn
-                    if (Config.despawnMonsters.get()) {
-                        despawnNearbyMonsters(player);
-                    }
+                    // If enabled, despawn
+                    if (Config.despawnMonsters.get()) despawnNearbyMonsters(player);
 
                     CommandUtil.sendOk(source, "You are no longer AFK");
+
                 } else {
-                    //Set position at which command was executed at
-                    //Add to team and set IS_AFK to true
-                    var pos = player.position();
-                    FdaUtil.set(player, PlayerAttachments.AFK_X, pos.x);
-                    FdaUtil.set(player, PlayerAttachments.AFK_Y, pos.y);
-                    FdaUtil.set(player, PlayerAttachments.AFK_Z, pos.z);
+                    // Set position at which command was executed at
+                    // Add to team and set IS_AFK to true
+                    FdaUtil.set(player, PlayerAttachments.AFK_POS, player.position());
 
                     scoreboard.addPlayerToTeam(player.getScoreboardName(), team);
                     FdaUtil.set(player, PlayerAttachments.IS_AFK, true);
@@ -85,9 +83,7 @@ public class Afk {
         );
 
         for (Monster monster : level.getEntitiesOfClass(Monster.class, box)) {
-            if (monster.hasCustomName()) continue;
-            if (monster.isPassenger()) continue;
-            if (monster.isVehicle()) continue;
+            if (monster.hasCustomName() || monster.isPassenger() || monster.isVehicle()) continue;;
 
             monster.discard();
         }

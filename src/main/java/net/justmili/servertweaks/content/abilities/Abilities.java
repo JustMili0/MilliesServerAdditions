@@ -6,9 +6,9 @@ import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.core.Registries;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
-import net.justmili.servertweaks.core.util.ScalerUtil;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.justmili.servertweaks.registries.TagRegistry;
+import net.justmili.servertweaks.util.ScalerUtil;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -59,9 +59,9 @@ public class Abilities {
     }
 
     /// Extra Ability variables
-    public static final Identifier AR_SLOW_SPEED = ServerTweaks.asResource("slow_speed");
-    public static final Identifier AR_STRONG_HP = ServerTweaks.asResource("strong_health");
-    public static final Identifier AR_STRONG_DAMAGE = ServerTweaks.asResource("strong_damage");
+    public static final Identifier AR_SLOW_SPEED = ServerTweaks.asId("slow_speed");
+    public static final Identifier AR_STRONG_HP = ServerTweaks.asId("strong_health");
+    public static final Identifier AR_STRONG_DAMAGE = ServerTweaks.asId("strong_damage");
     private static final Map<UUID, List<WrappedGoal>> STORED_GOALS = new HashMap<>();
     private static final List<MobData> MONSTER_IGNORE = List.of(
         new MobData(Pillager.class, 64.0, 0),
@@ -143,7 +143,7 @@ public class Abilities {
     }
 
     private static Identifier id(String id) {
-        return ServerTweaks.asResource(id);
+        return ServerTweaks.asId(id);
     }
 
     private static Ability register(Ability ability) {
@@ -272,7 +272,7 @@ public class Abilities {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             var scale = ScalerUtil.getScale(player);
-            if (scale != null && scale.getBaseValue() > 0.75) ScalerUtil.setScale(player, 0.75);
+            if (scale != null && scale.getBaseValue() > 0.75) ScalerUtil.setScale(player, 0.75f);
             EntityUtil.applyEffect(player, MobEffects.HASTE, 100, 1);
         }
     }

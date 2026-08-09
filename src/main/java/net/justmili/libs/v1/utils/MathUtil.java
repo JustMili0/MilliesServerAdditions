@@ -19,9 +19,9 @@ public class MathUtil {
      * @param ticks
      * @return
      */
-    public static double ticksToSeconds(long ticks) {
+    public static int ticksToSeconds(long ticks) {
         long seconds = ticks / 20;
-        return roundHalfUp(seconds, 2);
+        return (int) roundHalfUp(seconds, 0);
     }
     public static double ticksToMinutes(long ticks) {
         long minutes = ticks / 20 / 60;

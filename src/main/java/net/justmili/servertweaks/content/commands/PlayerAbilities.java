@@ -9,7 +9,7 @@ import net.justmili.servertweaks.content.abilities.arguments.PresetArgumentType;
 import net.justmili.servertweaks.content.abilities.core.AbilitiesFileUtil;
 import net.justmili.servertweaks.content.abilities.core.FileManager;
 import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
-import net.justmili.servertweaks.core.variables.PlayerAttachments;
+import net.justmili.servertweaks.variables.PlayerAttachments;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

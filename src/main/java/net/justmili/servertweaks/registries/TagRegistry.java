@@ -43,6 +43,6 @@ public class TagRegistry {
         ENCHANT_BOOST_5 = createTag(Registries.ENCHANTMENT, "boosted_level_by_5");
 
     private static <T> TagKey<T> createTag(ResourceKey<? extends Registry<T>> registries, String path) {
-        return TagKey.create(registries, ServerTweaks.asResource(path));
+        return TagKey.create(registries, ServerTweaks.asId(path));
     }
 }

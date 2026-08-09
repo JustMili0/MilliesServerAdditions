@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.AbilityEvents;
 import net.justmili.servertweaks.content.mechanics.features.*;
+import net.justmili.servertweaks.content.mechanics.logic.WhileAfk;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;

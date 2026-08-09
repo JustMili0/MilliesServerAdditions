@@ -1,35 +1,35 @@
 package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.FloatArgumentType;
 import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.libs.v1.utils.FdaUtil;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.core.util.ScalerUtil;
-import net.justmili.servertweaks.core.variables.PlayerAttachments;
+import net.justmili.servertweaks.util.ScalerUtil;
+import net.justmili.servertweaks.variables.PlayerAttachments;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 
-import static net.justmili.servertweaks.core.util.ScalerUtil.applyScaleToPlayer;
+import static net.justmili.servertweaks.util.ScalerUtil.applyScaleToPlayer;
 
 public class Scale {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext, Commands.CommandSelection environment) {
         dispatcher.register(
             Commands.literal("scale")
-                .then(Commands.argument("height_cm", DoubleArgumentType.doubleArg(Config.scaleMinHeight.get(), Config.scaleMaxHeight.get()))
+                .then(Commands.argument("height_cm", FloatArgumentType.floatArg(Config.scaleMinHeight.get(), Config.scaleMaxHeight.get()))
                     .executes(context -> {
                         var source = context.getSource();
-                        var player = context.getSource().getPlayerOrException();
+                        var player = source.getPlayerOrException();
 
                         if (FdaUtil.getBool(player, PlayerAttachments.SCALE_LOCKED)) {
                             CommandUtil.sendFail(source, "You can not change your height more than once");
                             return 0;
                         }
 
-                        double heightCm = DoubleArgumentType.getDouble(context, "height_cm");
-                        double scale = heightCm / 185.0;
+                        float heightCm = FloatArgumentType.getFloat(context, "height_cm");
+                        float scale = heightCm / 185f;
                         ScalerUtil.applyScaleToPlayer(player, scale);
                         FdaUtil.set(player, PlayerAttachments.SCALE_LOCKED, true);
 
@@ -40,12 +40,12 @@ public class Scale {
                 .then(Commands.literal("force")
                     .requires(src -> CommandUtil.hasPerms(src, 1))
                     .then(Commands.argument("player", EntityArgument.players())
-                        .then(Commands.argument("height_cm", DoubleArgumentType.doubleArg(18.5, 2960.0))
+                        .then(Commands.argument("height_cm", FloatArgumentType.floatArg(18.5f, 2960.0f))
                             .executes(context -> {
                                 var source = context.getSource();
 
-                                double heightCm = DoubleArgumentType.getDouble(context, "height_cm");
-                                double scale = heightCm / 185.0;
+                                float heightCm = FloatArgumentType.getFloat(context, "height_cm");
+                                float scale = heightCm / 185f;
 
                                 var players = EntityArgument.getPlayers(context, "player");
                                 for (var player : players) applyScaleToPlayer(player, scale);
@@ -78,7 +78,7 @@ public class Scale {
 
                             var players = EntityArgument.getPlayers(context, "player");
                             for (var player : players) {
-                                applyScaleToPlayer(player, 1.0);
+                                applyScaleToPlayer(player, 1f);
                                 FdaUtil.set(player, PlayerAttachments.SCALE_LOCKED, false);
                             }
 
@@ -94,7 +94,7 @@ public class Scale {
                             var source = context.getSource();
 
                             var players = EntityArgument.getPlayers(context, "player");
-                            for (var player : players) applyScaleToPlayer(player, 1.0);
+                            for (var player : players) applyScaleToPlayer(player, 1f);
 
                             CommandUtil.sendOk(source, String.format("Reset scale for %d player(s)", players.size()));
                             return players.size();

@@ -331,7 +331,7 @@ public class Presets {
     }
 
     private static Identifier id(String id) {
-        return ServerTweaks.asResource(id);
+        return ServerTweaks.asId(id);
     }
 
     public static void register(AbilityPreset preset) {

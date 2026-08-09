@@ -1,8 +1,8 @@
-package net.justmili.servertweaks.content.mechanics.features;
+package net.justmili.servertweaks.content.mechanics.logic;
 
 import net.justmili.libs.v1.utils.FdaUtil;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.core.variables.PlayerAttachments;
+import net.justmili.servertweaks.variables.PlayerAttachments;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,16 +22,15 @@ public class WhileAfk {
     public static void onPlayerTick(Player player) {
         if (!(player instanceof ServerPlayer serverPlayer)) return;
 
-        //Teleport the player to saved position to prevent movement
+        // Teleport the player to saved position to prevent movement
         if (FdaUtil.getBool(serverPlayer, PlayerAttachments.IS_AFK)) {
-            double x = FdaUtil.getDouble(serverPlayer, PlayerAttachments.AFK_X),
-                y = FdaUtil.getDouble(serverPlayer, PlayerAttachments.AFK_Y),
-                z = FdaUtil.getDouble(serverPlayer, PlayerAttachments.AFK_Z);
+            var pos = FdaUtil.get(serverPlayer, PlayerAttachments.AFK_POS);
 
             player.setDeltaMovement(Vec3.ZERO);
+            player.resetFallDistance();
 
-            if (player.distanceToSqr(x, y, z) > 0.0001)
-                serverPlayer.connection.teleport(x, y, z, serverPlayer.getYRot(), serverPlayer.getXRot());
+            if (player.distanceToSqr(pos.x(), pos.y(), pos.z()) > 0.001f)
+                serverPlayer.connection.teleport(pos.x(), pos.y(), pos.z(), serverPlayer.getYRot(), serverPlayer.getXRot());
         }
 
         //Set/reset command timer

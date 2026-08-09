@@ -41,8 +41,7 @@ public class DamageToggle {
             );
         }
 
-        dispatcher.register(
-            Commands.literal("damageToggle")
+        dispatcher.register(Commands.literal("damageToggle")
                 .requires(src -> CommandUtil.hasPerms(src, 2))
                 .then(Commands.literal("listDisabled")
                     .executes(context -> {

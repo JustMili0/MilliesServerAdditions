@@ -16,7 +16,7 @@ public class Modifiers {
     }
 
     private static Identifier id(String id) {
-        return ServerTweaks.asResource(id);
+        return ServerTweaks.asId(id);
     }
 
     private static AbilityModifier register(AbilityModifier modifier) {

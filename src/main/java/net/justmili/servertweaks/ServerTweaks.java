@@ -8,10 +8,10 @@ import net.justmili.servertweaks.content.abilities.Abilities;
 import net.justmili.servertweaks.content.abilities.Modifiers;
 import net.justmili.servertweaks.content.abilities.Presets;
 import net.justmili.servertweaks.content.abilities.core.FileManager;
-import net.justmili.servertweaks.core.variables.PlayerAttachments;
 import net.justmili.servertweaks.registries.CommandRegistry;
 import net.justmili.servertweaks.registries.DimRegistry;
 import net.justmili.servertweaks.registries.EventRegistry;
+import net.justmili.servertweaks.variables.PlayerAttachments;
 import net.minecraft.resources.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,7 +37,7 @@ public class ServerTweaks implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTED.register(FileManager::loadFile);
     }
 
-    public static Identifier asResource(String path) {
+    public static Identifier asId(String path) {
         return ResourceUtil.parse(MODID, path);
     }
 }

@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.core.util;
+package net.justmili.servertweaks.util;
 
 import net.justmili.libs.v1.utils.AttributeUtil;
 import net.minecraft.server.level.ServerPlayer;
@@ -8,9 +8,9 @@ import org.jspecify.annotations.Nullable;
 
 public class ScalerUtil {
     //Applies calculated scale
-    public static void applyScaleToPlayer(ServerPlayer player, double scale) {
-        double min = 0.1, max = 5.0;
-        if (Double.isNaN(scale) || scale <= 0.0) scale = 1.0;
+    public static void applyScaleToPlayer(ServerPlayer player, float scale) {
+        float min = 0.1f, max = 5;
+        if (Double.isNaN(scale) || scale <= 0f) scale = 1f;
         scale = Math.clamp(scale, min, max);
 
         if (getScale(player) != null) {
@@ -23,7 +23,7 @@ public class ScalerUtil {
         return AttributeUtil.getAttribute(player, Attributes.SCALE);
     }
 
-    public static void setScale(ServerPlayer player, double scale) {
+    public static void setScale(ServerPlayer player, float scale) {
         getScale(player).setBaseValue(scale);
     }
 }

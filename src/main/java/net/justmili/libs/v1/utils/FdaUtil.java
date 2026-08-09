@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.attachment.v1.AttachmentTarget;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.minecraft.resources.Identifier;
 
-@SuppressWarnings({"UnstableApiUsage", "NullableProblems"})
+@SuppressWarnings({"NullableProblems"})
 public class FdaUtil {
     //True/false and text
     public static boolean getBool(AttachmentTarget target, AttachmentType<Boolean> variable) {
