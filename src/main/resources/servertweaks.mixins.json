@@ -10,8 +10,8 @@
     "EnchantmentMixin",
     "PistonStructureResolverMixin",
     "ServerGamePacketListenerImplMixin",
-    "abilities.LivingEntityMixin",
-    "abilities.MobMixin",
+    "LivingEntityMixin",
+    "MobMixin",
     "accessors.CropBlockAccessor",
     "accessors.FoxAccessor"
   ],

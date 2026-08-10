@@ -6,7 +6,7 @@ import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.libs.v1.utils.FdaUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.util.ScalerUtil;
-import net.justmili.servertweaks.variables.PlayerAttachments;
+import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -23,7 +23,7 @@ public class Scale {
                         var source = context.getSource();
                         var player = source.getPlayerOrException();
 
-                        if (FdaUtil.getBool(player, PlayerAttachments.SCALE_LOCKED)) {
+                        if (FdaUtil.getBool(player, PlayerVars.SCALE_LOCKED)) {
                             CommandUtil.sendFail(source, "You can not change your height more than once");
                             return 0;
                         }
@@ -31,7 +31,7 @@ public class Scale {
                         float heightCm = FloatArgumentType.getFloat(context, "height_cm");
                         float scale = heightCm / 185f;
                         ScalerUtil.applyScaleToPlayer(player, scale);
-                        FdaUtil.set(player, PlayerAttachments.SCALE_LOCKED, true);
+                        FdaUtil.set(player, PlayerVars.SCALE_LOCKED, true);
 
                         CommandUtil.sendOk(source, String.format("Your irl-to-game scale is %.3f (%.1f cm). It is now locked", scale, heightCm));
                         return 1;
@@ -63,7 +63,7 @@ public class Scale {
                             var source = context.getSource();
 
                             var players = EntityArgument.getPlayers(context, "player");
-                            for (var player : players) FdaUtil.set(player, PlayerAttachments.SCALE_LOCKED, false);
+                            for (var player : players) FdaUtil.set(player, PlayerVars.SCALE_LOCKED, false);
 
                             CommandUtil.sendOk(source, String.format("Unlocked scale modification for %d player(s)", players.size()));
                             return players.size();
@@ -79,7 +79,7 @@ public class Scale {
                             var players = EntityArgument.getPlayers(context, "player");
                             for (var player : players) {
                                 applyScaleToPlayer(player, 1f);
-                                FdaUtil.set(player, PlayerAttachments.SCALE_LOCKED, false);
+                                FdaUtil.set(player, PlayerVars.SCALE_LOCKED, false);
                             }
 
                             CommandUtil.sendOk(source, String.format("Reset scale and unlocked scale modifications for %d player(s)", players.size()));

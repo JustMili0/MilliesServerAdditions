@@ -120,7 +120,10 @@ Feedback is appreciated ^^
 - Villagers and Tamables losing AI when named "NoAI" now has a config entry
 
 **Gameplay**
-- Shift-right-clicking an anvil with an iron ingot can repair it by one stage with a 33% chance
+- Shift-right-clicking anvils with an Iron Ingot or Iron Block will repair it
+  - Chipped Anvil - 33% chance of success with an Iron Ingot, or 100% with an Iron Block
+  - Damaged Anvil - 25% chance of success with an Iron Ingot, or 80% with an Iron Block
+  - Repairing an anvil can't fail more than 2 times, on 3rd try repair is always guaranteed
 - Previously incompatible enchantments such as different protection types, mending and infinity etc. are now compatible
 - Some enchantments can now be at higher levels than vanilla
   - All protection types - up to level 5 (Vanilla: 4)
@@ -135,7 +138,7 @@ Feedback is appreciated ^^
   - Unbreaking - up to level 5 (Vanilla: 3)
   - Multishot - up to level 3 (Vanilla: 1)
 - Armor Stands named "display" will be given arms
-- You can now duplicate enchantment books (at a level cost) by shift-right-clicking with an enchanted book in your offhand and a regular book in your main on an Enchantment Table
+- You can now duplicate enchantment books (at a level cost) by shift-right-clicking with an enchanted book in your offhand and a regular book in your main hand on an Enchantment Table
 - You can now die in the Banishment dimension (if the damage you've been delt is more than 2^18)
   - Added so `/kill` actually works in there
 - Invisible players when killing others or dying will have their names obfuscated
@@ -143,14 +146,17 @@ Feedback is appreciated ^^
 **Commands**
 - `/scale` now has configurable min-max values in the config
 - Patched one-hit mace exploit with `/afk`
-- `/afk` now uses Vec3 rather than individual x, y and z coordinates
+- `/afk` now uses BlockPos rather than individual x, y and z coordinates
+- `/damagetoggle` renamed to `/damageToggle`
+- `/damageToggle` - Permission Level Required `ADMINS (4)` -> `GAMEMASTERS (2)`
 
 **Player Abilities**
 - Abilities now are stored in lowercase instead of uppercase, e.g. `fire_immune` instead of `FIRE_IMMUNE`
+- All abilities, ability modifiers and ability presets are now saved in `modid:name` format instead of plain string
 - Renamed some abilities
-    - `FRIENDS_WITH_NATURE` -> `child_of_nature`
-    - `GRASS_EATER` -> `herbivore`
-    - `ONLY_EATS_SWEETS` -> `saccharivore`
+  - `FRIENDS_WITH_NATURE` -> `child_of_nature`
+  - `GRASS_EATER` -> `herbivore`
+  - `ONLY_EATS_SWEETS` -> `saccharivore`
 - Fix and optimize damage immunity handling
 - `fire_immune` and `lava_immune` now automatically get extinguished
 - Made `light` less annoying to walk down the stairs with (now additionally requires 3 blocks of fall distance)
@@ -161,7 +167,7 @@ Feedback is appreciated ^^
 - Fixed opening chests and interacting with workstation blocks being blocked when holding a non-in-diet item
   - Added `diets/allow_block_interaction.json` block tag to except blocks from getting interactions blocked
 - [WIP] Fixed blocking non-diet items while allowing to plant and harvest
-- Added Big Dripleaf, Small Dripleaf, Vines, Cave Vines, Glow Lichen, Ferns and Large Ferns to `herbivore`'s diet tag
+- Added Big Dripleaf, Small Dripleaf, Vines, Cave Vines, Glow Lichen, Ferns, Large Ferns, Bushes, Firefly Bushes, Seagrass, Tall Seagrass, Sea Pickles and Kelp to `herbivore`'s diet tag
 - Removed Jungle and its variants from tag `hot_biomes`
 - Added `canine` ability preset
 - [TODO] Fixed ability debuff `hunted_by_fox` - Foxes now attack even if you're not crouching
@@ -171,8 +177,9 @@ Feedback is appreciated ^^
 - (NEW) Bovid - Can be milked with a bucket by other players
 - (NEW) Squishy - Decreases `fall` and `fly_into_wall` damage by 75% each
 - [TODO] (NEW) Iron Belly - Prevents getting Poison and Hunger effect from eating rotten or raw (vanilla) foods. Can be negated with Weakness effect.
-- (NEW) Insectivore - Can only feed on bug-like entities, slimes, magma cubes, and items like slime balls and magma creams
-  - With Minecraft 26.2, you'll also be able to consume sulfur cubes
-    - If you eat a sulfur cube with a special block inside it, some effect will be given (e.g. TNT = You blow up, Magma Block = Slight Fire damage)
+- (NEW) Insectivore - Can feed on bug-like entities (Silverfish, Endermites, and size-1 Slimes and Magma Cubes) as well as items like Slimeballs, Magma Cream and Spider Eyes
+  - Eating a Cave Spider grants bonus nutrition but inflicts Poison
+  - Eating a Magma Cube deals a small amount of fire damage
+- Client is now properly updated about food value changes from abilities such as `insectivore` and herbivore
 
 Feedback is appreciated ^^

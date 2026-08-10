@@ -5,7 +5,7 @@ import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.libs.v1.utils.FdaUtil;
 import net.justmili.libs.v1.utils.MathUtil;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.variables.PlayerAttachments;
+import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -27,8 +27,8 @@ public class Afk {
                 var level = source.getLevel();
                 var player = context.getSource().getPlayerOrException();
 
-                int cooldown = FdaUtil.getInt(player, PlayerAttachments.AFK_COOLDOWN);
-                if (!FdaUtil.getBool(player, PlayerAttachments.IS_AFK) && Config.afkCommandCooldown.get() != 0 && cooldown > 0) {
+                int cooldown = FdaUtil.getInt(player, PlayerVars.AFK_COOLDOWN);
+                if (!FdaUtil.getBool(player, PlayerVars.IS_AFK) && Config.afkCommandCooldown.get() != 0 && cooldown > 0) {
                     CommandUtil.sendFail(source, "You must wait " + MathUtil.ticksToSeconds(cooldown) + "s before using this command again");
                     return 0;
                 }
@@ -44,13 +44,13 @@ public class Afk {
                     team.setColor(ChatFormatting.GRAY);
                 }
 
-                if (FdaUtil.getBool(player, PlayerAttachments.IS_AFK)) {
+                if (FdaUtil.getBool(player, PlayerVars.IS_AFK)) {
                     // Remove from team and set IS_AFK to false
                     scoreboard.removePlayerFromTeam(player.getScoreboardName(), team);
-                    FdaUtil.set(player, PlayerAttachments.IS_AFK, false);
+                    FdaUtil.set(player, PlayerVars.IS_AFK, false);
 
                     // Reset command cooldown
-                    FdaUtil.set(player, PlayerAttachments.AFK_COOLDOWN, Config.afkCommandCooldown.get());
+                    FdaUtil.set(player, PlayerVars.AFK_COOLDOWN, Config.afkCommandCooldown.get());
 
                     // If enabled, despawn
                     if (Config.despawnMonsters.get()) despawnNearbyMonsters(player);
@@ -60,10 +60,10 @@ public class Afk {
                 } else {
                     // Set position at which command was executed at
                     // Add to team and set IS_AFK to true
-                    FdaUtil.set(player, PlayerAttachments.AFK_POS, player.blockPosition());
+                    FdaUtil.set(player, PlayerVars.AFK_POS, player.blockPosition());
 
                     scoreboard.addPlayerToTeam(player.getScoreboardName(), team);
-                    FdaUtil.set(player, PlayerAttachments.IS_AFK, true);
+                    FdaUtil.set(player, PlayerVars.IS_AFK, true);
 
                     CommandUtil.sendOk(source, "You are now AFK");
                 }

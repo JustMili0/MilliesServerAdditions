@@ -11,7 +11,7 @@ import static net.justmili.libs.v1.utils.FdaUtil.create;
 import static net.justmili.libs.v1.utils.FdaUtil.createPersistent;
 
 @SuppressWarnings({"NullableProblems"})
-public final class PlayerAttachments {
+public final class PlayerVars {
     public static void register() {}
 
     public static final AttachmentType<BlockPos> AFK_POS = createPersistent(id("afk_pos"), BlockPos.containing(0, 255, 0), BlockPos.CODEC);

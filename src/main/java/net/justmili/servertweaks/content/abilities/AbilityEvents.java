@@ -12,7 +12,7 @@ import net.justmili.libs.v1.utils.FdaUtil;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.registries.TagRegistry;
-import net.justmili.servertweaks.variables.PlayerAttachments;
+import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
@@ -73,14 +73,14 @@ public class AbilityEvents {
                 // Change to: Check if player has presets locked;
                 // If yes but has no abilities or modifiers then clear them from the file and unlock preset picking
                 // As well as inform the player that they have to pick their preset/class again
-                if (FdaUtil.getBool(player, PlayerAttachments.HAS_PICKED_PRESET)
+                if (FdaUtil.getBool(player, PlayerVars.HAS_PICKED_PRESET)
                     && getAbilities(player).isEmpty()
                     && getModifiers(player).isEmpty()) {
 
                     // Remove from file
                     clearPlayerProfile(player);
                     // Unlock preset picking
-                    FdaUtil.set(player, PlayerAttachments.HAS_PICKED_PRESET, false);
+                    FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, false);
                     // Inform player
                     CommandUtil.sendFailTo(player, "Your ability preset data was invalid or missing. Please pick your ability preset again");
                 }
@@ -153,8 +153,8 @@ public class AbilityEvents {
 
         // Prevent double processing
         int currentTick = milking.tickCount;
-        if (FdaUtil.getInt(milking, PlayerAttachments.MILK_TICK) == currentTick) return InteractionResult.CONSUME;
-        FdaUtil.set(milking, PlayerAttachments.MILK_TICK, currentTick);
+        if (FdaUtil.getInt(milking, PlayerVars.MILK_TICK) == currentTick) return InteractionResult.CONSUME;
+        FdaUtil.set(milking, PlayerVars.MILK_TICK, currentTick);
 
         ItemStack milkBucket = new ItemStack(Items.MILK_BUCKET);
         milkBucket.set(DataComponents.CUSTOM_NAME, Component.literal(milked.getName().getString() + "'s Milk").withStyle(style -> style.withItalic(false)));
@@ -309,9 +309,9 @@ public class AbilityEvents {
     }
 
     private static boolean recalcDamage(ServerPlayer player, DamageSource source, float damageTaken, float multiplier) {
-        if (FdaUtil.getInt(player, PlayerAttachments.HURT_TICK) != player.tickCount) {
+        if (FdaUtil.getInt(player, PlayerVars.HURT_TICK) != player.tickCount) {
             // safeguard to make sure ALLOW_DAMAGE doesn't get called again and for this to not run recursively
-            FdaUtil.set(player, PlayerAttachments.HURT_TICK, player.tickCount);
+            FdaUtil.set(player, PlayerVars.HURT_TICK, player.tickCount);
             player.hurtServer(player.level(), source, damageTaken * multiplier); // TODO: See if hurt or hurtServer works
 
             return false;

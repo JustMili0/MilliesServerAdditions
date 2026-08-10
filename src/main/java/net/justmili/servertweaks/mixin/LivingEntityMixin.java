@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.mixin.abilities;
+package net.justmili.servertweaks.mixin;
 
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.Abilities;

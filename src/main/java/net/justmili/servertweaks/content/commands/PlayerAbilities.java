@@ -9,7 +9,7 @@ import net.justmili.servertweaks.content.abilities.arguments.PresetArgumentType;
 import net.justmili.servertweaks.content.abilities.core.AbilitiesFileUtil;
 import net.justmili.servertweaks.content.abilities.core.FileManager;
 import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
-import net.justmili.servertweaks.variables.PlayerAttachments;
+import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -121,7 +121,7 @@ public class PlayerAbilities {
                                 var player = EntityArgument.getPlayer(context, "player");
 
                                 AbilitiesFileUtil.clearPlayerProfile(player);
-                                FdaUtil.set(player, PlayerAttachments.HAS_PICKED_PRESET, false);
+                                FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, false);
 
                                 CommandUtil.sendOk(context.getSource(), "Cleared Abilities profile of " + player.getName().getString());
 
@@ -142,13 +142,13 @@ public class PlayerAbilities {
 
                                 var preset = PresetArgumentType.getPreset(context, "preset");
 
-                                if (FdaUtil.getBool(player, PlayerAttachments.HAS_PICKED_PRESET)) {
+                                if (FdaUtil.getBool(player, PlayerVars.HAS_PICKED_PRESET)) {
                                     CommandUtil.sendFailTo(player, "You've already picked an abilities preset.");
                                     return 0;
                                 }
 
                                 AbilitiesFileUtil.applyPreset(player, source.getServer(), preset);
-                                FdaUtil.set(player, PlayerAttachments.HAS_PICKED_PRESET, true);
+                                FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, true);
                                 CommandUtil.sendOkTo(player, "Applied the " + preset.getId() + " preset!");
 
                                 return 1;

@@ -11,7 +11,7 @@ import net.justmili.servertweaks.content.abilities.core.FileManager;
 import net.justmili.servertweaks.registries.CommandRegistry;
 import net.justmili.servertweaks.registries.DimRegistry;
 import net.justmili.servertweaks.registries.EventRegistry;
-import net.justmili.servertweaks.variables.PlayerAttachments;
+import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.resources.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +25,7 @@ public class ServerTweaks implements ModInitializer {
         LOGGER.info("Initializing Millie's Server Additions...");
         Config.register();
 
-        PlayerAttachments.register();
+        PlayerVars.register();
         DimRegistry.register();
         CommandRegistry.register();
         EventRegistry.register();

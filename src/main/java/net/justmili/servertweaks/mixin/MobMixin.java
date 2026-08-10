@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.mixin.abilities;
+package net.justmili.servertweaks.mixin;
 
 import net.justmili.servertweaks.config.Config;
 import net.minecraft.world.entity.Mob;
@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Mob.class)
 public class MobMixin {
-    // Non-Ability but I'm not making another file for this
     @Inject(method = "tick", at = @At("HEAD"))
     private void checkNoAiName(CallbackInfo ci) {
         if (!Config.noAiNameTags.get()) return;
