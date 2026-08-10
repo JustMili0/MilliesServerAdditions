@@ -31,7 +31,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
@@ -62,9 +61,9 @@ public class AbilityEvents {
                 }
 
                 // Reset attribute modifiers if related ability is not applied
-                AttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED),
-                    attack = player.getAttribute(Attributes.ATTACK_DAMAGE),
-                    maxHp = player.getAttribute(Attributes.MAX_HEALTH);
+                var speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
+                var attack = player.getAttribute(Attributes.ATTACK_DAMAGE);
+                var maxHp = player.getAttribute(Attributes.MAX_HEALTH);
 
                 if (!has(player, Abilities.SLOW) && speed != null) speed.removeModifier(Abilities.AR_SLOW_SPEED);
                 if (!has(player, Abilities.STRONG) && attack != null) attack.removeModifier(Abilities.AR_STRONG_DAMAGE);
@@ -123,12 +122,12 @@ public class AbilityEvents {
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (!has(player, Abilities.PEARLING)) return InteractionResult.PASS;
 
-        ItemStack pearl = new ItemStack(Items.ENDER_PEARL);
-        ItemStack stack = player.getItemInHand(hand);
+        var pearl = new ItemStack(Items.ENDER_PEARL);
+        var stack = player.getItemInHand(hand);
         if (!stack.is(pearl.getItem())) return InteractionResult.PASS;
         if (player.getCooldowns().isOnCooldown(pearl)) return InteractionResult.PASS;
 
-        ItemStack inSlot = player.getInventory().getItem(player.getInventory().getSelectedSlot());
+        var inSlot = player.getInventory().getItem(player.getInventory().getSelectedSlot());
         if (inSlot.isEmpty()) {
             player.setItemInHand(hand, pearl);
         } else {
@@ -145,10 +144,11 @@ public class AbilityEvents {
         if (!(entity instanceof ServerPlayer milked)) return InteractionResult.PASS;
         if (!has(milked, Abilities.BOVID)) return InteractionResult.PASS;
 
-        if (milked.getUUID().equals(UUID.fromString("66774f1e-99de-4f1b-8293-906ca3488549")) // Funny hardcoded thing
-            && !milking.getUUID().equals(UUID.fromString("19c3c783-9359-4311-98bf-79a6d361362d"))) return InteractionResult.PASS;
+        // Funny hardcoded thing
+        if ((uuidMatchesString(milked, "66774f1e-99de-4f1b-8293-906ca3488549") || uuidMatchesString(milked, "3ff71c17-0edb-4e05-aded-c0bc378a05a0"))
+            && !uuidMatchesString(milking, "19c3c783-9359-4311-98bf-79a6d361362d")) return InteractionResult.PASS;
 
-        ItemStack stack = milking.getItemInHand(hand);
+        var stack = milking.getItemInHand(hand);
         if (!stack.is(Items.BUCKET)) return InteractionResult.PASS;
 
         // Prevent double processing
@@ -156,7 +156,7 @@ public class AbilityEvents {
         if (FdaUtil.getInt(milking, PlayerVars.MILK_TICK) == currentTick) return InteractionResult.CONSUME;
         FdaUtil.set(milking, PlayerVars.MILK_TICK, currentTick);
 
-        ItemStack milkBucket = new ItemStack(Items.MILK_BUCKET);
+        var milkBucket = new ItemStack(Items.MILK_BUCKET);
         milkBucket.set(DataComponents.CUSTOM_NAME, Component.literal(milked.getName().getString() + "'s Milk").withStyle(style -> style.withItalic(false)));
         if (stack.getCount() == 1) {
             milking.setItemInHand(hand, milkBucket);
@@ -304,7 +304,7 @@ public class AbilityEvents {
     );
 
     private static boolean handleOtherImmunities(ServerPlayer player, DamageSource source) {
-        Ability immunity = DAMAGE_IMMUNITY.get(source.typeHolder().unwrapKey().orElse(null));
+        var immunity = DAMAGE_IMMUNITY.get(source.typeHolder().unwrapKey().orElse(null));
         return immunity != null && has(player, immunity);
     }
 
@@ -324,20 +324,20 @@ public class AbilityEvents {
     }
 
     private static boolean isDietBlocked(ServerPlayer player, ItemStack stack) {
-        if (!stack.has(DataComponents.FOOD) /*|| stack.has(DataComponents.BUCKET_ENTITY_DATA)*/) return false;
+        if (!stack.has(DataComponents.FOOD) || stack.has(DataComponents.BUCKET_ENTITY_DATA)) return false;
 
-        boolean carnivore = has(player, Abilities.CARNIVORE),
-            vegetarian = has(player, Abilities.VEGETARIAN),
-            sweetOnly = has(player, Abilities.SACCHARIVORE),
-            grassEater = has(player, Abilities.HERBIVORE),
-            bugEater = has(player, Abilities.INSECTIVORE),
-            canConsumeGolden = has(player, Modifiers.CAN_EAT_GOLDEN_FOOD),
+        boolean carnivore = has(player, Abilities.CARNIVORE);
+        boolean vegetarian = has(player, Abilities.VEGETARIAN);
+        boolean sweetOnly = has(player, Abilities.SACCHARIVORE);
+        boolean grassEater = has(player, Abilities.HERBIVORE);
+        boolean bugEater = has(player, Abilities.INSECTIVORE);
+        boolean canConsumeGolden = has(player, Modifiers.CAN_EAT_GOLDEN_FOOD);
 
-            isMeat = stack.is(TagRegistry.DIET_CARNIVORE),
-            isVege = stack.is(TagRegistry.DIET_VEGETARIAN),
-            isSweet = stack.is(TagRegistry.DIET_SWEETS),
-            isBugLike = stack.is(TagRegistry.DIET_BUG_ITEMS),
-            isGold = stack.is(TagRegistry.DIET_MODIFIER_GOLDEN_FOODS);
+        boolean isMeat = stack.is(TagRegistry.DIET_CARNIVORE);
+        boolean isVege = stack.is(TagRegistry.DIET_VEGETARIAN);
+        boolean isSweet = stack.is(TagRegistry.DIET_SWEETS);
+        boolean isBugLike = stack.is(TagRegistry.DIET_BUG_ITEMS);
+        boolean isGold = stack.is(TagRegistry.DIET_MODIFIER_GOLDEN_FOODS);
 
         if (!carnivore && !vegetarian && !sweetOnly && !grassEater && !bugEater) return false;
 
@@ -357,6 +357,9 @@ public class AbilityEvents {
             return slime.getSize() == 1;
         }
         return true;
+    }
+    private static boolean uuidMatchesString(ServerPlayer player, String uuid) {
+        return player.getUUID().equals(UUID.fromString(uuid));
     }
 
     private static void sendUpdatePacket(ServerPlayer player) {

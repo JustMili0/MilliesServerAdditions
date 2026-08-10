@@ -115,9 +115,10 @@ Feedback is appreciated ^^
 - Reworked registries for player abilities
 - Changed config file from `config\servertweaks\common.toml` into `config\servertweaks\common.properties`
 - Renamed config key `removeAnvilLimit` to `disableAnvilLimit`
+- Renamed config key `despawnMonsters` to `despawnMonstersPostAfk`
 - All `limit*****Speed` config keys are now false by default
 - `enableScaleCommand` and `enableBanishCommand` config keys are now false by default
-- Villagers and Tamables losing AI when named "NoAI" now has a config entry
+- Villagers and tamable mobs losing AI when named "NoAI" now has a config entry
 
 **Gameplay**
 - Shift-right-clicking anvils with an Iron Ingot or Iron Block will repair it
@@ -176,7 +177,6 @@ Feedback is appreciated ^^
 - [TODO] Fixed ability `climbs_walls` - Now can actually climb walls
 - (NEW) Bovid - Can be milked with a bucket by other players
 - (NEW) Squishy - Decreases `fall` and `fly_into_wall` damage by 75% each
-- [TODO] (NEW) Iron Belly - Prevents getting Poison and Hunger effect from eating rotten or raw (vanilla) foods. Can be negated with Weakness effect.
 - (NEW) Insectivore - Can feed on bug-like entities (Silverfish, Endermites, and size-1 Slimes and Magma Cubes) as well as items like Slimeballs, Magma Cream and Spider Eyes
   - Eating a Cave Spider grants bonus nutrition but inflicts Poison
   - Eating a Magma Cube deals a small amount of fire damage

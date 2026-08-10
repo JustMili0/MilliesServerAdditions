@@ -53,7 +53,7 @@ public class Afk {
                     FdaUtil.set(player, PlayerVars.AFK_COOLDOWN, Config.afkCommandCooldown.get());
 
                     // If enabled, despawn
-                    if (Config.despawnMonsters.get()) despawnNearbyMonsters(player);
+                    if (Config.despawnMonstersPostAfk.get()) despawnNearbyMonsters(player);
 
                     CommandUtil.sendOk(source, "You are no longer AFK");
 

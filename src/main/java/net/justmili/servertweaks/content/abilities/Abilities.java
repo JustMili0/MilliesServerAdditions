@@ -101,11 +101,11 @@ public class Abilities {
         PREDATORY, BOVID, CARNIVORE, VEGETARIAN, SACCHARIVORE, HERBIVORE, INSECTIVORE;
 
     static {
-        FIRE_IMMUNE = register(new FireImmune()); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
-        LAVA_IMMUNE = register(new LavaImmune()); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
-        HEAT_IMMUNE = register(new Ability(id("heat_immune"))); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
-        FREEZE_IMMUNE = register(new Ability(id("freeze_immune"))); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
-        FALL_IMMUNE = register(new Ability(id("fall_immune"))); // Mainly handled in AbilityEvents.handleOtherImmunities(...)
+        FIRE_IMMUNE = register(new FireImmune());
+        LAVA_IMMUNE = register(new LavaImmune());
+        HEAT_IMMUNE = register(new Ability(id("heat_immune")));
+        FREEZE_IMMUNE = register(new Ability(id("freeze_immune")));
+        FALL_IMMUNE = register(new Ability(id("fall_immune")));
         HEAT_SENSITIVE = register(new HeatSensitive());
         COLD_SENSITIVE = register(new ColdSensitive());
         LIGHT = register(new Light());
@@ -113,13 +113,13 @@ public class Abilities {
         SLOW = register(new Slow());
         HOPPY = register(new Hoppy());
         DWARF = register(new Dwarf());
-        SQUISHY = register(new Ability(id("squishy"))); // Handled in AbilityEvents.squishy(...)
+        SQUISHY = register(new Ability(id("squishy")));
         MAGNETIC = register(new Magnetic());
-        TOUGH = register(new Ability(id("tough"))); // Handled through LivingEntityMixin
+        TOUGH = register(new Ability(id("tough")));
         STRONG = register(new Strong());
         AQUA_GRACE = register(new AquaGrace());
-        BREATHES_UNDERWATER = register(new BreathesUnderwater()); // Handled by ticking and AbilityEvents.handleOtherImmunities(...)
-        CANT_BREATHE_AIR = register(new CantBreatheAir()); // Handled by ticking and LivingEntityMixin
+        BREATHES_UNDERWATER = register(new BreathesUnderwater());
+        CANT_BREATHE_AIR = register(new CantBreatheAir());
         CANT_SWIM = register(new CantSwim());                           // DOESN'T WORK, No code implemented yet
         HYDROPHOBIC = register(new Hydrophobic());
         HUNTED_BY_FOX = register(new HuntedByFox());                    // KINDA WORKS
@@ -127,19 +127,19 @@ public class Abilities {
         SCARES_CREEPERS = register(new ScaresCreepers());
         SCARES_PHANTOMS = register(new ScaresPhantoms());
         CHILD_OF_NATURE = register(new ChildOfNature());                // KINDA WORKS, no code for taming tho
-        WEAK_TO_DAMAGE = register(new Ability(id("weak_to_damage"))); // Handled in AbilityEvents.weakToDamage(...)
+        WEAK_TO_DAMAGE = register(new Ability(id("weak_to_damage")));
         NIGHT_VISION = register(new NightVision());
         BURNS_IN_DAYLIGHT = register(new BurnsInDaylight());
         IS_MONSTER = register(new IsMonster());
         CLIMBS_WALLS = register(new Ability(id("climbs_walls")));     // DOESN'T WORK, No code implemented yet
         PEARLING = register(new Ability(id("pearling")));
         PREDATORY = register(new Predatory());
-        BOVID = register(new Ability(id("bovid"))); // Handled in AbilityEvents.bovid(...)
-        CARNIVORE = register(new Ability(id("carnivore"))); // Handled by dietary methods in AbilityEvents
-        VEGETARIAN = register(new Ability(id("vegetarian"))); // Handled by dietary methods in AbilityEvents
-        SACCHARIVORE = register(new Ability(id("saccharivore"))); // Handled by dietary methods in AbilityEvents
-        HERBIVORE = register(new Ability(id("herbivore"))); // Handled by dietary methods in AbilityEvents
-        INSECTIVORE = register(new Ability(id("insectivore"))); // Handled by dietary methods in AbilityEvents
+        BOVID = register(new Ability(id("bovid")));
+        CARNIVORE = register(new Ability(id("carnivore")));
+        VEGETARIAN = register(new Ability(id("vegetarian")));
+        SACCHARIVORE = register(new Ability(id("saccharivore")));
+        HERBIVORE = register(new Ability(id("herbivore")));
+        INSECTIVORE = register(new Ability(id("insectivore")));
     }
 
     private static Identifier id(String id) {

@@ -13,7 +13,7 @@ public class Config {
         enableDamageToggleCommand,
         enableBanishCommand,
         enableFlyCommand,
-        despawnMonsters;
+        despawnMonstersPostAfk;
     public static ConfigEntry<Boolean> // Features
         rightClickHarvest,
         enableAnvilRepair,
@@ -48,8 +48,8 @@ public class Config {
         enableBanishCommand = common.define("enableBanishCommand", false);
         enableFlyCommand = common.define("enableFlyCommand", true);
 
-        despawnMonsters = common.comment("Should \"wild\" monsters despawn around the player when coming out of AFK?")
-            .define("despawnMonsters", true);
+        despawnMonstersPostAfk = common.comment("Should \"wild\" (unnamed, not in boats/minecarts) monsters despawn around the player when coming out of AFK?")
+            .define("despawnMonstersPostAfk", true);
         afkCommandCooldown = common.comment("Amount of time between the AFK command can be used again")
             .define("afkCommandCooldown", 6000, 0, Integer.MAX_VALUE-255);
 
