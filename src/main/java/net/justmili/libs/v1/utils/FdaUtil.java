@@ -8,7 +8,6 @@ import net.minecraft.resources.Identifier;
 
 @SuppressWarnings({"NullableProblems"})
 public class FdaUtil {
-    //True/false and text
     public static boolean getBool(AttachmentTarget target, AttachmentType<Boolean> variable) {
         return get(target, variable, false);
     }
@@ -17,7 +16,6 @@ public class FdaUtil {
         return get(target, variable, "ValueReturnedNull");
     }
 
-    //Numbers yay
     public static int getInt(AttachmentTarget target, AttachmentType<Integer> variable) {
         return get(target, variable, -1);
     }
@@ -49,12 +47,12 @@ public class FdaUtil {
         return target.hasAttached(variable);
     }
 
-    //Creates values that will clear after a restart
+    // Creates values that will clear after a restart
     public static <T> AttachmentType<T> create(Identifier id, T defaultValue) {
         return AttachmentRegistry.create(id, builder -> builder.initializer(() -> defaultValue).copyOnDeath());
     }
 
-    //Creates values that will NOT clear after a restart
+    // Creates values that will NOT clear after a restart
     public static <T> AttachmentType<T> createPersistent(Identifier id, T defaultValue, Codec<T> codec) {
         return AttachmentRegistry.create(id, builder -> builder.initializer(() -> defaultValue).copyOnDeath().persistent(codec));
     }

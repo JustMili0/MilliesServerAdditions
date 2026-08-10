@@ -4,7 +4,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.libs.v1.utils.FdaUtil;
 import net.justmili.libs.v1.utils.MathUtil;
-import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.variables.PlayerAttachments;
 import net.minecraft.ChatFormatting;
@@ -61,7 +60,7 @@ public class Afk {
                 } else {
                     // Set position at which command was executed at
                     // Add to team and set IS_AFK to true
-                    FdaUtil.set(player, PlayerAttachments.AFK_POS, player.position());
+                    FdaUtil.set(player, PlayerAttachments.AFK_POS, player.blockPosition());
 
                     scoreboard.addPlayerToTeam(player.getScoreboardName(), team);
                     FdaUtil.set(player, PlayerAttachments.IS_AFK, true);

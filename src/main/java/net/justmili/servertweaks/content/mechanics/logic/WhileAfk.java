@@ -29,16 +29,14 @@ public class WhileAfk {
             player.setDeltaMovement(Vec3.ZERO);
             player.resetFallDistance();
 
-            if (player.distanceToSqr(pos.x(), pos.y(), pos.z()) > 0.001f)
-                serverPlayer.connection.teleport(pos.x(), pos.y(), pos.z(), serverPlayer.getYRot(), serverPlayer.getXRot());
+            if (player.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) > 0.00001f)
+                serverPlayer.connection.teleport(pos.getX(), pos.getY(), pos.getZ(), serverPlayer.getYRot(), serverPlayer.getXRot());
         }
 
-        //Set/reset command timer
+        // Set/reset command timer
         if (!FdaUtil.getBool(serverPlayer, PlayerAttachments.IS_AFK) && Config.afkCommandCooldown.get() != 0) {
             int cooldown = FdaUtil.getInt(serverPlayer, PlayerAttachments.AFK_COOLDOWN);
-            if (cooldown > 0) {
-                FdaUtil.set(serverPlayer, PlayerAttachments.AFK_COOLDOWN, cooldown - 1);
-            }
+            if (cooldown > 0) FdaUtil.set(serverPlayer, PlayerAttachments.AFK_COOLDOWN, cooldown - 1);
         }
     }
 }

@@ -111,9 +111,9 @@ Feedback is appreciated ^^
 **Generic**
 - Updated to Minecraft 26.1.2
 - Changed project's buildscript from Groovy to Kotlin
-- Dropped dependency from SuperMartijn642's Config Lib and replaced it with my own mini config lib
+- Dropped dependency from SuperMartijn642's Config Lib and replaced it with a stripped down version of my Core Libs mod
 - Reworked registries for player abilities
-- Changed config file location and split into `config\servertweaks\common.toml` into `config\servertweaks\server.properties` and `config\servertweaks\mixins.properties`
+- Changed config file from `config\servertweaks\common.toml` into `config\servertweaks\common.properties`
 - Renamed config key `removeAnvilLimit` to `disableAnvilLimit`
 - All `limit*****Speed` config keys are now false by default
 - `enableScaleCommand` and `enableBanishCommand` config keys are now false by default
@@ -134,17 +134,14 @@ Feedback is appreciated ^^
   - Frost walker - up to level 5 (Vanilla: 2)
   - Unbreaking - up to level 5 (Vanilla: 3)
   - Multishot - up to level 3 (Vanilla: 1)
-- [TODO] Added ability to leash players
 - Armor Stands named "display" will be given arms
 - You can now duplicate enchantment books (at a level cost) by shift-right-clicking with an enchanted book in your offhand and a regular book in your main on an Enchantment Table
 - You can now die in the Banishment dimension (if the damage you've been delt is more than 2^18)
   - Added so `/kill` actually works in there
+- Invisible players when killing others or dying will have their names obfuscated
 
 **Commands**
 - `/scale` now has configurable min-max values in the config
-- Added `/ghostblock` command, for creating ghost blocks on the server
-  - `create clientbound <players> <coordinates>` creates a client-sided ghost block at specified coordinates for player(s) that does not exist on the server but does on client
-  - `create serverbound <player> <coordinates>` creates a server-sided ghost block at specified coordinates for player that doesn't exist on client but does on server
 - Patched one-hit mace exploit with `/afk`
 - `/afk` now uses Vec3 rather than individual x, y and z coordinates
 

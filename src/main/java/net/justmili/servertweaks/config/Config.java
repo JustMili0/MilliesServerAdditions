@@ -26,7 +26,8 @@ public class Config {
         noAiNameTags,
         enableHigherEnchants,
         disableAnvilLimit,
-        allowMixEnchantments;
+        allowMixEnchantments,
+        obfInvisDeathMessages;
 
     public static ConfigEntry<Integer> // Feature/Command config
         afkCommandCooldown;
@@ -36,60 +37,60 @@ public class Config {
         pistonPushLimit;
 
     public static void register() {
-        MConfigBuilder server = new MConfigBuilder(ServerTweaks.MODID, ConfigType.SERVER, FileType.PROPERTIES, true);
-        MConfigBuilder mixins = new MConfigBuilder(ServerTweaks.MODID, ConfigType.MIXINS, FileType.PROPERTIES, true);
+        MConfigBuilder common = new MConfigBuilder(ServerTweaks.MODID, ConfigType.COMMON, FileType.PROPERTIES, true);
 
-        // Features/Commands
-        server.comment("Should these commands and features be enabled on the server?");
+        // Commands
+        common.comment("Should these commands and features be enabled on the server?");
 
-        enableAfkCommand = server.define("enableAfkCommand", true);
-        enableScaleCommand = server.define("enableScaleCommand", false);
-        enableDamageToggleCommand = server.define("enableDamageToggleCommand", true);
-        enableBanishCommand = server.define("enableBanishCommand", false);
-        enableFlyCommand = server.define("enableFlyCommand", true);
+        enableAfkCommand = common.define("enableAfkCommand", true);
+        enableScaleCommand = common.define("enableScaleCommand", false);
+        enableDamageToggleCommand = common.define("enableDamageToggleCommand", true);
+        enableBanishCommand = common.define("enableBanishCommand", false);
+        enableFlyCommand = common.define("enableFlyCommand", true);
 
-        despawnMonsters = server.comment("Should \"wild\" monsters despawn around the player when coming out of AFK?")
+        despawnMonsters = common.comment("Should \"wild\" monsters despawn around the player when coming out of AFK?")
             .define("despawnMonsters", true);
-        afkCommandCooldown = server.comment("Amount of time between the AFK command can be used again")
+        afkCommandCooldown = common.comment("Amount of time between the AFK command can be used again")
             .define("afkCommandCooldown", 6000, 0, Integer.MAX_VALUE-255);
 
-        server.comment("What should be the min-max height values (In centimeters) for the \"/scale\" command?");
-        scaleMinHeight = server.define("scaleMinHeight", 80f, 18.5f, 2960f);
-        scaleMaxHeight = server.define("scaleMaxHeight", 300f, 18.5f, 2960f);
+        common.comment("What should be the min-max height values (In centimeters) for the \"/scale\" command?");
+        scaleMinHeight = common.define("scaleMinHeight", 80f, 18.5f, 2960f);
+        scaleMaxHeight = common.define("scaleMaxHeight", 300f, 18.5f, 2960f);
 
-        rightClickHarvest = server.comment("Should the player be able to harvest crops with by just right-clicking?")
-            .define("rightClickHarvest", true);
-        enableAnvilRepair = server.comment("Should a player be able to fix anvils by shift-right-clicking them with iron ingots and iron blocks?")
-            .define("anvilRepair", true);
-        enableEnchantDuplication = server.comment("")
-            .define("enableEnchantDuplication", true);
-        playerAbilities = server.comment("[EXPERIMENTAL] Allows server owners to configure player abilities for some or all members")
-            .define("playerAbilities", false);
-
-        server.build();
-
-        // Mixins
-        mixins.comment("Should these mixins apply on the server?");
-
-        enableHigherEnchants =  mixins.comment("Should some enchantments (controlled by enchantment tags) have a higher max value than Vanilla intended?")
-            .define("enableHigherEnchantmentLevels", false);
-
-        limitPlayerSpeed = mixins.comment("Should the server stop the player from moving too fast and print \"Player moved too fast!\" warn when on foot?")
-            .define("limitPlayerSpeed", false);
-        limitElytraSpeed = mixins.comment("Should the server stop the player from flying too fast and print \"Player moved too fast!\" warn when on elytra?")
-            .define("limitElytraSpeed", false);
-        limitVehicleSpeed = mixins.comment("Should the server stop the player from going too fast and print \"Player moved too fast!\" warn when in/on vehicle?")
-            .define("limitVehicleSpeed", false);
-        disableAnvilLimit = mixins.comment("Should the server clamp the max anvil cost to 39 levels if at or over, to prevent \"Too Expensive\"?")
-            .define("disableAnvilLimit", true);
-        allowMixEnchantments = mixins.comment("Should previously incompatible enchantments be able to be combined?")
+        // Enchanting
+        allowMixEnchantments = common.comment("Should previously incompatible enchantments be able to be combined?")
             .define("allowMixEnchantments", false);
-        pistonPushLimit = mixins.comment("How many blocks should the piston be able to push?")
+        enableHigherEnchants =  common.comment("Should some enchantments (controlled by enchantment tags) have a higher max value than Vanilla intended?")
+            .define("enableHigherEnchantmentLevels", false);
+        enableEnchantDuplication = common.comment("")
+            .define("enableEnchantDuplication", true);
+
+        // Limits
+        limitPlayerSpeed = common.comment("Should the server stop the player from moving too fast and print \"Player moved too fast!\" warn when on foot?")
+            .define("limitPlayerSpeed", false);
+        limitElytraSpeed = common.comment("Should the server stop the player from flying too fast and print \"Player moved too fast!\" warn when on elytra?")
+            .define("limitElytraSpeed", false);
+        limitVehicleSpeed = common.comment("Should the server stop the player from going too fast and print \"Player moved too fast!\" warn when in/on vehicle?")
+            .define("limitVehicleSpeed", false);
+        disableAnvilLimit = common.comment("Should the server clamp the max anvil cost to 39 levels if at or over, to prevent \"Too Expensive\"?")
+            .define("disableAnvilLimit", true);
+        pistonPushLimit = common.comment("How many blocks should the piston be able to push?")
             .define("pistonPushLimit", 12, 0, 511);
 
-        noAiNameTags = mixins.comment("Should Villagers and Tamable mobs lose their AI when named \"NoAI\"?")
+        // QoL, Gameplay
+        rightClickHarvest = common.comment("Should the player be able to harvest crops with by just right-clicking?")
+            .define("rightClickHarvest", true);
+        enableAnvilRepair = common.comment("Should a player be able to fix anvils by shift-right-clicking them with iron ingots and iron blocks?")
+            .define("anvilRepair", true);
+        noAiNameTags = common.comment("Should Villagers and Tamable mobs lose their AI when named \"NoAI\"?")
             .define("noAiNameTags", true);
+        obfInvisDeathMessages = common.comment("Should names of invisible players be obfuscated in chat in death messages?")
+            .define("obfuscateInvisDeathMessages", true);
 
-        mixins.build();
+        // Experimental, Fun
+        playerAbilities = common.comment("[EXPERIMENTAL] Allows server owners to configure player abilities for some or all members")
+            .define("playerAbilities", false);
+
+        common.build();
     }
 }

@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.config.Config;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.phys.Vec3;
 
 import static net.justmili.libs.v1.utils.FdaUtil.create;
 import static net.justmili.libs.v1.utils.FdaUtil.createPersistent;
@@ -14,7 +14,7 @@ import static net.justmili.libs.v1.utils.FdaUtil.createPersistent;
 public final class PlayerAttachments {
     public static void register() {}
 
-    public static final AttachmentType<Vec3> AFK_POS = createPersistent(id("afk_pos"), Vec3.ZERO, Vec3.CODEC);
+    public static final AttachmentType<BlockPos> AFK_POS = createPersistent(id("afk_pos"), BlockPos.containing(0, 255, 0), BlockPos.CODEC);
 
     public static final AttachmentType<Boolean>
         IS_AFK = createPersistent(id("is_afk"), false, Codec.BOOL), // AFK-Command related
