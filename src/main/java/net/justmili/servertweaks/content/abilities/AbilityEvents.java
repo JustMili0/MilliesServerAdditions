@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.libs.v1.utils.EntityUtil;
 import net.justmili.libs.v1.utils.FdaUtil;
+import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.registries.TagRegistry;
@@ -114,7 +115,7 @@ public class AbilityEvents {
         if (!has(player, Abilities.WEAK_TO_DAMAGE)) return true;
         if (source.is(DamageTypes.FALL)) return true;
 
-        return recalcDamage(player, source, value, 1.75F);
+        return recalcDamage(player, source, value, 1.25F);
     }
 
     private static InteractionResult pearling(Player interacting, Level level, InteractionHand hand) {
@@ -185,17 +186,21 @@ public class AbilityEvents {
 
         var stack = player.getItemInHand(hand);
         var state = level.getBlockState(hitResult.getBlockPos());
-        var block = state.getBlock();
 
         // Fuckery to properly diet-block while allowing planting and harvesting
-        if (stack.getItem() instanceof BlockItem) {
+        if (stack.getItem() instanceof BlockItem blockItem) {
             if (stack.is(ConventionalItemTags.CROPS) && state.is(BlockTags.GROWS_CROPS)) return InteractionResult.PASS;
             if (stack.is(ConventionalItemTags.BERRY_FOODS) && state.is(BlockTags.SUPPORTS_VEGETATION)) return InteractionResult.PASS;
-            //
+            ServerTweaks.LOGGER.info("got past 2nd check");
+            if (stack.is(ConventionalItemTags.BERRY_FOODS) && state.is(blockItem.getBlock())
+                && !player.getFoodData().needsFood()) return InteractionResult.PASS; // Don't block when hunger's full
+            // ISSUES: // TODO: FIX
+            // - Can't place glow berries, only can extend
+            player.getInventory().setChanged();
         }
 
         // Fix trying to RC anything with non-diet item in hand being blocked
-        if (block.defaultBlockState().is(TagRegistry.DIET_ALLOW_BLOCK_INTERACTION)) return InteractionResult.PASS;
+        if (state.getBlock().defaultBlockState().is(TagRegistry.DIET_ALLOW_BLOCK_INTERACTION)) return InteractionResult.PASS;
 
         bugEaterItems(interacting, level, hand); // Handle this first
         if (isDietBlocked(player, stack)) return InteractionResult.FAIL;
@@ -255,7 +260,7 @@ public class AbilityEvents {
             entity.discard();
             food.add(nutrition, saturation);
             playEatSound(player);
-            player.hurt(player.damageSources().onFire(), 2f);
+            player.hurtServer((ServerLevel) level, player.damageSources().onFire(), 2f);
             sendUpdatePacket(player);
 
             return InteractionResult.CONSUME;
@@ -312,7 +317,7 @@ public class AbilityEvents {
         if (FdaUtil.getInt(player, PlayerVars.HURT_TICK) != player.tickCount) {
             // safeguard to make sure ALLOW_DAMAGE doesn't get called again and for this to not run recursively
             FdaUtil.set(player, PlayerVars.HURT_TICK, player.tickCount);
-            player.hurtServer(player.level(), source, damageTaken * multiplier); // TODO: See if hurt or hurtServer works
+            player.hurtServer(player.level(), source, damageTaken * multiplier);
 
             return false;
         }
@@ -352,12 +357,14 @@ public class AbilityEvents {
     private static boolean isType(Entity entity, TagKey<EntityType<?>> tag) {
         return entity.is(tag);
     }
+
     private static boolean isBugLikeConsumable(Entity entity) {
-        if (entity instanceof Slime slime) { /// Change to AbstractCubeMob with 26.2!
+        if (entity instanceof Slime slime) { // TODO: Change to AbstractCubeMob with 26.2!
             return slime.getSize() == 1;
         }
         return true;
     }
+
     private static boolean uuidMatchesString(ServerPlayer player, String uuid) {
         return player.getUUID().equals(UUID.fromString(uuid));
     }

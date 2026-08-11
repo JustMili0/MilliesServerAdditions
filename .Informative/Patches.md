@@ -163,6 +163,7 @@ Feedback is appreciated ^^
 - Made `light` less annoying to walk down the stairs with (now additionally requires 3 blocks of fall distance)
 - Fixed being able to eat anything no matter the diet if food is held in the offhand
 - Fixed ability debuff `weak_to_damage` - Now actually deals more damage
+  - TEST NOTE (Patch was actively tested on server while being developed): changed damage multiplier from 1.75 to 1.25 to match Abilities.md desc. between last build and this final build
 - Fixed players with `herbivore` being able to eat even at full hunger
 - Fixed placing and picking up fish in and from buckets as `carnivore`, `vegeterian`, `saccharivore`, `herbivore` and `insectivore`
 - Fixed opening chests and interacting with workstation blocks being blocked when holding a non-in-diet item

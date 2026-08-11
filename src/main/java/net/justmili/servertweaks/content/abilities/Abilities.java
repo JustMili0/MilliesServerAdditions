@@ -191,7 +191,7 @@ public class Abilities {
                 || level.isRainingAt(player.blockPosition())
                 || player.isInWater()) return;
 
-            player.hurt(level.damageSources().onFire(), 1.0F);
+            player.hurtServer(level, level.damageSources().onFire(), 1.0F);
         }
     }
 
@@ -375,7 +375,7 @@ public class Abilities {
                 player.setAirSupply(player.getAirSupply() - 1);
                 if (player.getAirSupply() <= -20) {
                     player.setAirSupply(1);
-                    player.hurt(level.damageSources().drown(), 1.0F);
+                    player.hurtServer(level, level.damageSources().drown(), 1.0F);
                 }
             }
         }
@@ -405,14 +405,15 @@ public class Abilities {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
 
-            boolean inWaterBlock = player.isInWater(),
-                inWaterCauldron = level.getBlockState(player.blockPosition()).is(Blocks.WATER_CAULDRON),
-                hasHelmet = !player.getItemBySlot(EquipmentSlot.HEAD).isEmpty(),
-                inWetBiome = level.getBiome(player.blockPosition()).is(TagRegistry.HYDROPHOBIC_HELMET_EXCEPTIONS),
-                inRain = player.isInRain() && (!hasHelmet || inWetBiome),
-                inWater = inWaterBlock || inRain || inWaterCauldron;
+            boolean inWaterBlock = player.isInWater();
+            boolean inWaterCauldron = level.getBlockState(player.blockPosition()).is(Blocks.WATER_CAULDRON);
+            boolean hasHelmet = !player.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
+            boolean inWetBiome = level.getBiome(player.blockPosition()).is(TagRegistry.HYDROPHOBIC_HELMET_EXCEPTIONS);
+            boolean inRain = player.isInRain() && (!hasHelmet || inWetBiome);
 
-            if (inWater && level.getGameTime() % 20 == 0) player.hurt(level.damageSources().magic(), 1.0F);
+            boolean inWater = inWaterBlock || inRain || inWaterCauldron;
+
+            if (inWater && level.getGameTime() % 20 == 0) player.hurtServer(level, level.damageSources().magic(), 1.0F);
         }
     }
 

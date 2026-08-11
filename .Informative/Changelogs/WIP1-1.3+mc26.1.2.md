@@ -10,6 +10,7 @@
 - Configuration file has been moved to `\config\servertweaks\` directory. Previous configuration files won't be used anymore
 - Config file format changed from `.toml` to `.properties`
 - Renamed config key `removeAnvilLimit` to `disableAnvilLimit`
+- Renamed config key `despawnMonsters` to `despawnMonstersPostAfk`
 - All `limit*****Speed` config keys are now false by default
 - `enableScaleCommand` and `enableBanishCommand` config keys are now false by default
 
@@ -83,7 +84,7 @@
 - Removed "[ServerTweaks] " prefix from all messages sent by the mod
 
 ### ***DEV STUFF***
-- A lot of package and class renames
+- A lot of package, class renames and optimizations
 - Changed project's buildscript from Groovy to Kotlin
 - Dropped dependency on SuperMartijn642's Config Lib, replaced it with a stripped down version of my Core Libs mod
 - Changed archives base name `UnF-ServerTweaks` to `MilliesServerAdditions`
