@@ -168,10 +168,10 @@ Feedback is appreciated ^^
 - Added Big Dripleaf, Small Dripleaf, Vines, Cave Vines, Glow Lichen, Ferns, Large Ferns, Bushes, Firefly Bushes, Seagrass, Tall Seagrass, Sea Pickles and Kelp to `herbivore`'s diet tag
 - Removed Jungle and its variants from tag `hot_biomes`
 - Added `canine` ability preset
-- [TODO] Fixed ability debuff `hunted_by_fox` - Foxes now attack even if you're not crouching
-- [TODO] Fixed ability debuff `cant_swim` - Players no longer can swim up higher than one block up from the (sea) floor
-- [TODO] Fixed ability `child_of_nature` - Taming chance with any animal is now 100%
-- [TODO] Fixed ability `climbs_walls` - Now can actually climb walls
+- [TODO - needs fix] Fixed ability debuff `hunted_by_fox` - Foxes now attack even if you're not crouching 
+- [TODO - needs fix] Fixed ability debuff `cant_swim` - Players no longer can swim up higher than one block up from the (sea) floor
+- [TODO - needs code] Fixed ability `child_of_nature` - Taming chance with any animal is now 100%
+- [TODO - needs code] Fixed ability `climbs_walls` - Now can actually climb walls
 - (NEW) Bovid - Can be milked with a bucket by other players
 - (NEW) Squishy - Decreases `fall` and `fly_into_wall` damage by 75% each
 - (NEW) Insectivore - Can feed on bug-like entities (Silverfish, Endermites, and size-1 Slimes and Magma Cubes) as well as items like Slimeballs, Magma Cream and Spider Eyes
