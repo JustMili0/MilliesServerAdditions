@@ -196,7 +196,8 @@ public class AbilityEvents {
                 && !player.getFoodData().needsFood()) return InteractionResult.PASS; // Don't block when hunger's full
             // ISSUES: // TODO: FIX
             // - Can't place glow berries, only can extend
-            player.getInventory().setChanged();
+
+            //player.getInventory().setChanged(); // nvm this, didn't help with the disappearing-not-disappearing items
         }
 
         // Fix trying to RC anything with non-diet item in hand being blocked
