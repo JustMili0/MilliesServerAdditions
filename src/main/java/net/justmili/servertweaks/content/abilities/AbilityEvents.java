@@ -5,11 +5,10 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
+
 import net.justmili.libs.v1.utils.CommandUtil;
 import net.justmili.libs.v1.utils.EntityUtil;
 import net.justmili.libs.v1.utils.FdaUtil;
-import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.registries.TagRegistry;
@@ -21,7 +20,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -35,7 +33,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -92,8 +89,6 @@ public class AbilityEvents {
 
         UseItemCallback.EVENT.register(AbilityEvents::pearling);
         UseBlockCallback.EVENT.register(AbilityEvents::grassEater);
-        UseItemCallback.EVENT.register(AbilityEvents::handleDietItemCall);
-        UseBlockCallback.EVENT.register(AbilityEvents::handleDietBlockCall);
         UseEntityCallback.EVENT.register(AbilityEvents::bugEaterEntities);
         UseEntityCallback.EVENT.register(AbilityEvents::bovid);
     }
@@ -105,7 +100,7 @@ public class AbilityEvents {
 
         if (!(source.is(DamageTypes.FALL) || source.is(DamageTypes.FLY_INTO_WALL))) return true;
 
-        return recalcDamage(player, source, value, 0.75F);
+        return recalcDamage(player, source, value, 0.25F);
     }
 
     private static boolean weakToDamage(LivingEntity entity, DamageSource source, float value) {
@@ -170,41 +165,12 @@ public class AbilityEvents {
         return InteractionResult.CONSUME;
     }
 
-    private static InteractionResult handleDietItemCall(Player interacting, Level level, InteractionHand hand) { // Clicking while looking at nothing
+    public static InteractionResult handleDietItemCall(Player interacting, Level level, InteractionHand hand) { // Clicking while looking at nothing
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
 
         bugEaterItems(interacting, level, hand); // Handle this first
         if (isDietBlocked(player, player.getItemInHand(hand))) return InteractionResult.FAIL;
-
-        return InteractionResult.PASS;
-    }
-
-    private static InteractionResult handleDietBlockCall(Player interacting, Level level, InteractionHand hand, BlockHitResult hitResult) {
-        if (level.isClientSide()) return InteractionResult.PASS;
-        if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
-
-        var stack = player.getItemInHand(hand);
-        var state = level.getBlockState(hitResult.getBlockPos());
-
-        // Fuckery to properly diet-block while allowing planting and harvesting
-        if (stack.getItem() instanceof BlockItem blockItem) {
-            if (stack.is(ConventionalItemTags.CROPS) && state.is(BlockTags.GROWS_CROPS)) return InteractionResult.PASS;
-            if (stack.is(ConventionalItemTags.BERRY_FOODS) && state.is(BlockTags.SUPPORTS_VEGETATION)) return InteractionResult.PASS;
-            ServerTweaks.LOGGER.info("got past 2nd check");
-            if (stack.is(ConventionalItemTags.BERRY_FOODS) && state.is(blockItem.getBlock())
-                && !player.getFoodData().needsFood()) return InteractionResult.PASS; // Don't block when hunger's full
-            // ISSUES: // TODO: FIX
-            // - Can't place glow berries, only can extend
-
-            //player.getInventory().setChanged(); // nvm this, didn't help with the disappearing-not-disappearing items
-        }
-
-        // Fix trying to RC anything with non-diet item in hand being blocked
-        if (state.getBlock().defaultBlockState().is(TagRegistry.DIET_ALLOW_BLOCK_INTERACTION)) return InteractionResult.PASS;
-
-        bugEaterItems(interacting, level, hand); // Handle this first
-        if (isDietBlocked(player, stack)) return InteractionResult.FAIL;
 
         return InteractionResult.PASS;
     }

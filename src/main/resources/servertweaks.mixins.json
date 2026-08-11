@@ -8,6 +8,7 @@
     "CombatTrackerMixin",
     "DamageSourceMixin",
     "EnchantmentMixin",
+    "ItemMixin",
     "PistonStructureResolverMixin",
     "ServerGamePacketListenerImplMixin",
     "LivingEntityMixin",
