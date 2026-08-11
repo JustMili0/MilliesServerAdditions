@@ -11,8 +11,7 @@
 - Config file format changed from `.toml` to `.properties`
 - Renamed config key `removeAnvilLimit` to `disableAnvilLimit`
 - Renamed config key `despawnMonsters` to `despawnMonstersPostAfk`
-- All `limit*****Speed` config keys are now false by default
-- `enableScaleCommand` and `enableBanishCommand` config keys are now false by default
+- All `limit*****Speed`, `enableScaleCommand`, `enableBanishCommand` and `enableDamageToggleCommand` config keys are now false by default
 
 ### ***NEW CONTENT***
 - Special Player Abilities
@@ -27,7 +26,7 @@
   - Entity discard - basically `/kill` without dropping loot or XP, just poof, and it's gone
   - Block discard - basically `/setblock x y z minecraft:air` without specifying air and no items or anything else (like XP) drops from the block
   - Inventory discard - basically `/clear` mixed with `/data` but much less complex
-- `/fillExtras` command because vanilla didn't have what I needed
+- `/fillextras` command because vanilla didn't have what I needed
   - `/fill` but with more robust options:
     - `replaceOnly` - Basically vanilla's `replace` I guess
     - `destroyOnly` - Destroys only specified block
@@ -61,7 +60,7 @@
 - Invisible players when killing others or dying will have their names obfuscated
 
 ### ***CHANGES***
-- `/damagetoggle <damage_type> <true|false|status>`, reworked into `/damageToggle <options>`:
+- `/damagetoggle <damage_type> <true|false|status>`, reworked into `/damagetoggle <options>`:
   - Removed `<damage_type> true` - Replaced with `enable <damage_type>`
   - Removed `<damage_type> false` - Replaced with `disable <damage_type>`
   - Removed `<damage_type> status` - Replaced with `get <damage_type>`

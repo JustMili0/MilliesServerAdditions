@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.Block;
 
 public class FillExtras {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext, Commands.CommandSelection environment) {
-        dispatcher.register(Commands.literal("fillExtras")
+        dispatcher.register(Commands.literal("fillextras")
             .requires(src -> CommandUtil.hasPerms(src, 1))
             .then(Commands.argument("from", BlockPosArgument.blockPos())
                 .then(Commands.argument("to", BlockPosArgument.blockPos())

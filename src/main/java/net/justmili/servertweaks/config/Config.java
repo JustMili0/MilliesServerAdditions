@@ -11,6 +11,7 @@ public class Config {
         enableAfkCommand,
         enableScaleCommand,
         enableDamageToggleCommand,
+        enableFillExtrasCommand,
         enableBanishCommand,
         enableFlyCommand,
         despawnMonstersPostAfk;
@@ -44,7 +45,8 @@ public class Config {
 
         enableAfkCommand = common.define("enableAfkCommand", true);
         enableScaleCommand = common.define("enableScaleCommand", false);
-        enableDamageToggleCommand = common.define("enableDamageToggleCommand", true);
+        enableDamageToggleCommand = common.define("enableDamageToggleCommand", false);
+        enableFillExtrasCommand = common.define("enableFillExtrasCommand", false);
         enableBanishCommand = common.define("enableBanishCommand", false);
         enableFlyCommand = common.define("enableFlyCommand", true);
 
@@ -62,7 +64,8 @@ public class Config {
             .define("allowMixEnchantments", false);
         enableHigherEnchants =  common.comment("Should some enchantments (controlled by enchantment tags) have a higher max value than Vanilla intended?")
             .define("enableHigherEnchantmentLevels", false);
-        enableEnchantDuplication = common.comment("")
+        enableEnchantDuplication = common.comment("Should players be able to shift-right-click with an enchanted book in their offhand and a book in their main hand" +
+                "\nto duplicate the enchanted book using their experience?")
             .define("enableEnchantDuplication", true);
 
         // Limits

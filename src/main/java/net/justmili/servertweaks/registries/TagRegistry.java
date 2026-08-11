@@ -20,8 +20,7 @@ public class TagRegistry {
         DIET_MODIFIER_GOLDEN_FOODS = createTag(Registries.ITEM, "diets/modifier_golden_foods");
 
     public static final TagKey<Block>
-        DIET_FOLIAGE = createTag(Registries.BLOCK, "diets/herbivore"),
-        DIET_ALLOW_BLOCK_INTERACTION = createTag(Registries.BLOCK, "diets/allow_block_interaction");
+        DIET_FOLIAGE = createTag(Registries.BLOCK, "diets/herbivore");
 
     public static final TagKey<EntityType<?>>
         DIET_BUG_ENTITY_GENERIC = createTag(Registries.ENTITY_TYPE, "bug_eater/generic"),

@@ -11,8 +11,8 @@ public class CommandRegistry {
             if (Config.enableAfkCommand.get()) Afk.register(dispatcher, buildContext, environment);
             if (Config.enableDamageToggleCommand.get()) DamageToggle.register(dispatcher, buildContext, environment);
             if (Config.enableBanishCommand.get()) Banish.register(dispatcher, buildContext, environment);
-            Discard.register(dispatcher, buildContext, environment); // This command is not configurable.
-            FillExtras.register(dispatcher, buildContext, environment); // TODO: Make configurable
+            Discard.register(dispatcher, buildContext, environment); // This command is not configurable. Too useful to be configurable
+            if (Config.enableFillExtrasCommand.get()) FillExtras.register(dispatcher, buildContext, environment);
             if (Config.enableFlyCommand.get()) Fly.register(dispatcher, buildContext, environment);
             if (Config.playerAbilities.get()) PlayerAbilities.register(dispatcher, buildContext, environment);
         });

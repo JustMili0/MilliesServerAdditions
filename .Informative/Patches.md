@@ -116,8 +116,7 @@ Feedback is appreciated ^^
 - Changed config file from `config\servertweaks\common.toml` into `config\servertweaks\common.properties`
 - Renamed config key `removeAnvilLimit` to `disableAnvilLimit`
 - Renamed config key `despawnMonsters` to `despawnMonstersPostAfk`
-- All `limit*****Speed` config keys are now false by default
-- `enableScaleCommand` and `enableBanishCommand` config keys are now false by default
+- All `limit*****Speed`, `enableScaleCommand`, `enableBanishCommand` and `enableDamageToggleCommand` config keys are now false by default
 - Villagers and tamable mobs losing AI when named "NoAI" now has a config entry
 
 **Gameplay**
@@ -148,8 +147,8 @@ Feedback is appreciated ^^
 - `/scale` now has configurable min-max values in the config
 - Patched one-hit mace exploit with `/afk`
 - `/afk` now uses BlockPos rather than individual x, y and z coordinates
-- `/damagetoggle` renamed to `/damageToggle`
-- `/damageToggle` - Permission Level Required `ADMINS (4)` -> `GAMEMASTERS (2)`
+- Renamed `/fillExtras` to `/fillextras`
+- `/fillextras` is now a configurable command
 
 **Player Abilities**
 - Abilities now are stored in lowercase instead of uppercase, e.g. `fire_immune` instead of `FIRE_IMMUNE`
@@ -165,9 +164,7 @@ Feedback is appreciated ^^
 - Fixed and readjusted damage multipliers for `squishy` and `weak_to_damage`
 - Fixed players with `herbivore` being able to eat even at full hunger
 - Fixed placing and picking up fish in and from buckets as `carnivore`, `vegeterian`, `saccharivore`, `herbivore` and `insectivore`
-- Fixed opening chests and interacting with workstation blocks being blocked when holding a non-in-diet item
-  - Added `diets/allow_block_interaction.json` block tag to except blocks from getting interactions blocked
-- Fixed blocking non-diet items while allowing to plant and harvest
+- Fixed functional block interactions and crop planting and harvesting when holding a non-diet items as `carnivore`, `vegeterian`, `saccharivore`, `herbivore` and `insectivore`
 - Added Big Dripleaf, Small Dripleaf, Vines, Cave Vines, Glow Lichen, Ferns, Large Ferns, Bushes, Firefly Bushes, Seagrass, Tall Seagrass, Sea Pickles and Kelp to `herbivore`'s diet tag
 - Removed Jungle and its variants from tag `hot_biomes`
 - Added `canine` ability preset
