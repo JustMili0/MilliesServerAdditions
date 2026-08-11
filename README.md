@@ -10,26 +10,28 @@ I made this mod initially for my community Minecraft server, but after a while d
 As long as the two Minecraft servers I moderate live. So pretty long I guess.
 
 ### Will this mod support other mod loaders or versions?
-No.
+No. This mod is Fabric-only, and it will remain like so.<br>
+It will not be ported to older versions either, and will remain updated for latest Minecraft updates only.
 
 <hr>
 
 # Features
----- CONFIG ---- <br>
-The entire mod is entirely configurable with exceptions to like one command and one feature.<br>
-You can pretty much customize it however the hell you want
+### ***CONFIGURATION***
+The entire mod is entirely configurable with exceptions to one command (`/discard`) and one feature (Display Armor Stands).<br>
+Other than that, you can pretty much customize it however the hell you want
 
----- COMMANDS ---- <br>
-For The Players
+### ***COMMANDS***
+**For The Players**
 <details>
 <summary>/afk [Enabled By Default]</summary>
 
-Allows a player to safely stay in one place while they BR - The player can't be moved anywhere and becomes invulnerable but is also unable to attack anything or anyone.
+Allows a player to safely stay in one place while they afk.<br>
+The player won't be able to move or be moved, and won't be able to damage or be damaged.
 
 </details>
 
 <details>
-<summary>/scale [Enabled By Default]</summary>
+<summary>/scale [Disabled By Default]</summary>
 
 A fun addition for players to be able to scale themselves in-game to e.g. their irl height. (Metric system only)<br>
 
@@ -37,16 +39,30 @@ Movement speed and block/entity reach do not get modified.
 
 </details>
 
-For The Server Staff
+**For The Server Staff**
 <details>
-<summary>/discard [Not Configurable]</summary>
+<summary>/fly [Enabled By Default]</summary>
 
-Multi-use simplified version of multiple commands such as /data, /clear, /setblock + custom entity discarding (no loot, xp, just snapped out of existence).
+Allows creative flight in any survival-like gamemode. Can be applied to other players.
 
 </details>
 
 <details>
-<summary>/fillExtras [Not Configurable]</summary>
+<summary>/damagetoggle [Disabled By Default]</summary>
+
+Allows staff to disable individual damage types on the server. Resets after a server restart.
+
+</details>
+
+<details>
+<summary>/discard [Not Configurable]</summary>
+
+Allows to discard entities (No loot or EXP), removing blocks without them dropping anything and clearing inventories of entities and players.
+
+</details>
+
+<details>
+<summary>/fillextras [Disabled By Default]</summary>
 
 /fill on steroids - works just like /fill but has options such as replaceOnly, destroyOnly, silkDestroy, silkDestroyOnly, fortuneDestroy and fortuneDestroyOnly<br>
 allowing staff to clear out or fill blocks within an area in ways that `/fill` can't.
@@ -54,31 +70,23 @@ allowing staff to clear out or fill blocks within an area in ways that `/fill` c
 </details>
 
 <details>
-<summary>/fly [Enabled By Default]</summary>
+<summary>/banish [Disabled By Default]</summary>
 
-Allows creative flight in survival or any other non-creative gamemode. Can be applied to other players.
+A more fun way to "ban" people by sending them into the f#cking shadow realm.<br>
 
-</details>
-
-<details>
-<summary>/damageToggle [Enabled By Default]</summary>
-
-Allows staff to disable individual damage types on the server. Resets after a server restart.
+Banished players can still be killed if dealt enough damage in one hit (2^18hp or more)<br>
+this is so `/kill` still works if you ever need to use it in that dimension.
 
 </details>
 
-<details>
-<summary>/banish [Enabled By Default]</summary>
-
-A more fun way to "ban" people by sending them into the f#cking shadow realm.
-
-</details>
-
----- GAMEPLAY ----
+### ***GAMEPLAY***
 <details>
 <summary>Player Abilities [Disabled By Default]</summary>
 
-A rather complex system of abilities for players to choose from. Read <a href="https://github.com/JustMili0/UnF-ServerTweaks/blob/master/.Informative/Features/Abilities.md">About Abilities</a> to know more.
+An experimental feature, similar to Origins but server-side and not entirely the same as origins.<br>
+Players can pick presets of species via `/abilities pickPreset <preset>` that will grant them special abilities, debuffs and such.<br>
+Server moderators, admins, owners are also given tools to manage everyone's abilities within `/abilities` command.<br>
+***See [Features/Abilities.md](https://github.com/JustMili0/MilliesServerAdditions/blob/master/.Informative/Features/Abilities.md) on the mod's GitHub page for more information***
 
 </details>
 
@@ -90,9 +98,38 @@ Harvest full-grown crops by just right-clicking them. Bigger harvest area when u
 </details>
 
 <details>
+<summary>Anvil Repair [Enabled By Default]</summary>
+
+Shift-right-click a damaged or chipped anvil with an Iron Ingot or Iron Block to repair it a stage.<br>
+Iron Blocks have a much higher success chance than Ingots, and repair is always guaranteed by your 3rd attempt.
+
+</details>
+
+<details>
 <summary>Not Too Expensive [Enabled By Default]</summary>
 
 Remove anvil's "Too Expensive" limit, with the highest EXP cost being 39 levels.
+
+</details>
+
+<details>
+<summary>Enchanted Book Duplication [Enabled By Default]</summary>
+
+Shift-right-click an Enchantment Table with an Enchanted Book in your offhand and a regular Book in your main hand to duplicate the enchanted book, at the cost of some experience levels.
+
+</details>
+
+<details>
+<summary>Enchantment Mixing [Disabled By Default]</summary>
+
+Allows previously incompatible enchantments (different Protection types, Mending + Infinity, etc.) to be combined on the same item.
+
+</details>
+
+<details>
+<summary>Boosted Enchantment Levels [Disabled By Default]</summary>
+
+Some enchantments can go past their vanilla max level via an anvil (e.g. Sharpness VI, Unbreaking V, Frost Walker V). Fully customizable per-enchantment through tags.
 
 </details>
 
@@ -103,12 +140,12 @@ Remove anvil's "Too Expensive" limit, with the highest EXP cost being 39 levels.
 Individually remove speed limits for regular movement, elytra flight and vehicle movement to not be stopped by "Player moved too fast!" warnings.<br>
 This is useful for player cannons for transport.
 
-Elytra flight speed limit is removed by default.
+All three speed limits (elytra, on-ground movement, vehicle movement) are removed by default.
 
 </details>
 
 <details>
-<summary>Pistons Pushing Limits [Default By Default]</summary>
+<summary>Pistons Pushing Limits [Vanilla By Default]</summary>
 
 Allows modifying how many blocks a single piston can push.
 
@@ -122,10 +159,18 @@ which is pretty useful if you want to reduce lag in trading halls or have a lot 
 
 </details>
 
-<hr>
+<details>
+<summary>Display Armor Stands [Not Configurable]</summary>
 
-## Usage Permission
-You are not allowed to modify or/and redistribute the original code.<br>
-You are allowed to create addons for the mod. (e.g. to expand the Player Abilities feature)<br>
-You are allowed to distribute the mod in modpacks.<br>
-You are allowed to use this mod on public and private servers.
+Naming an Armor Stand "display" gives it arms automatically, posed for holding items and gear on display.
+
+</details>
+
+<details>
+<summary>Obfuscated Invisible Player Names [Enabled By Default]</summary>
+
+Names of players that are invisible will be obfuscated in chat in death messages, whether they kill someone or die themselves.
+
+</details>
+
+<hr>
