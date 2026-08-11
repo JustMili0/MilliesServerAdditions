@@ -18,7 +18,7 @@ It will not be ported to older versions either, and will remain updated for late
 # Features
 ### ***CONFIGURATION***
 The entire mod is entirely configurable with exceptions to one command (`/discard`) and one feature (Display Armor Stands).<br>
-Other than that, you can pretty much customize it however the hell you want
+Other than that, you can pretty much customize it however the hell you want. Config file can be found in `config\servertweaks\` directory.
 
 ### ***COMMANDS***
 **For The Players**
@@ -26,7 +26,10 @@ Other than that, you can pretty much customize it however the hell you want
 <summary>/afk [Enabled By Default]</summary>
 
 Allows a player to safely stay in one place while they afk.<br>
-The player won't be able to move or be moved, and won't be able to damage or be damaged.
+The player won't be able to move or be moved, and won't be able to damage or be damaged.<br>
+<br>
+Also, in config it's turned on by default that any hostile mobs that are unnamed, aren't in any vehicle and aren't being ridden<br>
+will be despawned upon leaving AFK around the player.
 
 </details>
 
@@ -34,6 +37,7 @@ The player won't be able to move or be moved, and won't be able to damage or be 
 <summary>/scale [Disabled By Default]</summary>
 
 A fun addition for players to be able to scale themselves in-game to e.g. their irl height. (Metric system only)<br>
+Min-max height values can be changed in config.<br>
 
 Movement speed and block/entity reach do not get modified.
 

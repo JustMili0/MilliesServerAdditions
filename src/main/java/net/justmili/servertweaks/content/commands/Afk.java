@@ -82,7 +82,7 @@ public class Afk {
         );
 
         for (Monster monster : level.getEntitiesOfClass(Monster.class, box)) {
-            if (monster.hasCustomName() || monster.isPassenger() || monster.isVehicle()) continue;;
+            if (monster.hasCustomName() || monster.isPassenger() || monster.isVehicle()) continue;
 
             monster.discard();
         }
