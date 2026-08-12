@@ -2,7 +2,7 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import net.justmili.libs.v1.utils.CommandUtil;
+import net.justmili.libs.v1.utils.common.CommandUtil;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -54,7 +54,7 @@ public class FillExtras {
                                             }
 
                                     CommandUtil.sendOk(source, "Successfully destroyed " + count + " block(s) of " + targetBlock.getBlock().getName().getString()
-                                        + " and replaced with " + replaceWith.getBlock().getName().getString());
+                                        + " and replaced with " + replaceWith.getBlock().getName().getString(), true);
                                     return count;
                                 })
                             )
@@ -87,7 +87,7 @@ public class FillExtras {
                                             }
 
                                     CommandUtil.sendOk(source, "Successfully replaced " + count + " block(s) of " + targetBlock.getBlock().getName().getString()
-                                        + " and replaced with " + replaceWith.getBlock().getName().getString());
+                                        + " and replaced with " + replaceWith.getBlock().getName().getString(), true);
                                     return count;
                                 })
                             )
@@ -120,7 +120,7 @@ public class FillExtras {
                                             }
                                         }
 
-                                CommandUtil.sendOk(source, "Successfully destroyed " + count + " block(s) with Silk Touch effect");
+                                CommandUtil.sendOk(source, "Successfully destroyed " + count + " block(s) with Silk Touch effect", true);
                                 return count;
                             })
                         )
@@ -154,7 +154,7 @@ public class FillExtras {
                                             }
 
                                     CommandUtil.sendOk(source, "Successfully destroyed " + count + " " +
-                                        targetBlock.getBlock().getName().getString() + " block(s) with Silk Touch effect");
+                                        targetBlock.getBlock().getName().getString() + " block(s) with Silk Touch effect", true);
                                     return count;
                                 })
                             )
@@ -189,7 +189,7 @@ public class FillExtras {
                                                 }
                                             }
 
-                                    CommandUtil.sendOk(source, "Successfully destroyed " + count + " block(s) with Fortune level" + fortuneLevel + " effect");
+                                    CommandUtil.sendOk(source, "Successfully destroyed " + count + " block(s) with Fortune level" + fortuneLevel + " effect", true);
                                     return count;
                                 })
                             )
@@ -226,7 +226,7 @@ public class FillExtras {
                                                 }
 
                                         CommandUtil.sendOk(source, "Successfully destroyed " + count + " " +
-                                            targetBlock.getBlock().getName().getString() + " block(s) with Fortune level" + fortuneLevel + " effect");
+                                            targetBlock.getBlock().getName().getString() + " block(s) with Fortune level" + fortuneLevel + " effect", true);
                                         return count;
                                     })
                                 )

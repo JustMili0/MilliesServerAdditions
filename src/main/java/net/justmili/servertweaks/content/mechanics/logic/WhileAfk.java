@@ -1,6 +1,6 @@
 package net.justmili.servertweaks.content.mechanics.logic;
 
-import net.justmili.libs.v1.utils.FdaUtil;
+import net.justmili.libs.v1.utils.common.FdaUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,8 +29,8 @@ public class WhileAfk {
             player.setDeltaMovement(Vec3.ZERO);
             player.resetFallDistance();
 
-            if (player.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) > 0.00001f)
-                serverPlayer.connection.teleport(pos.getX(), pos.getY(), pos.getZ(), serverPlayer.getYRot(), serverPlayer.getXRot());
+            if (player.distanceToSqr(pos.x, pos.y, pos.z) > 0.00001f)
+                serverPlayer.connection.teleport(pos.x, pos.y, pos.z, serverPlayer.getYRot(), serverPlayer.getXRot());
         }
 
         // Set/reset command timer

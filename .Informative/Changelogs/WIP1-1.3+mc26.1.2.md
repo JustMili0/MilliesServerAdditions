@@ -21,7 +21,12 @@
 - Right-Click-Harvest
   - Yes fortune applies
   - Larger affect area when using a hoe
-- You can now stop the AI of tamable animals and villagers by naming them `NoAI`
+- You can now stop the AI of tamable animals and villagers by naming them `NoAI`'
+- `/smpperms <player> <permission_level>` command, allowing to limit a server staff's permissions
+  - `moderator` - Can use all commands that a command block can
+  - `administrator` - Can use all commands (except `/smpperms`), can not stop the server
+  - `limited_operator` (owner but fair) - Operator permission level but limited to only a few commands essential (or so) for moderation
+  - `operator` (owner) - Regular operator permissions
 - `/discard <target>` command, allows operators discard entities, blocks, and clear inventories (of any entity/block)
   - Entity discard - basically `/kill` without dropping loot or XP, just poof, and it's gone
   - Block discard - basically `/setblock x y z minecraft:air` without specifying air and no items or anything else (like XP) drops from the block

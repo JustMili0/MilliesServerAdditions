@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.justmili.libs.v1.utils.CommandUtil;
+import net.justmili.libs.v1.utils.common.CommandUtil;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -47,9 +47,9 @@ public class Discard {
                     // One or multiple? Send message
                     if (entities.size() == 1) {
                         Entity only = entities.iterator().next();
-                        CommandUtil.sendOk(source, "Discarded " + only.getName().getString());
+                        CommandUtil.sendOk(source, "Discarded " + only.getName().getString(), true);
                     } else {
-                        CommandUtil.sendOk(source, "Discarded " + entities.size() + " entities");
+                        CommandUtil.sendOk(source, "Discarded " + entities.size() + " entities", true);
                     }
                     return entities.size();
                 })
@@ -74,7 +74,7 @@ public class Discard {
                     level.removeBlock(pos, false);
 
                     // Send message
-                    CommandUtil.sendOk(source, "Discarded " + blockId + " from " + formatPos(pos));
+                    CommandUtil.sendOk(source, "Discarded " + blockId + " from " + formatPos(pos), true);
                     return 1;
                 })
             )
@@ -119,7 +119,7 @@ public class Discard {
                         }
 
                         // Send message
-                        CommandUtil.sendOk(source, "Discarded " + cleared + " item(s) from " + entity.getName().getString() + "'s inventory");
+                        CommandUtil.sendOk(source, "Discarded " + cleared + " item(s) from " + entity.getName().getString() + "'s inventory", true);
                         return cleared;
                     })
                 )
@@ -149,7 +149,7 @@ public class Discard {
                         }
 
                         // Send message
-                        CommandUtil.sendOk(source, "Discarded " + cleared + " item(s) from " + blockId + "'s inventory at " + formatPos(pos));
+                        CommandUtil.sendOk(source, "Discarded " + cleared + " item(s) from " + blockId + "'s inventory at " + formatPos(pos), true);
                         return cleared;
                     })
                 )

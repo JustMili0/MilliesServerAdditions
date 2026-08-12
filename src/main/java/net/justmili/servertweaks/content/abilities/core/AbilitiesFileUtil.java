@@ -1,6 +1,6 @@
 package net.justmili.servertweaks.content.abilities.core;
 
-import net.justmili.libs.v1.utils.CommandUtil;
+import net.justmili.libs.v1.utils.common.CommandUtil;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 import net.justmili.servertweaks.content.abilities.type.AbilityPreset;

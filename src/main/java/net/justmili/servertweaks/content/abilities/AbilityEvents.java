@@ -6,9 +6,9 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 
-import net.justmili.libs.v1.utils.CommandUtil;
-import net.justmili.libs.v1.utils.EntityUtil;
-import net.justmili.libs.v1.utils.FdaUtil;
+import net.justmili.libs.v1.utils.common.CommandUtil;
+import net.justmili.libs.v1.utils.common.EntityUtil;
+import net.justmili.libs.v1.utils.common.FdaUtil;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.registries.TagRegistry;

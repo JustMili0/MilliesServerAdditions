@@ -1,0 +1,2 @@
+- Possibly improve upon how `/smpperms` command works
+- Give a proper description to `/smpperms` in README

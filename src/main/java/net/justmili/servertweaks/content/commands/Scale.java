@@ -2,8 +2,8 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.FloatArgumentType;
-import net.justmili.libs.v1.utils.CommandUtil;
-import net.justmili.libs.v1.utils.FdaUtil;
+import net.justmili.libs.v1.utils.common.CommandUtil;
+import net.justmili.libs.v1.utils.common.FdaUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.util.ScalerUtil;
 import net.justmili.servertweaks.variables.PlayerVars;
@@ -33,7 +33,7 @@ public class Scale {
                         ScalerUtil.applyScaleToPlayer(player, scale);
                         FdaUtil.set(player, PlayerVars.SCALE_LOCKED, true);
 
-                        CommandUtil.sendOk(source, String.format("Your irl-to-game scale is %.3f (%.1f cm). It is now locked", scale, heightCm));
+                        CommandUtil.sendOk(source, String.format("Your irl-to-game scale is %.3f (%.1f cm). It is now locked", scale, heightCm), false);
                         return 1;
                     })
                 )
@@ -50,7 +50,7 @@ public class Scale {
                                 var players = EntityArgument.getPlayers(context, "player");
                                 for (var player : players) applyScaleToPlayer(player, scale);
 
-                                CommandUtil.sendOk(source, String.format("Applied scale %.3f (%.1f cm) to %d player(s)", scale, heightCm, players.size()));
+                                CommandUtil.sendOk(source, String.format("Applied scale %.3f (%.1f cm) to %d player(s)", scale, heightCm, players.size()), true);
                                 return players.size();
                             })
                         )
@@ -65,7 +65,7 @@ public class Scale {
                             var players = EntityArgument.getPlayers(context, "player");
                             for (var player : players) FdaUtil.set(player, PlayerVars.SCALE_LOCKED, false);
 
-                            CommandUtil.sendOk(source, String.format("Unlocked scale modification for %d player(s)", players.size()));
+                            CommandUtil.sendOk(source, String.format("Unlocked scale modification for %d player(s)", players.size()), true);
                             return players.size();
                         })
                     )
@@ -82,7 +82,7 @@ public class Scale {
                                 FdaUtil.set(player, PlayerVars.SCALE_LOCKED, false);
                             }
 
-                            CommandUtil.sendOk(source, String.format("Reset scale and unlocked scale modifications for %d player(s)", players.size()));
+                            CommandUtil.sendOk(source, String.format("Reset scale and unlocked scale modifications for %d player(s)", players.size()), true);
                             return players.size();
                         })
                     )
@@ -96,7 +96,7 @@ public class Scale {
                             var players = EntityArgument.getPlayers(context, "player");
                             for (var player : players) applyScaleToPlayer(player, 1f);
 
-                            CommandUtil.sendOk(source, String.format("Reset scale for %d player(s)", players.size()));
+                            CommandUtil.sendOk(source, String.format("Reset scale for %d player(s)", players.size()), true);
                             return players.size();
                         })
                     )

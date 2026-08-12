@@ -8,6 +8,7 @@ import net.justmili.servertweaks.ServerTweaks;
 
 public class Config {
     public static ConfigEntry<Boolean> // Commands
+        enableSmpPermsCommand,
         enableAfkCommand,
         enableScaleCommand,
         enableDamageToggleCommand,
@@ -43,6 +44,7 @@ public class Config {
         // Commands
         common.comment("Should these commands and features be enabled on the server?");
 
+        enableSmpPermsCommand = common.define("enableSmpPermsCommand", false);
         enableAfkCommand = common.define("enableAfkCommand", true);
         enableScaleCommand = common.define("enableScaleCommand", false);
         enableDamageToggleCommand = common.define("enableDamageToggleCommand", false);

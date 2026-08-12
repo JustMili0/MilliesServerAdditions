@@ -45,6 +45,13 @@ Movement speed and block/entity reach do not get modified.
 
 **For The Server Staff**
 <details>
+<summary>/smpperms [Disabled By Default]</summary>
+
+Only accessible by operators
+
+</details>
+
+<details>
 <summary>/fly [Enabled By Default]</summary>
 
 Allows creative flight in any survival-like gamemode. Can be applied to other players.
@@ -95,9 +102,32 @@ Server moderators, admins, owners are also given tools to manage everyone's abil
 </details>
 
 <details>
+<summary>Obfuscated Invisible Player Names [Enabled By Default]</summary>
+
+Names of players that are invisible will be obfuscated in chat in death messages, whether they kill someone or die themselves.
+
+</details>
+
+<details>
+<summary>Display Armor Stands [Not Configurable]</summary>
+
+Naming an Armor Stand "display" gives it arms automatically, posed for holding items and gear on display.
+
+</details>
+
+
+<details>
 <summary>Right-Click Harvest [Enabled By Default]</summary>
 
 Harvest full-grown crops by just right-clicking them. Bigger harvest area when using hoes. Fortune does apply when harvesting.
+
+</details>
+
+<details>
+<summary>AI-Be-Gone [Enabled By Default]</summary>
+
+Naming Villagers or Tamable mobs "NoAI" will shut off their AI,<br>
+which is pretty useful if you want to reduce lag in trading halls or have a lot of pets that just sit around and do nothing.
 
 </details>
 
@@ -152,28 +182,6 @@ All three speed limits (elytra, on-ground movement, vehicle movement) are remove
 <summary>Pistons Pushing Limits [Vanilla By Default]</summary>
 
 Allows modifying how many blocks a single piston can push.
-
-</details>
-
-<details>
-<summary>AI-Be-Gone [Enabled By Default]</summary>
-
-Naming Villagers or Tamable mobs "NoAI" will shut off their AI,<br>
-which is pretty useful if you want to reduce lag in trading halls or have a lot of pets that just sit around and do nothing.
-
-</details>
-
-<details>
-<summary>Display Armor Stands [Not Configurable]</summary>
-
-Naming an Armor Stand "display" gives it arms automatically, posed for holding items and gear on display.
-
-</details>
-
-<details>
-<summary>Obfuscated Invisible Player Names [Enabled By Default]</summary>
-
-Names of players that are invisible will be obfuscated in chat in death messages, whether they kill someone or die themselves.
 
 </details>
 

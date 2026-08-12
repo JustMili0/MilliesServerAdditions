@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.content.abilities.arguments;
+package net.justmili.servertweaks.content.commands.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;

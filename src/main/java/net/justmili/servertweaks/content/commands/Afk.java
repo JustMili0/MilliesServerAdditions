@@ -1,9 +1,9 @@
 package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.justmili.libs.v1.utils.CommandUtil;
-import net.justmili.libs.v1.utils.FdaUtil;
-import net.justmili.libs.v1.utils.MathUtil;
+import net.justmili.libs.v1.utils.common.CommandUtil;
+import net.justmili.libs.v1.utils.common.FdaUtil;
+import net.justmili.libs.v1.utils.common.MathUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.ChatFormatting;
@@ -55,17 +55,17 @@ public class Afk {
                     // If enabled, despawn
                     if (Config.despawnMonstersPostAfk.get()) despawnNearbyMonsters(player);
 
-                    CommandUtil.sendOk(source, "You are no longer AFK");
+                    CommandUtil.sendOk(source, "You are no longer AFK", false);
 
                 } else {
                     // Set position at which command was executed at
                     // Add to team and set IS_AFK to true
-                    FdaUtil.set(player, PlayerVars.AFK_POS, player.blockPosition());
+                    FdaUtil.set(player, PlayerVars.AFK_POS, player.position());
 
                     scoreboard.addPlayerToTeam(player.getScoreboardName(), team);
                     FdaUtil.set(player, PlayerVars.IS_AFK, true);
 
-                    CommandUtil.sendOk(source, "You are now AFK");
+                    CommandUtil.sendOk(source, "You are now AFK", false);
                 }
 
                 return 1;

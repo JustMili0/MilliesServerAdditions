@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.abilities;
 
 import net.justmili.libs.v1.data.MobData;
-import net.justmili.libs.v1.utils.EntityUtil;
+import net.justmili.libs.v1.utils.common.EntityUtil;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.core.Registries;
 import net.justmili.servertweaks.content.abilities.type.Ability;
@@ -52,7 +52,7 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static net.justmili.libs.v1.utils.AttributeUtil.*;
+import static net.justmili.libs.v1.utils.common.AttributeUtil.*;
 
 public class Abilities {
     public static void init() {
