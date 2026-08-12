@@ -9,10 +9,11 @@
     "DamageSourceMixin",
     "EnchantmentMixin",
     "ItemMixin",
-    "PistonStructureResolverMixin",
-    "ServerGamePacketListenerImplMixin",
     "LivingEntityMixin",
     "MobMixin",
+    "PistonStructureResolverMixin",
+    "ServerGamePacketListenerImplMixin",
+    "accessors.CommandNodeAccessor",
     "accessors.CropBlockAccessor",
     "accessors.FoxAccessor"
   ],

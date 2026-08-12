@@ -3,12 +3,12 @@ package net.justmili.servertweaks.mixin;
 import com.mojang.brigadier.context.CommandContextBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.justmili.libs.v1.utils.common.CommandUtil;
-import net.justmili.libs.v1.utils.common.FdaUtil;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.variables.PlayerVars;
+import net.justmili.servertweaks.content.commands.SmpPerms;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.GameModeArgument;
 import net.minecraft.network.protocol.game.ServerboundChangeGameModePacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.permissions.LevelBasedPermissionSet;
 import net.minecraft.server.permissions.PermissionLevel;
@@ -22,16 +22,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Set;
-
 @Mixin(ServerGamePacketListenerImpl.class)
 public abstract class ServerGamePacketListenerImplMixin {
-    @Unique
-    private static final Set<String> servertweaks$ALLOWED_FOR_LIMITED_OP = Set.of(
-        "stop", "ban", "pardon", "kick", "banish", "discard",
-        "gamerule", "gamemode", "fly", "tp", "tick",
-        "say", "tellraw", "abilities", "scale"
-    );
 
     @ModifyConstant(method = "handleMovePlayer", constant = @Constant(floatValue = 100.0F))
     private float uncapPlayerSpeed(float speed) {
@@ -52,13 +44,11 @@ public abstract class ServerGamePacketListenerImplMixin {
     }
 
     @Inject(method = "handleChangeGameMode", at = @At("HEAD"), cancellable = true)
-    private void servertweaks$restrictDebugGameModeSwitch(ServerboundChangeGameModePacket packet, CallbackInfo ci) {
+    private void restrictDebugGameModeSwitch(ServerboundChangeGameModePacket packet, CallbackInfo ci) {
         var player = ((ServerGamePacketListenerImpl) (Object) this).player;
-        if (FdaUtil.getInt(player, PlayerVars.SMP_PERM_LEVEL) == 3) {
+        if (SmpPerms.isLimitedOperator(player)) {
             var target = packet.mode();
-            if (target != GameType.SURVIVAL && target != GameType.SPECTATOR) {
-                ci.cancel();
-            }
+            if (target != GameType.SURVIVAL && target != GameType.SPECTATOR) ci.cancel();
         }
     }
 
@@ -66,17 +56,15 @@ public abstract class ServerGamePacketListenerImplMixin {
     private void elevateAbilityCommands(String command, CallbackInfo ci) {
         var player = ((ServerGamePacketListenerImpl) (Object) this).player;
         var server = player.level().getServer();
-
         var source = server.createCommandSourceStack().withEntity(player).withLevel(player.level());
         var parseResults = server.getCommands().getDispatcher().parse(command, source);
 
-        if (FdaUtil.getInt(player, PlayerVars.SMP_PERM_LEVEL) == 3) {
+        if (SmpPerms.isLimitedOperator(player)) {
             if (servertweaks$requiresElevatedPermission(parseResults.getContext(), source)) {
                 var rootLiteral = servertweaks$getRootLiteral(parseResults.getContext());
 
-                if (rootLiteral == null || !servertweaks$ALLOWED_FOR_LIMITED_OP.contains(rootLiteral)) {
-                    CommandUtil.sendFailTo(player, "You do not have permission to use this command.");
-                    ci.cancel();
+                if (rootLiteral == null || !SmpPerms.ALLOWED_FOR_LIMITED_OP.contains(rootLiteral)) {
+                    servertweaks$failExec(player, ci);
                     return;
                 }
 
@@ -85,13 +73,11 @@ public abstract class ServerGamePacketListenerImplMixin {
                         var builtContext = parseResults.getContext().build(command);
                         var gameType = GameModeArgument.getGameMode(builtContext, "gamemode");
                         if (gameType != GameType.SURVIVAL && gameType != GameType.SPECTATOR) {
-                            CommandUtil.sendFailTo(player, "You do not have permission to use this command.");
-                            ci.cancel();
+                            servertweaks$failExec(player, ci);
                             return;
                         }
                     } catch (CommandSyntaxException e) {
-                        CommandUtil.sendFailTo(player, "You do not have permission to use this command.");
-                        ci.cancel();
+                        servertweaks$failExec(player, ci);
                         return;
                     }
                 }
@@ -106,11 +92,17 @@ public abstract class ServerGamePacketListenerImplMixin {
     }
 
     @Unique
+    private static void servertweaks$failExec(ServerPlayer player, CallbackInfo ci) {
+        CommandUtil.sendFailTo(player, "You do not have permission to use this command.");
+        ci.cancel();
+    }
+
+    @Unique
     private static boolean servertweaks$requiresElevatedPermission(CommandContextBuilder<CommandSourceStack> context, CommandSourceStack source) {
-        var zeroPermSource = source.withPermission(LevelBasedPermissionSet.forLevel(PermissionLevel.byId(0)));
+        var noPermSource = source.withPermission(LevelBasedPermissionSet.forLevel(PermissionLevel.byId(0)));
 
         for (var parsedNode : context.getNodes()) {
-            if (!parsedNode.getNode().canUse(zeroPermSource)) return true;
+            if (!parsedNode.getNode().canUse(noPermSource)) return true;
         }
 
         var child = context.getChild();
