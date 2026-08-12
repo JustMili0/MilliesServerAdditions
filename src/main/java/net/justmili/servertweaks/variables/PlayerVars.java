@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.config.Config;
-import net.minecraft.core.BlockPos;
+import net.justmili.servertweaks.content.commands.arguments.SmpPermsArgumentType;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 
@@ -22,8 +22,10 @@ public final class PlayerVars {
         SCALE_LOCKED = createPersistent(id("scale_locked"), false, Codec.BOOL), // Scale-Command related
         HAS_PICKED_PRESET = createPersistent(id("picked_ability_preset"), false, Codec.BOOL); // Player Abilities related
 
+    public static final AttachmentType<SmpPermsArgumentType.PermissionLevel>
+        SMP_PERM_LEVEL = createPersistent(id("smp_permission_level"), SmpPermsArgumentType.PermissionLevel.DEFAULT, SmpPermsArgumentType.PermissionLevel.CODEC);
+
     public static final AttachmentType<Integer>
-        SMP_PERM_LEVEL = createPersistent(id("smp_permission_level"), 0, Codec.INT),
         AFK_COOLDOWN = createPersistent(id("afk_cooldown"), Config.afkCommandCooldown.get(), Codec.INT),
         HURT_TICK = create(id("hurt_tick"), -1),
         MILK_TICK = create(id("milk_tick"), -1);

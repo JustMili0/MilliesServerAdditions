@@ -3,9 +3,8 @@ package net.justmili.servertweaks.mixin;
 import com.mojang.brigadier.context.CommandContextBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.justmili.libs.v1.utils.common.CommandUtil;
-import net.justmili.libs.v1.utils.common.FdaUtil;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.variables.PlayerVars;
+import net.justmili.servertweaks.content.commands.SmpPerms;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.GameModeArgument;
 import net.minecraft.network.protocol.game.ServerboundChangeGameModePacket;
@@ -22,17 +21,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Set;
-
 @Mixin(ServerGamePacketListenerImpl.class)
 public abstract class ServerGamePacketListenerImplMixin {
-    @Unique
-    private static final Set<String> servertweaks$ALLOWED_FOR_LIMITED_OP = Set.of(
-        "stop", "ban", "pardon", "kick", "banish", "discard",
-        "gamerule", "gamemode", "fly", "tp", "tick",
-        "say", "tellraw", "abilities", "scale"
-    );
-
     @ModifyConstant(method = "handleMovePlayer", constant = @Constant(floatValue = 100.0F))
     private float uncapPlayerSpeed(float speed) {
         if (Config.limitPlayerSpeed.get()) return speed;
@@ -52,13 +42,11 @@ public abstract class ServerGamePacketListenerImplMixin {
     }
 
     @Inject(method = "handleChangeGameMode", at = @At("HEAD"), cancellable = true)
-    private void servertweaks$restrictDebugGameModeSwitch(ServerboundChangeGameModePacket packet, CallbackInfo ci) {
+    private void restrictDebugGameModeSwitch(ServerboundChangeGameModePacket packet, CallbackInfo ci) {
         var player = ((ServerGamePacketListenerImpl) (Object) this).player;
-        if (FdaUtil.getInt(player, PlayerVars.SMP_PERM_LEVEL) == 3) {
+        if (player.permissions().hasPermission(SmpPerms.LIMITED_OPERATOR)) {
             var target = packet.mode();
-            if (target != GameType.SURVIVAL && target != GameType.SPECTATOR) {
-                ci.cancel();
-            }
+            if (target != GameType.SURVIVAL && target != GameType.SPECTATOR) ci.cancel();
         }
     }
 
@@ -67,14 +55,14 @@ public abstract class ServerGamePacketListenerImplMixin {
         var player = ((ServerGamePacketListenerImpl) (Object) this).player;
         var server = player.level().getServer();
 
-        var source = server.createCommandSourceStack().withEntity(player).withLevel(player.level());
+        var source = player.createCommandSourceStack();
         var parseResults = server.getCommands().getDispatcher().parse(command, source);
 
-        if (FdaUtil.getInt(player, PlayerVars.SMP_PERM_LEVEL) == 3) {
+        if (source.permissions().hasPermission(SmpPerms.LIMITED_OPERATOR)) {
             if (servertweaks$requiresElevatedPermission(parseResults.getContext(), source)) {
                 var rootLiteral = servertweaks$getRootLiteral(parseResults.getContext());
 
-                if (rootLiteral == null || !servertweaks$ALLOWED_FOR_LIMITED_OP.contains(rootLiteral)) {
+                if (rootLiteral == null) {
                     CommandUtil.sendFailTo(player, "You do not have permission to use this command.");
                     ci.cancel();
                     return;

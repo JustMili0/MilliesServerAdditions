@@ -3,6 +3,7 @@ package net.justmili.servertweaks.content.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import net.justmili.libs.v1.utils.common.CommandUtil;
 import net.justmili.libs.v1.utils.common.FdaUtil;
+import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.commands.arguments.SmpPermsArgumentType;
 import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.commands.CommandBuildContext;
@@ -10,14 +11,22 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.protocol.game.ClientboundEntityEventPacket;
 import net.minecraft.server.permissions.LevelBasedPermissionSet;
-import net.minecraft.server.permissions.PermissionLevel;
+import net.minecraft.server.permissions.Permission;
+import net.minecraft.world.entity.EntityEvent;
 
-import java.util.Optional;
+import java.util.Set;
 
 public class SmpPerms {
+    public static final Set<String> ALLOWED_FOR_LIMITED_OP = Set.of(
+        "stop", "ban", "pardon", "kick", "banish", "discard",
+        "gamerule", "gamemode", "fly", "tp", "tick",
+        "say", "tellraw", "abilities", "scale"
+    );
+
+    public static final Permission LIMITED_OPERATOR = new Permission.Atom(ServerTweaks.asId("limited_operator"));
+
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
         dispatcher.register(Commands.literal("smpperms").requires(src -> CommandUtil.hasPerms(src, 4))
             .then(Commands.argument("player", EntityArgument.player())
@@ -29,36 +38,34 @@ public class SmpPerms {
                         var player = EntityArgument.getPlayer(context, "player");
                         var level = SmpPermsArgumentType.getPermissionLevel(context, "permission_level");
 
-                        switch (level) {
-                            case DEFAULT -> {
-                                server.getPlayerList().deop(player.nameAndId());
-                                FdaUtil.set(player, PlayerVars.SMP_PERM_LEVEL, 0);
-                            }
-                            case MODERATOR -> setPermissions(source, player, server, 1, 2);
-                            case ADMINISTRATOR -> setPermissions(source, player, server, 2, 3);
-                            case LIMITED_OPERATOR -> setPermissions(source, player, server, 3, 4);
-                            case OPERATOR -> setPermissions(source, player, server, 4, 4);
-                            default -> throw new IllegalStateException("Unknown SMP permission level");
+                        FdaUtil.set(player, PlayerVars.SMP_PERM_LEVEL, level);
+                        CommandUtil.sendOk(source,
+                            Component.literal(player.getName().getString()
+                                + "'s SMP permission level has been set to "
+                                + player.getAttached(PlayerVars.SMP_PERM_LEVEL)),
+                            false
+                        );
+
+                        // now update the client about their new permissions
+                        var highest = server.getProfilePermissions(player.nameAndId());
+                        if (level == SmpPermsArgumentType.PermissionLevel.LIMITED_OPERATOR) {
+                            player.connection.send(new ClientboundEntityEventPacket(player, EntityEvent.PERMISSION_LEVEL_GAMEMASTERS));
+                        } else {
+                            if (level.getPermissionSet() instanceof LevelBasedPermissionSet other && other.level().isEqualOrHigherThan(highest.level())) highest = other;
+                            player.connection.send(new ClientboundEntityEventPacket(player, switch (highest.level()) {
+                                case ALL -> EntityEvent.PERMISSION_LEVEL_ALL;
+                                case MODERATORS -> EntityEvent.PERMISSION_LEVEL_MODERATORS;
+                                case GAMEMASTERS -> EntityEvent.PERMISSION_LEVEL_GAMEMASTERS;
+                                case ADMINS -> EntityEvent.PERMISSION_LEVEL_ADMINS;
+                                case OWNERS -> EntityEvent.PERMISSION_LEVEL_OWNERS;
+                            }));
                         }
+                        server.getCommands().sendCommands(player);
 
                         return 1;
                     })
                 )
             )
-        );
-    }
-
-    private static void setPermissions(CommandSourceStack source, ServerPlayer player, MinecraftServer server, int smpPermLevel, int permLevel) {
-        server.getPlayerList().op(
-            player.nameAndId(),
-            Optional.of(LevelBasedPermissionSet.forLevel(PermissionLevel.byId(permLevel))),
-            Optional.of(false));
-        FdaUtil.set(player, PlayerVars.SMP_PERM_LEVEL, smpPermLevel);
-        CommandUtil.sendOk(source,
-            Component.literal(player.getName().getString()
-                + "'s SMP permission level has been set to "
-                + player.getAttached(PlayerVars.SMP_PERM_LEVEL)),
-            false
         );
     }
 }
