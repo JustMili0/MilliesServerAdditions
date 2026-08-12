@@ -47,7 +47,12 @@ Movement speed and block/entity reach do not get modified.
 <details>
 <summary>/smpperms [Disabled By Default]</summary>
 
-Only accessible by operators
+Only accessible by operators.<br>
+Lets you set a player's permission level without having to just yeet full operator on them.<br>
+- `moderator` - Can use all commands that a command block can
+- `administrator` - Can use all commands (except `/smpperms`), can not stop the server
+- `limited_operator` (owner but fair) - Operator permission level but limited to only a few commands essential (or so) for moderation
+- `operator` (owner) - Regular operator permissions
 
 </details>
 

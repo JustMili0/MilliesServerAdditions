@@ -149,7 +149,7 @@ Feedback is appreciated ^^
 - `/afk` now uses Vec3 rather than individual x, y and z coordinates
 - Renamed `/fillExtras` to `/fillextras`
 - `/fillextras` is now a configurable command
-- [TODO] Added `/smpperms <player> <permission_level>`, permission levels:
+- Added `/smpperms <player> <permission_level>`, permission levels:
   - `moderator` - Can use all commands that a command block can
   - `administrator` - Can use all commands (except `/smpperms`), can not stop the server
   - `limited_operator` (owner but fair) - Operator permission level but limited to only a few commands essential (or so) for moderation

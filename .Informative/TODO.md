@@ -1,2 +1,2 @@
-- Possibly improve upon how `/smpperms` command works
-- Give a proper description to `/smpperms` in README
+- Add a thing to update command on player logon in case anything changes through just files and not via `smpperms` command
+- Finish fixing abilities
