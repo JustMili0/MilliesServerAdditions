@@ -2,7 +2,6 @@ package net.justmili.servertweaks.content.commands.arguments;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.commands.CommandSourceStack;
@@ -18,7 +17,7 @@ public class SmpPermsArgumentType {
         return StringArgumentType.word();
     }
 
-    public static PermissionLevel getPermissionLevel(CommandContext<CommandSourceStack> context, String argName) throws CommandSyntaxException {
+    public static PermissionLevel getPermissionLevel(CommandContext<CommandSourceStack> context, String argName) {
         var id = StringArgumentType.getString(context, argName);
         return PermissionLevel.byId(id);
     }
@@ -65,32 +64,5 @@ public class SmpPermsArgumentType {
         public static PermissionLevel byId(String id) {
             return CODEC.byName(id, DEFAULT);
         }
-    }
-
-    public static String permissionNameByLevel(int level) {
-        for (var value : PermissionLevel.values()) {
-            if (value.getPermissionLevel() == level) return value.getDisplayName();
-        }
-        return PermissionLevel.DEFAULT.getDisplayName();
-    }
-
-    public static int defaultPerms() {
-        return PermissionLevel.DEFAULT.getPermissionLevel();
-    }
-
-    public static int moderatorPerms() {
-        return PermissionLevel.MODERATOR.getPermissionLevel();
-    }
-
-    public static int adminPerms() {
-        return PermissionLevel.ADMINISTRATOR.getPermissionLevel();
-    }
-
-    public static int limitedOpPerms() {
-        return PermissionLevel.LIMITED_OPERATOR.getPermissionLevel();
-    }
-
-    public static int operatorPerms() {
-        return PermissionLevel.OPERATOR.getPermissionLevel();
     }
 }

@@ -7,6 +7,7 @@ import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.commands.*;
 import net.justmili.servertweaks.mixin.accessors.CommandNodeAccessor;
+import net.justmili.servertweaks.util.SmpPermsUtil;
 import net.minecraft.commands.CommandSourceStack;
 
 public class CommandRegistry {
@@ -42,7 +43,7 @@ public class CommandRegistry {
         ((CommandNodeAccessor<CommandSourceStack>) node).setRequirement(source -> {
             if (!original.test(source)) return false;
             var player = source.getPlayer();
-            return player == null || !SmpPerms.isLimitedOperator(player);
+            return player == null || !SmpPermsUtil.isLimitedOperator(player);
         });
 
         for (CommandNode<CommandSourceStack> child : node.getChildren()) patchRestrictRecursive(child);

@@ -4,9 +4,11 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.AbilityEvents;
 import net.justmili.servertweaks.content.mechanics.features.*;
+import net.justmili.servertweaks.content.mechanics.logic.UpdateSmpPermsOnLogon;
 import net.justmili.servertweaks.content.mechanics.logic.WhileAfk;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -16,6 +18,7 @@ import net.minecraft.world.phys.BlockHitResult;
 
 public class EventRegistry {
     public static void register() {
+        ServerPlayConnectionEvents.JOIN.register(UpdateSmpPermsOnLogon::onLogon);
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(Banishment::onEntityHurt);
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(WhileAfk::onEntityHurt);
         ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {

@@ -5,6 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.justmili.libs.v1.utils.common.CommandUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.commands.SmpPerms;
+import net.justmili.servertweaks.util.SmpPermsUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.GameModeArgument;
 import net.minecraft.network.protocol.game.ServerboundChangeGameModePacket;
@@ -46,7 +47,7 @@ public abstract class ServerGamePacketListenerImplMixin {
     @Inject(method = "handleChangeGameMode", at = @At("HEAD"), cancellable = true)
     private void restrictDebugGameModeSwitch(ServerboundChangeGameModePacket packet, CallbackInfo ci) {
         var player = ((ServerGamePacketListenerImpl) (Object) this).player;
-        if (SmpPerms.isLimitedOperator(player)) {
+        if (SmpPermsUtil.isLimitedOperator(player)) {
             var target = packet.mode();
             if (target != GameType.SURVIVAL && target != GameType.SPECTATOR) ci.cancel();
         }
@@ -59,7 +60,7 @@ public abstract class ServerGamePacketListenerImplMixin {
         var source = server.createCommandSourceStack().withEntity(player).withLevel(player.level());
         var parseResults = server.getCommands().getDispatcher().parse(command, source);
 
-        if (SmpPerms.isLimitedOperator(player)) {
+        if (SmpPermsUtil.isLimitedOperator(player)) {
             if (servertweaks$requiresElevatedPermission(parseResults.getContext(), source)) {
                 var rootLiteral = servertweaks$getRootLiteral(parseResults.getContext());
 
