@@ -17,27 +17,30 @@ public class UpdateSmpPermsOnLogon {
         var player = listener.getPlayer();
 
         if (!FdaUtil.has(player, PlayerVars.SMP_PERM_LEVEL)) {
-            applyPermissions(server, player, SmpPermsUtil.defaultPerms());
+            applyPermissions(player, SmpPermsUtil.defaultPerms());
             return;
         }
 
         int smpPermLevel = FdaUtil.getInt(player, PlayerVars.SMP_PERM_LEVEL);
-        int permLevel = player.permissions() instanceof LevelBasedPermissionSet permSet ? permSet.level().id() : -1;
-        if (smpPermLevel != permLevel) applyPermissions(server, player, smpPermLevel);
+        int expectedVanilla = smpToVanilla(smpPermLevel);
+        int actualVanilla = player.permissions() instanceof LevelBasedPermissionSet permSet ? permSet.level().id() : -1;
+        if (expectedVanilla != actualVanilla) applyPermissions(player, smpPermLevel);
     }
 
-    private static void applyPermissions(MinecraftServer server, ServerPlayer player, int smpPermLevel) {
-        int permLevel = switch (smpPermLevel) {
+    private static void applyPermissions(ServerPlayer player, int smpPermLevel) {
+        if (smpPermLevel == SmpPermsUtil.defaultPerms()) {
+            SmpPermsUtil.deop(player);
+        } else {
+            SmpPermsUtil.op(player, smpPermLevel, smpToVanilla(smpPermLevel));
+        }
+    }
+
+    private static int smpToVanilla(int smpPermLevel) {
+        return switch (smpPermLevel) {
             case 1 -> 2; // Moderator
             case 2 -> 3; // Administrator
             case 3, 4 -> 4; // Limited Operator, Operator
             default -> 0; // Default
         };
-
-        if (smpPermLevel == SmpPermsUtil.defaultPerms()) {
-            SmpPermsUtil.deop(player);
-        } else {
-            SmpPermsUtil.op(player, smpPermLevel, permLevel);
-        }
     }
 }
