@@ -9,9 +9,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.permissions.LevelBasedPermissionSet;
-import net.minecraft.server.permissions.PermissionLevel;
-
-import java.util.Optional;
 
 public class UpdateSmpPermsOnLogon {
 
@@ -30,10 +27,6 @@ public class UpdateSmpPermsOnLogon {
     }
 
     private static void applyPermissions(MinecraftServer server, ServerPlayer player, int smpPermLevel) {
-        FdaUtil.set(player, PlayerVars.SMP_PERM_LEVEL, smpPermLevel);
-        var playerList = server.getPlayerList();
-        var nameAndId = player.nameAndId();
-
         int permLevel = switch (smpPermLevel) {
             case 1 -> 2; // Moderator
             case 2 -> 3; // Administrator
@@ -42,11 +35,9 @@ public class UpdateSmpPermsOnLogon {
         };
 
         if (smpPermLevel == SmpPermsUtil.defaultPerms()) {
-            playerList.deop(nameAndId);
+            SmpPermsUtil.deop(player);
         } else {
-            playerList.op(nameAndId, Optional.of(LevelBasedPermissionSet.forLevel(PermissionLevel.byId(permLevel))), Optional.of(false));
+            SmpPermsUtil.op(player, smpPermLevel, permLevel);
         }
-
-        server.getCommands().sendCommands(player);
     }
 }

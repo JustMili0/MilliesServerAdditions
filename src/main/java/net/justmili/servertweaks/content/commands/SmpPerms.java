@@ -2,20 +2,15 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.justmili.libs.v1.utils.common.CommandUtil;
-import net.justmili.libs.v1.utils.common.FdaUtil;
 import net.justmili.servertweaks.content.commands.arguments.SmpPermsArgumentType;
 import net.justmili.servertweaks.util.SmpPermsUtil;
-import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.permissions.LevelBasedPermissionSet;
-import net.minecraft.server.permissions.PermissionLevel;
 
-import java.util.Optional;
 import java.util.Set;
 
 public class SmpPerms {
@@ -30,16 +25,11 @@ public class SmpPerms {
                     .suggests(SmpPermsArgumentType::suggest)
                     .executes(context -> {
                         var source = context.getSource();
-                        var server = source.getServer();
                         var player = EntityArgument.getPlayer(context, "player");
                         var permissionLevel = SmpPermsArgumentType.getPermissionLevel(context, "permission_level");
 
                         switch (permissionLevel) {
-                            case DEFAULT -> {
-                                server.getPlayerList().deop(player.nameAndId());
-                                FdaUtil.set(player, PlayerVars.SMP_PERM_LEVEL, SmpPermsUtil.defaultPerms());
-                                server.getCommands().sendCommands(player);
-                            }
+                            case DEFAULT -> SmpPermsUtil.deop(player);
                             case MODERATOR -> setPermissions(source, player, SmpPermsUtil.moderatorPerms(), 2);
                             case ADMINISTRATOR -> setPermissions(source, player, SmpPermsUtil.adminPerms(), 3);
                             case LIMITED_OPERATOR -> setPermissions(source, player, SmpPermsUtil.limitedOpPerms(), 4);
@@ -55,10 +45,7 @@ public class SmpPerms {
     }
 
     public static void setPermissions(CommandSourceStack source, ServerPlayer player, int smpPermLevel, int permLevel) {
-        var server = source.getServer();
-        FdaUtil.set(player, PlayerVars.SMP_PERM_LEVEL, smpPermLevel);
-        server.getPlayerList().op(player.nameAndId(), Optional.of(LevelBasedPermissionSet.forLevel(PermissionLevel.byId(permLevel))), Optional.of(false));
-        server.getCommands().sendCommands(player);
+        SmpPermsUtil.op(player, smpPermLevel, permLevel);
 
         var ownOrOthers = source.getPlayer() == player ? "own" : player.getName().getString() + "'s";
         var message = "Set " + ownOrOthers + " SMP permission level to " + SmpPermsUtil.permissionNameByLevel(smpPermLevel);
