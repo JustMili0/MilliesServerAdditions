@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class SmpPerms {
     public static final Set<String> ALLOWED_FOR_LIMITED_OP = Set.of(
-        "stop", "ban", "pardon", "kick", "banish", "discard", "gamemode", "fly", "tp", "say", "tellraw", "abilities", "scale"
+        "stop", "ban", "pardon", "kick", "banish", "discard", "gamemode", "fly", "tp", "say", "tellraw", "abilities", "scale", "flan"
     );
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
