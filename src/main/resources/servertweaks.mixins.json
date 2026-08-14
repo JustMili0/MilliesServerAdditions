@@ -7,21 +7,21 @@
     "minVersion": "0.5.0"
   },
   "mixins": [
-    "AnvilMenuMixin",
-    "CombatTrackerMixin",
-    "DamageSourceMixin",
-    "EnchantmentMixin",
+    "enchanting.AnvilMenuMixin",
+    "combat.CombatTrackerMixin",
+    "combat.DamageSourceMixin",
+    "enchanting.EnchantmentMixin",
     "ItemMixin",
-    "LivingEntityMixin",
-    "MobMixin",
+    "entity.LivingEntityMixin",
+    "entity.MobMixin",
     "PistonStructureResolverMixin",
     "ServerGamePacketListenerImplMixin",
     "accessors.CommandNodeAccessor",
     "accessors.CropBlockAccessor",
     "accessors.FoxAccessor",
-    "animal.HorsesMixin",
-    "animal.ParrotMixin",
-    "animal.PetsMixin"
+    "entity.animal.HorsesMixin",
+    "entity.animal.ParrotMixin",
+    "entity.animal.PetsMixin"
   ],
   "client": [
   ],

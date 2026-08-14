@@ -18,8 +18,6 @@ public abstract class ItemMixin {
         // Ironically, out of all the events available in *both* Fabric and NeoForge,
         // none of them handle this specific use case.
         InteractionResult result = AbilityEvents.handleDietItemCall(player, level, hand);
-        if (result != InteractionResult.PASS) {
-            cir.setReturnValue(result);
-        }
+        if (result != InteractionResult.PASS) cir.setReturnValue(result);
     }
 }

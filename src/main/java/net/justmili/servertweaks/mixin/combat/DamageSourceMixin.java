@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.mixin;
+package net.justmili.servertweaks.mixin.combat;
 
 import net.justmili.servertweaks.util.Util;
 import net.minecraft.network.chat.Component;

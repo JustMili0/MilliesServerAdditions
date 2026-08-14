@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.mixin;
+package net.justmili.servertweaks.mixin.entity;
 
 import net.justmili.servertweaks.config.Config;
 import net.minecraft.world.entity.Mob;
