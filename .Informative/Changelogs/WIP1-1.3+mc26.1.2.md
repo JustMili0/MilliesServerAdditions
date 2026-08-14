@@ -23,6 +23,7 @@
   - Larger affect area when using a hoe
 - You can now stop the AI of tamable animals and villagers by naming them `NoAI`'
 - `/smpperms <player> <permission_level>` command, allowing to limit a server staff's permissions
+  - `default` - Regular player permissions
   - `moderator` - Can use all commands that a command block can
   - `administrator` - Can use all commands (except `/smpperms`), can not stop the server
   - `limited_operator` (owner but fair) - Operator permission level but limited to only a few commands essential (or so) for moderation
