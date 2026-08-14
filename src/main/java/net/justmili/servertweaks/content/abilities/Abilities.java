@@ -120,18 +120,18 @@ public class Abilities {
         AQUA_GRACE = register(new AquaGrace());
         BREATHES_UNDERWATER = register(new BreathesUnderwater());
         CANT_BREATHE_AIR = register(new CantBreatheAir());
-        CANT_SWIM = register(new CantSwim());                           // DOESN'T WORK, No code implemented yet
+        CANT_SWIM = register(new Ability(id("cant_swim"))); // TODO: Implement, should only work in survival, only in water
         HYDROPHOBIC = register(new Hydrophobic());
-        HUNTED_BY_FOX = register(new HuntedByFox());                    // KINDA WORKS
+        HUNTED_BY_FOX = register(new HuntedByFox());
         HUNTED_BY_WOLF = register(new HuntedByWolf());
         SCARES_CREEPERS = register(new ScaresCreepers());
         SCARES_PHANTOMS = register(new ScaresPhantoms());
-        CHILD_OF_NATURE = register(new ChildOfNature());                // KINDA WORKS, no code for taming tho
+        CHILD_OF_NATURE = register(new ChildOfNature());
         WEAK_TO_DAMAGE = register(new Ability(id("weak_to_damage")));
         NIGHT_VISION = register(new NightVision());
         BURNS_IN_DAYLIGHT = register(new BurnsInDaylight());
         IS_MONSTER = register(new IsMonster());
-        CLIMBS_WALLS = register(new Ability(id("climbs_walls")));     // DOESN'T WORK, No code implemented yet
+        CLIMBS_WALLS = register(new Ability(id("climbs_walls"))); // TODO: Implement, should only work in survival, shouldn't work in water
         PEARLING = register(new Ability(id("pearling")));
         PREDATORY = register(new Predatory());
         BOVID = register(new Ability(id("bovid")));
@@ -151,7 +151,7 @@ public class Abilities {
         return ability;
     }
 
-    /// Define ticking abilities
+    // Define ticking abilities
     static class FireImmune extends TickingAbility {
         FireImmune() {
             super(id("fire_immune"));
@@ -337,7 +337,7 @@ public class Abilities {
             EntityUtil.applyEffect(player, MobEffects.CONDUIT_POWER, 100, 0);
 
             if (level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT).get(Enchantments.DEPTH_STRIDER)
-                .map(enchant -> EnchantmentHelper.getItemEnchantmentLevel(enchant, player.getItemBySlot(EquipmentSlot.HEAD)) > 1)
+                .map(enchant -> EnchantmentHelper.getItemEnchantmentLevel(enchant, player.getItemBySlot(EquipmentSlot.FEET)) > 1)
                 .orElse(false)) return; // Return before granting Dolphin's Grace if player has depth strider to prevent OP swimming speeds
 
             EntityUtil.applyEffect(player, MobEffects.DOLPHINS_GRACE, 100, 0);
@@ -381,21 +381,6 @@ public class Abilities {
         }
     }
 
-    static class CantSwim extends TickingAbility {
-        CantSwim() {
-            super(id("cant_swim"));
-        }
-
-        @Override
-        public void tick(ServerPlayer player, ServerLevel level) {
-            if (!player.gameMode.isSurvival()) return;
-            if (!player.isInWater()) return;
-
-            var delta = player.getDeltaMovement();
-            if (delta.y > 0) player.setDeltaMovement(delta.x, -1, delta.z);
-        }
-    }
-
     static class Hydrophobic extends TickingAbility {
         Hydrophobic() {
             super(id("hydrophobic"));
@@ -425,6 +410,7 @@ public class Abilities {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
+            // TODO: Possibly turn into a goal mixin
             for (Fox fox : EntityUtil.getNearby(player, Fox.class, 12.0)) {
                 var accessor = (FoxAccessor) fox;
                 if (accessor.invokeTrusts(player)) continue;
