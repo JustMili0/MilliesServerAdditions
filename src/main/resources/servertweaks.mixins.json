@@ -19,9 +19,9 @@
     "accessors.CommandNodeAccessor",
     "accessors.CropBlockAccessor",
     "accessors.FoxAccessor",
-    "mobs.HorsesMixin",
-    "mobs.ParrotMixin",
-    "mobs.PetsMixin"
+    "animal.HorsesMixin",
+    "animal.ParrotMixin",
+    "animal.PetsMixin"
   ],
   "client": [
   ],

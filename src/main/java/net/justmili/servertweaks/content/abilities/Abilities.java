@@ -426,8 +426,11 @@ public class Abilities {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
             for (Fox fox : EntityUtil.getNearby(player, Fox.class, 12.0)) {
-                if (((FoxAccessor) fox).invokeTrusts(player)) continue;
+                var accessor = (FoxAccessor) fox;
+                if (accessor.invokeTrusts(player)) continue;
+
                 if (fox.getTarget() == null) fox.setTarget(player);
+                if (fox.getTarget() == player && !accessor.invokeIsDefending()) accessor.invokeSetDefending(true);
             }
         }
     }
@@ -500,7 +503,6 @@ public class Abilities {
             for (Wolf wolf : EntityUtil.getNearby(player, Wolf.class, 24.0)) {
                 if (!wolf.isTame() && wolf.getTarget() == player) wolf.setTarget(null);
             }
-            // TODO: Code 100% taming success rate
         }
     }
 

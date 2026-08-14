@@ -12,4 +12,10 @@ public interface FoxAccessor {
 
     @Invoker("addTrustedEntity")
     void invokeAddTrustedEntity(LivingEntity entity);
+
+    @Invoker("isDefending")
+    boolean invokeIsDefending();
+
+    @Invoker("setDefending")
+    void invokeSetDefending(boolean defending);
 }
