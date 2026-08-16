@@ -10,7 +10,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.world.entity.Relative;
 
 public class Banish {
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext, Commands.CommandSelection environment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
         dispatcher.register(
             Commands.literal("banish")
                 .requires(src -> CommandUtil.hasPerms(src, 1))

@@ -15,7 +15,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import static net.justmili.servertweaks.util.ScalerUtil.applyScaleToPlayer;
 
 public class Scale {
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext, Commands.CommandSelection environment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
         dispatcher.register(
             Commands.literal("scale")
                 .then(Commands.argument("height_cm", FloatArgumentType.floatArg(Config.scaleMinHeight.get(), Config.scaleMaxHeight.get()))

@@ -4,7 +4,6 @@ import com.mojang.brigadier.context.CommandContextBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.justmili.libs.v1.utils.common.CommandUtil;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.commands.SmpPerms;
 import net.justmili.servertweaks.util.SmpPermsUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.GameModeArgument;
@@ -64,7 +63,7 @@ public abstract class ServerGamePacketListenerImplMixin {
             if (servertweaks$requiresElevatedPermission(parseResults.getContext(), source)) {
                 var rootLiteral = servertweaks$getRootLiteral(parseResults.getContext());
 
-                if (rootLiteral == null || !SmpPerms.ALLOWED_FOR_LIMITED_OP.contains(rootLiteral)) {
+                if (rootLiteral == null || !SmpPermsUtil.ALLOWED_FOR_LIMITED_OP.contains(rootLiteral)) {
                     servertweaks$failExec(player, ci);
                     return;
                 }

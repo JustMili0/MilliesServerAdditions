@@ -11,14 +11,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
-import java.util.Set;
-
 public class SmpPerms {
-    public static final Set<String> ALLOWED_FOR_LIMITED_OP = Set.of(
-        "stop", "ban", "ban-ip", "pardon", "pardon-ip", "kick", "banish", "discard", "gamemode", "fly", "tp", "teleport", "trigger", "say", "tellraw",
-        "abilities", "scale", "flan", "waypoint", "function", "whitelist", "banlist", "whynoaxiom", "reload", "datapack", "graves", "servercore", "servux",
-        "spectate", "sit", "vanish"
-    );
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
         dispatcher.register(Commands.literal("smpperms").requires(src -> CommandUtil.hasPerms(src, 4))

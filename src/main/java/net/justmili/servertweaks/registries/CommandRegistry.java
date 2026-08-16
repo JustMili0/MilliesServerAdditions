@@ -38,11 +38,10 @@ public class CommandRegistry {
             Set<CommandNode<CommandSourceStack>> exempt = Collections.newSetFromMap(new IdentityHashMap<>());
 
             for (CommandNode<CommandSourceStack> child : root.getChildren()) {
-                if (SmpPerms.ALLOWED_FOR_LIMITED_OP.contains(child.getName())) collectRedirectTargets(child, exempt);
+                if (SmpPermsUtil.ALLOWED_FOR_LIMITED_OP.contains(child.getName())) collectRedirectTargets(child, exempt);
             }
-
             for (CommandNode<CommandSourceStack> child : root.getChildren()) {
-                if (!SmpPerms.ALLOWED_FOR_LIMITED_OP.contains(child.getName())) patchRestrictRecursive(child, exempt);
+                if (!SmpPermsUtil.ALLOWED_FOR_LIMITED_OP.contains(child.getName())) patchRestrictRecursive(child, exempt);
             }
         });
     }

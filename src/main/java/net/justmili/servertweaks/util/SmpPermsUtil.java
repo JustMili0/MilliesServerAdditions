@@ -8,8 +8,15 @@ import net.minecraft.server.permissions.LevelBasedPermissionSet;
 import net.minecraft.server.permissions.PermissionLevel;
 
 import java.util.Optional;
+import java.util.Set;
 
 public class SmpPermsUtil {
+    public static final Set<String> ALLOWED_FOR_LIMITED_OP = Set.of(
+        "stop", "ban", "ban-ip", "pardon", "pardon-ip", "kick", "banish", "discard", "gamemode", "fly", "tp", "teleport", "trigger", "say", "tellraw",
+        "abilities", "scale", "flan", "waypoint", "function", "whitelist", "banlist", "whynoaxiom", "reload", "datapack", "graves", "servercore", "servux",
+        "spectate", "sit", "vanish"
+    );
+
     public static boolean isLimitedOperator(ServerPlayer player) {
         return FdaUtil.getInt(player, PlayerVars.SMP_PERM_LEVEL) == SmpPermsUtil.limitedOpPerms();
     }

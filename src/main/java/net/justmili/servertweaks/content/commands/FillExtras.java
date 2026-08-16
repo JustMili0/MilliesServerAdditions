@@ -19,14 +19,14 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.Block;
 
 public class FillExtras {
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext, Commands.CommandSelection environment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
         dispatcher.register(Commands.literal("fillextras")
             .requires(src -> CommandUtil.hasPerms(src, 1))
             .then(Commands.argument("from", BlockPosArgument.blockPos())
                 .then(Commands.argument("to", BlockPosArgument.blockPos())
-                    .then(Commands.argument("block", BlockStateArgument.block(commandBuildContext))
+                    .then(Commands.argument("block", BlockStateArgument.block(buildContext))
                         .then(Commands.literal("destroyOnly")
-                            .then(Commands.argument("target", BlockStateArgument.block(commandBuildContext))
+                            .then(Commands.argument("target", BlockStateArgument.block(buildContext))
                                 .executes(context -> {
                                     var source = context.getSource();
                                     var level = source.getLevel();
@@ -60,7 +60,7 @@ public class FillExtras {
                             )
                         )
                         .then(Commands.literal("replaceOnly")
-                            .then(Commands.argument("target", BlockStateArgument.block(commandBuildContext))
+                            .then(Commands.argument("target", BlockStateArgument.block(buildContext))
                                 .executes(context -> {
                                     var source = context.getSource();
                                     var level = source.getLevel();
@@ -125,7 +125,7 @@ public class FillExtras {
                             })
                         )
                         .then(Commands.literal("silkDestroyOnly")
-                            .then(Commands.argument("target", BlockStateArgument.block(commandBuildContext))
+                            .then(Commands.argument("target", BlockStateArgument.block(buildContext))
                                 .executes(context -> {
                                     var source = context.getSource();
                                     var level = source.getLevel();
@@ -196,7 +196,7 @@ public class FillExtras {
                         )
                         .then(Commands.literal("fortuneDestroyOnly")
                             .then(Commands.argument("fortuneLevel", IntegerArgumentType.integer(1, 3))
-                                .then(Commands.argument("target", BlockStateArgument.block(commandBuildContext))
+                                .then(Commands.argument("target", BlockStateArgument.block(buildContext))
                                     .executes(context -> {
                                         var source = context.getSource();
                                         var level = source.getLevel();
