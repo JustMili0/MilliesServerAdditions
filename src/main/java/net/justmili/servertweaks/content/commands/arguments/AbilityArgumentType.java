@@ -27,6 +27,6 @@ public class AbilityArgumentType {
     }
 
     public static CompletableFuture<Suggestions> suggest(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggest(Registries.getAsString(Registries.ABILITIES), builder);
+        return SharedSuggestionProvider.suggestResource(Registries.ABILITIES.keySet(), builder);
     }
 }

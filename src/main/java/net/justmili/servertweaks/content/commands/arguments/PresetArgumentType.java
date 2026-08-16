@@ -27,6 +27,6 @@ public class PresetArgumentType {
     }
 
     public static CompletableFuture<Suggestions> suggest(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggest(Registries.getAsString(Registries.PRESETS), builder);
+        return SharedSuggestionProvider.suggestResource(Registries.PRESETS.keySet(), builder);
     }
 }

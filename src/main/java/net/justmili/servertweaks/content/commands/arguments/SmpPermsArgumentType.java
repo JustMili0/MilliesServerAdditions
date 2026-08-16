@@ -23,10 +23,7 @@ public class SmpPermsArgumentType {
     }
 
     public static CompletableFuture<Suggestions> suggest(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggest(
-            Arrays.stream(PermissionLevel.values()).map(PermissionLevel::getSerializedName),
-            builder
-        );
+        return SharedSuggestionProvider.suggest(Arrays.stream(PermissionLevel.values()).map(PermissionLevel::getSerializedName), builder);
     }
 
     public enum PermissionLevel implements StringRepresentable {

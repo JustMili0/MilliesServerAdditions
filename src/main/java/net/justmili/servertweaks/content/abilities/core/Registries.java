@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Stream;
 
 public class Registries {
     public static final Map<Identifier, Ability> ABILITIES = new HashMap<>();
@@ -44,9 +43,5 @@ public class Registries {
     }
     public static Set<Identifier> getPresetIds() {
         return PRESETS.keySet();
-    }
-
-    public static <T> Stream<String> getAsString(Map<Identifier, T> map) {
-        return map.keySet().stream().map(Identifier::toString);
     }
 }

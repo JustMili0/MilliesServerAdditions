@@ -163,6 +163,7 @@ Feedback is appreciated ^^
   - `FRIENDS_WITH_NATURE` -> `child_of_nature`
   - `GRASS_EATER` -> `herbivore`
   - `ONLY_EATS_SWEETS` -> `saccharivore`
+  - `AQUA_GRACE` -> `aquatic_grace`
 - Fix and optimize damage immunity handling
 - `fire_immune` and `lava_immune` now automatically get extinguished
 - Made `light` less annoying to walk down the stairs with (now additionally requires 3 blocks of fall distance)
@@ -178,7 +179,8 @@ Feedback is appreciated ^^
 - [TODO - needs code] Fixed ability debuff `cant_swim` - Players no longer can swim up higher than one block up from the (sea) floor
 - Fixed ability `child_of_nature` - Taming chance with any animal is now 100%
 - [TODO - needs code] Fixed ability `climbs_walls` - Now can actually climb walls
-- Fixed `aqua_grace` checking HEAD equipment slot instead of FEET for Depth Strider enchantment
+- Fixed `aquatic_grace` checking HEAD equipment slot instead of FEET for Depth Strider enchantment
+- Made `aquatic_grace` not apply Dolphin's Grace affect
 - (NEW) Bovid - Can be milked with a bucket by other players
 - (NEW) Squishy - Decreases `fall` and `fly_into_wall` damage by 75% each
 - (NEW) Insectivore - Can feed on bug-like entities (Silverfish, Endermites, and size-1 Slimes and Magma Cubes) as well as items like Slimeballs, Magma Cream and Spider Eyes

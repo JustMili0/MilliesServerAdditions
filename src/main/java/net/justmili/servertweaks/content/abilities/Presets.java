@@ -218,7 +218,7 @@ public class Presets {
                 "being able to breathe in water but suffocating on the surface. Aquarians can not be in hot climates, or they'll become fish soufflé." +
                 "They primarily feed on meat and underwater or surface foliage.",
             Set.of(
-                Abilities.AQUA_GRACE,
+                Abilities.AQUATIC_GRACE,
                 Abilities.BREATHES_UNDERWATER,
                 Abilities.CANT_BREATHE_AIR,
                 Abilities.CARNIVORE,

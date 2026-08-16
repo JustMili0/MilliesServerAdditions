@@ -27,6 +27,6 @@ public class ModifierArgumentType {
     }
 
     public static CompletableFuture<Suggestions> suggest(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggest(Registries.getAsString(Registries.MODIFIERS), builder);
+        return SharedSuggestionProvider.suggestResource(Registries.MODIFIERS.keySet(), builder);
     }
 }

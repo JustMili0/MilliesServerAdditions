@@ -190,7 +190,6 @@ public class AbilityEvents {
             food.add(3, 2.0F);
             playEatSound(player);
             sendUpdatePacket(player);
-
         }
         // In-tag foods with food data handle via handleDiet* methods
     }

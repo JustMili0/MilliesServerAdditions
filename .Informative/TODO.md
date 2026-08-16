@@ -1,0 +1,2 @@
+- Fix/Finish player abilities
+- Write proper description and documentation for Abilities in Abilities.md

@@ -10,6 +10,10 @@ import net.justmili.servertweaks.mixin.accessors.CommandNodeAccessor;
 import net.justmili.servertweaks.util.SmpPermsUtil;
 import net.minecraft.commands.CommandSourceStack;
 
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Set;
+
 public class CommandRegistry {
     public static void register() {
         CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) -> {
@@ -26,18 +30,33 @@ public class CommandRegistry {
             if (Config.playerAbilities.get()) PlayerAbilities.register(dispatcher, buildContext, environment);
         });
 
+        // SMP Permission Levels
         var modifyPermissionsPhase = ServerTweaks.asId("modify_permissions");
-        CommandRegistrationCallback.EVENT.addPhaseOrdering(modifyPermissionsPhase, Event.DEFAULT_PHASE);
+        CommandRegistrationCallback.EVENT.addPhaseOrdering(Event.DEFAULT_PHASE, modifyPermissionsPhase);
         CommandRegistrationCallback.EVENT.register(modifyPermissionsPhase, (dispatcher, buildContext, selection) -> {
-            for (CommandNode<CommandSourceStack> child : dispatcher.getRoot().getChildren()) {
-                if (!SmpPerms.ALLOWED_FOR_LIMITED_OP.contains(child.getName())) {
-                    patchRestrictRecursive(child);
-                }
+            var root = dispatcher.getRoot();
+            Set<CommandNode<CommandSourceStack>> exempt = Collections.newSetFromMap(new IdentityHashMap<>());
+
+            for (CommandNode<CommandSourceStack> child : root.getChildren()) {
+                if (SmpPerms.ALLOWED_FOR_LIMITED_OP.contains(child.getName())) collectRedirectTargets(child, exempt);
+            }
+
+            for (CommandNode<CommandSourceStack> child : root.getChildren()) {
+                if (!SmpPerms.ALLOWED_FOR_LIMITED_OP.contains(child.getName())) patchRestrictRecursive(child, exempt);
             }
         });
     }
 
-    private static void patchRestrictRecursive(CommandNode<CommandSourceStack> node) {
+    private static void collectRedirectTargets(CommandNode<CommandSourceStack> node, Set<CommandNode<CommandSourceStack>> exempt) {
+        var redirect = node.getRedirect();
+        if (redirect != null && exempt.add(redirect)) collectRedirectTargets(redirect, exempt);
+
+        for (CommandNode<CommandSourceStack> child : node.getChildren()) collectRedirectTargets(child, exempt);
+    }
+
+    private static void patchRestrictRecursive(CommandNode<CommandSourceStack> node, Set<CommandNode<CommandSourceStack>> exempt) {
+        if (exempt.contains(node)) return;
+
         var original = node.getRequirement();
         //noinspection unchecked
         ((CommandNodeAccessor<CommandSourceStack>) node).setRequirement(source -> {
@@ -46,6 +65,6 @@ public class CommandRegistry {
             return player == null || !SmpPermsUtil.isLimitedOperator(player);
         });
 
-        for (CommandNode<CommandSourceStack> child : node.getChildren()) patchRestrictRecursive(child);
+        for (CommandNode<CommandSourceStack> child : node.getChildren()) patchRestrictRecursive(child, exempt);
     }
 }

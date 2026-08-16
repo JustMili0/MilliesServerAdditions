@@ -94,7 +94,7 @@ public class Abilities {
         FIRE_IMMUNE, LAVA_IMMUNE, HEAT_IMMUNE, FREEZE_IMMUNE, FALL_IMMUNE,
         HEAT_SENSITIVE, COLD_SENSITIVE,
         LIGHT, SWIFT, SLOW, HOPPY, DWARF, SQUISHY, MAGNETIC, TOUGH, STRONG,
-        AQUA_GRACE, BREATHES_UNDERWATER, CANT_BREATHE_AIR, CANT_SWIM, HYDROPHOBIC,
+        AQUATIC_GRACE, BREATHES_UNDERWATER, CANT_BREATHE_AIR, CANT_SWIM, HYDROPHOBIC,
         HUNTED_BY_FOX, HUNTED_BY_WOLF, SCARES_CREEPERS, SCARES_PHANTOMS,
         CHILD_OF_NATURE, WEAK_TO_DAMAGE, NIGHT_VISION,
         BURNS_IN_DAYLIGHT, IS_MONSTER, CLIMBS_WALLS, PEARLING,
@@ -117,7 +117,7 @@ public class Abilities {
         MAGNETIC = register(new Magnetic());
         TOUGH = register(new Ability(id("tough")));
         STRONG = register(new Strong());
-        AQUA_GRACE = register(new AquaGrace());
+        AQUATIC_GRACE = register(new AquaticGrace());
         BREATHES_UNDERWATER = register(new BreathesUnderwater());
         CANT_BREATHE_AIR = register(new CantBreatheAir());
         CANT_SWIM = register(new Ability(id("cant_swim"))); // TODO: Implement, should only work in survival, only in water
@@ -325,9 +325,9 @@ public class Abilities {
         }
     }
 
-    static class AquaGrace extends TickingAbility {
-        AquaGrace() {
-            super(id("aqua_grace"));
+    static class AquaticGrace extends TickingAbility {
+        AquaticGrace() {
+            super(id("aquatic_grace"));
         }
 
         @Override
@@ -337,7 +337,7 @@ public class Abilities {
             EntityUtil.applyEffect(player, MobEffects.CONDUIT_POWER, 100, 0);
 
             if (level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT).get(Enchantments.DEPTH_STRIDER)
-                .map(enchant -> EnchantmentHelper.getItemEnchantmentLevel(enchant, player.getItemBySlot(EquipmentSlot.FEET)) > 1)
+                .map(enchant -> EnchantmentHelper.getItemEnchantmentLevel(enchant, player.getItemBySlot(EquipmentSlot.FEET)) > 2)
                 .orElse(false)) return; // Return before granting Dolphin's Grace if player has depth strider to prevent OP swimming speeds
 
             EntityUtil.applyEffect(player, MobEffects.DOLPHINS_GRACE, 100, 0);
