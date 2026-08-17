@@ -93,7 +93,7 @@ public class AbilityEvents {
         UseEntityCallback.EVENT.register(AbilityEvents::bovid);
     }
 
-    private static boolean squishy(LivingEntity entity, DamageSource source, float value) {
+    static boolean squishy(LivingEntity entity, DamageSource source, float value) {
         if (!(entity instanceof ServerPlayer player)) return true;
         if (handleOtherImmunities(player, source)) return false;
         if (!has(player, Abilities.SQUISHY)) return true;
@@ -103,7 +103,7 @@ public class AbilityEvents {
         return recalcDamage(player, source, value, 0.25F);
     }
 
-    private static boolean weakToDamage(LivingEntity entity, DamageSource source, float value) {
+    static boolean weakToDamage(LivingEntity entity, DamageSource source, float value) {
         if (!(entity instanceof ServerPlayer player)) return true;
         if (handleOtherImmunities(player, source)) return false;
 
@@ -113,7 +113,7 @@ public class AbilityEvents {
         return recalcDamage(player, source, value, 1.25F);
     }
 
-    private static InteractionResult pearling(Player interacting, Level level, InteractionHand hand) {
+    static InteractionResult pearling(Player interacting, Level level, InteractionHand hand) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (!has(player, Abilities.PEARLING)) return InteractionResult.PASS;
@@ -133,7 +133,7 @@ public class AbilityEvents {
         return InteractionResult.PASS;
     }
 
-    private static InteractionResult bovid(Player interacting, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
+    static InteractionResult bovid(Player interacting, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer milking)) return InteractionResult.PASS;
@@ -175,7 +175,7 @@ public class AbilityEvents {
         return InteractionResult.PASS;
     }
 
-    private static void bugEaterItems(Player interacting, Level level, InteractionHand hand) {
+    static void bugEaterItems(Player interacting, Level level, InteractionHand hand) {
         if (level.isClientSide()) return;
         if (!(interacting instanceof ServerPlayer player)) return;
         if (!has(player, Abilities.INSECTIVORE)) return;
@@ -194,7 +194,7 @@ public class AbilityEvents {
         // In-tag foods with food data handle via handleDiet* methods
     }
 
-    private static InteractionResult bugEaterEntities(Player interacting, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
+    static InteractionResult bugEaterEntities(Player interacting, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (!has(player, Abilities.INSECTIVORE)) return InteractionResult.PASS;
@@ -245,7 +245,7 @@ public class AbilityEvents {
         return InteractionResult.PASS;
     }
 
-    private static InteractionResult grassEater(Player interacting, Level level, InteractionHand hand, BlockHitResult hitResult) {
+    static InteractionResult grassEater(Player interacting, Level level, InteractionHand hand, BlockHitResult hitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (!has(player, Abilities.HERBIVORE)) return InteractionResult.PASS;
@@ -267,19 +267,19 @@ public class AbilityEvents {
     }
 
     // Helper methods/variables
-    private static final Map<ResourceKey<DamageType>, Ability> DAMAGE_IMMUNITY = Map.of(
+    static final Map<ResourceKey<DamageType>, Ability> DAMAGE_IMMUNITY = Map.of(
         DamageTypes.IN_FIRE, Abilities.FIRE_IMMUNE, DamageTypes.ON_FIRE, Abilities.FIRE_IMMUNE, DamageTypes.LAVA, Abilities.LAVA_IMMUNE,
         DamageTypes.HOT_FLOOR, Abilities.HEAT_IMMUNE, DamageTypes.FREEZE, Abilities.FREEZE_IMMUNE,
         DamageTypes.FALL, Abilities.FALL_IMMUNE, DamageTypes.ENDER_PEARL, Abilities.PEARLING,
         DamageTypes.DROWN, Abilities.BREATHES_UNDERWATER
     );
 
-    private static boolean handleOtherImmunities(ServerPlayer player, DamageSource source) {
+    static boolean handleOtherImmunities(ServerPlayer player, DamageSource source) {
         var immunity = DAMAGE_IMMUNITY.get(source.typeHolder().unwrapKey().orElse(null));
         return immunity != null && has(player, immunity);
     }
 
-    private static boolean recalcDamage(ServerPlayer player, DamageSource source, float damageTaken, float multiplier) {
+    static boolean recalcDamage(ServerPlayer player, DamageSource source, float damageTaken, float multiplier) {
         if (FdaUtil.getInt(player, PlayerVars.HURT_TICK) != player.tickCount) {
             // safeguard to make sure ALLOW_DAMAGE doesn't get called again and for this to not run recursively
             FdaUtil.set(player, PlayerVars.HURT_TICK, player.tickCount);
@@ -290,11 +290,11 @@ public class AbilityEvents {
         return true;
     }
 
-    private static void playEatSound(ServerPlayer player) {
+    static void playEatSound(ServerPlayer player) {
         player.playSound(SoundEvents.GENERIC_EAT.value(), 1.0F, 1.0F + (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.4F);
     }
 
-    private static boolean isDietBlocked(ServerPlayer player, ItemStack stack) {
+    static boolean isDietBlocked(ServerPlayer player, ItemStack stack) {
         if (!stack.has(DataComponents.FOOD) || stack.has(DataComponents.BUCKET_ENTITY_DATA)) return false;
 
         boolean carnivore = has(player, Abilities.CARNIVORE);
@@ -320,22 +320,21 @@ public class AbilityEvents {
         // No GRASS_EATER item tag for this to check. GRASS_EATER diet is handled by grassEater interaction method.
     }
 
-    private static boolean isType(Entity entity, TagKey<EntityType<?>> tag) {
+    static boolean isType(Entity entity, TagKey<EntityType<?>> tag) {
         return entity.is(tag);
     }
 
-    private static boolean isBugLikeConsumable(Entity entity) {
-        if (entity instanceof Slime slime) { // TODO: Change to AbstractCubeMob with 26.2!
-            return slime.getSize() == 1;
-        }
-        return true;
+    static boolean isBugLikeConsumable(Entity entity) {
+        // TODO: Change to AbstractCubeMob with 26.2!
+        if (entity instanceof Slime slime) return slime.getSize() == 1;
+        return false;
     }
 
-    private static boolean uuidMatchesString(ServerPlayer player, String uuid) {
+    static boolean uuidMatchesString(ServerPlayer player, String uuid) {
         return player.getUUID().equals(UUID.fromString(uuid));
     }
 
-    private static void sendUpdatePacket(ServerPlayer player) {
+    static void sendUpdatePacket(ServerPlayer player) {
         var food = player.getFoodData();
         player.connection.send(new ClientboundSetHealthPacket(player.getHealth(), food.getFoodLevel(), food.getSaturationLevel()));
     }

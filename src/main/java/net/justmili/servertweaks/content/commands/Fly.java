@@ -2,33 +2,35 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.justmili.libs.v1.utils.common.CommandUtil;
-import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.Collection;
+
 public class Fly {
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("fly")
             .requires(src -> CommandUtil.hasPerms(src, 1))
             .executes(context ->
                 toggleFly(context.getSource().getPlayerOrException(), context.getSource()))
             .then(Commands.argument("player", EntityArgument.players())
-                .executes(context -> {
-                    var players = EntityArgument.getPlayers(context, "player");
-                    int count = 0;
-                    for (var player : players) {
-                        toggleFly(player, context.getSource());
-                        count++;
-                    }
-                    return count;
-                })
+                .executes(context -> toggleFly(context.getSource(), EntityArgument.getPlayers(context, "player")))
             )
         );
     }
 
-    private static int toggleFly(ServerPlayer player, CommandSourceStack source) {
+    static int toggleFly(CommandSourceStack source, Collection<ServerPlayer> players) {
+        int count = 0;
+        for (var player : players) {
+            toggleFly(player, source);
+            count++;
+        }
+        return count;
+    }
+
+    static int toggleFly(ServerPlayer player, CommandSourceStack source) {
         var abilities = player.getAbilities();
 
         abilities.mayfly = !abilities.mayfly;

@@ -238,22 +238,18 @@ public class FillExtras {
         );
     }
 
-    private static ItemStack makeSilkTouchTool(ServerLevel level) {
+    static ItemStack makeSilkTouchTool(ServerLevel level) {
         var tool = new ItemStack(Items.NETHERITE_PICKAXE);
-        var silkTouch = level.registryAccess()
-            .lookupOrThrow(Registries.ENCHANTMENT)
-            .getOrThrow(Enchantments.SILK_TOUCH);
+        var silkTouch = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH);
         var enchantments = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
         enchantments.set(silkTouch, 1);
         tool.set(DataComponents.ENCHANTMENTS, enchantments.toImmutable());
         return tool;
     }
 
-    private static ItemStack makeFortuneTool(ServerLevel level, int fortuneLevel) {
+    static ItemStack makeFortuneTool(ServerLevel level, int fortuneLevel) {
         var tool = new ItemStack(Items.NETHERITE_PICKAXE);
-        var fortune = level.registryAccess()
-            .lookupOrThrow(Registries.ENCHANTMENT)
-            .getOrThrow(Enchantments.FORTUNE);
+        var fortune = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE);
         var enchantments = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
         enchantments.set(fortune, fortuneLevel);
         tool.set(DataComponents.ENCHANTMENTS, enchantments.toImmutable());

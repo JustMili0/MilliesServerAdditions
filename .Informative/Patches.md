@@ -167,8 +167,10 @@ Feedback is appreciated ^^
   - `ONLY_EATS_SWEETS` -> `saccharivore`
   - `AQUA_GRACE` -> `aquatic_grace`
 - Fix and optimize damage immunity handling
-- `fire_immune` and `lava_immune` now automatically get extinguished
+- `fire_immune` and `lava_immune` now automatically get extinguished. This can be countered with Weakness
 - Made `light` less annoying to walk down the stairs with (now additionally requires 3 blocks of fall distance)
+- `fall_immune` is no longer affected by Slow Falling. This can be countered with Weakness
+- `freeze_immune` no longer gets the freezing overlay and hearts. This can be countered with Weakness
 - Fixed being able to eat anything no matter the diet if food is held in the offhand
 - Fixed and readjusted damage multipliers for `squishy` and `weak_to_damage`
 - Fixed players with `herbivore` being able to eat even at full hunger

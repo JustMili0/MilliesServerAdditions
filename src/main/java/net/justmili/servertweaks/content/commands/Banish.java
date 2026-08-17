@@ -23,7 +23,7 @@ public class Banish {
         );
     }
 
-    private static int banish(CommandSourceStack source, ServerPlayer player) {
+    static int banish(CommandSourceStack source, ServerPlayer player) {
         var banishLevel = source.getServer().getLevel(DimRegistry.BANISHMENT);
 
         if (banishLevel == null) {

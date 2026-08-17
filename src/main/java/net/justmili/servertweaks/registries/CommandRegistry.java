@@ -21,9 +21,9 @@ public class CommandRegistry {
             if (Config.enableScaleCommand.get()) Scale.register(dispatcher, buildContext, environment);
 
             if (Config.enableSmpPermsCommand.get()) SmpPerms.register(dispatcher, buildContext, environment);
-            if (Config.enableFlyCommand.get()) Fly.register(dispatcher, buildContext, environment);
+            if (Config.enableFlyCommand.get()) Fly.register(dispatcher);
             if (Config.enableDamageToggleCommand.get()) DamageToggle.register(dispatcher, buildContext);
-            Discard.register(dispatcher, buildContext, environment); // This command is not configurable. Too useful to be configurable
+            Discard.register(dispatcher); // This command is not configurable. Too useful to be configurable
             if (Config.enableFillExtrasCommand.get()) FillExtras.register(dispatcher, buildContext, environment);
             if (Config.enableBanishCommand.get()) Banish.register(dispatcher);
 

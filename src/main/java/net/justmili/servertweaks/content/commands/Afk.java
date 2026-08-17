@@ -26,7 +26,7 @@ public class Afk {
                 var source = context.getSource();
 
                 var level = source.getLevel();
-                var player = context.getSource().getPlayerOrException();
+                var player = source.getPlayerOrException();
 
                 int cooldown = FdaUtil.getInt(player, PlayerVars.AFK_COOLDOWN);
                 if (!FdaUtil.getBool(player, PlayerVars.IS_AFK) && Config.afkCommandCooldown.get() != 0 && cooldown > 0) {
@@ -45,7 +45,7 @@ public class Afk {
         );
     }
 
-    private static PlayerTeam createTeam(ServerScoreboard board) {
+    static PlayerTeam createTeam(ServerScoreboard board) {
         var team = board.addPlayerTeam(AFK_PLAYERS);
         team.setNameTagVisibility(Team.Visibility.ALWAYS);
         team.setPlayerPrefix(Component.literal("[AFK] "));
@@ -53,7 +53,7 @@ public class Afk {
         return team;
     }
 
-    private static void toggleAfk(CommandSourceStack source, ServerPlayer player, ServerScoreboard board, PlayerTeam team) {
+    static void toggleAfk(CommandSourceStack source, ServerPlayer player, ServerScoreboard board, PlayerTeam team) {
         if (FdaUtil.getBool(player, PlayerVars.IS_AFK)) {
             // Remove from team and set IS_AFK to false
             board.removePlayerFromTeam(player.getScoreboardName(), team);
@@ -79,7 +79,7 @@ public class Afk {
         }
     }
 
-    private static void despawnNearbyMonsters(ServerPlayer player) {
+    static void despawnNearbyMonsters(ServerPlayer player) {
         var level = player.level();
         if (level.isBrightOutside()) return;
         var area = new AABB(

@@ -9,6 +9,8 @@ import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.justmili.servertweaks.registries.TagRegistry;
 import net.justmili.servertweaks.util.ScalerUtil;
+import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
+import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -104,8 +106,8 @@ public class Abilities {
         FIRE_IMMUNE = register(new FireImmune());
         LAVA_IMMUNE = register(new LavaImmune());
         HEAT_IMMUNE = register(new Ability(id("heat_immune")));
-        FREEZE_IMMUNE = register(new Ability(id("freeze_immune")));
-        FALL_IMMUNE = register(new Ability(id("fall_immune")));
+        FREEZE_IMMUNE = register(new FreezeImmune());
+        FALL_IMMUNE = register(new FallImmune());
         HEAT_SENSITIVE = register(new HeatSensitive());
         COLD_SENSITIVE = register(new ColdSensitive());
         LIGHT = register(new Light());
@@ -131,7 +133,7 @@ public class Abilities {
         NIGHT_VISION = register(new NightVision());
         BURNS_IN_DAYLIGHT = register(new BurnsInDaylight());
         IS_MONSTER = register(new IsMonster());
-        CLIMBS_WALLS = register(new Ability(id("climbs_walls"))); // TODO: Implement, should only work in survival, shouldn't work in water
+        CLIMBS_WALLS = register(new Ability(id("climbs_walls"))); // TODO: Implement, should only work in survival, shouldn't work in water or when flying
         PEARLING = register(new Ability(id("pearling")));
         PREDATORY = register(new Predatory());
         BOVID = register(new Ability(id("bovid")));
@@ -159,7 +161,7 @@ public class Abilities {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            if (player.isOnFire() && !level.getBlockState(player.blockPosition()).is(Blocks.FIRE)) player.extinguishFire();
+            if (player.isOnFire() && !level.getBlockState(player.blockPosition()).is(Blocks.FIRE) && !player.hasEffect(MobEffects.WEAKNESS)) player.extinguishFire();
         }
     }
 
@@ -170,7 +172,30 @@ public class Abilities {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            if (player.isOnFire() && !level.getBlockState(player.blockPosition()).is(Blocks.LAVA)) player.extinguishFire();
+            if (player.isOnFire() && !level.getBlockState(player.blockPosition()).is(Blocks.LAVA) && !player.hasEffect(MobEffects.WEAKNESS)) player.extinguishFire();
+        }
+    }
+
+    static class FreezeImmune extends TickingAbility {
+        public FreezeImmune() {
+            super(id("freeze_immune"));
+        }
+
+        @Override
+        public void tick(ServerPlayer player, ServerLevel level) {
+            if (!player.hasEffect(MobEffects.WEAKNESS) && player.isFreezing()) player.clearFreeze();
+        }
+    }
+
+    static class FallImmune extends TickingAbility {
+        FallImmune() {
+            super(id("fall_immune"));
+        }
+
+        @Override
+        public void tick(ServerPlayer player, ServerLevel level) {
+            if (!player.gameMode.isSurvival()) return;
+            if (!player.hasEffect(MobEffects.WEAKNESS) && player.hasEffect(MobEffects.SLOW_FALLING)) player.removeEffect(MobEffects.SLOW_FALLING);
         }
     }
 
@@ -204,12 +229,12 @@ public class Abilities {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
             if (!level.getBiome(player.blockPosition()).is(TagRegistry.COLD_BIOMES)) return;
+            // Completely cancel any effects if player has full leather armor.
+            // Still applies freezing overlays but stops damage when armor isn't full leather. It is an intended side effect.
             if (player.getItemBySlot(EquipmentSlot.HEAD).is(Items.LEATHER_HELMET)
                 && player.getItemBySlot(EquipmentSlot.CHEST).is(Items.LEATHER_CHESTPLATE)
                 && player.getItemBySlot(EquipmentSlot.LEGS).is(Items.LEATHER_LEGGINGS)
                 && player.getItemBySlot(EquipmentSlot.FEET).is(Items.LEATHER_BOOTS)) return;
-            // Completely cancel any effects if player has full leather armor.
-            // Still applies freezing overlays but stops damage when armor isn't full leather. It is an intended side effect.
 
             int targetTime = player.getTicksRequiredToFreeze() + 20;
             player.setTicksFrozen(targetTime);
@@ -249,7 +274,7 @@ public class Abilities {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             var speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
-            addOrUpdate(speed, create(AR_SLOW_SPEED, -0.32, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+            addOrUpdate(speed, AR_SLOW_SPEED, -0.32, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         }
     }
 
@@ -311,7 +336,7 @@ public class Abilities {
             var attack = get(player, Attributes.ATTACK_DAMAGE);
             var maxHp = get(player, Attributes.MAX_HEALTH);
 
-            addOrUpdate(attack, create(AR_STRONG_DAMAGE, 3, AttributeModifier.Operation.ADD_VALUE));
+            addOrUpdate(attack, AR_STRONG_DAMAGE, 3, AttributeModifier.Operation.ADD_VALUE);
 
             // Don't apply past this point
             if (!player.gameMode.isSurvival()) return;
@@ -320,7 +345,7 @@ public class Abilities {
             float targetHp = Math.clamp(100.0F - (armor * 3.0F), 40.0F, 100.0F);
             if (targetHp % 2 != 0) targetHp += 1;
 
-            addOrReplace(maxHp, create(AR_STRONG_HP, targetHp - 20.0, AttributeModifier.Operation.ADD_VALUE));
+            addOrReplace(maxHp, AR_STRONG_HP, targetHp - 20.0, AttributeModifier.Operation.ADD_VALUE);
             if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
         }
     }
