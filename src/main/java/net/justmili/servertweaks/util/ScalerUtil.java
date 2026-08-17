@@ -20,7 +20,7 @@ public class ScalerUtil {
     }
 
     public static @Nullable AttributeInstance getScale(ServerPlayer player) {
-        return AttributeUtil.getAttribute(player, Attributes.SCALE);
+        return AttributeUtil.get(player, Attributes.SCALE);
     }
 
     public static void setScale(ServerPlayer player, float scale) {

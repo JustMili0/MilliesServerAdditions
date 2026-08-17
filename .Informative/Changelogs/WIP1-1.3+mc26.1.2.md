@@ -67,19 +67,21 @@
 
 ### ***CHANGES***
 - `/damagetoggle <damage_type> <true|false|status>`, reworked into `/damagetoggle <options>`:
-  - Removed `<damage_type> true` - Replaced with `enable <damage_type>`
-  - Removed `<damage_type> false` - Replaced with `disable <damage_type>`
-  - Removed `<damage_type> status` - Replaced with `get <damage_type>`
-  - Added `listDisabled` - Lists all currently disabled damage types
-  - Added `enableAll` - Enables all disabled damage types
-  - Added `disableAll` - Disables all known damage types
+  - Removed `<damage_type> true` - replaced with `enable <damage_type>`
+  - Removed `<damage_type> false` - replaced with `disable <damage_type>`
+  - Removed `<damage_type> status` - replaced with `get <damage_type>`
+  - Added `listDisabled` - lists all currently disabled damage types
+  - Added `enableAll` - enables all disabled damage types
+  - Added `disableAll` - disables all known damage types
+- `/damagetoggle` now properly suggests damage types
 - `/scale` now has configurable min-max values in the config
-- `/afk` now uses `BlockPos` rather than individual x, y and z coordinates
+- `/afk` now uses `Vec3` `player.position()` rather than individual x, y and z coordinates
+- `/afk` now shows exact time left until end of cooldown (days, hours, minutes, seconds)
 - Patched one-hit mace exploit with `/afk`
 - Changed permission requirements for commands
-  - `/scale <force|unlock|reset|reset-nounlock>` - Permission Level Required `ADMINS (4)` -> `MODERATORS (1)`
-  - `/banish` - Permission Level Required `ADMINS (4)` -> `MODERATORS (1)`
-  - `/damageToggle` - Permission Level Required `ADMINS (4)` -> `GAMEMASTERS (2)`
+  - `/scale <force|unlock|reset|reset-nounlock>` - Permission level required `ADMINS (4)` -> `MODERATORS (1)`
+  - `/banish` - Permission level required `ADMINS (4)` -> `MODERATORS (1)`
+  - `/damageToggle` - Permission level required `ADMINS (4)` -> `GAMEMASTERS (2)`
 
 ### ***REMOVED***
 - Removed `/daycount` command

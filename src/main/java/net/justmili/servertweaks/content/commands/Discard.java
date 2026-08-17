@@ -47,9 +47,9 @@ public class Discard {
                     // One or multiple? Send message
                     if (entities.size() == 1) {
                         Entity only = entities.iterator().next();
-                        CommandUtil.sendOk(source, "Discarded " + only.getName().getString(), true);
+                        CommandUtil.sendOk(source, "Discarded " + only.getName().getString());
                     } else {
-                        CommandUtil.sendOk(source, "Discarded " + entities.size() + " entities", true);
+                        CommandUtil.sendOk(source, "Discarded " + entities.size() + " entities");
                     }
                     return entities.size();
                 })
@@ -74,7 +74,7 @@ public class Discard {
                     level.removeBlock(pos, false);
 
                     // Send message
-                    CommandUtil.sendOk(source, "Discarded " + blockId + " from " + formatPos(pos), true);
+                    CommandUtil.sendOk(source, "Discarded " + blockId + " from " + formatPos(pos));
                     return 1;
                 })
             )
@@ -119,7 +119,7 @@ public class Discard {
                         }
 
                         // Send message
-                        CommandUtil.sendOk(source, "Discarded " + cleared + " item(s) from " + entity.getName().getString() + "'s inventory", true);
+                        CommandUtil.sendOk(source, "Discarded " + cleared + " item(s) from " + entity.getName().getString() + "'s inventory");
                         return cleared;
                     })
                 )
@@ -149,7 +149,7 @@ public class Discard {
                         }
 
                         // Send message
-                        CommandUtil.sendOk(source, "Discarded " + cleared + " item(s) from " + blockId + "'s inventory at " + formatPos(pos), true);
+                        CommandUtil.sendOk(source, "Discarded " + cleared + " item(s) from " + blockId + "'s inventory at " + formatPos(pos));
                         return cleared;
                     })
                 )

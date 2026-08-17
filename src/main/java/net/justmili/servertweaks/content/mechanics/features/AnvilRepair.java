@@ -1,5 +1,6 @@
 package net.justmili.servertweaks.content.mechanics.features;
 
+import net.justmili.libs.v1.utils.common.MathUtil;
 import net.justmili.servertweaks.config.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -40,11 +41,11 @@ public class AnvilRepair {
         if (!hasIngot && !hasBlock) return;
 
         // Roll chances
-        double chance;
+        float chance;
         if (block == Blocks.CHIPPED_ANVIL) {
-            chance = hasBlock? 1.0 : 0.33;
+            chance = hasBlock? 1.0f : 0.33f;
         } else if (block == Blocks.DAMAGED_ANVIL) {
-            chance = hasBlock? 0.80 : 0.25;
+            chance = hasBlock? 0.80f : 0.25f;
         } else {
             return;
         }
@@ -66,7 +67,7 @@ public class AnvilRepair {
             stack.shrink(1);
         }
 
-        if (attempts.getOrDefault(uuid, 0) >= 2 || Math.random() <= chance) {
+        if (attempts.getOrDefault(uuid, 0) >= 2 || MathUtil.chance(chance)) {
             // Clear map data
             repairAttemptsIngot.remove(uuid);
             repairAttemptsBlock.remove(uuid);

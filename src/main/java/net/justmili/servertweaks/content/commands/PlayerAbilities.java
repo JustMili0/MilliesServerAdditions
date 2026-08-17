@@ -46,7 +46,7 @@ public class PlayerAbilities {
                         var server = context.getSource().getServer();
                         FileManager.loadFile(server);
 
-                        CommandUtil.sendOk(context.getSource(), "Reloaded Player Abilities", true);
+                        CommandUtil.sendOk(context.getSource(), "Reloaded Player Abilities");
                         return 1;
                     })
                 )
@@ -62,7 +62,7 @@ public class PlayerAbilities {
                                     var ability = AbilityArgumentType.getAbility(context, "abilityOrDebuff");
 
                                     AbilitiesFileUtil.grantAbility(player, ability);
-                                    CommandUtil.sendOk(context.getSource(), "Granted ability " + ability.getId() + " to player " + player.getName().getString(), true);
+                                    CommandUtil.sendOk(context.getSource(), "Granted ability " + ability.getId() + " to player " + player.getName().getString());
 
                                     return 1;
                                 })
@@ -76,7 +76,7 @@ public class PlayerAbilities {
                                     var modifier = ModifierArgumentType.getModifier(context, "modifier");
 
                                     AbilitiesFileUtil.grantModifier(player, modifier);
-                                    CommandUtil.sendOk(context.getSource(), "Granted ability modifier " + modifier.getId() + " to player " + player.getName().getString(), true);
+                                    CommandUtil.sendOk(context.getSource(), "Granted ability modifier " + modifier.getId() + " to player " + player.getName().getString());
 
                                     return 1;
                                 })
@@ -96,7 +96,7 @@ public class PlayerAbilities {
                                     var ability = AbilityArgumentType.getAbility(context, "abilityOrDebuff");
 
                                     AbilitiesFileUtil.revokeAbility(player, ability);
-                                    CommandUtil.sendOk(context.getSource(), "Removed ability " + ability.getId() + " from player " + player.getName().getString(), true);
+                                    CommandUtil.sendOk(context.getSource(), "Removed ability " + ability.getId() + " from player " + player.getName().getString());
 
                                     return 1;
                                 })
@@ -110,7 +110,7 @@ public class PlayerAbilities {
                                     var modifier = ModifierArgumentType.getModifier(context, "modifier");
 
                                     AbilitiesFileUtil.revokeModifier(player, modifier);
-                                    CommandUtil.sendOk(context.getSource(), "Removed ability modifier " + modifier.getId() + " from player " + player.getName().getString(), true);
+                                    CommandUtil.sendOk(context.getSource(), "Removed ability modifier " + modifier.getId() + " from player " + player.getName().getString());
 
                                     return 1;
                                 })
@@ -123,7 +123,7 @@ public class PlayerAbilities {
                                 AbilitiesFileUtil.clearPlayerProfile(player);
                                 FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, false);
 
-                                CommandUtil.sendOk(context.getSource(), "Cleared Abilities profile of " + player.getName().getString(), true);
+                                CommandUtil.sendOk(context.getSource(), "Cleared Abilities profile of " + player.getName().getString());
 
                                 return 1;
                             })

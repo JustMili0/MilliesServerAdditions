@@ -146,7 +146,8 @@ Feedback is appreciated ^^
 **Commands**
 - `/scale` now has configurable min-max values in the config
 - Patched one-hit mace exploit with `/afk`
-- `/afk` now uses Vec3 rather than individual x, y and z coordinates
+- `/afk` now uses `Vec3` `player.position()` rather than individual x, y and z coordinates
+- `/afk` now shows exact time left until end of cooldown (days, hours, minutes, seconds)
 - Renamed `/fillExtras` to `/fillextras`
 - `/fillextras` is now a configurable command
 - Added `/smpperms <player> <permission_level>`, permission levels:
@@ -155,6 +156,7 @@ Feedback is appreciated ^^
   - `administrator` - Can use all commands (except `/smpperms`), can not stop the server
   - `limited_operator` (owner but fair) - Operator permission level but limited to only a few commands essential (or so) for moderation
   - `operator` (owner) - Regular operator permissions
+- `/damagetoggle` now properly suggests damage types
 
 **Player Abilities**
 - Abilities now are stored in lowercase instead of uppercase, e.g. `fire_immune` instead of `FIRE_IMMUNE`
@@ -180,7 +182,7 @@ Feedback is appreciated ^^
 - Fixed ability `child_of_nature` - Taming chance with any animal is now 100%
 - [TODO - needs code] Fixed ability `climbs_walls` - Now can actually climb walls
 - Fixed `aquatic_grace` checking HEAD equipment slot instead of FEET for Depth Strider enchantment
-- Made `aquatic_grace` not apply Dolphin's Grace affect
+- Made `aquatic_grace` not apply Dolphin's Grace effect with Depth Strider 3, only 2 and below
 - (NEW) Bovid - Can be milked with a bucket by other players
 - (NEW) Squishy - Decreases `fall` and `fly_into_wall` damage by 75% each
 - (NEW) Insectivore - Can feed on bug-like entities (Silverfish, Endermites, and size-1 Slimes and Magma Cubes) as well as items like Slimeballs, Magma Cream and Spider Eyes

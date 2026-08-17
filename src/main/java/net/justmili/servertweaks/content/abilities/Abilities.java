@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.abilities;
 
-import net.justmili.libs.v1.data.MobData;
 import net.justmili.libs.v1.utils.common.EntityUtil;
+import net.justmili.libs.v1.utils.common.EntityUtil.MobData;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.core.Registries;
 import net.justmili.servertweaks.content.abilities.type.Ability;
@@ -249,7 +249,7 @@ public class Abilities {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             var speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
-            addOrUpdate(speed, newModifier(AR_SLOW_SPEED, -0.32, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+            addOrUpdate(speed, create(AR_SLOW_SPEED, -0.32, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }
     }
 
@@ -308,10 +308,10 @@ public class Abilities {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (level.getGameTime() % 5 != 0) return;
 
-            var attack = getAttribute(player, Attributes.ATTACK_DAMAGE);
-            var maxHp = getAttribute(player, Attributes.MAX_HEALTH);
+            var attack = get(player, Attributes.ATTACK_DAMAGE);
+            var maxHp = get(player, Attributes.MAX_HEALTH);
 
-            addOrUpdate(attack, newModifier(AR_STRONG_DAMAGE, 3, AttributeModifier.Operation.ADD_VALUE));
+            addOrUpdate(attack, create(AR_STRONG_DAMAGE, 3, AttributeModifier.Operation.ADD_VALUE));
 
             // Don't apply past this point
             if (!player.gameMode.isSurvival()) return;
@@ -320,7 +320,7 @@ public class Abilities {
             float targetHp = Math.clamp(100.0F - (armor * 3.0F), 40.0F, 100.0F);
             if (targetHp % 2 != 0) targetHp += 1;
 
-            addOrReplace(maxHp, newModifier(AR_STRONG_HP, targetHp - 20.0, AttributeModifier.Operation.ADD_VALUE));
+            addOrReplace(maxHp, create(AR_STRONG_HP, targetHp - 20.0, AttributeModifier.Operation.ADD_VALUE));
             if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
         }
     }

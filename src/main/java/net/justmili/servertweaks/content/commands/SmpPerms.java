@@ -44,6 +44,6 @@ public class SmpPerms {
 
         var ownOrOthers = source.getPlayer() == player ? "own" : player.getName().getString() + "'s";
         var message = "Set " + ownOrOthers + " SMP permission level to " + SmpPermsUtil.permissionNameByLevel(smpPermLevel);
-        CommandUtil.sendOk(source, Component.literal(message), true);
+        CommandUtil.sendOk(source, Component.literal(message));
     }
 }

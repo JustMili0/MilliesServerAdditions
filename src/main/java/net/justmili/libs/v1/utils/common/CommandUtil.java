@@ -22,6 +22,14 @@ public class CommandUtil {
         sendOk(source, Component.literal(message), allowLogging);
     }
 
+    public static void sendOk(CommandSourceStack source, Component message) {
+        sendOk(source, message, true);
+    }
+
+    public static void sendOk(CommandSourceStack source, String message) {
+        sendOk(source, message, true);
+    }
+
     public static void sendFail(CommandSourceStack source, Component message) {
         source.sendFailure(message);
     }

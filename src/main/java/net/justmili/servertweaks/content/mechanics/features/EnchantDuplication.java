@@ -46,7 +46,7 @@ public class EnchantDuplication {
                 default -> 3;
             };
             int multiplier = (storedEnchantment.getValue() * enchantment.value().getMaxLevel()) / 4;
-            int expCost = player.experienceLevel - MathUtil.roundInt(requiredExp + multiplier);
+            int expCost = player.experienceLevel - MathUtil.roundIntDown(requiredExp + multiplier);
             if (expCost <= 0) return;
 
             player.experienceLevel = expCost;

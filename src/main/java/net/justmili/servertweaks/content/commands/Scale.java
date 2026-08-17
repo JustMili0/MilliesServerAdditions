@@ -50,7 +50,7 @@ public class Scale {
                                 var players = EntityArgument.getPlayers(context, "player");
                                 for (var player : players) applyScaleToPlayer(player, scale);
 
-                                CommandUtil.sendOk(source, String.format("Applied scale %.3f (%.1f cm) to %d player(s)", scale, heightCm, players.size()), true);
+                                CommandUtil.sendOk(source, String.format("Applied scale %.3f (%.1f cm) to %d player(s)", scale, heightCm, players.size()));
                                 return players.size();
                             })
                         )
@@ -65,7 +65,7 @@ public class Scale {
                             var players = EntityArgument.getPlayers(context, "player");
                             for (var player : players) FdaUtil.set(player, PlayerVars.SCALE_LOCKED, false);
 
-                            CommandUtil.sendOk(source, String.format("Unlocked scale modification for %d player(s)", players.size()), true);
+                            CommandUtil.sendOk(source, String.format("Unlocked scale modification for %d player(s)", players.size()));
                             return players.size();
                         })
                     )
@@ -82,7 +82,7 @@ public class Scale {
                                 FdaUtil.set(player, PlayerVars.SCALE_LOCKED, false);
                             }
 
-                            CommandUtil.sendOk(source, String.format("Reset scale and unlocked scale modifications for %d player(s)", players.size()), true);
+                            CommandUtil.sendOk(source, String.format("Reset scale and unlocked scale modifications for %d player(s)", players.size()));
                             return players.size();
                         })
                     )
@@ -96,7 +96,7 @@ public class Scale {
                             var players = EntityArgument.getPlayers(context, "player");
                             for (var player : players) applyScaleToPlayer(player, 1f);
 
-                            CommandUtil.sendOk(source, String.format("Reset scale for %d player(s)", players.size()), true);
+                            CommandUtil.sendOk(source, String.format("Reset scale for %d player(s)", players.size()));
                             return players.size();
                         })
                     )
