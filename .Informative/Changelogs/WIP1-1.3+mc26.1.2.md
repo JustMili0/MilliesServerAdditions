@@ -12,6 +12,7 @@
 - Renamed config key `removeAnvilLimit` to `disableAnvilLimit`
 - Renamed config key `despawnMonsters` to `despawnMonstersPostAfk`
 - All `limit*****Speed`, `enableScaleCommand`, `enableBanishCommand` and `enableDamageToggleCommand` config keys are now false by default
+- `/scale` command now has configurable min-max values for use by regular players
 
 ### ***NEW CONTENT***
 - Special Player Abilities
@@ -73,15 +74,7 @@
   - Added `listDisabled` - lists all currently disabled damage types
   - Added `enableAll` - enables all disabled damage types
   - Added `disableAll` - disables all known damage types
-- `/damagetoggle` now properly suggests damage types
-- `/scale` now has configurable min-max values in the config
-- `/afk` now uses `Vec3` `player.position()` rather than individual x, y and z coordinates
 - `/afk` now shows exact time left until end of cooldown (days, hours, minutes, seconds)
-- Patched one-hit mace exploit with `/afk`
-- Changed permission requirements for commands
-  - `/scale <force|unlock|reset|reset-nounlock>` - Permission level required `ADMINS (4)` -> `MODERATORS (1)`
-  - `/banish` - Permission level required `ADMINS (4)` -> `MODERATORS (1)`
-  - `/damageToggle` - Permission level required `ADMINS (4)` -> `GAMEMASTERS (2)`
 
 ### ***REMOVED***
 - Removed `/daycount` command
@@ -89,6 +82,14 @@
 
 ### ***BUG FIXES/TECHNICAL CHANGES***
 - Removed "[ServerTweaks] " prefix from all messages sent by the mod
+- Changed permission requirements for commands
+  - `/scale <force|unlock|reset|reset-nounlock>` - Permission level required `ADMINS (4)` -> `MODERATORS (1)`
+  - `/banish` - Permission level required `ADMINS (4)` -> `MODERATORS (1)`
+  - `/damagetoggle` - Permission level required `ADMINS (4)` -> `GAMEMASTERS (2)`
+- `/damagetoggle` now properly suggests damage types
+- `/damagetoggle` now *actually* can enable and disable all damage types
+- Patched one-hit mace exploit with `/afk`
+- `/afk` now uses `Vec3` `player.position()` rather than individual x, y and z coordinates
 
 ### ***DEV STUFF***
 - A lot of package, class renames and optimizations

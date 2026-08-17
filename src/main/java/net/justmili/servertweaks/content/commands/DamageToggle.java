@@ -9,6 +9,7 @@ import net.justmili.libs.v1.commands.arguments.DamageTypesArgumentType;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
@@ -19,14 +20,14 @@ import java.util.List;
 import java.util.Map;
 
 public class DamageToggle {
-    private static final Map<ResourceKey<DamageType>, Boolean> damageDisabled = new HashMap<>();
+    private static final Map<ResourceKey<DamageType>, Boolean> DISABLED_TYPES = new HashMap<>();
     private static boolean eventRegistered = false;
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext) {
         if (!eventRegistered) {
             eventRegistered = true;
             ServerLivingEntityEvents.ALLOW_DAMAGE.register((LivingEntity _, DamageSource source, float _) -> {
-                    for (Map.Entry<ResourceKey<DamageType>, Boolean> entry : damageDisabled.entrySet()) {
+                    for (Map.Entry<ResourceKey<DamageType>, Boolean> entry : DISABLED_TYPES.entrySet()) {
                         if (!entry.getValue()) continue;
                         if (source.is(entry.getKey())) return false;
                     }
@@ -60,32 +61,33 @@ public class DamageToggle {
 
     private static int setStatus(CommandContext<CommandSourceStack> context, boolean disable) throws CommandSyntaxException {
         var key = DamageTypesArgumentType.getTypeId(context, "type");
-        damageDisabled.put(key, disable);
+        DISABLED_TYPES.put(key, disable);
         CommandUtil.sendOk(context.getSource(), "Damage type '" + key.identifier() + "' is now " + (disable ? "disabled" : "enabled"), false);
         return 1;
     }
 
     private static int getStatus(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         var key = DamageTypesArgumentType.getTypeId(context, "type");
-        var status = damageDisabled.getOrDefault(key, false) ? "disabled" : "enabled";
+        var status = DISABLED_TYPES.getOrDefault(key, false) ? "disabled" : "enabled";
         CommandUtil.sendOk(context.getSource(), "Damage type '" + key.identifier() + "' is " + status);
         return 1;
     }
 
     private static int enableAll(CommandContext<CommandSourceStack> context) {
-        damageDisabled.replaceAll((id, bool) -> false);
+        DISABLED_TYPES.clear();
         CommandUtil.sendOk(context.getSource(), "All damage types enabled.");
         return 1;
     }
 
     private static int disableAll(CommandContext<CommandSourceStack> context) {
-        damageDisabled.replaceAll((_, _) -> true);
+        var registry = context.getSource().getServer().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE);
+        registry.listElementIds().forEach(key -> DISABLED_TYPES.put(key, true));
         CommandUtil.sendOk(context.getSource(), "All damage types disabled.");
         return 1;
     }
 
     private static int listDisabled(CommandContext<CommandSourceStack> context) {
-        List<String> list = damageDisabled.entrySet().stream().filter(Map.Entry::getValue)
+        List<String> list = DISABLED_TYPES.entrySet().stream().filter(Map.Entry::getValue)
             .map(entry -> entry.getKey().identifier().toString()).toList();
         CommandUtil.sendOk(context.getSource(), list.isEmpty() ? "No damage types are currently disabled" : "Disabled damage types: " + String.join(", ", list));
         return 1;
