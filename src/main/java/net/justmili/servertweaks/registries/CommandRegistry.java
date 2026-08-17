@@ -18,7 +18,7 @@ public class CommandRegistry {
     public static void register() {
         CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) -> {
             if (Config.enableAfkCommand.get()) Afk.register(dispatcher);
-            if (Config.enableScaleCommand.get()) Scale.register(dispatcher, buildContext, environment);
+            if (Config.enableScaleCommand.get()) Scale.register(dispatcher);
 
             if (Config.enableSmpPermsCommand.get()) SmpPerms.register(dispatcher, buildContext, environment);
             if (Config.enableFlyCommand.get()) Fly.register(dispatcher);

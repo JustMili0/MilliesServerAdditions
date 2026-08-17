@@ -9,8 +9,6 @@ import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.justmili.servertweaks.registries.TagRegistry;
 import net.justmili.servertweaks.util.ScalerUtil;
-import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
-import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
