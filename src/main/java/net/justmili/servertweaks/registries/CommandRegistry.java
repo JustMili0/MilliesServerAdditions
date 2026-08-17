@@ -27,7 +27,7 @@ public class CommandRegistry {
             if (Config.enableFillExtrasCommand.get()) FillExtras.register(dispatcher, buildContext, environment);
             if (Config.enableBanishCommand.get()) Banish.register(dispatcher);
 
-            if (Config.playerAbilities.get()) PlayerAbilities.register(dispatcher, buildContext, environment);
+            if (Config.playerAbilities.get()) PlayerAbilities.register(dispatcher);
         });
 
         // SMP Permission Levels

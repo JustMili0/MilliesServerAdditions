@@ -1,166 +1,168 @@
 package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.justmili.libs.v1.utils.common.CommandUtil;
 import net.justmili.libs.v1.utils.common.FdaUtil;
 import net.justmili.servertweaks.content.abilities.core.AbilitiesFileUtil;
 import net.justmili.servertweaks.content.abilities.core.FileManager;
+import net.justmili.servertweaks.content.abilities.type.Ability;
+import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
 import net.justmili.servertweaks.content.commands.arguments.AbilityArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.ModifierArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.PresetArgumentType;
 import net.justmili.servertweaks.variables.PlayerVars;
-import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerPlayer;
 
 public class PlayerAbilities {
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
-        dispatcher.register(
-            Commands.literal("abilities")
-                .then(Commands.literal("pickPreset")
-                    .then(Commands.argument("preset", PresetArgumentType.preset())
-                        .suggests(PresetArgumentType::suggest)
-                        .executes(context -> {
-                            var player = context.getSource().getPlayerOrException();
-                            AbilityPreset preset = PresetArgumentType.getPreset(context, "preset");
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+        dispatcher.register(Commands.literal("abilities")
+            .then(Commands.literal("pickPreset")
+                .then(Commands.argument("preset", PresetArgumentType.preset())
+                    .suggests(PresetArgumentType::suggest)
+                    .executes(context -> presentPreset(context.getSource(), PresetArgumentType.getPreset(context, "preset")))))
 
-                            var apply = Component.literal("     [APPLY] ").setStyle(Style.EMPTY.withColor(0x55FF55).withClickEvent(
-                                new ClickEvent.RunCommand("/abilities applyPreset " + preset.getId() + " " + player.getName().getString())));
-                            var cancel = Component.literal(" [CANCEL]").setStyle(Style.EMPTY.withColor(0xFF5555).withClickEvent(
-                                new ClickEvent.RunCommand("/abilities dontApplyPreset " + player.getName().getString())));
+            .then(Commands.literal("reload").requires(src -> CommandUtil.hasPerms(src, 1))
+                .executes(context -> reload(context.getSource())))
 
-                            player.sendSystemMessage(Component.literal(preset.getDesc() + "\n\n").append(apply).append(cancel));
-                            return 1;
-                        })
-                    )
+            .then(Commands.literal("grant").requires(src -> CommandUtil.hasPerms(src, 1))
+                .then(Commands.argument("player", EntityArgument.player())
+
+                    .then(Commands.literal("ability").then(Commands.argument("abilityOrDebuff", AbilityArgumentType.abilities())
+                        .suggests(AbilityArgumentType::suggest)
+                        .executes(context -> manage(
+                            context.getSource(),
+                            EntityArgument.getPlayer(context, "player"),
+                            AbilityArgumentType.getAbility(context, "abilityOrDebuff"),
+                            0))))
+
+                    .then(Commands.literal("modifier").then(Commands.argument("modifier", ModifierArgumentType.modifier())
+                        .suggests(ModifierArgumentType::suggest)
+                        .executes(context -> manage(
+                            context.getSource(),
+                            EntityArgument.getPlayer(context, "player"),
+                            ModifierArgumentType.getModifier(context, "modifier"),
+                            0))))
                 )
+            )
 
-                .then(Commands.literal("reload")
-                    .requires(src -> CommandUtil.hasPerms(src, 1))
-                    .executes(context -> {
-                        var server = context.getSource().getServer();
-                        FileManager.loadFile(server);
+            .then(Commands.literal("revoke").requires(src -> CommandUtil.hasPerms(src, 1))
+                .then(Commands.argument("player", EntityArgument.player())
 
-                        CommandUtil.sendOk(context.getSource(), "Reloaded Player Abilities");
-                        return 1;
-                    })
+                    .then(Commands.literal("ability").then(Commands.argument("abilityOrDebuff", AbilityArgumentType.abilities())
+                        .suggests(AbilityArgumentType::suggest)
+                        .executes(context -> manage(
+                            context.getSource(),
+                            EntityArgument.getPlayer(context, "player"),
+                            AbilityArgumentType.getAbility(context, "abilityOrDebuff"),
+                            1))))
+                    .then(Commands.literal("modifier").then(Commands.argument("modifier", ModifierArgumentType.modifier())
+                        .suggests(ModifierArgumentType::suggest)
+                        .executes(context -> manage(
+                            context.getSource(),
+                            EntityArgument.getPlayer(context, "player"),
+                            ModifierArgumentType.getModifier(context, "modifier"),
+                            1))))
+
+                    .then(Commands.literal("everything")
+                        .executes(context -> clear(context.getSource(), EntityArgument.getPlayer(context, "player"))))
                 )
+            )
 
-                .then(Commands.literal("grant")
-                    .requires(src -> CommandUtil.hasPerms(src, 1))
+            .then(Commands.literal("applyPreset").requires(src -> CommandUtil.hasPerms(src, 4))
+                .then(Commands.argument("preset", PresetArgumentType.preset())
+                    .suggests(PresetArgumentType::suggest)
                     .then(Commands.argument("player", EntityArgument.player())
-                        .then(Commands.literal("ability")
-                            .then(Commands.argument("abilityOrDebuff", AbilityArgumentType.abilities())
-                                .suggests(AbilityArgumentType::suggest)
-                                .executes(context -> {
-                                    var player = EntityArgument.getPlayer(context, "player");
-                                    var ability = AbilityArgumentType.getAbility(context, "abilityOrDebuff");
-
-                                    AbilitiesFileUtil.grantAbility(player, ability);
-                                    CommandUtil.sendOk(context.getSource(), "Granted ability " + ability.getId() + " to player " + player.getName().getString());
-
-                                    return 1;
-                                })
-                            )
-                        )
-                        .then(Commands.literal("modifier")
-                            .then(Commands.argument("modifier", ModifierArgumentType.modifier())
-                                .suggests(ModifierArgumentType::suggest)
-                                .executes(context -> {
-                                    var player = EntityArgument.getPlayer(context, "player");
-                                    var modifier = ModifierArgumentType.getModifier(context, "modifier");
-
-                                    AbilitiesFileUtil.grantModifier(player, modifier);
-                                    CommandUtil.sendOk(context.getSource(), "Granted ability modifier " + modifier.getId() + " to player " + player.getName().getString());
-
-                                    return 1;
-                                })
-                            )
-                        )
-                    )
-                )
-
-                .then(Commands.literal("revoke")
-                    .requires(src -> CommandUtil.hasPerms(src, 1))
-                    .then(Commands.argument("player", EntityArgument.player())
-                        .then(Commands.literal("ability")
-                            .then(Commands.argument("abilityOrDebuff", AbilityArgumentType.abilities())
-                                .suggests(AbilityArgumentType::suggest)
-                                .executes(context -> {
-                                    var player = EntityArgument.getPlayer(context, "player");
-                                    var ability = AbilityArgumentType.getAbility(context, "abilityOrDebuff");
-
-                                    AbilitiesFileUtil.revokeAbility(player, ability);
-                                    CommandUtil.sendOk(context.getSource(), "Removed ability " + ability.getId() + " from player " + player.getName().getString());
-
-                                    return 1;
-                                })
-                            )
-                        )
-                        .then(Commands.literal("modifier")
-                            .then(Commands.argument("modifier", ModifierArgumentType.modifier())
-                                .suggests(ModifierArgumentType::suggest)
-                                .executes(context -> {
-                                    var player = EntityArgument.getPlayer(context, "player");
-                                    var modifier = ModifierArgumentType.getModifier(context, "modifier");
-
-                                    AbilitiesFileUtil.revokeModifier(player, modifier);
-                                    CommandUtil.sendOk(context.getSource(), "Removed ability modifier " + modifier.getId() + " from player " + player.getName().getString());
-
-                                    return 1;
-                                })
-                            )
-                        )
-                        .then(Commands.literal("everything")
-                            .executes(context -> {
-                                var player = EntityArgument.getPlayer(context, "player");
-
-                                AbilitiesFileUtil.clearPlayerProfile(player);
-                                FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, false);
-
-                                CommandUtil.sendOk(context.getSource(), "Cleared Abilities profile of " + player.getName().getString());
-
-                                return 1;
-                            })
-                        )
-                    )
-                )
-
-                .then(Commands.literal("applyPreset")
-                    .requires(src -> CommandUtil.hasPerms(src, 4))
-                    .then(Commands.argument("preset", PresetArgumentType.preset())
-                        .suggests(PresetArgumentType::suggest)
-                        .then(Commands.argument("player", EntityArgument.player())
-                            .executes(context -> {
-                                CommandSourceStack source = context.getSource();
-                                var player = EntityArgument.getPlayer(context, "player");
-
-                                var preset = PresetArgumentType.getPreset(context, "preset");
-
-                                if (FdaUtil.getBool(player, PlayerVars.HAS_PICKED_PRESET)) {
-                                    CommandUtil.sendFailTo(player, "You've already picked an abilities preset.");
-                                    return 0;
-                                }
-
-                                AbilitiesFileUtil.applyPreset(player, source.getServer(), preset);
-                                FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, true);
-                                CommandUtil.sendOkTo(player, "Applied the " + preset.getId() + " preset!");
-
-                                return 1;
-                            })
-                        )
-                    )
-                )
-                .then(Commands.literal("dontApplyPreset")
-                    .requires(src -> CommandUtil.hasPerms(src, 4))
-                    .then(Commands.argument("player", EntityArgument.player())
-                        .executes(context -> 0))
-                )
+                        .executes(context -> setPrest(context.getSource(), PresetArgumentType.getPreset(context, "preset"))))))
+            .then(Commands.literal("dontApplyPreset").requires(src -> CommandUtil.hasPerms(src, 4))
+                .then(Commands.argument("player", EntityArgument.player()).executes(_ -> 1)))
         );
+    }
+
+    static int manage(CommandSourceStack source, ServerPlayer player, Ability ability, int action) {
+        var id = ability.getId();
+        var name = player.getName().getString();
+
+        switch (action) {
+            case 0 -> {
+                AbilitiesFileUtil.grantAbility(player, ability);
+                CommandUtil.sendOk(source, "Granted ability " + id + " to player " + name);
+            }
+            case 1 -> {
+                AbilitiesFileUtil.revokeAbility(player, ability);
+                CommandUtil.sendOk(source, "Revoked ability " + id + " from player " + name);
+            }
+        }
+
+        return 1;
+    }
+
+    static int manage(CommandSourceStack source, ServerPlayer player, AbilityModifier modifier, int action) {
+        var id = modifier.getId();
+        var name = player.getName().getString();
+
+        switch (action) {
+            case 0 -> {
+                AbilitiesFileUtil.grantModifier(player, modifier);
+                CommandUtil.sendOk(source, "Granted ability modifier " + id + " to player " + name);
+            }
+            case 1 -> {
+                AbilitiesFileUtil.revokeModifier(player, modifier);
+                CommandUtil.sendOk(source, "Revoked ability modifier " + id + " from player " + name);
+            }
+        }
+
+        return 1;
+    }
+
+    static int clear(CommandSourceStack source, ServerPlayer player) {
+        AbilitiesFileUtil.clearPlayerProfile(player);
+        FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, false);
+
+        CommandUtil.sendOk(source, "Cleared Abilities profile of " + player.getName().getString());
+
+        return 1;
+    }
+
+    static int reload(CommandSourceStack source) {
+        var server = source.getServer();
+        FileManager.loadFile(server);
+
+        CommandUtil.sendOk(source, "Reloaded Player Abilities");
+        return 1;
+    }
+
+    static int presentPreset(CommandSourceStack source, AbilityPreset preset) throws CommandSyntaxException {
+        var player = source.getPlayerOrException();
+
+        var apply = Component.literal("     [APPLY] ").setStyle(Style.EMPTY.withColor(0x55FF55).withClickEvent(
+            new ClickEvent.RunCommand("/abilities applyPreset " + preset.getId() + " " + player.getName().getString())));
+        var cancel = Component.literal(" [CANCEL]").setStyle(Style.EMPTY.withColor(0xFF5555).withClickEvent(
+            new ClickEvent.RunCommand("/abilities dontApplyPreset " + player.getName().getString())));
+
+        CommandUtil.sendOkTo(player, Component.literal(preset.getDesc() + "\n\n").append(apply).append(cancel), false);
+        return 1;
+    }
+
+    static int setPrest(CommandSourceStack source, AbilityPreset preset) throws CommandSyntaxException {
+        var player = source.getPlayerOrException();
+
+        if (FdaUtil.getBool(player, PlayerVars.HAS_PICKED_PRESET)) {
+            CommandUtil.sendFailTo(player, "You've already picked an abilities preset.");
+            return 0;
+        }
+
+        AbilitiesFileUtil.applyPreset(player, source.getServer(), preset);
+        FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, true);
+        CommandUtil.sendOkTo(player, "Applied the " + preset.getId() + " preset!");
+
+        return 1;
     }
 }
