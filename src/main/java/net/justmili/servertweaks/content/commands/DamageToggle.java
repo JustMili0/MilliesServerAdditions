@@ -36,33 +36,25 @@ public class DamageToggle {
             );
         }
 
-        dispatcher.register(Commands.literal("damagetoggle")
-            .requires(src -> CommandUtil.hasPerms(src, 2))
+        dispatcher.register(Commands.literal("damagetoggle").requires(src -> CommandUtil.hasPerms(src, 2))
 
-            .then(Commands.literal("enable")
-                .then(Commands.argument("type", DamageTypesArgumentType.damageTypes(buildContext))
-                    .executes(context -> setStatus(context, false))))
-            .then(Commands.literal("disable")
-                .then(Commands.argument("type", DamageTypesArgumentType.damageTypes(buildContext))
-                    .executes(context -> setStatus(context, true))))
-            .then(Commands.literal("get")
-                .then(Commands.argument("type", DamageTypesArgumentType.damageTypes(buildContext))
-                    .executes(DamageToggle::getStatus)))
+            .then(Commands.literal("enable").then(Commands.argument("type", DamageTypesArgumentType.damageTypes(buildContext))
+                .executes(context -> setStatus(context, false))))
+            .then(Commands.literal("disable").then(Commands.argument("type", DamageTypesArgumentType.damageTypes(buildContext))
+                .executes(context -> setStatus(context, true))))
+            .then(Commands.literal("get").then(Commands.argument("type", DamageTypesArgumentType.damageTypes(buildContext))
+                .executes(DamageToggle::getStatus)))
 
-            .then(Commands.literal("enableAll")
-                .executes(DamageToggle::enableAll))
-            .then(Commands.literal("disableAll")
-                .executes(DamageToggle::disableAll))
-
-            .then(Commands.literal("listDisabled")
-                .executes(DamageToggle::listDisabled))
+            .then(Commands.literal("enableAll").executes(DamageToggle::enableAll))
+            .then(Commands.literal("disableAll").executes(DamageToggle::disableAll))
+            .then(Commands.literal("listDisabled").executes(DamageToggle::listDisabled))
         );
     }
 
-    private static int setStatus(CommandContext<CommandSourceStack> context, boolean disable) throws CommandSyntaxException {
+    private static int setStatus(CommandContext<CommandSourceStack> context, boolean shouldDisable) throws CommandSyntaxException {
         var key = DamageTypesArgumentType.getTypeId(context, "type");
-        var status = disable ? "Disabled" : "Enabled";
-        DISABLED_TYPES.put(key, disable);
+        var status = shouldDisable? "Disabled" : "Enabled";
+        DISABLED_TYPES.put(key, shouldDisable);
         CommandUtil.sendOk(context.getSource(), status + " Damage Type " + key.identifier());
         return 1;
     }

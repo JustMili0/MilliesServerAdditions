@@ -1,2 +1,3 @@
+- Finish cleaning up commands (Left: Discard, FillExtras, Fly, PlayerAbilities + argument types for ID getting or smth, Scale, SmpPerms)
 - Fix/Finish player abilities
 - Write proper description and documentation for Abilities in Abilities.md
