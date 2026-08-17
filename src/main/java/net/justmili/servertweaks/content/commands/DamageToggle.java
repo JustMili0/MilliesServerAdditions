@@ -61,35 +61,47 @@ public class DamageToggle {
 
     private static int setStatus(CommandContext<CommandSourceStack> context, boolean disable) throws CommandSyntaxException {
         var key = DamageTypesArgumentType.getTypeId(context, "type");
+        var status = disable ? "Disabled" : "Enabled";
         DISABLED_TYPES.put(key, disable);
-        CommandUtil.sendOk(context.getSource(), "Damage type '" + key.identifier() + "' is now " + (disable ? "disabled" : "enabled"), false);
+        CommandUtil.sendOk(context.getSource(), status + " Damage Type " + key.identifier());
         return 1;
     }
 
     private static int getStatus(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         var key = DamageTypesArgumentType.getTypeId(context, "type");
         var status = DISABLED_TYPES.getOrDefault(key, false) ? "disabled" : "enabled";
-        CommandUtil.sendOk(context.getSource(), "Damage type '" + key.identifier() + "' is " + status);
+        CommandUtil.sendOk(context.getSource(), "Damage Type " + key.identifier() + " is currently " + status);
         return 1;
     }
 
     private static int enableAll(CommandContext<CommandSourceStack> context) {
         DISABLED_TYPES.clear();
-        CommandUtil.sendOk(context.getSource(), "All damage types enabled.");
+        CommandUtil.sendOk(context.getSource(), "Enabled all existing Damage Types");
         return 1;
     }
 
     private static int disableAll(CommandContext<CommandSourceStack> context) {
         var registry = context.getSource().getServer().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE);
         registry.listElementIds().forEach(key -> DISABLED_TYPES.put(key, true));
-        CommandUtil.sendOk(context.getSource(), "All damage types disabled.");
+        CommandUtil.sendOk(context.getSource(), "Disabled all existing Damage Types");
         return 1;
     }
 
     private static int listDisabled(CommandContext<CommandSourceStack> context) {
+        var registry = context.getSource().getServer().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE);
         List<String> list = DISABLED_TYPES.entrySet().stream().filter(Map.Entry::getValue)
             .map(entry -> entry.getKey().identifier().toString()).toList();
-        CommandUtil.sendOk(context.getSource(), list.isEmpty() ? "No damage types are currently disabled" : "Disabled damage types: " + String.join(", ", list));
+
+        String message;
+        if (list.isEmpty()) {
+            message = "No existing Damage Types are currently disabled";
+        } else if (list.size() >= registry.size()) {
+            message = "All existing Damage Types are currently disabled";
+        } else {
+            message = "Disabled damage types: " + String.join(", ", list);
+        }
+
+        CommandUtil.sendOk(context.getSource(), message);
         return 1;
     }
 }
