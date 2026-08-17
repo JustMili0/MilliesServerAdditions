@@ -13,10 +13,13 @@ public class Fly {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("fly")
             .requires(src -> CommandUtil.hasPerms(src, 1))
-            .executes(context ->
-                toggleFly(context.getSource().getPlayerOrException(), context.getSource()))
+
+            .executes(context -> toggleFly(
+                context.getSource().getPlayerOrException(), context.getSource()))
+
             .then(Commands.argument("player", EntityArgument.players())
-                .executes(context -> toggleFly(context.getSource(), EntityArgument.getPlayers(context, "player")))
+                .executes(context -> toggleFly(
+                    context.getSource(), EntityArgument.getPlayers(context, "player")))
             )
         );
     }

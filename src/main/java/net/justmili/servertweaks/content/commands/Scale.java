@@ -26,20 +26,23 @@ public class Scale {
             .then(Commands.literal("force").requires(src -> CommandUtil.hasPerms(src, 1))
                 .then(Commands.argument("player", EntityArgument.players())
                     .then(Commands.argument("height_cm", FloatArgumentType.floatArg(18.5f, 2960.0f))
-                        .executes(context ->
-                            forceScale(context.getSource(), EntityArgument.getPlayers(context, "player"), FloatArgumentType.getFloat(context, "height_cm"))))))
+                        .executes(context -> forceScale(
+                            context.getSource(), EntityArgument.getPlayers(context, "player"), FloatArgumentType.getFloat(context, "height_cm"))))))
 
             .then(Commands.literal("unlock").requires(src -> CommandUtil.hasPerms(src, 1))
                 .then(Commands.argument("player", EntityArgument.players())
-                    .executes(context -> unlockScale(context.getSource(), EntityArgument.getPlayers(context, "player")))))
+                    .executes(context -> unlockScale(
+                        context.getSource(), EntityArgument.getPlayers(context, "player")))))
 
             .then(Commands.literal("reset").requires(src -> CommandUtil.hasPerms(src, 1))
                 .then(Commands.argument("player", EntityArgument.players())
-                    .executes(context -> resetScale(context.getSource(), EntityArgument.getPlayers(context, "player"), true))))
+                    .executes(context -> resetScale(
+                        context.getSource(), EntityArgument.getPlayers(context, "player"), true))))
 
             .then(Commands.literal("reset-nounlock").requires(src -> CommandUtil.hasPerms(src, 1))
                 .then(Commands.argument("player", EntityArgument.players())
-                    .executes(context -> resetScale(context.getSource(), EntityArgument.getPlayers(context, "player"), false))))
+                    .executes(context -> resetScale(
+                        context.getSource(), EntityArgument.getPlayers(context, "player"), false))))
         );
     }
 

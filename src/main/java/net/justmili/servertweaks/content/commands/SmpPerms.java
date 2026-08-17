@@ -18,25 +18,24 @@ public class SmpPerms {
             .then(Commands.argument("player", EntityArgument.player())
                 .then(Commands.argument("permission_level", SmpPermsArgumentType.permissionLevel())
                     .suggests(SmpPermsArgumentType::suggest)
-                    .executes(context -> {
-                        var source = context.getSource();
-                        var player = EntityArgument.getPlayer(context, "player");
-                        var permissionLevel = SmpPermsArgumentType.getPermissionLevel(context, "permission_level");
-
-                        switch (permissionLevel) {
-                            case DEFAULT -> SmpPermsUtil.deop(player);
-                            case MODERATOR -> setPermissions(source, player, SmpPermsUtil.moderatorPerms(), 2);
-                            case ADMINISTRATOR -> setPermissions(source, player, SmpPermsUtil.adminPerms(), 3);
-                            case LIMITED_OPERATOR -> setPermissions(source, player, SmpPermsUtil.limitedOpPerms(), 4);
-                            case OPERATOR -> setPermissions(source, player, SmpPermsUtil.operatorPerms(), 4);
-                            default -> throw new IllegalStateException("Unknown SMP permission level");
-                        }
-
-                        return 1;
-                    })
-                )
+                    .executes(context -> setPermissions(
+                        context.getSource(), EntityArgument.getPlayer(context, "player"),
+                        SmpPermsArgumentType.getPermissionLevel(context, "permission_level"))))
             )
         );
+    }
+
+    static int setPermissions(CommandSourceStack source, ServerPlayer player, SmpPermsArgumentType.PermissionLevel permissionLevel) {
+        switch (permissionLevel) {
+            case DEFAULT -> SmpPermsUtil.deop(player);
+            case MODERATOR -> setPermissions(source, player, SmpPermsUtil.moderatorPerms(), 2);
+            case ADMINISTRATOR -> setPermissions(source, player, SmpPermsUtil.adminPerms(), 3);
+            case LIMITED_OPERATOR -> setPermissions(source, player, SmpPermsUtil.limitedOpPerms(), 4);
+            case OPERATOR -> setPermissions(source, player, SmpPermsUtil.operatorPerms(), 4);
+            default -> throw new IllegalStateException("Unknown SMP permission level");
+        }
+
+        return 1;
     }
 
     public static void setPermissions(CommandSourceStack source, ServerPlayer player, int smpPermLevel, int permLevel) {

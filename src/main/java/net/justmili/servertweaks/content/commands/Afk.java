@@ -36,11 +36,9 @@ public class Afk {
 
                 var scoreboard = level.getScoreboard();
                 var team = scoreboard.getPlayerTeam(AFK_PLAYERS);
-
                 if (team == null) team = createTeam(scoreboard);
-                toggleAfk(source, player, scoreboard, team);
 
-                return 1;
+                return toggleAfk(source, player, scoreboard, team);
             })
         );
     }
@@ -53,7 +51,7 @@ public class Afk {
         return team;
     }
 
-    static void toggleAfk(CommandSourceStack source, ServerPlayer player, ServerScoreboard board, PlayerTeam team) {
+    static int toggleAfk(CommandSourceStack source, ServerPlayer player, ServerScoreboard board, PlayerTeam team) {
         if (FdaUtil.getBool(player, PlayerVars.IS_AFK)) {
             // Remove from team and set IS_AFK to false
             board.removePlayerFromTeam(player.getScoreboardName(), team);
@@ -77,6 +75,8 @@ public class Afk {
 
             CommandUtil.sendOk(source, "You are now AFK", false);
         }
+
+        return 1;
     }
 
     static void despawnNearbyMonsters(ServerPlayer player) {

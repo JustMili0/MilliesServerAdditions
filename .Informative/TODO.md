@@ -1,3 +1,2 @@
-- Finish cleaning up commands (Left: PlayerAbilities + argument types for ID getting or smth, SmpPerms)
 - Fix/Finish player abilities
 - Write proper description and documentation for Abilities in Abilities.md

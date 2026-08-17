@@ -13,13 +13,7 @@ public class Banish {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("banish").requires(src -> CommandUtil.hasPerms(src, 1))
             .then(Commands.argument("player", EntityArgument.player())
-                .executes(context -> {
-                    var player = EntityArgument.getPlayer(context, "player");
-                    var source = context.getSource();
-
-                    return banish(source, player);
-                })
-            )
+                .executes(context -> banish(context.getSource(), EntityArgument.getPlayer(context, "player"))))
         );
     }
 

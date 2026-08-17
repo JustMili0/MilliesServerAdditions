@@ -26,22 +26,26 @@ public class Discard {
         dispatcher.register(Commands.literal("discard").requires(src -> CommandUtil.hasPerms(src, 1))
             // Entity discard
             .then(Commands.argument("entity", EntityArgument.entities())
-                .executes(context -> discardEntity(context.getSource(), EntityArgument.getEntities(context, "entity"))))
+                .executes(context -> discardEntity(
+                    context.getSource(), EntityArgument.getEntities(context, "entity"))))
 
             // Block discard
             .then(Commands.argument("block", BlockPosArgument.blockPos())
-                .executes(context -> discardBlock(context.getSource(), BlockPosArgument.getLoadedBlockPos(context, "block"))))
+                .executes(context -> discardBlock(
+                    context.getSource(), BlockPosArgument.getLoadedBlockPos(context, "block"))))
 
             // Entity/Block inventory discard
             .then(Commands.literal("inventory")
 
                 // Entity
                 .then(Commands.argument("entity", EntityArgument.entity())
-                    .executes(context -> discardEntityInv(context.getSource(), EntityArgument.getEntity(context, "entity"))))
+                    .executes(context -> discardEntityInv(
+                        context.getSource(), EntityArgument.getEntity(context, "entity"))))
 
                 // Block
                 .then(Commands.argument("block", BlockPosArgument.blockPos())
-                    .executes(context -> discardBlockInv(context.getSource(), BlockPosArgument.getLoadedBlockPos(context, "block"))))
+                    .executes(context -> discardBlockInv(
+                        context.getSource(), BlockPosArgument.getLoadedBlockPos(context, "block"))))
             )
         );
     }

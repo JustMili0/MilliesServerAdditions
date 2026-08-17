@@ -104,7 +104,7 @@ public class FillExtras {
             }
         }
 
-        sendMessage(source, count, replaceBlock);
+        sendMessage(source, replaceBlock, count);
         return count;
     }
 
@@ -128,7 +128,7 @@ public class FillExtras {
             }
         }
 
-        sendMessage(source, count, replaceBlock);
+        sendMessage(source, replaceBlock, count);
         return count;
     }
 
@@ -153,11 +153,11 @@ public class FillExtras {
             }
         }
 
-        sendMessage(source, count, replaceBlock);
+        sendMessage(source, replaceBlock, count);
         return count;
     }
 
-    static void sendMessage(CommandSourceStack source, int count, Block replacementBlock) {
+    static void sendMessage(CommandSourceStack source, Block replacementBlock, int count) {
         CommandUtil.sendOk(source, String.format("Successfully replaced %s block(s) with %s", count, replacementBlock.getName().getString()));
     }
 
