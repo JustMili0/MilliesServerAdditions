@@ -215,7 +215,7 @@ public class Abilities {
                 || level.isRainingAt(player.blockPosition())
                 || player.isInWater()) return;
 
-            player.hurtServer(level, level.damageSources().onFire(), 1.0F);
+            player.hurtServer(level, level.damageSources().onFire(), 1f);
         }
     }
 
@@ -309,17 +309,12 @@ public class Abilities {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            double radius = 6.0, stop = 1.5;
-            List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, player.getBoundingBox().inflate(6.0));
+            float r = 6f, rSq = r * r;
+            var items = level.getEntitiesOfClass(ItemEntity.class, player.getBoundingBox().inflate(r));
 
             for (ItemEntity item : items) {
-                if (!item.onGround()) return;
-
-                var directionToPlayer = player.position().add(0, 0.5, 0).subtract(item.position());
-                double distance = directionToPlayer.length();
-                if (distance > radius || distance < stop) continue;
-
-                item.setDeltaMovement(directionToPlayer.normalize().scale(0.4));
+                if (item.distanceToSqr(player) > rSq) continue;
+                item.playerTouch(player);
             }
         }
     }
