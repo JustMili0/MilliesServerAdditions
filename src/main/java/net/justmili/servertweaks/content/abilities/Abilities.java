@@ -341,11 +341,11 @@ public class Abilities {
             // Don't apply past this point
             if (!player.gameMode.isSurvival()) return;
 
-            int armor = player.getArmorValue();
-            float targetHp = Math.clamp(100.0F - (armor * 3.0F), 40.0F, 100.0F);
+            float min = 40f, max = 80f;
+            float targetHp = Math.clamp(max - (player.getArmorValue() * 2), min, max);
             if (targetHp % 2 != 0) targetHp += 1;
 
-            addOrReplace(maxHp, AR_STRONG_HP, targetHp - 20.0, AttributeModifier.Operation.ADD_VALUE);
+            addOrReplace(maxHp, AR_STRONG_HP, targetHp - 20, AttributeModifier.Operation.ADD_VALUE);
             if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
         }
     }
@@ -361,7 +361,7 @@ public class Abilities {
 
             EntityUtil.applyEffect(player, MobEffects.CONDUIT_POWER, 100, 0);
 
-            int num = player.hasEffect(MobEffects.WEAKNESS)? 1 : 2;
+            int num = player.hasEffect(MobEffects.POISON)? 1 : 2;
             if (level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.DEPTH_STRIDER)
                 .map(e -> EnchantmentHelper.getItemEnchantmentLevel(e, player.getItemBySlot(EquipmentSlot.FEET)) > num)
                 .orElse(false)) return; // Return before granting Dolphin's Grace if player has depth strider to prevent OP swimming speeds
