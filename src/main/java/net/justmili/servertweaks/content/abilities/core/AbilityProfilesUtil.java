@@ -11,9 +11,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static net.justmili.servertweaks.content.abilities.core.FileManager.*;
+import static net.justmili.servertweaks.content.abilities.core.AbilityProfiles.*;
 
-public class AbilitiesFileUtil {
+public class AbilityProfilesUtil {
     // Ability and Modifier management
     public static Set<Ability> getAbilities(ServerPlayer player) {
         return playerAbilities.getOrDefault(player.getUUID(), Collections.emptySet());

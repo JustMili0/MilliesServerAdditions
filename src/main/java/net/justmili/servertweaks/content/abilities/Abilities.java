@@ -3,12 +3,13 @@ package net.justmili.servertweaks.content.abilities;
 import net.justmili.libs.v1.utils.common.EntityUtil;
 import net.justmili.libs.v1.utils.common.EntityUtil.MobData;
 import net.justmili.servertweaks.ServerTweaks;
-import net.justmili.servertweaks.content.abilities.core.Registries;
+import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.justmili.servertweaks.registries.TagRegistry;
 import net.justmili.servertweaks.util.ScalerUtil;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -120,7 +121,7 @@ public class Abilities {
         AQUATIC_GRACE = register(new AquaticGrace());
         BREATHES_UNDERWATER = register(new BreathesUnderwater());
         CANT_BREATHE_AIR = register(new CantBreatheAir());
-        CANT_SWIM = register(new Ability(id("cant_swim"))); // TODO: Implement, should only work in survival, only in water
+        CANT_SWIM = register(new Ability(id("cant_swim"))); // TODO: Implement, should only work in survival, only in water and only if player is actively swimming up
         HYDROPHOBIC = register(new Hydrophobic());
         HUNTED_BY_FOX = register(new HuntedByFox());
         HUNTED_BY_WOLF = register(new HuntedByWolf());
@@ -147,7 +148,7 @@ public class Abilities {
     }
 
     private static Ability register(Ability ability) {
-        Registries.ABILITIES.put(ability.getId(), ability);
+        AbilityRegistries.ABILITIES.put(ability.getId(), ability);
         return ability;
     }
 
@@ -248,6 +249,7 @@ public class Abilities {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
+            if (player.hasEffect(MobEffects.WEAKNESS)) return;
             if (player.getDeltaMovement().y < -0.4 && player.fallDistance > 3) EntityUtil.applyEffect(player, MobEffects.SLOW_FALLING, 60, 1);
             if (player.onGround()) player.removeEffect(MobEffects.SLOW_FALLING);
         }
@@ -359,8 +361,9 @@ public class Abilities {
 
             EntityUtil.applyEffect(player, MobEffects.CONDUIT_POWER, 100, 0);
 
-            if (level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT).get(Enchantments.DEPTH_STRIDER)
-                .map(enchant -> EnchantmentHelper.getItemEnchantmentLevel(enchant, player.getItemBySlot(EquipmentSlot.FEET)) > 2)
+            int num = player.hasEffect(MobEffects.WEAKNESS)? 1 : 2;
+            if (level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.DEPTH_STRIDER)
+                .map(e -> EnchantmentHelper.getItemEnchantmentLevel(e, player.getItemBySlot(EquipmentSlot.FEET)) > num)
                 .orElse(false)) return; // Return before granting Dolphin's Grace if player has depth strider to prevent OP swimming speeds
 
             EntityUtil.applyEffect(player, MobEffects.DOLPHINS_GRACE, 100, 0);
@@ -468,7 +471,7 @@ public class Abilities {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
 
-            for (Creeper creeper : EntityUtil.getNearby(player, Creeper.class, 8.0)) {
+            for (Creeper creeper : EntityUtil.getNearby(player, Creeper.class, 10.0)) {
                 creeper.setTarget(null);
                 creeper.getNavigation().moveTo(
                     creeper.getX() + (creeper.getX() - player.getX()),
@@ -504,12 +507,12 @@ public class Abilities {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            for (Fox fox : EntityUtil.getNearby(player, Fox.class, 24.0)) {
+            for (Fox fox : EntityUtil.getNearby(player, Fox.class, 12.0)) {
                 var accessor = (FoxAccessor) fox;
                 if (accessor.invokeTrusts(player)) continue;
                 accessor.invokeAddTrustedEntity(player);
             }
-            for (Wolf wolf : EntityUtil.getNearby(player, Wolf.class, 24.0)) {
+            for (Wolf wolf : EntityUtil.getNearby(player, Wolf.class, 12.0)) {
                 if (!wolf.isTame() && wolf.getTarget() == player) wolf.setTarget(null);
             }
         }

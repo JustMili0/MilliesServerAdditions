@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.abilities;
 
 import net.justmili.servertweaks.ServerTweaks;
-import net.justmili.servertweaks.content.abilities.core.Registries;
+import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
 import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 import net.minecraft.resources.Identifier;
 
@@ -20,7 +20,7 @@ public class Modifiers {
     }
 
     private static AbilityModifier register(AbilityModifier modifier) {
-        Registries.MODIFIERS.put(modifier.getId(), modifier);
+        AbilityRegistries.MODIFIERS.put(modifier.getId(), modifier);
         return modifier;
     }
 }

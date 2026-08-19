@@ -1,4 +1,6 @@
 This file was made specifically for Millie's discord announcements about small patches and additions being added to the main server mod.
+These patch versions are not publicly released, never will. They exist only for purpose of testing this massive update.
+All features here are new, some were added in 1.3.0-beta.1 to 1.3.0-beta.10 before server testing was initiated with individual numbered patches, so they are not mentioned in here nor in any previous main changelogs prior to 1.3.0.
 
 ------------------------------------------------------------------------------------------------------------------------
 

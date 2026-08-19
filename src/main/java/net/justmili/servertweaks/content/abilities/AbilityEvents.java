@@ -43,7 +43,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.UUID;
 
-import static net.justmili.servertweaks.content.abilities.core.AbilitiesFileUtil.*;
+import static net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil.*;
 
 public class AbilityEvents {
     public static void registerAbilityEvents() {

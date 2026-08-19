@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.justmili.servertweaks.content.abilities.Abilities;
-import net.justmili.servertweaks.content.abilities.core.AbilitiesFileUtil;
+import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
@@ -28,6 +28,6 @@ public abstract class PetsMixin extends TamableAnimal {
     @ModifyExpressionValue(method = "tryToTame", at = @At("MIXINEXTRAS:EXPRESSION"))
     private boolean alwaysTameIfCON(boolean original, @Local(argsOnly = true) Player player) {
         if (!(player instanceof ServerPlayer serverPlayer)) return original;
-        return AbilitiesFileUtil.has(serverPlayer, Abilities.CHILD_OF_NATURE) || original;
+        return AbilityProfilesUtil.has(serverPlayer, Abilities.CHILD_OF_NATURE) || original;
     }
 }

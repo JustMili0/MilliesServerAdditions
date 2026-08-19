@@ -4,8 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.justmili.libs.v1.utils.common.CommandUtil;
 import net.justmili.libs.v1.utils.common.FdaUtil;
-import net.justmili.servertweaks.content.abilities.core.AbilitiesFileUtil;
-import net.justmili.servertweaks.content.abilities.core.FileManager;
+import net.justmili.servertweaks.content.abilities.core.AbilityProfiles;
+import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
@@ -92,11 +92,11 @@ public class PlayerAbilities {
 
         switch (action) {
             case 0 -> {
-                AbilitiesFileUtil.grantAbility(player, ability);
+                AbilityProfilesUtil.grantAbility(player, ability);
                 CommandUtil.sendOk(source, "Granted ability " + id + " to player " + name);
             }
             case 1 -> {
-                AbilitiesFileUtil.revokeAbility(player, ability);
+                AbilityProfilesUtil.revokeAbility(player, ability);
                 CommandUtil.sendOk(source, "Revoked ability " + id + " from player " + name);
             }
         }
@@ -110,11 +110,11 @@ public class PlayerAbilities {
 
         switch (action) {
             case 0 -> {
-                AbilitiesFileUtil.grantModifier(player, modifier);
+                AbilityProfilesUtil.grantModifier(player, modifier);
                 CommandUtil.sendOk(source, "Granted ability modifier " + id + " to player " + name);
             }
             case 1 -> {
-                AbilitiesFileUtil.revokeModifier(player, modifier);
+                AbilityProfilesUtil.revokeModifier(player, modifier);
                 CommandUtil.sendOk(source, "Revoked ability modifier " + id + " from player " + name);
             }
         }
@@ -123,17 +123,17 @@ public class PlayerAbilities {
     }
 
     static int clear(CommandSourceStack source, ServerPlayer player) {
-        AbilitiesFileUtil.clearPlayerProfile(player);
+        AbilityProfilesUtil.clearPlayerProfile(player);
         FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, false);
 
-        CommandUtil.sendOk(source, "Cleared Abilities profile of " + player.getName().getString());
+        CommandUtil.sendOk(source, "Cleared the Abilities Profile of " + player.getName().getString());
 
         return 1;
     }
 
     static int reload(CommandSourceStack source) {
         var server = source.getServer();
-        FileManager.loadFile(server);
+        AbilityProfiles.loadFile(server);
 
         CommandUtil.sendOk(source, "Reloaded Player Abilities");
         return 1;
@@ -159,7 +159,7 @@ public class PlayerAbilities {
             return 0;
         }
 
-        AbilitiesFileUtil.applyPreset(player, source.getServer(), preset);
+        AbilityProfilesUtil.applyPreset(player, source.getServer(), preset);
         FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, true);
         CommandUtil.sendOkTo(player, "Applied the " + preset.getId() + " preset!");
 

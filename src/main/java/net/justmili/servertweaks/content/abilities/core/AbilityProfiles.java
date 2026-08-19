@@ -15,7 +15,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class FileManager {
+public class AbilityProfiles {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String FILE_NAME = "player_abilities.json";
     public static final Map<UUID, Set<Ability>> playerAbilities = new LinkedHashMap<>();
@@ -54,7 +54,7 @@ public class FileManager {
                             continue;
                         }
 
-                        var ability = Registries.byAbilityId(id);
+                        var ability = AbilityRegistries.byAbilityId(id);
                         if (ability == null) {
                             ServerTweaks.LOGGER.warn("Unknown ability '{}', skipping", raw);
                             continue;
@@ -72,7 +72,7 @@ public class FileManager {
                             continue;
                         }
 
-                        var modifier = Registries.byModifierId(id);
+                        var modifier = AbilityRegistries.byModifierId(id);
                         if (modifier == null) {
                             ServerTweaks.LOGGER.warn("Unknown modifier '{}', skipping", raw);
                             continue;

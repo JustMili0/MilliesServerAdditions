@@ -7,7 +7,7 @@ import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.Abilities;
 import net.justmili.servertweaks.content.abilities.Modifiers;
 import net.justmili.servertweaks.content.abilities.Presets;
-import net.justmili.servertweaks.content.abilities.core.FileManager;
+import net.justmili.servertweaks.content.abilities.core.AbilityProfiles;
 import net.justmili.servertweaks.registries.CommandRegistry;
 import net.justmili.servertweaks.registries.DimRegistry;
 import net.justmili.servertweaks.registries.EventRegistry;
@@ -34,7 +34,7 @@ public class ServerTweaks implements ModInitializer {
         Modifiers.init();
         Presets.init();
 
-        ServerLifecycleEvents.SERVER_STARTED.register(FileManager::loadFile);
+        ServerLifecycleEvents.SERVER_STARTED.register(AbilityProfiles::loadFile);
     }
 
     public static Identifier asId(String path) {

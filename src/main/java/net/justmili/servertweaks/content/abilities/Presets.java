@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.abilities;
 
 import net.justmili.servertweaks.ServerTweaks;
-import net.justmili.servertweaks.content.abilities.core.Registries;
+import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
 import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
 import net.minecraft.resources.Identifier;
 
@@ -335,6 +335,6 @@ public class Presets {
     }
 
     public static void register(AbilityPreset preset) {
-        Registries.PRESETS.put(preset.getId(), preset);
+        AbilityRegistries.PRESETS.put(preset.getId(), preset);
     }
 }

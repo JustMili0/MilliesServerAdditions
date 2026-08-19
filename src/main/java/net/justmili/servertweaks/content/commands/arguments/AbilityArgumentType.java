@@ -5,7 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.justmili.servertweaks.content.abilities.core.Registries;
+import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -21,12 +21,12 @@ public class AbilityArgumentType {
 
     public static Ability getAbility(CommandContext<CommandSourceStack> context, String argName) throws CommandSyntaxException {
         var id = IdentifierArgument.getId(context, argName);
-        var ability = Registries.byAbilityId(id);
+        var ability = AbilityRegistries.byAbilityId(id);
         if (ability == null) throw new SimpleCommandExceptionType(Component.literal("Unknown player ability: " + id)).create();
         return ability;
     }
 
     public static CompletableFuture<Suggestions> suggest(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggestResource(Registries.ABILITIES.keySet(), builder);
+        return SharedSuggestionProvider.suggestResource(AbilityRegistries.ABILITIES.keySet(), builder);
     }
 }

@@ -2,7 +2,7 @@ package net.justmili.servertweaks.content.mechanics.features;
 
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.Abilities;
-import net.justmili.servertweaks.content.abilities.core.AbilitiesFileUtil;
+import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.justmili.servertweaks.mixin.accessors.CropBlockAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -30,7 +30,7 @@ public final class RightClickHarvest {
         if (level.isClientSide()) return;
         if (hand != InteractionHand.MAIN_HAND) return;
         if (player.isSpectator()) return;
-        if (AbilitiesFileUtil.getAbilities(player).contains(Abilities.HERBIVORE) && player.isShiftKeyDown()) return;
+        if (AbilityProfilesUtil.getAbilities(player).contains(Abilities.HERBIVORE) && player.isShiftKeyDown()) return;
 
         var pos = blockHitResult.getBlockPos();
         var state = level.getBlockState(pos);

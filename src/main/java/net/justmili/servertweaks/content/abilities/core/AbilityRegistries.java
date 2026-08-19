@@ -10,13 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class Registries {
+public class AbilityRegistries {
     public static final Map<Identifier, Ability> ABILITIES = new HashMap<>();
     public static final Map<Identifier, AbilityModifier> MODIFIERS = new HashMap<>();
     public static final Map<Identifier, AbilityPreset> PRESETS = new HashMap<>();
 
     public static Map<Identifier, Ability> getAbilities() {
-        return Registries.ABILITIES;
+        return AbilityRegistries.ABILITIES;
     }
     public static @Nullable Ability byAbilityId(Identifier id) {
         return ABILITIES.get(id);
@@ -26,7 +26,7 @@ public class Registries {
     }
 
     public static Map<Identifier, AbilityModifier> getModifiers() {
-        return Registries.MODIFIERS;
+        return AbilityRegistries.MODIFIERS;
     }
     public static @Nullable AbilityModifier byModifierId(Identifier id) {
         return MODIFIERS.get(id);
@@ -36,7 +36,7 @@ public class Registries {
     }
 
     public static Map<Identifier, AbilityPreset> getPresets() {
-        return Registries.PRESETS;
+        return AbilityRegistries.PRESETS;
     }
     public static @Nullable AbilityPreset byPresetId(Identifier id) {
         return PRESETS.get(id);
