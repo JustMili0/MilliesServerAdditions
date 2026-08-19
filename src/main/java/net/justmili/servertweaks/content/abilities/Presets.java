@@ -33,7 +33,9 @@ public class Presets {
                 Abilities.CANT_SWIM,
                 Abilities.SWIFT
             ),
-            Set.of()
+            Set.of(
+                Modifiers.CAN_EAT_GOLDEN_FOOD
+            )
         ));
         register(new AbilityPreset(
             id("dreamweaver"),
@@ -51,7 +53,9 @@ public class Presets {
                 Abilities.CANT_SWIM,
                 Abilities.LIGHT
             ),
-            Set.of()
+            Set.of(
+                Modifiers.CAN_EAT_GOLDEN_FOOD
+            )
             // Ability set approved by Flufaye the dreamweaver Vtuber herself :3
         ));
         register(new AbilityPreset(
@@ -87,7 +91,9 @@ public class Presets {
                 Abilities.TOUGH,
                 Abilities.FREEZE_IMMUNE
             ),
-            Set.of()
+            Set.of(
+                Modifiers.CAN_EAT_GOLDEN_FOOD
+            )
         ));
         register(new AbilityPreset(
             id("monster_generic"),
@@ -128,6 +134,7 @@ public class Presets {
                 Abilities.BREATHES_UNDERWATER
             ),
             Set.of(
+                Modifiers.CAN_EAT_GOLDEN_FOOD
             )
         ));
         register(new AbilityPreset(
@@ -148,6 +155,7 @@ public class Presets {
                 Abilities.TOUGH
             ),
             Set.of(
+                Modifiers.CAN_EAT_GOLDEN_FOOD
             )
         ));
         register(new AbilityPreset(
@@ -165,6 +173,7 @@ public class Presets {
                 Abilities.HEAT_IMMUNE
             ),
             Set.of(
+                Modifiers.CAN_EAT_GOLDEN_FOOD
             )
         ));
         register(new AbilityPreset( // aka Iron Golem
@@ -197,6 +206,7 @@ public class Presets {
                 Abilities.SCARES_PHANTOMS
             ),
             Set.of(
+                Modifiers.CAN_EAT_GOLDEN_FOOD
             )
         ));
         register(new AbilityPreset( // aka Chicken
@@ -210,6 +220,7 @@ public class Presets {
                 Abilities.SWIFT
             ),
             Set.of(
+                Modifiers.CAN_EAT_GOLDEN_FOOD
             )
         ));
         register(new AbilityPreset( // aka Fish
@@ -228,6 +239,7 @@ public class Presets {
                 Abilities.SLOW
             ),
             Set.of(
+                Modifiers.CAN_EAT_GOLDEN_FOOD
             )
         ));
         register(new AbilityPreset( // aka Spider
@@ -244,6 +256,7 @@ public class Presets {
                 Abilities.PREDATORY
             ),
             Set.of(
+                Modifiers.CAN_EAT_GOLDEN_FOOD
             )
         ));
         register(new AbilityPreset( // aka Enderman
@@ -274,6 +287,7 @@ public class Presets {
                 Abilities.BREATHES_UNDERWATER
             ),
             Set.of(
+                Modifiers.CAN_EAT_GOLDEN_FOOD
             )
         ));
         register(new AbilityPreset( // aka Slime
@@ -290,6 +304,7 @@ public class Presets {
                 Abilities.SQUISHY
             ),
             Set.of(
+                Modifiers.CAN_EAT_GOLDEN_FOOD
             )
         ));
         register(new AbilityPreset( // aka Magma Cube
@@ -309,6 +324,7 @@ public class Presets {
                 Abilities.SQUISHY
             ),
             Set.of(
+                Modifiers.CAN_EAT_GOLDEN_FOOD
             )
         ));
         register(new AbilityPreset(

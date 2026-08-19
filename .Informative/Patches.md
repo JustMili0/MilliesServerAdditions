@@ -168,16 +168,18 @@ Feedback is appreciated ^^
   - `GRASS_EATER` -> `herbivore`
   - `ONLY_EATS_SWEETS` -> `saccharivore`
   - `AQUA_GRACE` -> `aquatic_grace`
-- Fix and optimize damage immunity handling
-- `fire_immune` and `lava_immune` now automatically get extinguished. This can be countered with Weakness
+- Fixed and optimize damage immunity handling
+- `fire_immune` and `lava_immune` now automatically get extinguished
 - Made `light` less annoying to walk down the stairs with (now additionally requires 3 blocks of fall distance)
-- `fall_immune` is no longer affected by Slow Falling. This can be countered with Weakness
-- `freeze_immune` no longer gets the freezing overlay and hearts. This can be countered with Weakness
+- `fall_immune` is no longer affected by Slow Falling
+- `freeze_immune` no longer gets the freezing overlay and hearts
 - Fixed being able to eat anything no matter the diet if food is held in the offhand
 - Fixed and readjusted damage multipliers for `squishy` and `weak_to_damage`
 - Fixed players with `herbivore` being able to eat even at full hunger
 - Fixed placing and picking up fish in and from buckets as `carnivore`, `vegeterian`, `saccharivore`, `herbivore` and `insectivore`
 - Fixed functional block interactions and crop planting and harvesting when holding a non-diet items as `carnivore`, `vegeterian`, `saccharivore`, `herbivore` and `insectivore`
+- Gave use to Poison and Weakness effects to counter some abilities' features
+- Nerfed `strong` ability - Instead of max 100hp with no armor, now it's max 80hp with no armor
 - Added Big Dripleaf, Small Dripleaf, Vines, Cave Vines, Glow Lichen, Ferns, Large Ferns, Bushes, Firefly Bushes, Seagrass, Tall Seagrass, Sea Pickles and Kelp to `herbivore`'s diet tag
 - Removed Jungle and its variants from tag `hot_biomes`
 - Added `canine` ability preset
@@ -186,7 +188,8 @@ Feedback is appreciated ^^
 - Fixed ability `child_of_nature` - Taming chance with any animal is now 100%
 - [TODO - needs code] Fixed ability `climbs_walls` - Now can actually climb walls
 - Fixed `aquatic_grace` checking HEAD equipment slot instead of FEET for Depth Strider enchantment
-- Made `aquatic_grace` not apply Dolphin's Grace effect with Depth Strider 3, only 2 and below
+- Made `aquatic_grace` not apply Dolphin's Grace effect with Depth Strider above level 1, now applies at levels 1 and 2 (only 1 if poisoned)
+- All ability presents with diet restrictions now grant `can_eat_golden_foods` modifier 
 - (NEW) Bovid - Can be milked with a bucket by other players
 - (NEW) Squishy - Decreases `fall` and `fly_into_wall` damage by 75% each
 - (NEW) Insectivore - Can feed on bug-like entities (Silverfish, Endermites, and size-1 Slimes and Magma Cubes) as well as items like Slimeballs, Magma Cream and Spider Eyes
