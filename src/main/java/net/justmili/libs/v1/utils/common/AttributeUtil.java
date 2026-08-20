@@ -37,12 +37,11 @@ public class AttributeUtil {
 
     public static void addOrUpdate(AttributeInstance instance, AttributeModifier modifier) {
         if (instance == null) return;
-        addTransient(instance, modifier);
+        instance.addOrUpdateTransientModifier(modifier);
     }
     public static void addOrReplace(AttributeInstance instance, AttributeModifier modifier) {
         if (instance == null) return;
-        instance.removeModifier(modifier);
-        addPermanent(instance, modifier);
+        instance.addOrReplacePermanentModifier(modifier);
     }
     public static void addOrUpdate(AttributeInstance instance, Identifier id, double value, AttributeModifier.Operation operation) {
         if (instance == null) return;
