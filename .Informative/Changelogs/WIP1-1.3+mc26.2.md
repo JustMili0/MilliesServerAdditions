@@ -4,7 +4,7 @@
 ### ***GENERAL***
 - Mod renamed from "Useful & Fun Server Tweaks" to "Millie's Server Additions"
 - License changed from All-Rights-Reserved to MIT
-- Updated to Minecraft 26.1.2
+- Updated to Minecraft 26.2
 
 ### ***CONFIGURATION***
 - Configuration file has been moved to `\config\servertweaks\` directory. Previous configuration files won't be used anymore

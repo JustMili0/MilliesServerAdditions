@@ -111,7 +111,7 @@ Feedback is appreciated ^^
 (AWAITING COMPLETION, WIP)
 # Millie's Server Additions, Patch #6 - 1.3.0-beta.16
 **Generic**
-- Updated to Minecraft 26.1.2
+- Updated to Minecraft 26.2
 - Changed project's buildscript from Groovy to Kotlin
 - Dropped dependency from SuperMartijn642's Config Lib and replaced it with a stripped down version of my Core Libs mod
 - Reworked registries for player abilities

@@ -16,6 +16,9 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Team;
+import net.minecraft.world.scores.TeamColor;
+
+import java.util.Optional;
 
 public class Afk {
     private static final String AFK_PLAYERS = "afk_players";
@@ -47,7 +50,7 @@ public class Afk {
         var team = board.addPlayerTeam(AFK_PLAYERS);
         team.setNameTagVisibility(Team.Visibility.ALWAYS);
         team.setPlayerPrefix(Component.literal("[AFK] "));
-        team.setColor(ChatFormatting.GRAY);
+        team.setColor(Optional.of(TeamColor.GRAY));
         return team;
     }
 

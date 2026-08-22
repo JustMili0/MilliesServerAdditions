@@ -31,7 +31,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.entity.monster.cubemob.AbstractCubeMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -325,8 +325,7 @@ public class AbilityEvents {
     }
 
     static boolean isBugLikeConsumable(Entity entity) {
-        // TODO: Change to AbstractCubeMob with 26.2!
-        if (entity instanceof Slime slime) return slime.getSize() == 1;
+        if (entity instanceof AbstractCubeMob slime) return slime.getSize() == 1;
         return false;
     }
 

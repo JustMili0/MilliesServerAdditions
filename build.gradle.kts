@@ -26,7 +26,7 @@ dependencies {
     //implementation("maven.modrinth:millies-core-libs:${rootProject.property("config_lib")}")
 
     implementation("com.terraformersmc:modmenu:${rootProject.property("mod_menu")}") // Mod menu
-    implementation("maven.modrinth:lithium:mc26.1.2-0.24.7-fabric") // Just for performance
+    implementation("maven.modrinth:lithium:mc26.2-0.25.3-fabric") // Just for performance
     //include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${libs.versions.mixinsquared.get()}")!!)!!)
 }
 
