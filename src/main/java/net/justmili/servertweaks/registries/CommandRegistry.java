@@ -31,19 +31,21 @@ public class CommandRegistry {
         });
 
         // SMP Permission Levels
-        var modifyPermissionsPhase = ServerTweaks.asId("modify_permissions");
-        CommandRegistrationCallback.EVENT.addPhaseOrdering(Event.DEFAULT_PHASE, modifyPermissionsPhase);
-        CommandRegistrationCallback.EVENT.register(modifyPermissionsPhase, (dispatcher, buildContext, selection) -> {
-            var root = dispatcher.getRoot();
-            Set<CommandNode<CommandSourceStack>> exempt = Collections.newSetFromMap(new IdentityHashMap<>());
+        if (Config.enableSmpPermsCommand.get()) {
+            var modifyPermissionsPhase = ServerTweaks.asId("modify_permissions");
+            CommandRegistrationCallback.EVENT.addPhaseOrdering(Event.DEFAULT_PHASE, modifyPermissionsPhase);
+            CommandRegistrationCallback.EVENT.register(modifyPermissionsPhase, (dispatcher, buildContext, selection) -> {
+                var root = dispatcher.getRoot();
+                Set<CommandNode<CommandSourceStack>> exempt = Collections.newSetFromMap(new IdentityHashMap<>());
 
-            for (CommandNode<CommandSourceStack> child : root.getChildren()) {
-                if (SmpPermsUtil.ALLOWED_FOR_LIMITED_OP.contains(child.getName())) collectRedirectTargets(child, exempt);
-            }
-            for (CommandNode<CommandSourceStack> child : root.getChildren()) {
-                if (!SmpPermsUtil.ALLOWED_FOR_LIMITED_OP.contains(child.getName())) patchRestrictRecursive(child, exempt);
-            }
-        });
+                for (CommandNode<CommandSourceStack> child : root.getChildren()) {
+                    if (SmpPermsUtil.ALLOWED_FOR_LIMITED_OP.contains(child.getName())) collectRedirectTargets(child, exempt);
+                }
+                for (CommandNode<CommandSourceStack> child : root.getChildren()) {
+                    if (!SmpPermsUtil.ALLOWED_FOR_LIMITED_OP.contains(child.getName())) patchRestrictRecursive(child, exempt);
+                }
+            });
+        }
     }
 
     private static void collectRedirectTargets(CommandNode<CommandSourceStack> node, Set<CommandNode<CommandSourceStack>> exempt) {

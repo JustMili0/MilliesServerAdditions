@@ -13,12 +13,14 @@ import net.justmili.servertweaks.content.commands.arguments.AbilityArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.ModifierArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.PresetArgumentType;
 import net.justmili.servertweaks.variables.PlayerVars;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerPlayer;
 
 public class PlayerAbilities {
@@ -41,7 +43,7 @@ public class PlayerAbilities {
                             context.getSource(),
                             EntityArgument.getPlayer(context, "player"),
                             AbilityArgumentType.getAbility(context, "abilityOrDebuff"),
-                            0))))
+                            Action.GRANT))))
 
                     .then(Commands.literal("modifier").then(Commands.argument("modifier", ModifierArgumentType.modifier())
                         .suggests(ModifierArgumentType::suggest)
@@ -49,7 +51,7 @@ public class PlayerAbilities {
                             context.getSource(),
                             EntityArgument.getPlayer(context, "player"),
                             ModifierArgumentType.getModifier(context, "modifier"),
-                            0))))
+                            Action.GRANT))))
                 )
             )
 
@@ -62,14 +64,14 @@ public class PlayerAbilities {
                             context.getSource(),
                             EntityArgument.getPlayer(context, "player"),
                             AbilityArgumentType.getAbility(context, "abilityOrDebuff"),
-                            1))))
+                            Action.REVOKE))))
                     .then(Commands.literal("modifier").then(Commands.argument("modifier", ModifierArgumentType.modifier())
                         .suggests(ModifierArgumentType::suggest)
                         .executes(context -> manage(
                             context.getSource(),
                             EntityArgument.getPlayer(context, "player"),
                             ModifierArgumentType.getModifier(context, "modifier"),
-                            1))))
+                            Action.REVOKE))))
 
                     .then(Commands.literal("everything")
                         .executes(context -> clear(context.getSource(), EntityArgument.getPlayer(context, "player"))))
@@ -80,42 +82,46 @@ public class PlayerAbilities {
                 .then(Commands.argument("preset", PresetArgumentType.preset())
                     .suggests(PresetArgumentType::suggest)
                     .then(Commands.argument("player", EntityArgument.player())
-                        .executes(context -> setPrest(context.getSource(), PresetArgumentType.getPreset(context, "preset"))))))
+                        .executes(context -> setPreset(context.getSource(), PresetArgumentType.getPreset(context, "preset"))))))
             .then(Commands.literal("dontApplyPreset").requires(src -> CommandUtil.hasPerms(src, 4))
                 .then(Commands.argument("player", EntityArgument.player()).executes(_ -> 1)))
         );
     }
 
-    static int manage(CommandSourceStack source, ServerPlayer player, Ability ability, int action) {
-        var id = ability.getId();
-        var name = player.getName().getString();
+    enum Action {
+        GRANT, REVOKE
+    }
+
+    static int manage(CommandSourceStack source, ServerPlayer player, Ability ability, Action action) {
+        var aName = ability.getDisplayName();
+        var pName = player.getName().getString();
 
         switch (action) {
-            case 0 -> {
+            case GRANT -> {
                 AbilityProfilesUtil.grantAbility(player, ability);
-                CommandUtil.sendOk(source, "Granted ability " + id + " to player " + name);
+                CommandUtil.sendOk(source, String.format("Granted ability %s to %s", aName, pName));
             }
-            case 1 -> {
+            case REVOKE -> {
                 AbilityProfilesUtil.revokeAbility(player, ability);
-                CommandUtil.sendOk(source, "Revoked ability " + id + " from player " + name);
+                CommandUtil.sendOk(source, String.format("Revoked ability %s from %s", aName, pName));
             }
         }
 
         return 1;
     }
 
-    static int manage(CommandSourceStack source, ServerPlayer player, AbilityModifier modifier, int action) {
-        var id = modifier.getId();
-        var name = player.getName().getString();
+    static int manage(CommandSourceStack source, ServerPlayer player, AbilityModifier modifier, Action action) {
+        var aName = modifier.getDisplayName();
+        var pName = player.getName().getString();
 
         switch (action) {
-            case 0 -> {
+            case GRANT -> {
                 AbilityProfilesUtil.grantModifier(player, modifier);
-                CommandUtil.sendOk(source, "Granted ability modifier " + id + " to player " + name);
+                CommandUtil.sendOk(source, String.format("Granted ability modifier %s to %s", aName, pName));
             }
-            case 1 -> {
+            case REVOKE -> {
                 AbilityProfilesUtil.revokeModifier(player, modifier);
-                CommandUtil.sendOk(source, "Revoked ability modifier " + id + " from player " + name);
+                CommandUtil.sendOk(source, String.format("Revoked ability modifier %s from %s", aName, pName));
             }
         }
 
@@ -142,6 +148,11 @@ public class PlayerAbilities {
     static int presentPreset(CommandSourceStack source, AbilityPreset preset) throws CommandSyntaxException {
         var player = source.getPlayerOrException();
 
+        if (FdaUtil.getBool(player, PlayerVars.HAS_PICKED_PRESET)) {
+            CommandUtil.sendFailTo(player, "You've already picked a Player Abilities Preset");
+            return 0;
+        }
+
         var apply = Component.literal("     [APPLY] ").setStyle(Style.EMPTY.withColor(0x55FF55).withClickEvent(
             new ClickEvent.RunCommand("/abilities applyPreset " + preset.getId() + " " + player.getName().getString())));
         var cancel = Component.literal(" [CANCEL]").setStyle(Style.EMPTY.withColor(0xFF5555).withClickEvent(
@@ -151,17 +162,26 @@ public class PlayerAbilities {
         return 1;
     }
 
-    static int setPrest(CommandSourceStack source, AbilityPreset preset) throws CommandSyntaxException {
+    static int setPreset(CommandSourceStack source, AbilityPreset preset) throws CommandSyntaxException {
         var player = source.getPlayerOrException();
-
-        if (FdaUtil.getBool(player, PlayerVars.HAS_PICKED_PRESET)) {
-            CommandUtil.sendFailTo(player, "You've already picked an abilities preset.");
-            return 0;
-        }
+        var psName = preset.getDisplayName();
 
         AbilityProfilesUtil.applyPreset(player, source.getServer(), preset);
         FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, true);
-        CommandUtil.sendOkTo(player, "Applied the " + preset.getId() + " preset!");
+        CommandUtil.sendOkTo(player, "\nApplied the \"" + psName + "\" Abilities Preset!");
+
+        for (var ability : preset.getAbilities()) {
+            if (ability.isClientRequired()) {
+                CommandUtil.sendOkTo(player, Component.literal(
+                    String.format("""
+                    One of the abilities in %s preset also requires
+                    Millie's Server Additions to be installed client-side to function properly.
+                    Please make sure you have it installed!
+                    """, psName)
+                ).withColor(TextColor.YELLOW));
+                break; // Close loop after finding just one
+            }
+        }
 
         return 1;
     }

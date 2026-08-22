@@ -102,45 +102,47 @@ public class Abilities {
         PREDATORY, BOVID, CARNIVORE, VEGETARIAN, SACCHARIVORE, HERBIVORE, INSECTIVORE;
 
     static {
-        FIRE_IMMUNE = register(new FireImmune());
-        LAVA_IMMUNE = register(new LavaImmune());
-        HEAT_IMMUNE = register(new Ability(id("heat_immune")));
-        FREEZE_IMMUNE = register(new FreezeImmune());
-        FALL_IMMUNE = register(new FallImmune());
-        HEAT_SENSITIVE = register(new HeatSensitive());
-        COLD_SENSITIVE = register(new ColdSensitive());
-        LIGHT = register(new Light());
-        SWIFT = register(new Swift());
-        SLOW = register(new Slow());
-        HOPPY = register(new Hoppy());
-        DWARF = register(new Dwarf());
-        SQUISHY = register(new Ability(id("squishy")));
-        MAGNETIC = register(new Magnetic());
-        TOUGH = register(new Ability(id("tough")));
-        STRONG = register(new Strong());
-        AQUATIC_GRACE = register(new AquaticGrace());
-        BREATHES_UNDERWATER = register(new BreathesUnderwater());
-        CANT_BREATHE_AIR = register(new CantBreatheAir());
-        CANT_SWIM = register(new Ability(id("cant_swim"))); // TODO: Implement, should only work in survival, only in water and only if player is actively swimming up
-        HYDROPHOBIC = register(new Hydrophobic());
-        HUNTED_BY_FOX = register(new HuntedByFox());
-        HUNTED_BY_WOLF = register(new HuntedByWolf());
-        SCARES_CREEPERS = register(new ScaresCreepers());
-        SCARES_PHANTOMS = register(new ScaresPhantoms());
-        CHILD_OF_NATURE = register(new ChildOfNature());
-        WEAK_TO_DAMAGE = register(new Ability(id("weak_to_damage")));
-        NIGHT_VISION = register(new NightVision());
-        BURNS_IN_DAYLIGHT = register(new BurnsInDaylight());
-        IS_MONSTER = register(new IsMonster());
-        CLIMBS_WALLS = register(new Ability(id("climbs_walls"))); // TODO: Implement, should only work in survival, shouldn't work in water or when flying
-        PEARLING = register(new Ability(id("pearling")));
-        PREDATORY = register(new Predatory());
-        BOVID = register(new Ability(id("bovid")));
-        CARNIVORE = register(new Ability(id("carnivore")));
-        VEGETARIAN = register(new Ability(id("vegetarian")));
-        SACCHARIVORE = register(new Ability(id("saccharivore")));
-        HERBIVORE = register(new Ability(id("herbivore")));
-        INSECTIVORE = register(new Ability(id("insectivore")));
+        FIRE_IMMUNE = register(new FireImmune(id("fire_immune"), "Fire Immune", false));
+        LAVA_IMMUNE = register(new LavaImmune(id("lava_immune"), "Lava Immune", false));
+        HEAT_IMMUNE = register(new Ability(id("heat_immune"), "Heat Immune", false));
+        FREEZE_IMMUNE = register(new FreezeImmune(id("freeze_immune"), "Freeze Immune", false));
+        FALL_IMMUNE = register(new FallImmune(id("fall_immune"), "Fall Immune", false));
+        HEAT_SENSITIVE = register(new HeatSensitive(id("heat_sensitive"), "Heat Sensitive", false));
+        COLD_SENSITIVE = register(new ColdSensitive(id("cold_sensitive"), "Cold Sensitive", false));
+        LIGHT = register(new Light(id("light"), "Lightweight", false));
+        SWIFT = register(new Swift(id("swift"), "Swift", false));
+        SLOW = register(new Slow(id("slow"), "Slow", false));
+        HOPPY = register(new Hoppy(id("hoppy"), "Hoppy", false));
+        DWARF = register(new Dwarf(id("dwarf"), "Dwarf", false));
+        SQUISHY = register(new Ability(id("squishy"), "Squishy", false));
+        MAGNETIC = register(new Magnetic(id("magnetic"), "Magnetic", false));
+        TOUGH = register(new Ability(id("tough"), "Tough", false));
+        STRONG = register(new Strong(id("strong"), "Strong", false));
+        AQUATIC_GRACE = register(new AquaticGrace(id("aquatic_grace"), "Aquatic Grace", false));
+        BREATHES_UNDERWATER = register(new BreathesUnderwater(id("breathes_underwater"), "Breathes Underwater", false));
+        CANT_BREATHE_AIR = register(new CantBreatheAir(id("cant_breathe_air"), "Can't Breathe Air", false));
+        // TODO: Implement cant_swim, should only work in survival, only in water and only if player is actively swimming up
+        CANT_SWIM = register(new Ability(id("cant_swim"), "Can't Swim", true));
+        HYDROPHOBIC = register(new Hydrophobic(id("hydrophobic"), "Hydrophobic", false));
+        HUNTED_BY_FOX = register(new HuntedByFox(id("hunted_by_fox"), "Hunted By Foxes", false));
+        HUNTED_BY_WOLF = register(new HuntedByWolf(id("hunted_by_wolf"), "Hunted By Wolves", false));
+        SCARES_CREEPERS = register(new ScaresCreepers(id("scares_creepers"), "Scares Creepers", false));
+        SCARES_PHANTOMS = register(new ScaresPhantoms(id("scares_phantoms"), "Scares Phantoms", false));
+        CHILD_OF_NATURE = register(new ChildOfNature(id("child_of_nature"), "Child of Nature", false));
+        WEAK_TO_DAMAGE = register(new Ability(id("weak_to_damage"), "Weak to Damage", false));
+        NIGHT_VISION = register(new NightVision(id("night_vision"), "Night Vision", false));
+        BURNS_IN_DAYLIGHT = register(new BurnsInDaylight(id("burns_in_daylight"), "Burns In Daylight", false));
+        IS_MONSTER = register(new IsMonster(id("is_monster"), "Monster", false));
+        // TODO: Implement climbs_walls, should only work in survival, shouldn't work in water or when flying
+        CLIMBS_WALLS = register(new Ability(id("climbs_walls"), "Climbs Walls", true));
+        PEARLING = register(new Ability(id("pearling"), "Pearling", false));
+        PREDATORY = register(new Predatory(id("predatory"), "Predatory", false));
+        BOVID = register(new Ability(id("bovid"), "Bovid", false));
+        CARNIVORE = register(new Ability(id("carnivore"), "Carnivore", false));
+        VEGETARIAN = register(new Ability(id("vegetarian"), "Vegetarian", false));
+        SACCHARIVORE = register(new Ability(id("saccharivore"), "Saccharivore", false));
+        HERBIVORE = register(new Ability(id("herbivore"), "Herbivore", false));
+        INSECTIVORE = register(new Ability(id("insectivore"), "Insectivore", false));
     }
 
     private static Identifier id(String id) {
@@ -154,8 +156,8 @@ public class Abilities {
 
     // Define ticking abilities
     static class FireImmune extends TickingAbility {
-        FireImmune() {
-            super(id("fire_immune"));
+        FireImmune(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -165,8 +167,8 @@ public class Abilities {
     }
 
     static class LavaImmune extends TickingAbility {
-        LavaImmune() {
-            super(id("lava_immune"));
+        LavaImmune(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -176,8 +178,8 @@ public class Abilities {
     }
 
     static class FreezeImmune extends TickingAbility {
-        public FreezeImmune() {
-            super(id("freeze_immune"));
+        public FreezeImmune(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -187,8 +189,8 @@ public class Abilities {
     }
 
     static class FallImmune extends TickingAbility {
-        FallImmune() {
-            super(id("fall_immune"));
+        FallImmune(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -199,8 +201,8 @@ public class Abilities {
     }
 
     static class HeatSensitive extends TickingAbility {
-        HeatSensitive() {
-            super(id("heat_sensitive"));
+        HeatSensitive(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -220,8 +222,8 @@ public class Abilities {
     }
 
     static class ColdSensitive extends TickingAbility {
-        ColdSensitive() {
-            super(id("cold_sensitive"));
+        ColdSensitive(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -242,8 +244,8 @@ public class Abilities {
     }
 
     static class Light extends TickingAbility {
-        Light() {
-            super(id("light"));
+        Light(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -256,8 +258,8 @@ public class Abilities {
     }
 
     static class Swift extends TickingAbility {
-        Swift() {
-            super(id("swift"));
+        Swift(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -267,8 +269,8 @@ public class Abilities {
     }
 
     static class Slow extends TickingAbility {
-        Slow() {
-            super(id("slow"));
+        Slow(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -279,8 +281,8 @@ public class Abilities {
     }
 
     static class Hoppy extends TickingAbility {
-        Hoppy() {
-            super(id("hoppy"));
+        Hoppy(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -290,8 +292,8 @@ public class Abilities {
     }
 
     static class Dwarf extends TickingAbility {
-        Dwarf() {
-            super(id("dwarf"));
+        Dwarf(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -303,8 +305,8 @@ public class Abilities {
     }
 
     static class Magnetic extends TickingAbility {
-        Magnetic() {
-            super(id("magnetic"));
+        Magnetic(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -320,8 +322,8 @@ public class Abilities {
     }
 
     static class Strong extends TickingAbility {
-        Strong() {
-            super(id("strong"));
+        Strong(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -346,8 +348,8 @@ public class Abilities {
     }
 
     static class AquaticGrace extends TickingAbility {
-        AquaticGrace() {
-            super(id("aquatic_grace"));
+        AquaticGrace(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -366,8 +368,8 @@ public class Abilities {
     }
 
     static class BreathesUnderwater extends TickingAbility {
-        BreathesUnderwater() {
-            super(id("breathes_underwater"));
+        BreathesUnderwater(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -379,8 +381,8 @@ public class Abilities {
     }
 
     static class CantBreatheAir extends TickingAbility {
-        CantBreatheAir() {
-            super(id("cant_breathe_air"));
+        CantBreatheAir(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -403,8 +405,8 @@ public class Abilities {
     }
 
     static class Hydrophobic extends TickingAbility {
-        Hydrophobic() {
-            super(id("hydrophobic"));
+        Hydrophobic(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -424,8 +426,8 @@ public class Abilities {
     }
 
     static class HuntedByFox extends TickingAbility {
-        HuntedByFox() {
-            super(id("hunted_by_fox"));
+        HuntedByFox(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -443,8 +445,8 @@ public class Abilities {
     }
 
     static class HuntedByWolf extends TickingAbility {
-        HuntedByWolf() {
-            super(id("hunted_by_wolf"));
+        HuntedByWolf(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -458,8 +460,8 @@ public class Abilities {
     }
 
     static class ScaresCreepers extends TickingAbility {
-        ScaresCreepers() {
-            super(id("scares_creepers"));
+        ScaresCreepers(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -477,8 +479,8 @@ public class Abilities {
     }
 
     static class ScaresPhantoms extends TickingAbility {
-        ScaresPhantoms() {
-            super(id("scares_phantoms"));
+        ScaresPhantoms(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -496,8 +498,8 @@ public class Abilities {
     }
 
     static class ChildOfNature extends TickingAbility {
-        ChildOfNature() {
-            super(id("child_of_nature"));
+        ChildOfNature(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -514,8 +516,8 @@ public class Abilities {
     }
 
     static class NightVision extends TickingAbility {
-        NightVision() {
-            super(id("night_vision"));
+        NightVision(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -525,8 +527,8 @@ public class Abilities {
     }
 
     static class BurnsInDaylight extends TickingAbility {
-        BurnsInDaylight() {
-            super(id("burns_in_daylight"));
+        BurnsInDaylight(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -541,8 +543,8 @@ public class Abilities {
     }
 
     static class IsMonster extends TickingAbility {
-        IsMonster() {
-            super(id("is_monster"));
+        IsMonster(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override
@@ -595,8 +597,8 @@ public class Abilities {
     }
 
     static class Predatory extends TickingAbility {
-        Predatory() {
-            super(id("predatory"));
+        Predatory(Identifier id, String name, boolean needsClient) {
+            super(id, name, needsClient);
         }
 
         @Override

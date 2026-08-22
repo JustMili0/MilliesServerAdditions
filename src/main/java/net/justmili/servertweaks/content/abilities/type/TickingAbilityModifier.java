@@ -4,8 +4,10 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 
-public abstract class TickingAbility extends Ability {
-    public TickingAbility(Identifier id, String displayName, boolean isClientRequired) {
+import java.util.Objects;
+
+public abstract class TickingAbilityModifier extends AbilityModifier {
+    public TickingAbilityModifier(Identifier id, String displayName, boolean isClientRequired) {
         super(id, displayName, isClientRequired);
     }
 

@@ -12,7 +12,7 @@ public class Modifiers {
     public static final AbilityModifier CAN_EAT_GOLDEN_FOOD;
 
     static {
-        CAN_EAT_GOLDEN_FOOD = register(new AbilityModifier(id("can_eat_golden_foods")));
+        CAN_EAT_GOLDEN_FOOD = register(new AbilityModifier(id("can_eat_golden_foods"), "Can Eat Golden Foods", false));
     }
 
     private static Identifier id(String id) {
