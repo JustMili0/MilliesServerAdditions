@@ -29,7 +29,8 @@ public class Config {
         enableHigherEnchants,
         disableAnvilLimit,
         allowMixEnchantments,
-        obfInvisDeathMessages;
+        obfInvisDeathMessages,
+        fasterRiptideCharge;
 
     public static ConfigEntry<Integer> // Feature/Command config
         afkCommandCooldown;
@@ -79,6 +80,8 @@ public class Config {
             .define("limitVehicleSpeed", false);
         disableAnvilLimit = common.comment("Should the server clamp the max anvil cost to 39 levels if at or over, to prevent \"Too Expensive\"?")
             .define("disableAnvilLimit", true);
+        fasterRiptideCharge = common.comment("Should the right-click-hold time be shorter (by half) in order to use a Riptide Trident?")
+            .define("fasterRiptideCharge", true);
         pistonPushLimit = common.comment("How many blocks should the piston be able to push?")
             .define("pistonPushLimit", 12, 0, 511);
 

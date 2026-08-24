@@ -185,6 +185,13 @@ All three speed limits (elytra, on-ground movement, vehicle movement) are remove
 </details>
 
 <details>
+<summary>Faster Riptide Charge</summary>
+
+Makes the time required to hold down right-click to use a riptide trident only 5 ticks instead of 10.
+
+</details>
+
+<details>
 <summary>Pistons Pushing Limits [Vanilla By Default]</summary>
 
 Allows modifying how many blocks a single piston can push.
