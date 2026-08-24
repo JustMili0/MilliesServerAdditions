@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.mixin;
+package net.justmili.servertweaks.mixin.item;
 
 import net.justmili.servertweaks.content.abilities.AbilityEvents;
 import net.minecraft.world.InteractionHand;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Item.class)
 public abstract class ItemMixin {
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
-    private void handleDietItemInteraction(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+    private void servertweaks$handleDietItemInteraction(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         // Ironically, out of all the events available in *both* Fabric and NeoForge,
         // none of them handle this specific use case.
         InteractionResult result = AbilityEvents.handleDietItemCall(player, level, hand);

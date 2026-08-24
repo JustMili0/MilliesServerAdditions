@@ -11,6 +11,7 @@ import net.justmili.servertweaks.content.abilities.core.AbilityProfiles;
 import net.justmili.servertweaks.registries.CommandRegistry;
 import net.justmili.servertweaks.registries.DimRegistry;
 import net.justmili.servertweaks.registries.EventRegistry;
+import net.justmili.servertweaks.registries.PacketRegistry;
 import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.resources.Identifier;
 import org.apache.logging.log4j.LogManager;
@@ -23,18 +24,21 @@ public class ServerTweaks implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Initializing Millie's Server Additions...");
-        Config.register();
 
-        PlayerVars.register();
-        DimRegistry.register();
-        CommandRegistry.register();
-        EventRegistry.register();
+        PacketRegistry.init();
+        Config.init();
+        PlayerVars.init();
 
-        Abilities.init();
-        Modifiers.init();
-        Presets.init();
+        DimRegistry.init();
+        CommandRegistry.init();
+        EventRegistry.init();
 
-        ServerLifecycleEvents.SERVER_STARTED.register(AbilityProfiles::loadFile);
+        if (Config.playerAbilities.get()) {
+            Abilities.init();
+            Modifiers.init();
+            Presets.init();
+            ServerLifecycleEvents.SERVER_STARTED.register(AbilityProfiles::loadFile);
+        }
     }
 
     public static Identifier asId(String path) {

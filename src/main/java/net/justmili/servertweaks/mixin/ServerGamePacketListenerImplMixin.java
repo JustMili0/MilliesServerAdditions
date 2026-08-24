@@ -26,25 +26,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ServerGamePacketListenerImplMixin {
 
     @ModifyConstant(method = "handleMovePlayer", constant = @Constant(floatValue = 100.0F))
-    private float uncapPlayerSpeed(float speed) {
+    private float servertweaks$uncapPlayerSpeed(float speed) {
         if (Config.limitPlayerSpeed.get()) return speed;
         return Float.MAX_VALUE;
     }
 
     @ModifyConstant(method = "handleMovePlayer", constant = @Constant(floatValue = 300.0F))
-    private float uncapElytraSpeed(float speed) {
+    private float servertweaks$uncapElytraSpeed(float speed) {
         if (Config.limitElytraSpeed.get()) return speed;
         return Float.MAX_VALUE;
     }
 
     @ModifyConstant(method = "handleMoveVehicle", constant = @Constant(doubleValue = (double) 100.0F))
-    private double uncapVehicleSpeed(double speed) {
+    private double servertweaks$uncapVehicleSpeed(double speed) {
         if (Config.limitVehicleSpeed.get()) return speed;
         return Double.MAX_VALUE;
     }
 
     @Inject(method = "handleChangeGameMode", at = @At("HEAD"), cancellable = true)
-    private void restrictDebugGameModeSwitch(ServerboundChangeGameModePacket packet, CallbackInfo ci) {
+    private void servertweaks$restrictDebugGameModeSwitch(ServerboundChangeGameModePacket packet, CallbackInfo ci) {
         var player = ((ServerGamePacketListenerImpl) (Object) this).player;
         if (SmpPermsUtil.isLimitedOperator(player)) {
             var target = packet.mode();
@@ -53,7 +53,7 @@ public abstract class ServerGamePacketListenerImplMixin {
     }
 
     @Inject(method = "performUnsignedChatCommand", at = @At("HEAD"), cancellable = true)
-    private void elevateAbilityCommands(String command, CallbackInfo ci) {
+    private void servertweaks$elevateAbilityCommands(String command, CallbackInfo ci) {
         var player = ((ServerGamePacketListenerImpl) (Object) this).player;
         var server = player.level().getServer();
         var source = server.createCommandSourceStack().withEntity(player).withLevel(player.level());

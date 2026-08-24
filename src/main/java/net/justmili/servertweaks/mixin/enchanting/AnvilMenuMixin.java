@@ -31,7 +31,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 
     // Allow over-vanilla enchant levels
     @WrapOperation(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/Enchantment;getMaxLevel()I"))
-    private int modifyMaxLevels(Enchantment enchantment, Operation<Integer> original) {
+    private int servertweaks$modifyMaxLevels(Enchantment enchantment, Operation<Integer> original) {
         int maxLevel = original.call(enchantment);
         if (!Config.enableHigherEnchants.get()) return maxLevel;
 
@@ -49,13 +49,13 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 
     // Remove anvil "too expensive"
     @Inject(method = "createResult", at = {@At("RETURN")})
-    private void clampResultCost(CallbackInfo ci) {
+    private void servertweaks$clampResultCost(CallbackInfo ci) {
         if (!Config.disableAnvilLimit.get()) return;
         if (this.cost.get() > 39) this.cost.set(39);
     }
 
     @ModifyConstant(method = "createResult", constant = {@Constant(intValue = 40)})
-    private int modifyCostLimit(int i) {
+    private int servertweaks$modifyCostLimit(int i) {
         if (!Config.disableAnvilLimit.get()) return i;
         return Integer.MAX_VALUE;
     }

@@ -21,7 +21,7 @@ public abstract class HorsesMixin extends Goal {
     @Definition(id = "nextInt", method = "Lnet/minecraft/util/RandomSource;nextInt(I)I")
     @Expression("this.horse.getRandom().nextInt(?) < ?")
     @ModifyExpressionValue(method = "tick", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private boolean alwaysTameIfCON(boolean original, @Local Entity passenger) {
+    private boolean servertweaks$alwaysTame(boolean original, @Local Entity passenger) {
         // Covers anything that extends AbstractHorse
         // Horses (all), Donkeys, Mules, Llamas
         if (!(passenger instanceof ServerPlayer serverPlayer)) return original;

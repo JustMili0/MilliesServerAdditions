@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(PistonStructureResolver.class)
 public class PistonStructureResolverMixin {
     @ModifyConstant(method = "addBlockLine", constant = @Constant(intValue = 12))
-    private int modifyPushLimit(int original) {
+    private int servertweaks$modifyPushLimit(int original) {
         return Config.pistonPushLimit.get();
     }
 }

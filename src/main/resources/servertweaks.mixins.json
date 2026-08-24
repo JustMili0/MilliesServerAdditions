@@ -7,7 +7,6 @@
     "minVersion": "0.5.0"
   },
   "mixins": [
-    "ItemMixin",
     "PistonStructureResolverMixin",
     "ServerGamePacketListenerImplMixin",
     "accessors.CommandNodeAccessor",
@@ -21,7 +20,9 @@
     "entity.MobMixin",
     "entity.animal.HorsesMixin",
     "entity.animal.ParrotMixin",
-    "entity.animal.PetsMixin"
+    "entity.animal.PetsMixin",
+    "item.ItemMixin",
+    "item.TridentItemMixin"
   ],
   "client": [
   ],

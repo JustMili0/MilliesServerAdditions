@@ -3,6 +3,7 @@ package net.justmili.servertweaks.content.abilities;
 import net.justmili.libs.v1.utils.common.EntityUtil;
 import net.justmili.libs.v1.utils.common.EntityUtil.MobData;
 import net.justmili.servertweaks.ServerTweaks;
+import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
@@ -275,8 +276,10 @@ public class Abilities {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
+            float multiplier = AbilityProfilesUtil.has(player, AQUATIC_GRACE) && player.isInWater()? -0.16f : -0.32f;
             var speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
-            addOrUpdate(speed, AR_SLOW_SPEED, -0.32, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+
+            addOrUpdate(speed, AR_SLOW_SPEED, multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         }
     }
 

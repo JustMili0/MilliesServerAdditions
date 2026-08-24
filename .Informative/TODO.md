@@ -1,0 +1,5 @@
+- Fix default-level commands being inaccessible for limited_operator if not added to allowed list
+  - E.g. "/afk", "/msg"
+- Code own veinminer
+- Code own portal blocker
+- Code own sitting

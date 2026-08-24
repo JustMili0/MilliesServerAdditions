@@ -12,7 +12,7 @@ import static net.justmili.libs.v1.utils.common.FdaUtil.createPersistent;
 
 @SuppressWarnings({"NullableProblems"})
 public final class PlayerVars {
-    public static void register() {}
+    public static void init() {}
 
     public static final AttachmentType<Vec3> AFK_POS = createPersistent(id("afk_pos"), Vec3.ZERO, Vec3.CODEC);
 

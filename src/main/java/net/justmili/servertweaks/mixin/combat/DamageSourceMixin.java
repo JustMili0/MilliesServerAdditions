@@ -13,12 +13,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class DamageSourceMixin {
 
     @Redirect(method = "getLocalizedDeathMessage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getDisplayName()Lnet/minecraft/network/chat/Component;"))
-    public Component hideDeathMessages(LivingEntity entity) {
+    public Component servertweaks$hideDeathMessages(LivingEntity entity) {
         return Util.shouldObfuscateDeathMessage(entity);
     }
 
     @Redirect(method = "getLocalizedDeathMessage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getDisplayName()Lnet/minecraft/network/chat/Component;"))
-    private Component hideKillMessages(Entity entity) {
+    private Component servertweaks$hideKillMessages(Entity entity) {
         return Util.shouldObfuscateDeathMessage(entity);
     }
 }

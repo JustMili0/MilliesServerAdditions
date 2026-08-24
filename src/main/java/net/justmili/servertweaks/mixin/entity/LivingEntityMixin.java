@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class LivingEntityMixin {
     // TOUGH
     @Inject(method = "knockback(DDDLnet/minecraft/world/damagesource/DamageSource;FZ)V", at = @At("HEAD"), cancellable = true)
-    private void knockback(double power, double xd, double zd, DamageSource source, float damage, boolean comesFromEffect, CallbackInfo ci) {
+    private void servertweaks$knockback(double power, double xd, double zd, DamageSource source, float damage, boolean comesFromEffect, CallbackInfo ci) {
         if (!(Config.playerAbilities.get())) return;
         if (!((LivingEntity) (Object) this instanceof ServerPlayer player)) return;
         if (AbilityProfilesUtil.has(player, Abilities.TOUGH)) ci.cancel();
@@ -24,7 +24,7 @@ public class LivingEntityMixin {
 
     // CANT_BREATHE_AIR
     @Inject(method = "increaseAirSupply", at = @At("HEAD"), cancellable = true)
-    private void increaseAirSupply(int currentAir, CallbackInfoReturnable<Integer> cir) {
+    private void servertweaks$increaseAirSupply(int currentAir, CallbackInfoReturnable<Integer> cir) {
         if (!(Config.playerAbilities.get())) return;
         if (!((LivingEntity) (Object) this instanceof ServerPlayer player)) return;
         if (!AbilityProfilesUtil.has(player, Abilities.CANT_BREATHE_AIR)) return;

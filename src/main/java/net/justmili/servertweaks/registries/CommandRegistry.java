@@ -15,7 +15,7 @@ import java.util.IdentityHashMap;
 import java.util.Set;
 
 public class CommandRegistry {
-    public static void register() {
+    public static void init() {
         CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) -> {
             if (Config.enableAfkCommand.get()) Afk.register(dispatcher);
             if (Config.enableScaleCommand.get()) Scale.register(dispatcher);

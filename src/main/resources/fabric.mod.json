@@ -15,6 +15,9 @@
   "entrypoints": {
     "main": [
       "net.justmili.servertweaks.ServerTweaks"
+    ],
+    "client": [
+      "net.justmili.servertweaks.client.FabricClient"
     ]
   },
   "mixins": [

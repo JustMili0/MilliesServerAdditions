@@ -2,6 +2,7 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.justmili.libs.v1.utils.common.CommandUtil;
 import net.justmili.libs.v1.utils.common.FdaUtil;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfiles;
@@ -12,6 +13,7 @@ import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
 import net.justmili.servertweaks.content.commands.arguments.AbilityArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.ModifierArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.PresetArgumentType;
+import net.justmili.servertweaks.network.packets.ClientboundModCheckPacket;
 import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -170,7 +172,8 @@ public class PlayerAbilities {
         FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, true);
         CommandUtil.sendOkTo(player, "\nApplied the \"" + psName + "\" Abilities Preset!");
 
-        for (var ability : preset.getAbilities()) {
+        if (ServerPlayNetworking.canSend(player, ClientboundModCheckPacket.PACKET_ID)) return 1; // Shush if client already has mod
+        for (var ability : preset.getAbilities()) { // Inform client needs mod
             if (ability.isClientRequired()) {
                 CommandUtil.sendOkTo(player, Component.literal(
                     String.format("""

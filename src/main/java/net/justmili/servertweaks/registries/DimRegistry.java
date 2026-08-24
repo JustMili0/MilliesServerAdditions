@@ -8,6 +8,6 @@ import net.minecraft.world.level.Level;
 public class DimRegistry {
     public static final ResourceKey<Level> BANISHMENT = ResourceKey.create(Registries.DIMENSION, ServerTweaks.asId("banishment"));
 
-    public static void register() {
+    public static void init() {
     }
 }

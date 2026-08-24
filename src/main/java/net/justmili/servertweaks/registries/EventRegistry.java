@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class EventRegistry {
-    public static void register() {
+    public static void init() {
         ServerPlayConnectionEvents.JOIN.register(UpdateSmpPermsOnLogon::onLogon);
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(Banishment::onEntityHurt);
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(WhileAfk::onEntityHurt);

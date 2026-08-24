@@ -38,7 +38,7 @@ public class Config {
     public static ConfigEntry<Integer> // Mixin Features
         pistonPushLimit;
 
-    public static void register() {
+    public static void init() {
         MConfigBuilder common = new MConfigBuilder(ServerTweaks.MODID, ConfigType.COMMON, FileType.PROPERTIES, true);
 
         // Commands
