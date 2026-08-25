@@ -187,7 +187,7 @@ All three speed limits (elytra, on-ground movement, vehicle movement) are remove
 <details>
 <summary>Faster Riptide Charge</summary>
 
-Makes the time required to hold down right-click to use a riptide trident only 5 ticks instead of 10.
+Makes the time required to hold down right-click to use a riptide trident only 3 ticks instead of 10.
 
 </details>
 

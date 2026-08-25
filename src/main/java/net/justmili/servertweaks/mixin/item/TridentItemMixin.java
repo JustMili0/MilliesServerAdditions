@@ -23,7 +23,7 @@ public class TridentItemMixin {
     @ModifyExpressionValue(method = "releaseUsing", at = @At(value = "CONSTANT", args = "intValue=10"))
     private int servertweaks$fasterRechargeWithRiptide(int original, ItemStack stack, Level level, LivingEntity entity, int remainingTime) {
         if (!Config.fasterRiptideCharge.get()) return original;
-        if (entity instanceof Player player && EnchantmentHelper.getTridentSpinAttackStrength(stack, player) > 0.0F) return 5;
+        if (entity instanceof Player player && EnchantmentHelper.getTridentSpinAttackStrength(stack, player) > 0.0F) return 3;
         return original;
     }
 

@@ -65,7 +65,7 @@
 - You can now die in the Banishment dimension (if the damage you've been delt is more than 2^18)
   - Added that so `/kill` actually works in there
 - Invisible players when killing others or dying will have their names obfuscated
-- Tridents with Riptide now charge twice as fast (10t delay -> 5t delay)
+- Tridents with Riptide now charge more than twice as fast (10t delay -> 3t delay)
 
 ### ***CHANGES***
 - `/damagetoggle <damage_type> <true|false|status>`, reworked into `/damagetoggle <options>`:
