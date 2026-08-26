@@ -1,6 +1,7 @@
 This file was made specifically for Millie's discord announcements about small patches and additions being added to the main server mod.
 These patch versions are not publicly released, never will. They exist only for purpose of testing this massive update.
-All features here are new, some were added in 1.3.0-beta.1 to 1.3.0-beta.10 before server testing was initiated with individual numbered patches, so they are not mentioned in here nor in any previous main changelogs prior to 1.3.0.
+All features here are new, some were added in 1.3.0-beta.1 to 1.3.0-beta.10 before server testing was initiated with individual numbered patches, 
+so they are not mentioned in here nor in any previous main changelogs prior to 1.3.0.
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -114,6 +115,7 @@ Feedback is appreciated ^^
 - Updated to Minecraft 26.2
 - Changed project's buildscript from Groovy to Kotlin
 - Dropped dependency from SuperMartijn642's Config Lib and replaced it with a stripped down version of my Core Libs mod
+- Mod now can be optionally installed client-side for some features (mainly some Player Abilities) to work properly
 - Reworked registries for player abilities
 - Changed config file from `config\servertweaks\common.toml` into `config\servertweaks\common.properties`
 - Renamed config key `removeAnvilLimit` to `disableAnvilLimit`

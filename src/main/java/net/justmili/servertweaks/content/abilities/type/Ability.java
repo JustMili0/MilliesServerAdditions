@@ -9,10 +9,10 @@ public class Ability {
     private final String displayName;
     private final boolean clientRequired;
 
-    public Ability(Identifier id, String displayName, boolean isClientRequired) {
+    public Ability(Identifier id, String displayName, boolean requiresClient) {
         this.id = id;
         this.displayName = displayName;
-        this.clientRequired = isClientRequired;
+        this.clientRequired = requiresClient;
     }
 
     public Identifier getId() {

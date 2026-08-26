@@ -5,8 +5,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 
 public abstract class TickingAbility extends Ability {
-    public TickingAbility(Identifier id, String displayName, boolean isClientRequired) {
-        super(id, displayName, isClientRequired);
+    public TickingAbility(Identifier id, String displayName, boolean requiresClient) {
+        super(id, displayName, requiresClient);
     }
 
     public abstract void tick(ServerPlayer player, ServerLevel level);

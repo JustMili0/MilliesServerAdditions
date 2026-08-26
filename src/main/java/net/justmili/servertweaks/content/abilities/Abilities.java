@@ -122,8 +122,7 @@ public class Abilities {
         AQUATIC_GRACE = register(new AquaticGrace(id("aquatic_grace"), "Aquatic Grace", false));
         BREATHES_UNDERWATER = register(new BreathesUnderwater(id("breathes_underwater"), "Breathes Underwater", false));
         CANT_BREATHE_AIR = register(new CantBreatheAir(id("cant_breathe_air"), "Can't Breathe Air", false));
-        // TODO: Implement cant_swim, should only work in survival, only in water and only if player is actively swimming up
-        CANT_SWIM = register(new Ability(id("cant_swim"), "Can't Swim", true));
+        CANT_SWIM = register(new Ability(id("cant_swim"), "Can't Swim", false));
         HYDROPHOBIC = register(new Hydrophobic(id("hydrophobic"), "Hydrophobic", false));
         HUNTED_BY_FOX = register(new HuntedByFox(id("hunted_by_fox"), "Hunted By Foxes", false));
         HUNTED_BY_WOLF = register(new HuntedByWolf(id("hunted_by_wolf"), "Hunted By Wolves", false));
@@ -157,8 +156,8 @@ public class Abilities {
 
     // Define ticking abilities
     static class FireImmune extends TickingAbility {
-        FireImmune(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        FireImmune(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -168,8 +167,8 @@ public class Abilities {
     }
 
     static class LavaImmune extends TickingAbility {
-        LavaImmune(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        LavaImmune(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -179,8 +178,8 @@ public class Abilities {
     }
 
     static class FreezeImmune extends TickingAbility {
-        public FreezeImmune(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        public FreezeImmune(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -190,8 +189,8 @@ public class Abilities {
     }
 
     static class FallImmune extends TickingAbility {
-        FallImmune(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        FallImmune(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -202,8 +201,8 @@ public class Abilities {
     }
 
     static class HeatSensitive extends TickingAbility {
-        HeatSensitive(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        HeatSensitive(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -223,8 +222,8 @@ public class Abilities {
     }
 
     static class ColdSensitive extends TickingAbility {
-        ColdSensitive(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        ColdSensitive(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -245,8 +244,8 @@ public class Abilities {
     }
 
     static class Light extends TickingAbility {
-        Light(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        Light(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -259,8 +258,8 @@ public class Abilities {
     }
 
     static class Swift extends TickingAbility {
-        Swift(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        Swift(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -270,8 +269,8 @@ public class Abilities {
     }
 
     static class Slow extends TickingAbility {
-        Slow(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        Slow(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -284,8 +283,8 @@ public class Abilities {
     }
 
     static class Hoppy extends TickingAbility {
-        Hoppy(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        Hoppy(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -295,8 +294,8 @@ public class Abilities {
     }
 
     static class Dwarf extends TickingAbility {
-        Dwarf(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        Dwarf(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -308,8 +307,8 @@ public class Abilities {
     }
 
     static class Magnetic extends TickingAbility {
-        Magnetic(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        Magnetic(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -325,8 +324,8 @@ public class Abilities {
     }
 
     static class Strong extends TickingAbility {
-        Strong(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        Strong(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -351,8 +350,8 @@ public class Abilities {
     }
 
     static class AquaticGrace extends TickingAbility {
-        AquaticGrace(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        AquaticGrace(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -371,8 +370,8 @@ public class Abilities {
     }
 
     static class BreathesUnderwater extends TickingAbility {
-        BreathesUnderwater(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        BreathesUnderwater(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -384,8 +383,8 @@ public class Abilities {
     }
 
     static class CantBreatheAir extends TickingAbility {
-        CantBreatheAir(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        CantBreatheAir(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -408,8 +407,8 @@ public class Abilities {
     }
 
     static class Hydrophobic extends TickingAbility {
-        Hydrophobic(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        Hydrophobic(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -429,8 +428,8 @@ public class Abilities {
     }
 
     static class HuntedByFox extends TickingAbility {
-        HuntedByFox(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        HuntedByFox(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -448,8 +447,8 @@ public class Abilities {
     }
 
     static class HuntedByWolf extends TickingAbility {
-        HuntedByWolf(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        HuntedByWolf(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -463,8 +462,8 @@ public class Abilities {
     }
 
     static class ScaresCreepers extends TickingAbility {
-        ScaresCreepers(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        ScaresCreepers(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -482,8 +481,8 @@ public class Abilities {
     }
 
     static class ScaresPhantoms extends TickingAbility {
-        ScaresPhantoms(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        ScaresPhantoms(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -501,8 +500,8 @@ public class Abilities {
     }
 
     static class ChildOfNature extends TickingAbility {
-        ChildOfNature(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        ChildOfNature(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -519,8 +518,8 @@ public class Abilities {
     }
 
     static class NightVision extends TickingAbility {
-        NightVision(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        NightVision(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -530,8 +529,8 @@ public class Abilities {
     }
 
     static class BurnsInDaylight extends TickingAbility {
-        BurnsInDaylight(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        BurnsInDaylight(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -546,8 +545,8 @@ public class Abilities {
     }
 
     static class IsMonster extends TickingAbility {
-        IsMonster(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        IsMonster(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override
@@ -600,8 +599,8 @@ public class Abilities {
     }
 
     static class Predatory extends TickingAbility {
-        Predatory(Identifier id, String name, boolean needsClient) {
-            super(id, name, needsClient);
+        Predatory(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
         }
 
         @Override

@@ -7,8 +7,8 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.Objects;
 
 public abstract class TickingAbilityModifier extends AbilityModifier {
-    public TickingAbilityModifier(Identifier id, String displayName, boolean isClientRequired) {
-        super(id, displayName, isClientRequired);
+    public TickingAbilityModifier(Identifier id, String displayName, boolean requiresClient) {
+        super(id, displayName, requiresClient);
     }
 
     public abstract void tick(ServerPlayer player, ServerLevel level);

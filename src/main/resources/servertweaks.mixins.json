@@ -18,6 +18,7 @@
     "enchanting.EnchantmentMixin",
     "entity.LivingEntityMixin",
     "entity.MobMixin",
+    "entity.PlayerMixin",
     "entity.animal.HorsesMixin",
     "entity.animal.ParrotMixin",
     "entity.animal.PetsMixin",
