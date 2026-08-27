@@ -111,93 +111,110 @@ Feedback is appreciated ^^
 
 (AWAITING COMPLETION, WIP)
 # Millie's Server Additions, Patch #6 - 1.3.0-beta.16
-**Generic**
-- Updated to Minecraft 26.2
+
+### ***GENERIC***
+- New *Update Patch* format. Changelog format will also be changing with update 1.3.1 for this and all other projects by or involving JustMili
+- Updated to Minecraft 26.2 from 1.21.11
 - Changed project's buildscript from Groovy to Kotlin
 - Dropped dependency from SuperMartijn642's Config Lib and replaced it with a stripped down version of my Core Libs mod
-- Mod now can be optionally installed client-side for some features (mainly some Player Abilities) to work properly
-- Reworked registries for player abilities
-- Changed config file from `config\servertweaks\common.toml` into `config\servertweaks\common.properties`
-- Renamed config key `removeAnvilLimit` to `disableAnvilLimit`
-- Renamed config key `despawnMonsters` to `despawnMonstersPostAfk`
-- All `limit*****Speed`, `enableScaleCommand`, `enableBanishCommand` and `enableDamageToggleCommand` config keys are now false by default
-- Villagers and tamable mobs losing AI when named "NoAI" now has a config entry
+
+### ***ADDED***
+**Configuration**
+- Added a config key for Villagers and tamable mobs losing their AI when named "NoAI"
+- Added a config key for min-max values usable by regular players for `/scale`
+- Added a config key for `/fillextras` command
 
 **Gameplay**
+- Armor Stands named "display" in an anvil will be given arms when placed
 - Shift-right-clicking anvils with an Iron Ingot or Iron Block will repair it
   - Chipped Anvil - 33% chance of success with an Iron Ingot, or 100% with an Iron Block
   - Damaged Anvil - 25% chance of success with an Iron Ingot, or 80% with an Iron Block
   - Repairing an anvil can't fail more than 2 times, on 3rd try repair is always guaranteed
-- Previously incompatible enchantments such as different protection types, mending and infinity etc. are now compatible
-- Some enchantments can now be at higher levels than vanilla
-  - All protection types - up to level 5 (Vanilla: 4)
-  - Sharpness - up to level 6 (Vanilla: 5)
-  - Smite - up to level 6 (Vanilla: 5)
-  - Bane of Arthropods - up to level 5 (Vanilla: 4)
-  - Looting - up to level 4 (Vanilla: 3)
-  - Lunge - up to level 5 (Vanilla: 3)
-  - Efficiency - up to level 6 (Vanilla: 5)
-  - Feather Falling - up to level 5 (Vanilla: 4)
-  - Frost walker - up to level 5 (Vanilla: 2)
-  - Unbreaking - up to level 5 (Vanilla: 3)
-  - Multishot - up to level 3 (Vanilla: 1)
-- Armor Stands named "display" will be given arms
-- You can now duplicate enchantment books (at a level cost) by shift-right-clicking with an enchanted book in your offhand and a regular book in your main hand on an Enchantment Table
-- You can now die in the Banishment dimension (if the damage you've been delt is more than 2^18)
-  - Added so `/kill` actually works in there
-- Invisible players when killing others or dying will have their names obfuscated
+- Enchantment Book duplication is now possible by shift-right-clicking an Enchantment Table with an enchanted book in your offhand and a normal book in your main hand
+  - The Enchanted Book can not have more than one enchantment on it
+  - Duplication costs experience levels. Cost is calculated based on enchantment rarity, max enchantment level and current enchantment level
+- All incompatible enchantments can be now combined with each other
+  - Note that some enchantment effects may conflict or take priority over one another
+- Some enchantments are now available at a higher max level than vanilla
+  - What is made higher level can be found in [OverVanillaEnchantments.md](https://github.com/JustMili0/MilliesServerAdditions/blob/master/.Informative/Features/OverVanillaEnchantments.md)
+- Names of invisible players become obfuscated in death/kill messages
 - Tridents with Riptide now charge more than twice as fast (10t delay -> 3t delay)
 
 **Commands**
-- `/scale` now has configurable min-max values in the config
-- Patched one-hit mace exploit with `/afk`
-- `/afk` now uses `Vec3` `player.position()` rather than individual x, y and z coordinates
-- `/afk` now shows exact time left until end of cooldown (days, hours, minutes, seconds)
-- Renamed `/fillExtras` to `/fillextras`
-- `/fillextras` is now a configurable command
 - Added `/smpperms <player> <permission_level>`, permission levels:
   - `default` - Regular player permissions
   - `moderator` - Can use all commands that a command block can
   - `administrator` - Can use all commands (except `/smpperms`), can not stop the server
-  - `limited_operator` (owner but fair) - Operator permission level but limited to only a few commands essential (or so) for moderation
+  - `limited_operator` (owner but fair) - Operator permission level but limited to only a few commands essential (or so) for server moderation
   - `operator` (owner) - Regular operator permissions
-- `/damagetoggle` now properly suggests damage types
+  
+***Millie's server permissions on Millie's Cove community Minecraft server are now set to `limited_operator`**
 
 **Player Abilities**
-- Abilities now are stored in lowercase instead of uppercase, e.g. `fire_immune` instead of `FIRE_IMMUNE`
-- All abilities, ability modifiers and ability presets are now saved in `modid:name` format instead of plain string
-- Renamed some abilities
+- Added `canine` ability preset
+- Bovid - Can be milked with a bucket by other players
+- Squishy - Decreases `fall` and `fly_into_wall` damage by 75% each
+- Insectivore - Can feed on bug-like entities (Silverfish, Endermites, and size-1 Slimes and Magma Cubes) as well as items like Slimeballs, Magma Cream and Spider Eyes
+  - Consuming a Cave Spider grants bonus nutrition but poisons player
+  - Consuming a Sulfur Cube poisons player
+  - Consuming a Magma Cube deals half a heart of fire damage
+
+### ***BUG FIXES/TECHNICAL CHANGES***
+**Configuration**
+- Changed config file from `config\servertweaks\common.toml` into `config\servertweaks\common.properties`
+- Renamed config key `removeAnvilLimit` to `disableAnvilLimit`
+- Renamed config key `despawnMonsters` to `despawnMonstersPostAfk`
+- All `limit.....Speed` as well as `enableScaleCommand`, `enableBanishCommand` and `enableDamageToggleCommand` config keys are now false by default
+
+**Gameplay**
+- You can now die in `servertweaks:banishment` dimension by `/kill` (or generally dealt more than 2^18 points of damage)
+
+**Commands**
+- Cleaned up and possibly optimized the code of all the command classes
+- Renamed `/fillExtras` to `/fillextras`
+- Reworked informative texts shown in `/abilities`
+  - `pickPreset <preset>` now utilizes `getDisplayName` instead of `getId` for informing that a preset had been applied
+  - `pickPreset <preset>` now informs the player if any ability in given preset requires a client-side installation to function properly
+  - `grant` and `revoke` now utilizes `getDisplayName` instead of `getId` for showing ability and ability modifier names
+- Fixed one-hit mace exploit in `/afk` not resetting fall distance
+- `/afk` now uses `Vec3` `player.position()` to store player position instead of individual x, y and z `double` values
+- `/afk` can now show the exact remaining time of its cooldown in days, hours, minutes and seconds format instead of just seconds
+
+**Player Abilities**
+- Mod can be now installed client-side for some abilities to work properly (quite literally, just `climbs_walls` needs it)
+- Reworked registries for player abilities
+  - Class names and packages were altered a lot
+  - All abilities and ability modifiers (including ticking) now define an Identifier, Display Name and whether it requires a client-side installation or not (for most; not)
+  - All ability presets now define an Identifier and Display Name
+- Added `TickingAbilityModifier` class
+- All abilities, ability modifiers and ability presets are no longer plain full-capitalized strings (`EXAMPLE_THING`) and now instead are Identifiers (`mod_id:example_thing`)
+- Some abilities were renamed for consistency and better language
   - `FRIENDS_WITH_NATURE` -> `child_of_nature`
   - `GRASS_EATER` -> `herbivore`
   - `ONLY_EATS_SWEETS` -> `saccharivore`
   - `AQUA_GRACE` -> `aquatic_grace`
-- Fixed and optimize damage immunity handling
-- `fire_immune` and `lava_immune` now automatically get extinguished
-- Made `light` less annoying to walk down the stairs with (now additionally requires 3 blocks of fall distance)
-- `fall_immune` is no longer affected by Slow Falling
-- `freeze_immune` no longer gets the freezing overlay and hearts
-- Fixed being able to eat anything no matter the diet if food is held in the offhand
-- Fixed and readjusted damage multipliers for `squishy` and `weak_to_damage`
-- Fixed players with `herbivore` being able to eat even at full hunger
-- Fixed placing and picking up fish in and from buckets as `carnivore`, `vegeterian`, `saccharivore`, `herbivore` and `insectivore`
-- Fixed functional block interactions and crop planting and harvesting when holding a non-diet items as `carnivore`, `vegeterian`, `saccharivore`, `herbivore` and `insectivore`
-- Gave use to Poison and Weakness effects to counter some abilities' features
-- Nerfed `strong` ability - Instead of max 100hp with no armor, now it's max 80hp with no armor
+- All ability presets with diet restriction abilities now come with `can_eat_golden_foods` modifier
 - Added Big Dripleaf, Small Dripleaf, Vines, Cave Vines, Glow Lichen, Ferns, Large Ferns, Bushes, Firefly Bushes, Seagrass, Tall Seagrass, Sea Pickles and Kelp to `herbivore`'s diet tag
-- Removed Jungle and its variants from tag `hot_biomes`
-- Added `canine` ability preset
-- Fixed ability debuff `hunted_by_fox` - Foxes now attack even if you're not crouching
-- [TODO - needs code] Fixed ability debuff `cant_swim` - Players no longer can swim up higher than one block up from the (sea) floor
-- Fixed ability `child_of_nature` - Taming chance with any animal is now 100%
-- [TODO - needs code] Fixed ability `climbs_walls` - Now can actually climb walls
+- Removed Jungle and its variants from biome tag `hot_biomes`
+- Some abilities now have special interactions with potion effects (mainly with Weakness and Poison)
+- Decreased max health of `strong` ability from 100 to 80, minimum still being 40
+- Dolphin's Grace now applies to `aquatic_grace` with Depth Strider 2, below or none. Depth Strider 1, below or none unless poisoned
+- `fire_immune` and `lava_immune` now automatically get extinguished unless has Weakness effect
+- `fall_immune` is no longer affected by Slow Falling unless has Weakness effect
+- `freeze_immune` no longer gets the freezing overlay and hearts unless has Weakness effect
+- `aquarian` preset no longer grants `breathes_underwater`, as water breathing is already provided by Conduit Power effect from `aquatic_grace`
+- Fixed and optimized damage immunity handling
+- Fixed and readjusted damage multipliers for `weak_to_damage` ability to match its descriptions in [Abilities.md](https://github.com/JustMili0/MilliesServerAdditions/blob/master/.Informative/Features/Abilities.md)
+- Fixed being able to eat anything by just having it in your offhand
+- Fixed `herbivore` ability being able to eat foliage even when full
+- Fixed food values not updating when eating foliage as `herbivore`
+- Fixed block placement, block interactions and fish bucket place/pickup with any diet restriction abilities applied
+- Fixed `child_of_nature` ability - Taming chance with any animal is now 100%
+- Fixed `hunted_by_fox` ability - Foxes now attack even if you're not crouching
+- [TODO - implementation wip] Fixed ability debuff `cant_swim` - Player no longer can swim up in water
+- [TODO - to be implemented] Fixed ability `climbs_walls` - Now can actually climb walls
+- Fixed `light` ability applying Slow Falling at any fall distance, even when going downstairs
+  - Now requires 3 blocks or more of fall distance to apply Slow Falling
 - Fixed `aquatic_grace` checking HEAD equipment slot instead of FEET for Depth Strider enchantment
-- Made `aquatic_grace` not apply Dolphin's Grace effect with Depth Strider above level 1, now applies at levels 1 and 2 (only 1 if poisoned)
-- All ability presents with diet restrictions now grant `can_eat_golden_foods` modifier 
-- (NEW) Bovid - Can be milked with a bucket by other players
-- (NEW) Squishy - Decreases `fall` and `fly_into_wall` damage by 75% each
-- (NEW) Insectivore - Can feed on bug-like entities (Silverfish, Endermites, and size-1 Slimes and Magma Cubes) as well as items like Slimeballs, Magma Cream and Spider Eyes
-  - Eating a Cave Spider grants bonus nutrition but inflicts Poison
-  - Eating a Magma Cube deals a small amount of fire damage
-- Client is now properly updated about food value changes from abilities such as `insectivore` and herbivore
 
 Feedback is appreciated ^^
