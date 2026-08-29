@@ -86,7 +86,7 @@ public class Discard {
     static int discardEntityInv(CommandSourceStack source, Entity entity) {
         int cleared = 0;
 
-        if (entity instanceof ServerPlayer player) { // Players, clear everything, even carried items
+        if (entity instanceof Player player) { // Players, clear everything, even carried items
             var inv = player.getInventory();
             cleared = countContainer(inv);
 

@@ -113,32 +113,32 @@ Feedback is appreciated ^^
 # Millie's Server Additions, Patch #6 - 1.3.0-beta.16
 
 ### ***GENERIC***
-- New *Update Patch* format. Changelog format will also be changing with update 1.3.1 for this and all other projects by or involving JustMili
+- New *Update Patches* format. Changelog format will also be changing with update 1.3.1 for this and all other projects by or involving JustMili
 - Updated to Minecraft 26.2 from 1.21.11
 - Changed project's buildscript from Groovy to Kotlin
 - Dropped dependency from SuperMartijn642's Config Lib and replaced it with a stripped down version of my Core Libs mod
 
 ### ***ADDED***
 **Configuration**
-- Added a config key for Villagers and tamable mobs losing their AI when named "NoAI"
+- Added a config key for Villagers and tamable mobs to lose their AI when named "NoAI"
 - Added a config key for min-max values usable by regular players for `/scale`
 - Added a config key for `/fillextras` command
 
 **Gameplay**
 - Armor Stands named "display" in an anvil will be given arms when placed
-- Shift-right-clicking anvils with an Iron Ingot or Iron Block will repair it
+- Shift-right-clicking an anvil with an Iron Ingot or Iron Block will repair it
   - Chipped Anvil - 33% chance of success with an Iron Ingot, or 100% with an Iron Block
   - Damaged Anvil - 25% chance of success with an Iron Ingot, or 80% with an Iron Block
   - Repairing an anvil can't fail more than 2 times, on 3rd try repair is always guaranteed
 - Enchantment Book duplication is now possible by shift-right-clicking an Enchantment Table with an enchanted book in your offhand and a normal book in your main hand
   - The Enchanted Book can not have more than one enchantment on it
   - Duplication costs experience levels. Cost is calculated based on enchantment rarity, max enchantment level and current enchantment level
-- All incompatible enchantments can be now combined with each other
+- All incompatible enchantments can now be combined with each other
   - Note that some enchantment effects may conflict or take priority over one another
 - Some enchantments are now available at a higher max level than vanilla
   - What is made higher level can be found in [OverVanillaEnchantments.md](https://github.com/JustMili0/MilliesServerAdditions/blob/master/.Informative/Features/OverVanillaEnchantments.md)
 - Names of invisible players become obfuscated in death/kill messages
-- Tridents with Riptide now charge more than twice as fast (10t delay -> 3t delay)
+- Tridents with Riptide now charge over 3 times faster (10t -> 3t charge time)
 
 **Commands**
 - Added `/smpperms <player> <permission_level>`, permission levels:
@@ -187,7 +187,7 @@ Feedback is appreciated ^^
   - All abilities and ability modifiers (including ticking) now define an Identifier, Display Name and whether it requires a client-side installation or not (for most; not)
   - All ability presets now define an Identifier and Display Name
 - Added `TickingAbilityModifier` class
-- All abilities, ability modifiers and ability presets are no longer plain full-capitalized strings (`EXAMPLE_THING`) and now instead are Identifiers (`mod_id:example_thing`)
+- All abilities, ability modifiers and ability presets are no longer plain full-capitalized strings (`EXAMPLE_THING`) now being Identifiers (`mod_id:example_thing`)
 - Some abilities were renamed for consistency and better language
   - `FRIENDS_WITH_NATURE` -> `child_of_nature`
   - `GRASS_EATER` -> `herbivore`
@@ -198,7 +198,7 @@ Feedback is appreciated ^^
 - Removed Jungle and its variants from biome tag `hot_biomes`
 - Some abilities now have special interactions with potion effects (mainly with Weakness and Poison)
 - Decreased max health of `strong` ability from 100 to 80, minimum still being 40
-- Dolphin's Grace now applies to `aquatic_grace` with Depth Strider 2, below or none. Depth Strider 1, below or none unless poisoned
+- Dolphin's Grace now applies to `aquatic_grace` with Depth Strider 2, below or none; if poisoned, only Depth Strider 1 or none, instead of just Depth Strider 1
 - `fire_immune` and `lava_immune` now automatically get extinguished unless has Weakness effect
 - `fall_immune` is no longer affected by Slow Falling unless has Weakness effect
 - `freeze_immune` no longer gets the freezing overlay and hearts unless has Weakness effect
@@ -212,7 +212,7 @@ Feedback is appreciated ^^
 - Fixed `child_of_nature` ability - Taming chance with any animal is now 100%
 - Fixed `hunted_by_fox` ability - Foxes now attack even if you're not crouching
 - [TODO - implementation wip] Fixed ability debuff `cant_swim` - Player no longer can swim up in water
-- [TODO - to be implemented] Fixed ability `climbs_walls` - Now can actually climb walls
+- [TODO - to be reimplemented] Fixed ability `climbs_walls` - Now can actually climb walls
 - Fixed `light` ability applying Slow Falling at any fall distance, even when going downstairs
   - Now requires 3 blocks or more of fall distance to apply Slow Falling
 - Fixed `aquatic_grace` checking HEAD equipment slot instead of FEET for Depth Strider enchantment

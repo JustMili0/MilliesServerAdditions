@@ -1,5 +1,6 @@
 package net.justmili.servertweaks.content.mechanics.logic;
 
+import net.justmili.libs.v1.utils.common.EntityUtil;
 import net.justmili.libs.v1.utils.common.FdaUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.variables.PlayerVars;
@@ -11,10 +12,8 @@ import net.minecraft.world.phys.Vec3;
 
 public class WhileAfk {
     public static boolean onEntityHurt(LivingEntity entity, DamageSource source, float value) {
-        if (source.getEntity() instanceof ServerPlayer attacker
-            && FdaUtil.getBool(attacker, PlayerVars.IS_AFK)) return false;
-        if (entity instanceof ServerPlayer victim
-            && FdaUtil.getBool(victim, PlayerVars.IS_AFK)) return false;
+        if (source.getEntity() instanceof Player attacker && FdaUtil.getBool(attacker, PlayerVars.IS_AFK)) return false;
+        if (entity instanceof Player victim && FdaUtil.getBool(victim, PlayerVars.IS_AFK)) return false;
 
         return true;
     }
@@ -29,8 +28,7 @@ public class WhileAfk {
             player.setDeltaMovement(Vec3.ZERO);
             player.resetFallDistance();
 
-            if (player.distanceToSqr(pos.x, pos.y, pos.z) > 0.00001f)
-                serverPlayer.connection.teleport(pos.x, pos.y, pos.z, serverPlayer.getYRot(), serverPlayer.getXRot());
+            if (player.distanceToSqr(pos.x, pos.y, pos.z) > 0.00001f) EntityUtil.tp(player, pos);
         }
 
         // Set/reset command timer

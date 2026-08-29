@@ -6,6 +6,7 @@ import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
 import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -15,29 +16,29 @@ import static net.justmili.servertweaks.content.abilities.core.AbilityProfiles.*
 
 public class AbilityProfilesUtil {
     // Ability and Modifier management
-    public static Set<Ability> getAbilities(ServerPlayer player) {
+    public static Set<Ability> getAbilities(Player player) {
         return playerAbilities.getOrDefault(player.getUUID(), Collections.emptySet());
     }
 
-    public static void grantAbility(ServerPlayer player, Ability ability) {
+    public static void grantAbility(Player player, Ability ability) {
         if (ability == null) {
-            CommandUtil.sendFailTo(player, "Unknown player ability");
+            CommandUtil.sendFailTo((ServerPlayer) player, "Unknown player ability");
             return;
         }
-        playerAbilities.computeIfAbsent(player.getUUID(), uuid -> new HashSet<>()).add(ability);
+        playerAbilities.computeIfAbsent(player.getUUID(), _ -> new HashSet<>()).add(ability);
         saveFile(player.level().getServer());
     }
 
-    public static void revokeAbility(ServerPlayer player, Ability ability) {
+    public static void revokeAbility(Player player, Ability ability) {
         if (ability == null) {
-            CommandUtil.sendFailTo(player, "Unknown player ability");
+            CommandUtil.sendFailTo((ServerPlayer) player, "Unknown player ability");
             return;
         }
         playerAbilities.getOrDefault(player.getUUID(), Collections.emptySet()).remove(ability);
         saveFile(player.level().getServer());
     }
 
-    public static Set<AbilityModifier> getModifiers(ServerPlayer player) {
+    public static Set<AbilityModifier> getModifiers(Player player) {
         return playerModifiers.getOrDefault(player.getUUID(), Collections.emptySet());
     }
 
@@ -50,34 +51,34 @@ public class AbilityProfilesUtil {
         saveFile(player.level().getServer());
     }
 
-    public static void revokeModifier(ServerPlayer player, AbilityModifier modifier) {
+    public static void revokeModifier(Player player, AbilityModifier modifier) {
         if (modifier == null) {
-            CommandUtil.sendFailTo(player, "Unknown ability modifier");
+            CommandUtil.sendFailTo((ServerPlayer) player, "Unknown ability modifier");
             return;
         }
         playerModifiers.getOrDefault(player.getUUID(), Collections.emptySet()).remove(modifier);
         saveFile(player.level().getServer());
     }
 
-    public static boolean has(ServerPlayer player, Ability ability) {
+    public static boolean has(Player player, Ability ability) {
         if (ability == null) {
-            CommandUtil.sendFailTo(player, "Unknown player ability");
+            CommandUtil.sendFailTo((ServerPlayer) player, "Unknown player ability");
             return false;
         }
         return getAbilities(player).contains(ability);
     }
 
-    public static boolean has(ServerPlayer player, AbilityModifier modifier) {
+    public static boolean has(Player player, AbilityModifier modifier) {
         if (modifier == null) {
-            CommandUtil.sendFailTo(player, "Unknown ability modifier");
+            CommandUtil.sendFailTo((ServerPlayer) player, "Unknown ability modifier");
             return false;
         }
         return getModifiers(player).contains(modifier);
     }
 
-    public static void applyPreset(ServerPlayer player, MinecraftServer server, AbilityPreset preset) {
+    public static void applyPreset(Player player, MinecraftServer server, AbilityPreset preset) {
         if (preset == null) {
-            CommandUtil.sendFailTo(player, "Unknown abilities preset");
+            CommandUtil.sendFailTo((ServerPlayer) player, "Unknown abilities preset");
             return;
         }
         var uuid = player.getUUID();
@@ -86,9 +87,9 @@ public class AbilityProfilesUtil {
         saveFile(server);
     }
 
-    public static void clearPlayerProfile(ServerPlayer player) {
+    public static void clearPlayerProfile(Player player) {
         var uuid = player.getUUID();
-        MinecraftServer server = player.level().getServer();
+        var server = player.level().getServer();
         playerAbilities.remove(uuid);
         playerModifiers.remove(uuid);
         saveFile(server);

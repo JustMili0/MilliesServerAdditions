@@ -27,7 +27,6 @@ public abstract class PetsMixin extends TamableAnimal {
     @Expression("?.nextInt(?) == ?")
     @ModifyExpressionValue(method = "tryToTame", at = @At("MIXINEXTRAS:EXPRESSION"))
     private boolean servertweaks$alwaysTame(boolean original, @Local(argsOnly = true) Player player) {
-        if (!(player instanceof ServerPlayer serverPlayer)) return original;
-        return AbilityProfilesUtil.has(serverPlayer, Abilities.CHILD_OF_NATURE) || original;
+        return AbilityProfilesUtil.has(player, Abilities.CHILD_OF_NATURE) || original;
     }
 }

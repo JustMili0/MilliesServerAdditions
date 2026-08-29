@@ -1,5 +1,6 @@
 package net.justmili.servertweaks.content.mechanics.features;
 
+import net.justmili.libs.v1.utils.common.EntityUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.registries.DimRegistry;
 import net.minecraft.core.BlockPos;
@@ -21,15 +22,14 @@ public final class Banishment {
 
     public static boolean onEntityHurt(LivingEntity entity, DamageSource source, float value) {
         if (!Config.enableBanishCommand.get()) return true;
-        if (!(entity instanceof ServerPlayer player)) return true;
+        if (!(entity instanceof Player player)) return true;
 
         if (value >= (1 << 18)) return true;
         return player.level().dimension() != DimRegistry.BANISHMENT;
     }
 
-    public static void onPlayerTick(Player ticking) {
+    public static void onPlayerTick(Player player) {
         if (!Config.enableBanishCommand.get()) return;
-        if (!(ticking instanceof ServerPlayer player)) return;
         var level = player.level();
 
         if (level.dimension() != DimRegistry.BANISHMENT) return;
@@ -50,9 +50,9 @@ public final class Banishment {
                     if (!level.getBlockState(pos).is(Blocks.BEDROCK)) level.setBlock(pos, Blocks.BEDROCK.defaultBlockState(), 3);
                 }
             }
-            player.teleportTo(level, player.getX(), 3.0, player.getZ(), Set.of(), player.getYRot(), player.getXRot(), true);
+            EntityUtil.tp(player, level, player.getX(), 3.0, player.getZ());
             player.setDeltaMovement(0.0, 0.0, 0.0);
-            player.fallDistance = 0.0F;
+            player.resetFallDistance();
         }
     }
 

@@ -21,13 +21,15 @@ public class PlayerMixin {
     private void servertweaks$preventSwimUp(Vec3 input, CallbackInfo ci) {
         if (!Config.playerAbilities.get()) return;
         if (!((Player) (Object) this instanceof ServerPlayer player)) return;
-        if (!AbilityProfilesUtil.has(player, Abilities.CANT_SWIM) || !player.isInWater() || !player.gameMode.isSurvival()) return;
+        if (!AbilityProfilesUtil.has(player, Abilities.CANT_SWIM) || !player.isInWater() || !player.gameMode().isSurvival()) return;
 
-        if (player.level().getFluidState(player.blockPosition().below()).isEmpty()) return;
+        var level = player.level();
+        var pos = player.blockPosition();
+        if (level.getFluidState(pos.above()).isEmpty() && level.getFluidState(pos.below()).isEmpty()) return;
 
         // Issues:
         // - Still can rise up a little, but it's very slow
-        // (generally swimming in any direction is now very slow, where it's only wanted for upwards movement)
+        // (generally swimming in any direction is now very slow, where it's only wanted for upwards movement to be entirely prevented)
         var movement = player.getDeltaMovement();
         if (movement.y > 0.0) player.setDeltaMovement(movement.with(Direction.Axis.Y, 0.0));
         player.connection.send(new ClientboundSetEntityMotionPacket(player));

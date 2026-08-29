@@ -2,6 +2,7 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.justmili.libs.v1.utils.common.CommandUtil;
+import net.justmili.libs.v1.utils.common.EntityUtil;
 import net.justmili.servertweaks.registries.DimRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -24,7 +25,7 @@ public class Banish {
             CommandUtil.sendFail(source, "Banishment dimension is not loaded");
             return 0;
         }
-        player.teleportTo(banishLevel, 0.5, 2.0, 0.5, Relative.DELTA, player.getYRot(), player.getXRot(), true);
+        EntityUtil.tp(player, banishLevel, 0.5, 2.0, 0.5);
 
         CommandUtil.sendOkTo(player,
             """

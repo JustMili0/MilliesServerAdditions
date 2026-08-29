@@ -49,13 +49,11 @@ public class AbilityEvents {
     public static void registerAbilityEvents() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (var player : server.getPlayerList().getPlayers()) {
-                ServerLevel level = player.level();
+                var level = player.level();
 
                 // Tick all Ticking Abilities
-                for (Ability ability : getAbilities(player)) {
-                    if (ability instanceof TickingAbility tickingAbility) {
-                        tickingAbility.tick(player, level);
-                    }
+                for (var ability : getAbilities(player)) {
+                    if (ability instanceof TickingAbility tickingAbility) tickingAbility.tick(player, level);
                 }
 
                 // Reset attribute modifiers if related ability is not applied
@@ -70,9 +68,7 @@ public class AbilityEvents {
                 // Change to: Check if player has presets locked;
                 // If yes but has no abilities or modifiers then clear them from the file and unlock preset picking
                 // As well as inform the player that they have to pick their preset/class again
-                if (FdaUtil.getBool(player, PlayerVars.HAS_PICKED_PRESET)
-                    && getAbilities(player).isEmpty()
-                    && getModifiers(player).isEmpty()) {
+                if (FdaUtil.getBool(player, PlayerVars.HAS_PICKED_PRESET) && getAbilities(player).isEmpty() && getModifiers(player).isEmpty()) {
 
                     // Remove from file
                     clearPlayerProfile(player);
@@ -94,7 +90,7 @@ public class AbilityEvents {
     }
 
     static boolean squishy(LivingEntity entity, DamageSource source, float value) {
-        if (!(entity instanceof ServerPlayer player)) return true;
+        if (!(entity instanceof Player player)) return true;
         if (handleOtherImmunities(player, source)) return false;
         if (!has(player, Abilities.SQUISHY)) return true;
 
@@ -104,7 +100,7 @@ public class AbilityEvents {
     }
 
     static boolean weakToDamage(LivingEntity entity, DamageSource source, float value) {
-        if (!(entity instanceof ServerPlayer player)) return true;
+        if (!(entity instanceof Player player)) return true;
         if (handleOtherImmunities(player, source)) return false;
 
         if (!has(player, Abilities.WEAK_TO_DAMAGE)) return true;
@@ -113,9 +109,8 @@ public class AbilityEvents {
         return recalcDamage(player, source, value, 1.25F);
     }
 
-    static InteractionResult pearling(Player interacting, Level level, InteractionHand hand) {
+    static InteractionResult pearling(Player player, Level level, InteractionHand hand) {
         if (level.isClientSide()) return InteractionResult.PASS;
-        if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (!has(player, Abilities.PEARLING)) return InteractionResult.PASS;
 
         var pearl = new ItemStack(Items.ENDER_PEARL);
@@ -133,51 +128,48 @@ public class AbilityEvents {
         return InteractionResult.PASS;
     }
 
-    static InteractionResult bovid(Player interacting, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
+    static InteractionResult bovid(Player player, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
-        if (!(interacting instanceof ServerPlayer milking)) return InteractionResult.PASS;
-        if (!(entity instanceof ServerPlayer milked)) return InteractionResult.PASS;
+        if (!(entity instanceof Player milked)) return InteractionResult.PASS;
         if (!has(milked, Abilities.BOVID)) return InteractionResult.PASS;
 
         // Funny hardcoded thing
         if ((uuidMatchesString(milked, "66774f1e-99de-4f1b-8293-906ca3488549") || uuidMatchesString(milked, "3ff71c17-0edb-4e05-aded-c0bc378a05a0"))
-            && !uuidMatchesString(milking, "19c3c783-9359-4311-98bf-79a6d361362d")) return InteractionResult.PASS;
+            && !uuidMatchesString(player, "19c3c783-9359-4311-98bf-79a6d361362d")) return InteractionResult.PASS;
 
-        var stack = milking.getItemInHand(hand);
+        var stack = player.getItemInHand(hand);
         if (!stack.is(Items.BUCKET)) return InteractionResult.PASS;
 
         // Prevent double processing
-        int currentTick = milking.tickCount;
-        if (FdaUtil.getInt(milking, PlayerVars.MILK_TICK) == currentTick) return InteractionResult.CONSUME;
-        FdaUtil.set(milking, PlayerVars.MILK_TICK, currentTick);
+        int currentTick = player.tickCount;
+        if (FdaUtil.getInt(player, PlayerVars.MILK_TICK) == currentTick) return InteractionResult.CONSUME;
+        FdaUtil.set(player, PlayerVars.MILK_TICK, currentTick);
 
         var milkBucket = new ItemStack(Items.MILK_BUCKET);
         milkBucket.set(DataComponents.CUSTOM_NAME, Component.literal(milked.getName().getString() + "'s Milk").withStyle(style -> style.withItalic(false)));
         if (stack.getCount() == 1) {
-            milking.setItemInHand(hand, milkBucket);
+            player.setItemInHand(hand, milkBucket);
         } else {
             stack.shrink(1);
-            milking.getInventory().add(milkBucket);
+            player.getInventory().add(milkBucket);
         }
-        milking.containerMenu.broadcastFullState();
+        player.containerMenu.broadcastFullState();
 
         return InteractionResult.CONSUME;
     }
 
-    public static InteractionResult handleDietItemCall(Player interacting, Level level, InteractionHand hand) { // Clicking while looking at nothing
+    public static InteractionResult handleDietItemCall(Player player, Level level, InteractionHand hand) { // Clicking while looking at nothing
         if (level.isClientSide()) return InteractionResult.PASS;
-        if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
 
-        bugEaterItems(interacting, level, hand); // Handle this first
+        bugEaterItems(player, level, hand); // Handle this first
         if (isDietBlocked(player, player.getItemInHand(hand))) return InteractionResult.FAIL;
 
         return InteractionResult.PASS;
     }
 
-    static void bugEaterItems(Player interacting, Level level, InteractionHand hand) {
+    static void bugEaterItems(Player player, Level level, InteractionHand hand) {
         if (level.isClientSide()) return;
-        if (!(interacting instanceof ServerPlayer player)) return;
         if (!has(player, Abilities.INSECTIVORE)) return;
 
         var stack = player.getItemInHand(hand);
@@ -194,9 +186,8 @@ public class AbilityEvents {
         // In-tag foods with food data handle via handleDiet* methods
     }
 
-    static InteractionResult bugEaterEntities(Player interacting, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
+    static InteractionResult bugEaterEntities(Player player, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
-        if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (!has(player, Abilities.INSECTIVORE)) return InteractionResult.PASS;
 
         var food = player.getFoodData();
@@ -245,9 +236,8 @@ public class AbilityEvents {
         return InteractionResult.PASS;
     }
 
-    static InteractionResult grassEater(Player interacting, Level level, InteractionHand hand, BlockHitResult hitResult) {
+    static InteractionResult grassEater(Player player, Level level, InteractionHand hand, BlockHitResult hitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
-        if (!(interacting instanceof ServerPlayer player)) return InteractionResult.PASS;
         if (!has(player, Abilities.HERBIVORE)) return InteractionResult.PASS;
 
         if (!player.isShiftKeyDown()) return InteractionResult.PASS;
@@ -274,27 +264,27 @@ public class AbilityEvents {
         DamageTypes.DROWN, Abilities.BREATHES_UNDERWATER
     );
 
-    static boolean handleOtherImmunities(ServerPlayer player, DamageSource source) {
+    static boolean handleOtherImmunities(Player player, DamageSource source) {
         var immunity = DAMAGE_IMMUNITY.get(source.typeHolder().unwrapKey().orElse(null));
         return immunity != null && has(player, immunity);
     }
 
-    static boolean recalcDamage(ServerPlayer player, DamageSource source, float damageTaken, float multiplier) {
+    static boolean recalcDamage(Player player, DamageSource source, float damageTaken, float multiplier) {
         if (FdaUtil.getInt(player, PlayerVars.HURT_TICK) != player.tickCount) {
             // safeguard to make sure ALLOW_DAMAGE doesn't get called again and for this to not run recursively
             FdaUtil.set(player, PlayerVars.HURT_TICK, player.tickCount);
-            player.hurtServer(player.level(), source, damageTaken * multiplier);
+            player.hurtServer((ServerLevel) player.level(), source, damageTaken * multiplier);
 
             return false;
         }
         return true;
     }
 
-    static void playEatSound(ServerPlayer player) {
+    static void playEatSound(Player player) {
         player.playSound(SoundEvents.GENERIC_EAT.value(), 1.0F, 1.0F + (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.4F);
     }
 
-    static boolean isDietBlocked(ServerPlayer player, ItemStack stack) {
+    static boolean isDietBlocked(Player player, ItemStack stack) {
         if (!stack.has(DataComponents.FOOD) || stack.has(DataComponents.BUCKET_ENTITY_DATA)) return false;
 
         boolean carnivore = has(player, Abilities.CARNIVORE);
@@ -329,12 +319,13 @@ public class AbilityEvents {
         return false;
     }
 
-    static boolean uuidMatchesString(ServerPlayer player, String uuid) {
+    static boolean uuidMatchesString(Player player, String uuid) {
         return player.getUUID().equals(UUID.fromString(uuid));
     }
 
-    static void sendUpdatePacket(ServerPlayer player) {
+    static void sendUpdatePacket(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
         var food = player.getFoodData();
-        player.connection.send(new ClientboundSetHealthPacket(player.getHealth(), food.getFoodLevel(), food.getSaturationLevel()));
+        serverPlayer.connection.send(new ClientboundSetHealthPacket(player.getHealth(), food.getFoodLevel(), food.getSaturationLevel()));
     }
 }

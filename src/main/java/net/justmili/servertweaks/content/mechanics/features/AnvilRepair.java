@@ -24,9 +24,8 @@ public class AnvilRepair {
     private static final Map<UUID, Integer> repairAttemptsIngot = new HashMap<>(), repairAttemptsBlock = new HashMap<>();
     private static final Map<UUID, BlockPos> anvilPosition = new HashMap<>();
 
-    public static void onUseBlock(Player interacting, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
+    public static void onUseBlock(Player player, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
         if (!Config.enableAnvilRepair.get()) return;
-        if (!(interacting instanceof ServerPlayer player)) return;
         if (!player.isShiftKeyDown()) return;
 
         // Block checks

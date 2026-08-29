@@ -6,10 +6,10 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.justmili.servertweaks.content.abilities.Abilities;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RunAroundLikeCrazyGoal;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -24,7 +24,7 @@ public abstract class HorsesMixin extends Goal {
     private boolean servertweaks$alwaysTame(boolean original, @Local Entity passenger) {
         // Covers anything that extends AbstractHorse
         // Horses (all), Donkeys, Mules, Llamas
-        if (!(passenger instanceof ServerPlayer serverPlayer)) return original;
-        return AbilityProfilesUtil.has(serverPlayer, Abilities.CHILD_OF_NATURE) || original;
+        if (!(passenger instanceof Player player)) return original;
+        return AbilityProfilesUtil.has(player, Abilities.CHILD_OF_NATURE) || original;
     }
 }
