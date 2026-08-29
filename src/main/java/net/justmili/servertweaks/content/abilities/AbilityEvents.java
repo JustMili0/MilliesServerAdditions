@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
-
 import net.justmili.libs.v1.utils.common.CommandUtil;
 import net.justmili.libs.v1.utils.common.EntityUtil;
 import net.justmili.libs.v1.utils.common.FdaUtil;
@@ -16,6 +15,7 @@ import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,6 +30,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.cubemob.AbstractCubeMob;
 import net.minecraft.world.entity.player.Player;
@@ -57,13 +58,9 @@ public class AbilityEvents {
                 }
 
                 // Reset attribute modifiers if related ability is not applied
-                var speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
-                var attack = player.getAttribute(Attributes.ATTACK_DAMAGE);
-                var maxHp = player.getAttribute(Attributes.MAX_HEALTH);
-
-                if (!has(player, Abilities.SLOW) && speed != null) speed.removeModifier(Abilities.AR_SLOW_SPEED);
-                if (!has(player, Abilities.STRONG) && attack != null) attack.removeModifier(Abilities.AR_STRONG_DAMAGE);
-                if (!has(player, Abilities.STRONG) && maxHp != null) maxHp.removeModifier(Abilities.AR_STRONG_HP);
+                removeModifier(player, player.getAttribute(Attributes.MOVEMENT_SPEED), Abilities.SLOW, Abilities.AR_SLOW_SPEED);
+                removeModifier(player, player.getAttribute(Attributes.ATTACK_DAMAGE), Abilities.STRONG, Abilities.AR_STRONG_DAMAGE);
+                removeModifier(player, player.getAttribute(Attributes.MAX_HEALTH), Abilities.STRONG, Abilities.AR_STRONG_HP);
 
                 // Change to: Check if player has presets locked;
                 // If yes but has no abilities or modifiers then clear them from the file and unlock preset picking
@@ -87,6 +84,11 @@ public class AbilityEvents {
         UseBlockCallback.EVENT.register(AbilityEvents::grassEater);
         UseEntityCallback.EVENT.register(AbilityEvents::bugEaterEntities);
         UseEntityCallback.EVENT.register(AbilityEvents::bovid);
+    }
+
+    // Remove modifiers that are related to abilities the player does not have
+    static void removeModifier(Player player, AttributeInstance instance, Ability ability, Identifier id) {
+        if (!has(player, ability) && instance != null) instance.removeModifier(id);
     }
 
     static boolean squishy(LivingEntity entity, DamageSource source, float value) {

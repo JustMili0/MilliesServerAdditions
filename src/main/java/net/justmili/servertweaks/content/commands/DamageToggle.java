@@ -13,24 +13,19 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.LivingEntity;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class DamageToggle {
-    private static final Map<ResourceKey<DamageType>, Boolean> DISABLED_TYPES = new HashMap<>();
+    private static final Set<ResourceKey<DamageType>> DISABLED_TYPES = new HashSet<>();
     private static boolean eventRegistered = false;
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext) {
         if (!eventRegistered) {
             eventRegistered = true;
-            ServerLivingEntityEvents.ALLOW_DAMAGE.register((LivingEntity _, DamageSource source, float _) -> {
-                    for (Map.Entry<ResourceKey<DamageType>, Boolean> entry : DISABLED_TYPES.entrySet()) {
-                        if (!entry.getValue()) continue;
-                        if (source.is(entry.getKey())) return false;
-                    }
-                    return true;
-                }
+            ServerLivingEntityEvents.ALLOW_DAMAGE.register((LivingEntity _, DamageSource source, float _) ->
+                !DISABLED_TYPES.contains(source.typeHolder().unwrapKey().orElse(null))
             );
         }
 
@@ -55,15 +50,17 @@ public class DamageToggle {
     }
 
     static int setStatus(CommandSourceStack source, ResourceKey<DamageType> key, boolean shouldDisable) {
-        var status = shouldDisable? "Disabled" : "Enabled";
-        DISABLED_TYPES.put(key, shouldDisable);
-        CommandUtil.sendOk(source, status + " Damage Type " + key.identifier());
+        if (shouldDisable) {
+            DISABLED_TYPES.add(key);
+        } else {
+            DISABLED_TYPES.remove(key);
+        }
+        CommandUtil.sendOk(source, (shouldDisable ? "Disabled" : "Enabled") + " Damage Type " + key.identifier());
         return 1;
     }
 
     static int getStatus(CommandSourceStack source, ResourceKey<DamageType> key) {
-        var status = DISABLED_TYPES.getOrDefault(key, false) ? "disabled" : "enabled";
-        CommandUtil.sendOk(source, "Damage Type " + key.identifier() + " is currently " + status);
+        CommandUtil.sendOk(source, "Damage Type " + key.identifier() + " is currently " + (DISABLED_TYPES.contains(key) ? "disabled" : "enabled"));
         return 1;
     }
 
@@ -75,25 +72,16 @@ public class DamageToggle {
 
     static int disableAll(CommandSourceStack source) {
         var registry = source.getServer().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE);
-        registry.listElementIds().forEach(key -> DISABLED_TYPES.put(key, true));
+        registry.listElementIds().forEach(DISABLED_TYPES::add);
         CommandUtil.sendOk(source, "Disabled all existing Damage Types");
         return 1;
     }
 
     static int listDisabled(CommandSourceStack source) {
         var registry = source.getServer().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE);
-        List<String> list = DISABLED_TYPES.entrySet().stream().filter(Map.Entry::getValue)
-            .map(entry -> entry.getKey().identifier().toString()).toList();
-
-        String message;
-        if (list.isEmpty()) {
-            message = "No existing Damage Types are currently disabled";
-        } else if (list.size() >= registry.size()) {
-            message = "All existing Damage Types are currently disabled";
-        } else {
-            message = "Disabled damage types: " + String.join(", ", list);
-        }
-
+        var message = DISABLED_TYPES.isEmpty() ? "No existing Damage Types are currently disabled"
+            : DISABLED_TYPES.size() >= registry.size() ? "All existing Damage Types are currently disabled"
+            : "Disabled damage types: " + DISABLED_TYPES.stream().map(key -> key.identifier().toString()).collect(Collectors.joining(", "));
         CommandUtil.sendOk(source, message);
         return 1;
     }

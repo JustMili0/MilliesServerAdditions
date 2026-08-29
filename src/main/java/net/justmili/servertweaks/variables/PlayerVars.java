@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.config.Config;
+import net.justmili.servertweaks.content.mechanics.features.AnvilRepair;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 
@@ -26,6 +27,9 @@ public final class PlayerVars {
         AFK_COOLDOWN = createPersistent(id("afk_cooldown"), Config.afkCommandCooldown.get(), Codec.INT),
         HURT_TICK = create(id("hurt_tick"), -1),
         MILK_TICK = create(id("milk_tick"), -1);
+
+    public static final AttachmentType<AnvilRepair.RepairState> ANVIL_REPAIR_STATE =
+        create(id("anvil_repair_state"), AnvilRepair.RepairState.NONE);
 
     private static Identifier id(String path) {
         return ServerTweaks.asId(path);

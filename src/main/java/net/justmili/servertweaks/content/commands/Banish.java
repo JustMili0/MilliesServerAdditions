@@ -8,7 +8,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Relative;
 
 public class Banish {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {

@@ -25,7 +25,7 @@ public class FdaUtil {
     }
 
     public static float getFloat(AttachmentTarget target, AttachmentType<Float> variable) {
-        return get(target, variable, -1.0f);
+        return get(target, variable, -1f);
     }
 
     public static long getLong(AttachmentTarget target, AttachmentType<Long> variable) {

@@ -2,6 +2,8 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import net.justmili.libs.v1.utils.common.CommandUtil;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -11,6 +13,7 @@ import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -18,8 +21,13 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gamerules.GameRules;
 
 public class FillExtras {
+    private static final Dynamic2CommandExceptionType ERROR_AREA_TOO_LARGE = new Dynamic2CommandExceptionType(
+        (max, count) -> Component.translatableEscape("commands.fill.toobig", max, count)
+    );
+
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
         dispatcher.register(Commands.literal("fillextras")
             .requires(src -> CommandUtil.hasPerms(src, 1))
@@ -53,7 +61,7 @@ public class FillExtras {
                                 BlockPosArgument.getLoadedBlockPos(context, "from"),
                                 BlockPosArgument.getLoadedBlockPos(context, "to"),
                                 BlockStateArgument.getBlock(context, "replacement").getState(),
-                                0, 0)))
+                                Enchant.SILK_TOUCH, 0)))
 
                         .then(Commands.literal("silkDestroyOnly")
                             .then(Commands.argument("target", BlockStateArgument.block(buildContext))
@@ -63,7 +71,7 @@ public class FillExtras {
                                     BlockPosArgument.getLoadedBlockPos(context, "to"),
                                     BlockStateArgument.getBlock(context, "target").getState(),
                                     BlockStateArgument.getBlock(context, "replacement").getState(),
-                                    0, 0))))
+                                    Enchant.SILK_TOUCH, 0))))
 
                         .then(Commands.literal("fortuneDestroy").then(Commands.argument("fortuneLevel", IntegerArgumentType.integer(1, 3))
                                 .executes(context -> enchantDestroy(
@@ -71,7 +79,7 @@ public class FillExtras {
                                     BlockPosArgument.getLoadedBlockPos(context, "from"),
                                     BlockPosArgument.getLoadedBlockPos(context, "to"),
                                     BlockStateArgument.getBlock(context, "replacement").getState(),
-                                    1, IntegerArgumentType.getInteger(context, "fortuneLevel")))))
+                                    Enchant.FORTUNE, IntegerArgumentType.getInteger(context, "fortuneLevel")))))
 
                         .then(Commands.literal("fortuneDestroyOnly")
                             .then(Commands.argument("fortuneLevel", IntegerArgumentType.integer(1, 3))
@@ -82,15 +90,29 @@ public class FillExtras {
                                         BlockPosArgument.getLoadedBlockPos(context, "to"),
                                         BlockStateArgument.getBlock(context, "target").getState(),
                                         BlockStateArgument.getBlock(context, "replacement").getState(),
-                                        1, IntegerArgumentType.getInteger(context, "fortuneLevel"))))))
+                                        Enchant.FORTUNE, IntegerArgumentType.getInteger(context, "fortuneLevel"))))))
                     )
                 )
             )
         );
     }
 
-    static int replaceOnly(CommandSourceStack source, BlockPos from, BlockPos to, BlockState target, BlockState replacement, boolean destroy) {
+    // TODO: reuse volume from checkVolume as return for all replace and destroy methods instead of count
+    static void checkVolume(ServerLevel level, BlockPos from, BlockPos to) throws CommandSyntaxException {
+        int volume = (Math.abs(to.getX() - from.getX()) + 1) // 100% there is a vanilla method somewhere to replace this
+            * (Math.abs(to.getY() - from.getY()) + 1)
+            * (Math.abs(to.getZ() - from.getZ()) + 1);
+        int limit = level.getGameRules().get(GameRules.MAX_BLOCK_MODIFICATIONS);
+        if (volume > limit) throw ERROR_AREA_TOO_LARGE.create(limit, volume);
+    }
+
+    enum Enchant {
+        SILK_TOUCH, FORTUNE
+    }
+
+    static int replaceOnly(CommandSourceStack source, BlockPos from, BlockPos to, BlockState target, BlockState replacement, boolean destroy) throws CommandSyntaxException {
         var level = source.getLevel();
+        checkVolume(level, from, to);
         var targetBlock = target.getBlock();
         var replaceBlock = replacement.getBlock();
 
@@ -108,14 +130,14 @@ public class FillExtras {
         return count;
     }
 
-    static int enchantDestroy(CommandSourceStack source, BlockPos from, BlockPos to, BlockState replacement, int enchantment, int fortuneLevel) {
+    static int enchantDestroy(CommandSourceStack source, BlockPos from, BlockPos to, BlockState replacement, Enchant enchantment, int fortuneLevel) throws CommandSyntaxException {
         var level = source.getLevel();
+        checkVolume(level, from, to);
         var replaceBlock = replacement.getBlock();
 
         var tool = switch (enchantment) {
-            case 0 -> silkTouchTool(level);
-            case 1 -> fortuneTool(level, fortuneLevel);
-            default -> new ItemStack(Items.NETHERITE_PICKAXE);
+            case SILK_TOUCH -> silkTouchTool(level);
+            case FORTUNE -> fortuneTool(level, fortuneLevel);
         };
 
         int count = 0;
@@ -132,15 +154,15 @@ public class FillExtras {
         return count;
     }
 
-    static int enchantDestroyOnly(CommandSourceStack source, BlockPos from, BlockPos to, BlockState target, BlockState replacement, int enchantment, int fortuneLevel) {
+    static int enchantDestroyOnly(CommandSourceStack source, BlockPos from, BlockPos to, BlockState target, BlockState replacement, Enchant enchantment, int fortuneLevel) throws CommandSyntaxException {
         var level = source.getLevel();
+        checkVolume(level, from, to);
         var targetBlock = target.getBlock();
         var replaceBlock = replacement.getBlock();
 
         var tool = switch (enchantment) {
-            case 0 -> silkTouchTool(level);
-            case 1 -> fortuneTool(level, fortuneLevel);
-            default -> new ItemStack(Items.NETHERITE_PICKAXE);
+            case SILK_TOUCH -> silkTouchTool(level);
+            case FORTUNE -> fortuneTool(level, fortuneLevel);
         };
 
         int count = 0;

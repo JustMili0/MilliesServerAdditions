@@ -39,7 +39,7 @@ public final class RightClickHarvest {
             case CropBlock cropBlock -> {
                 if (!harvestCrop(player, level, pos, state, cropBlock)) return;
                 if (hoeHeld) {
-                    for (BlockPos near : BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 0, 1))) {
+                    for (var near : BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 0, 1))) {
                         if (near.equals(pos)) continue;
                         var nearState = level.getBlockState(near);
                         if (nearState.getBlock() instanceof CropBlock nearCrop)
@@ -50,7 +50,7 @@ public final class RightClickHarvest {
             case NetherWartBlock _ -> {
                 if (!harvestNetherWart(player, level, pos, state)) return;
                 if (hoeHeld) {
-                    for (BlockPos near : BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 0, 1))) {
+                    for (var near : BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 0, 1))) {
                         if (near.equals(pos)) continue;
                         var nearState = level.getBlockState(near);
                         if (nearState.getBlock() instanceof NetherWartBlock) harvestNetherWart(player, level, near.immutable(), nearState);

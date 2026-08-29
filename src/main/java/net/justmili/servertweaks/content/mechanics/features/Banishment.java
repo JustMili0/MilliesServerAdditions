@@ -1,11 +1,13 @@
 package net.justmili.servertweaks.content.mechanics.features;
 
+import net.justmili.libs.v1.utils.common.ContainerUtil;
+import net.justmili.libs.v1.utils.common.DataComponentUtil;
 import net.justmili.libs.v1.utils.common.EntityUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.registries.DimRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,12 +15,11 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-import java.util.Set;
-
 public final class Banishment {
-    private static final int HOTBAR_SLOT = 4;
+    static final String TORCH_TAG = "banishment_torch";
 
     public static boolean onEntityHurt(LivingEntity entity, DamageSource source, float value) {
         if (!Config.enableBanishCommand.get()) return true;
@@ -34,26 +35,40 @@ public final class Banishment {
 
         if (level.dimension() != DimRegistry.BANISHMENT) return;
 
+        var inventory = player.getInventory();
+
         // Give torch so they can even see
-        var stack = player.getInventory().getItem(HOTBAR_SLOT);
+        var stack = inventory.getItem(ContainerUtil.HOTBAR_MIDDLE);
         if (stack.isEmpty()) {
-            player.getInventory().setItem(HOTBAR_SLOT, new ItemStack(Items.TORCH));
+            var torch = DataComponentUtil.custom().addBool(TORCH_TAG, true).applyToStack(new ItemStack(Items.TORCH));
+            inventory.setItem(ContainerUtil.HOTBAR_MIDDLE, torch);
         }
+
+        // Safeguard 1 - Strip any tagged torch that isn't in the designated slot, so it can't be hoarded
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            if (i == ContainerUtil.HOTBAR_MIDDLE) continue;
+            if (isBanishmentTorch(inventory.getItem(i))) inventory.setItem(i, ItemStack.EMPTY);
+        }
+        if (isBanishmentTorch(player.getOffhandItem())) player.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
 
         // Safeguard 2 - Prevent falling into the deep void if the player breaks the bedrock somehow
         if (player.getY() < -1.0) {
-            int centerX = player.blockPosition().getX(), centerZ = player.blockPosition().getZ();
-
-            for (int dx = -2; dx <= 2; dx++) {
-                for (int dz = -2; dz <= 2; dz++) {
-                    var pos = new BlockPos(centerX + dx, 0, centerZ + dz);
-                    if (!level.getBlockState(pos).is(Blocks.BEDROCK)) level.setBlock(pos, Blocks.BEDROCK.defaultBlockState(), 3);
-                }
+            var pos = player.blockPosition();
+            var min = new BlockPos(pos.getX() - 2, 0, pos.getZ() - 2);
+            var max = new BlockPos(pos.getX() + 2, 0, pos.getZ() + 2);
+            for (var block : BlockPos.betweenClosed(min, max)) {
+                if (!level.getBlockState(block).is(Blocks.BEDROCK)) level.setBlock(block, Blocks.BEDROCK.defaultBlockState(), Block.UPDATE_ALL);
             }
+
             EntityUtil.tp(player, level, player.getX(), 3.0, player.getZ());
             player.setDeltaMovement(0.0, 0.0, 0.0);
             player.resetFallDistance();
         }
+    }
+
+    static boolean isBanishmentTorch(ItemStack stack) {
+        if (!stack.is(Items.TORCH)) return false;
+        return DataComponentUtil.getBool(stack, TORCH_TAG, false);
     }
 
     public static void onEntityLoad(Entity entity, ServerLevel level) {

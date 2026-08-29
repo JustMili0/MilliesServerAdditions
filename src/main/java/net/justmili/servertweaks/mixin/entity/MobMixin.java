@@ -16,12 +16,10 @@ public class MobMixin {
         if (!Config.noAiNameTags.get()) return;
         var mob = (Mob) (Object) this;
         if (mob.level().isClientSide()) return;
+        if (!(mob instanceof TamableAnimal || mob instanceof AbstractVillager)) return;
 
         var name = mob.getCustomName();
         boolean shouldBeNoAi = name != null && name.getString().equals("NoAI");
-
-        if ((mob instanceof TamableAnimal || mob instanceof AbstractVillager) && (mob.isNoAi() != shouldBeNoAi)) {
-            mob.setNoAi(shouldBeNoAi);
-        }
+        if (mob.isNoAi() != shouldBeNoAi) mob.setNoAi(shouldBeNoAi);
     }
 }

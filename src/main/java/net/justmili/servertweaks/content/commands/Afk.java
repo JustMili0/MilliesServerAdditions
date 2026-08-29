@@ -6,7 +6,6 @@ import net.justmili.libs.v1.utils.common.FdaUtil;
 import net.justmili.libs.v1.utils.common.MathUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.variables.PlayerVars;
-import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;

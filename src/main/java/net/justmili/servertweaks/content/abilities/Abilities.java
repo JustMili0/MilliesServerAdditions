@@ -435,6 +435,7 @@ public class Abilities {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
+            if (level.getGameTime() % 5 != 0) return;
             // TODO: Possibly turn into a goal mixin
             for (Fox fox : EntityUtil.getNearby(player, Fox.class, 12.0)) {
                 var accessor = (FoxAccessor) fox;
@@ -454,6 +455,7 @@ public class Abilities {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
+            if (level.getGameTime() % 5 != 0) return;
             for (Wolf wolf : EntityUtil.getNearby(player, Wolf.class, 16.0)) {
                 if (wolf.isTame()) continue;
                 if (wolf.getTarget() == null) wolf.setTarget(player);
@@ -506,6 +508,8 @@ public class Abilities {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
+            if (!player.gameMode.isSurvival()) return;
+            if (level.getGameTime() % 5 != 0) return;
             for (Fox fox : EntityUtil.getNearby(player, Fox.class, 12.0)) {
                 var accessor = (FoxAccessor) fox;
                 if (accessor.invokeTrusts(player)) continue;

@@ -28,7 +28,7 @@ public class WhileAfk {
             player.setDeltaMovement(Vec3.ZERO);
             player.resetFallDistance();
 
-            if (player.distanceToSqr(pos.x, pos.y, pos.z) > 0.00001f) EntityUtil.tp(player, pos);
+            if (player.distanceToSqr(pos.x, pos.y, pos.z) > 0.001f) EntityUtil.tp(player, pos);
         }
 
         // Set/reset command timer

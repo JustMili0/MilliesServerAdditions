@@ -15,7 +15,6 @@ import net.justmili.servertweaks.content.commands.arguments.ModifierArgumentType
 import net.justmili.servertweaks.content.commands.arguments.PresetArgumentType;
 import net.justmili.servertweaks.network.packets.ClientboundModCheckPacket;
 import net.justmili.servertweaks.variables.PlayerVars;
-import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;

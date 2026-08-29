@@ -24,6 +24,8 @@ public class ScalerUtil {
     }
 
     public static void setScale(ServerPlayer player, float scale) {
-        getScale(player).setBaseValue(scale);
+        var instance = getScale(player);
+        if (instance == null) return;
+        instance.setBaseValue(scale);
     }
 }
