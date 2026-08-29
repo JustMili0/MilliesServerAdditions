@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.libs.v1.utils.common.CommandUtil;
 import net.justmili.libs.v1.utils.common.EntityUtil;
 import net.justmili.libs.v1.utils.common.FdaUtil;
@@ -62,9 +63,6 @@ public class AbilityEvents {
                 removeModifier(player, player.getAttribute(Attributes.ATTACK_DAMAGE), Abilities.STRONG, Abilities.AR_STRONG_DAMAGE);
                 removeModifier(player, player.getAttribute(Attributes.MAX_HEALTH), Abilities.STRONG, Abilities.AR_STRONG_HP);
 
-                // Change to: Check if player has presets locked;
-                // If yes but has no abilities or modifiers then clear them from the file and unlock preset picking
-                // As well as inform the player that they have to pick their preset/class again
                 if (FdaUtil.getBool(player, PlayerVars.HAS_PICKED_PRESET) && getAbilities(player).isEmpty() && getModifiers(player).isEmpty()) {
 
                     // Remove from file
@@ -75,6 +73,12 @@ public class AbilityEvents {
                     CommandUtil.sendFailTo(player, "Your ability preset data was invalid or missing. Please pick your ability preset again");
                 }
             }
+        });
+
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+            var leaving = handler.getPlayer();
+            boolean stillCovered = server.getPlayerList().getPlayers().stream().anyMatch(p -> p != leaving && has(p, Abilities.IS_MONSTER));
+            if (!stillCovered) Abilities.restoreAllMonsterGoals(leaving.level());
         });
 
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(AbilityEvents::weakToDamage);

@@ -22,6 +22,7 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gamerules.GameRules;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 public class FillExtras {
     private static final Dynamic2CommandExceptionType ERROR_AREA_TOO_LARGE = new Dynamic2CommandExceptionType(
@@ -74,12 +75,12 @@ public class FillExtras {
                                     Enchant.SILK_TOUCH, 0))))
 
                         .then(Commands.literal("fortuneDestroy").then(Commands.argument("fortuneLevel", IntegerArgumentType.integer(1, 3))
-                                .executes(context -> enchantDestroy(
-                                    context.getSource(),
-                                    BlockPosArgument.getLoadedBlockPos(context, "from"),
-                                    BlockPosArgument.getLoadedBlockPos(context, "to"),
-                                    BlockStateArgument.getBlock(context, "replacement").getState(),
-                                    Enchant.FORTUNE, IntegerArgumentType.getInteger(context, "fortuneLevel")))))
+                            .executes(context -> enchantDestroy(
+                                context.getSource(),
+                                BlockPosArgument.getLoadedBlockPos(context, "from"),
+                                BlockPosArgument.getLoadedBlockPos(context, "to"),
+                                BlockStateArgument.getBlock(context, "replacement").getState(),
+                                Enchant.FORTUNE, IntegerArgumentType.getInteger(context, "fortuneLevel")))))
 
                         .then(Commands.literal("fortuneDestroyOnly")
                             .then(Commands.argument("fortuneLevel", IntegerArgumentType.integer(1, 3))
@@ -97,13 +98,12 @@ public class FillExtras {
         );
     }
 
-    // TODO: reuse volume from checkVolume as return for all replace and destroy methods instead of count
-    static void checkVolume(ServerLevel level, BlockPos from, BlockPos to) throws CommandSyntaxException {
-        int volume = (Math.abs(to.getX() - from.getX()) + 1) // 100% there is a vanilla method somewhere to replace this
-            * (Math.abs(to.getY() - from.getY()) + 1)
-            * (Math.abs(to.getZ() - from.getZ()) + 1);
+    static int checkVolume(ServerLevel level, BlockPos from, BlockPos to) throws CommandSyntaxException {
+        var box = BoundingBox.fromCorners(from, to);
+        int volume = box.getXSpan() * box.getYSpan() * box.getZSpan();
         int limit = level.getGameRules().get(GameRules.MAX_BLOCK_MODIFICATIONS);
         if (volume > limit) throw ERROR_AREA_TOO_LARGE.create(limit, volume);
+        return volume;
     }
 
     enum Enchant {
@@ -112,27 +112,25 @@ public class FillExtras {
 
     static int replaceOnly(CommandSourceStack source, BlockPos from, BlockPos to, BlockState target, BlockState replacement, boolean destroy) throws CommandSyntaxException {
         var level = source.getLevel();
-        checkVolume(level, from, to);
+        int volume = checkVolume(level, from, to);
         var targetBlock = target.getBlock();
         var replaceBlock = replacement.getBlock();
 
-        int count = 0;
         for (var pos : BlockPos.betweenClosed(from, to)) {
             var current = level.getBlockState(pos);
             if (current.getBlock() == targetBlock) {
                 if (destroy) Block.dropResources(current, level, pos, level.getBlockEntity(pos));
                 level.setBlock(pos, replacement, Block.UPDATE_CLIENTS);
-                count++;
             }
         }
 
-        sendMessage(source, replaceBlock, count);
-        return count;
+        sendMessage(source, replaceBlock, volume);
+        return volume;
     }
 
     static int enchantDestroy(CommandSourceStack source, BlockPos from, BlockPos to, BlockState replacement, Enchant enchantment, int fortuneLevel) throws CommandSyntaxException {
         var level = source.getLevel();
-        checkVolume(level, from, to);
+        int volume = checkVolume(level, from, to);
         var replaceBlock = replacement.getBlock();
 
         var tool = switch (enchantment) {
@@ -140,23 +138,21 @@ public class FillExtras {
             case FORTUNE -> fortuneTool(level, fortuneLevel);
         };
 
-        int count = 0;
         for (var pos : BlockPos.betweenClosed(from, to)) {
             var current = level.getBlockState(pos);
             if (!current.isAir()) {
                 Block.dropResources(current, level, pos, level.getBlockEntity(pos), null, tool);
                 level.setBlock(pos, replacement, Block.UPDATE_CLIENTS);
-                count++;
             }
         }
 
-        sendMessage(source, replaceBlock, count);
-        return count;
+        sendMessage(source, replaceBlock, volume);
+        return volume;
     }
 
     static int enchantDestroyOnly(CommandSourceStack source, BlockPos from, BlockPos to, BlockState target, BlockState replacement, Enchant enchantment, int fortuneLevel) throws CommandSyntaxException {
         var level = source.getLevel();
-        checkVolume(level, from, to);
+        int volume = checkVolume(level, from, to);
         var targetBlock = target.getBlock();
         var replaceBlock = replacement.getBlock();
 
@@ -165,18 +161,16 @@ public class FillExtras {
             case FORTUNE -> fortuneTool(level, fortuneLevel);
         };
 
-        int count = 0;
         for (var pos : BlockPos.betweenClosed(from, to)) {
             var current = level.getBlockState(pos);
             if (current.getBlock() == targetBlock) {
                 Block.dropResources(current, level, pos, level.getBlockEntity(pos), null, tool);
                 level.setBlock(pos, replacement, Block.UPDATE_CLIENTS);
-                count++;
             }
         }
 
-        sendMessage(source, replaceBlock, count);
-        return count;
+        sendMessage(source, replaceBlock, volume);
+        return volume;
     }
 
     static void sendMessage(CommandSourceStack source, Block replacementBlock, int count) {

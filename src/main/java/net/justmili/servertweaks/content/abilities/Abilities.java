@@ -122,7 +122,7 @@ public class Abilities {
         AQUATIC_GRACE = register(new AquaticGrace(id("aquatic_grace"), "Aquatic Grace", false));
         BREATHES_UNDERWATER = register(new BreathesUnderwater(id("breathes_underwater"), "Breathes Underwater", false));
         CANT_BREATHE_AIR = register(new CantBreatheAir(id("cant_breathe_air"), "Can't Breathe Air", false));
-        CANT_SWIM = register(new Ability(id("cant_swim"), "Can't Swim", false));
+        CANT_SWIM = register(new Ability(id("cant_swim"), "Can't Swim", true));
         HYDROPHOBIC = register(new Hydrophobic(id("hydrophobic"), "Hydrophobic", false));
         HUNTED_BY_FOX = register(new HuntedByFox(id("hunted_by_fox"), "Hunted By Foxes", false));
         HUNTED_BY_WOLF = register(new HuntedByWolf(id("hunted_by_wolf"), "Hunted By Wolves", false));
@@ -600,6 +600,15 @@ public class Abilities {
                 }
             );
         }
+    }
+
+    public static void restoreAllMonsterGoals(ServerLevel level) {
+        STORED_GOALS.forEach((uuid, goals) -> {
+            if (level.getEntity(uuid) instanceof Mob mob) {
+                goals.forEach(goal -> mob.targetSelector.addGoal(goal.getPriority(), goal.getGoal()));
+            }
+        });
+        STORED_GOALS.clear();
     }
 
     static class Predatory extends TickingAbility {
