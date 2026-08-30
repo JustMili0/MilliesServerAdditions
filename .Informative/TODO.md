@@ -1,5 +1,6 @@
 # TODO (1.3.0)
 - Finish fixing abilities
+- Improve the abilities file stuff
 - Fix default-level commands being inaccessible for limited_operator if not added to allowed list
   - E.g. "/afk", "/msg"
 - Add publishing to buildscript
