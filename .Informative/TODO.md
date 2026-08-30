@@ -1,6 +1,4 @@
 # TODO (1.3.0)
-- Add automatic converter for when loading
-  - If it's in abilities but can't be found in abilities, check if it's in debuffs, if it is, move it there
 - Update Patches.md
 
 - Finish fixing abilities

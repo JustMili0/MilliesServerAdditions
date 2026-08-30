@@ -4,7 +4,7 @@ Idk, this is still wip
 ## Ability Presets
 Idk, this is still wip
 
-## Player Abilities, Debuffs and Ability Modifiers
+## Player Abilities, Debuffs and (Ability/Debuff) Modifiers
 | ***Ability/Debuff*** | ***Based On*** | ***Description***                                                                                                                                                                                                                  |                  ***Incompatibilities***                  | ***Required Client-Side*** |
 |:--------------------:|:--------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------:|:--------------------------:|
 |     Fire Immune      |  Nether Mobs   | Immunity to `fire` damage                                                                                                                                                                                                          |             Burns In Daylight, Heat Sensitive             |             ❌             |

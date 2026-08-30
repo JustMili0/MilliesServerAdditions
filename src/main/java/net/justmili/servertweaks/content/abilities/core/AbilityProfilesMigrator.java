@@ -8,7 +8,10 @@ import net.minecraft.resources.Identifier;
 
 import java.util.Set;
 
+@Deprecated
 public class AbilityProfilesMigrator {
+    // Abilities were split into Abilities and Debuffs respectively, which was quite a lot of changes to the file and registries
+    // This is to migrate the file the next time the server starts up. Only needs to run once per server
     public static boolean migrateAbilitiesSplit(JsonObject uuidObj, Set<Ability> abilities, Set<Debuff> debuffs) {
         if (!uuidObj.has("abilities")) return false;
         boolean migrated = false;

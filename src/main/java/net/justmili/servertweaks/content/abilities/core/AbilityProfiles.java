@@ -80,7 +80,7 @@ public class AbilityProfiles {
             return;
         }
 
-        boolean migrated = false;
+        //boolean migrated = false;
 
         try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
             var root = GSON.fromJson(reader, JsonObject.class);
@@ -98,9 +98,10 @@ public class AbilityProfiles {
                 Set<Debuff> debuffs = new LinkedHashSet<>();
                 Set<Modifier> modifiers = new LinkedHashSet<>();
 
-                migrated |= AbilityProfilesMigrator.migrateAbilitiesSplit(uuidObj, abilities, debuffs);
-                migrated |= AbilityProfilesMigrator.migrateLegacyKey(uuidObj, "ability_modifiers", "modifiers");
+                //migrated |= AbilityProfilesMigrator.migrateAbilitiesSplit(uuidObj, abilities, debuffs);
+                //migrated |= AbilityProfilesMigrator.migrateLegacyKey(uuidObj, "ability_modifiers", "modifiers");
 
+                loadElements(uuidObj, abilities, "abilities", "ability", AbilityRegistries::getAbilityById);
                 loadElements(uuidObj, debuffs, "debuffs", "debuff", AbilityRegistries::getDebuffById);
                 loadElements(uuidObj, modifiers, "modifiers", "modifier", AbilityRegistries::getModifierById);
 
@@ -112,7 +113,7 @@ public class AbilityProfiles {
             ServerTweaks.LOGGER.error("Failed to load ability profiles: {}", e.getMessage());
         }
 
-        if (migrated) saveProfiles();
+        //if (migrated) saveProfiles();
     }
 
     private static <T> void loadElements(JsonObject uuidObj, Set<T> member, String memberName, String elementName, Function<Identifier, T> lookup) {
