@@ -9,9 +9,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.libs.v1.utils.common.CommandUtil;
 import net.justmili.libs.v1.utils.common.EntityUtil;
 import net.justmili.libs.v1.utils.common.FdaUtil;
-import net.justmili.servertweaks.content.abilities.type.Ability;
-import net.justmili.servertweaks.content.abilities.type.Debuff;
-import net.justmili.servertweaks.content.abilities.type.TickingAbility;
+import net.justmili.servertweaks.content.abilities.type.*;
 import net.justmili.servertweaks.registries.TagRegistry;
 import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.core.component.DataComponents;
@@ -56,11 +54,18 @@ public class AbilityEvents {
 
                 // Tick all Ticking Abilities
                 for (var ability : getAbilities(player)) {
-                    if (ability instanceof TickingAbility tickingAbility) tickingAbility.tick(player, level);
+                    if (ability instanceof TickingAbility ticking) ticking.tick(player, level);
+                }
+                for (var debuff : getDebuffs(player)) {
+                    if (debuff instanceof TickingDebuff ticking) ticking.tick(player, level);
+                }
+                for (var modifier : getModifiers(player)) {
+                    if (modifier instanceof TickingModifier ticking) ticking.tick(player, level);
                 }
 
+
                 // Reset attribute modifiers if related ability is not applied
-                removeModifier(player, player.getAttribute(Attributes.MOVEMENT_SPEED), Debuffs.SLOW, Abilities.AR_SLOW_SPEED);
+                removeModifier(player, player.getAttribute(Attributes.MOVEMENT_SPEED), Debuffs.SLOW, Debuffs.AR_SLOW_SPEED);
                 removeModifier(player, player.getAttribute(Attributes.ATTACK_DAMAGE), Abilities.STRONG, Abilities.AR_STRONG_DAMAGE);
                 removeModifier(player, player.getAttribute(Attributes.MAX_HEALTH), Abilities.STRONG, Abilities.AR_STRONG_HP);
 
@@ -79,7 +84,7 @@ public class AbilityEvents {
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             var leaving = handler.getPlayer();
             boolean stillCovered = server.getPlayerList().getPlayers().stream().anyMatch(p -> p != leaving && has(p, Debuffs.IS_MONSTER));
-            if (!stillCovered) Abilities.restoreAllMonsterGoals(leaving.level());
+            if (!stillCovered) Debuffs.restoreAllMonsterGoals(leaving.level());
         });
 
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(AbilityEvents::weakToDamage);
@@ -95,6 +100,7 @@ public class AbilityEvents {
     public static void removeModifier(Player player, AttributeInstance instance, Ability ability, Identifier id) {
         if (!has(player, ability) && instance != null) instance.removeModifier(id);
     }
+
     public static void removeModifier(Player player, AttributeInstance instance, Debuff debuff, Identifier id) {
         if (!has(player, debuff) && instance != null) instance.removeModifier(id);
     }

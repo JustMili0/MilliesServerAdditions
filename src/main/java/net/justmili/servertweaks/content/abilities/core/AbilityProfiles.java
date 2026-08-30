@@ -26,7 +26,7 @@ public class AbilityProfiles {
     public static final Map<UUID, Set<Debuff>> DEBUFFS = new LinkedHashMap<>();
     public static final Map<UUID, Set<Modifier>> MODIFIERS = new LinkedHashMap<>();
 
-    public static void saveServerFile() {
+    public static void saveProfiles() {
         var root = new JsonObject();
 
         Set<UUID> uuids = new HashSet<>(ABILITIES.keySet());
@@ -49,10 +49,16 @@ public class AbilityProfiles {
             try (Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
                 GSON.toJson(root, writer);
             }
-            ServerTweaks.LOGGER.info("Saved Ability Profiles for {} player(s)", uuids.size());
+
+            int size = uuids.size();
+            if (size > 0) {
+                ServerTweaks.LOGGER.info("Saved ability profiles for {} player(s)", size);
+            } else {
+                ServerTweaks.LOGGER.info("Saved ability profiles");
+            }
 
         } catch (Exception e) {
-            ServerTweaks.LOGGER.error("Failed to save Ability Profiles: {}", e.getMessage());
+            ServerTweaks.LOGGER.error("Failed to save ability profiles: {}", e.getMessage());
         }
     }
 
@@ -62,7 +68,7 @@ public class AbilityProfiles {
         playerObj.add(memberName, array);
     }
 
-    public static void loadServerFile() {
+    public static void loadProfiles() {
         ABILITIES.clear();
         DEBUFFS.clear();
         MODIFIERS.clear();
@@ -70,12 +76,12 @@ public class AbilityProfiles {
 
         var file = getServerFile();
         if (!file.exists()) {
-            saveServerFile();
+            saveProfiles();
             return;
         }
 
         try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
-            JsonObject root = GSON.fromJson(reader, JsonObject.class);
+            var root = GSON.fromJson(reader, JsonObject.class);
             for (var entry : root.entrySet()) {
                 UUID uuid;
                 try {
@@ -99,7 +105,7 @@ public class AbilityProfiles {
                 MODIFIERS.put(uuid, modifiers);
             }
         } catch (Exception e) {
-            ServerTweaks.LOGGER.error("Failed to Ability Profiles: {}", e.getMessage());
+            ServerTweaks.LOGGER.error("Failed to load ability profiles: {}", e.getMessage());
         }
     }
 
@@ -116,12 +122,18 @@ public class AbilityProfiles {
 
             var type = lookup.apply(id);
             if (type == null) {
+                // TODO: Convert (abilities split into abilities and debuffs) - If in "abilities": [], but not an ability but is a debuff, move element to "debuffs": []
+
                 ServerTweaks.LOGGER.warn("Unknown {} '{}', skipping", elementName, raw);
                 continue;
             }
 
             member.add(type);
         }
+    }
+
+    public static void reloadProfiles() {
+        loadProfiles();
     }
 
     public static Path getConfigDir() {

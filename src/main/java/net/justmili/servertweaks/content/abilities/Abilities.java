@@ -62,36 +62,8 @@ public class Abilities {
     }
 
     /// Extra Ability variables
-    public static final Identifier AR_SLOW_SPEED = ServerTweaks.asId("slow_speed");
     public static final Identifier AR_STRONG_HP = ServerTweaks.asId("strong_health");
     public static final Identifier AR_STRONG_DAMAGE = ServerTweaks.asId("strong_damage");
-    private static final Map<UUID, List<WrappedGoal>> STORED_GOALS = new HashMap<>();
-    private static final List<MobData> MONSTER_IGNORE = List.of(
-        new MobData(Pillager.class, 64.0, 0),
-        new MobData(Vindicator.class, 32.0, 0),
-        new MobData(Evoker.class, 16.0, 0),
-        new MobData(Witch.class, 16.0, 0),
-        new MobData(Zombie.class, 48.0, 0),
-        new MobData(Husk.class, 48.0, 0),
-        new MobData(Drowned.class, 48.0, 0),
-        new MobData(Skeleton.class, 24.0, 0),
-        new MobData(Parched.class, 24.0, 0),
-        new MobData(Slime.class, 16.0, 0)
-    );
-    private static final List<MobData> MONSTER_FEAR = List.of(
-        new MobData(Villager.class, 16.0, 0)
-    );
-    private static final List<MobData> MONSTER_AGGRO = List.of(
-        new MobData(IronGolem.class, 16.0, 0),
-        new MobData(SnowGolem.class, 24.0, 0)
-    );
-    private static final List<MobData> PREDATORY_FEAR = List.of(
-        new MobData(Chicken.class, 8.0, 1.4),
-        new MobData(Parrot.class, 12.0, 1.25),
-        new MobData(Frog.class, 12.0, 2.0),
-        new MobData(Salmon.class, 6.0, 1.25),
-        new MobData(Pig.class, 8.0, 1.25)
-    );
 
     public static final Ability
         FIRE_IMMUNE, LAVA_IMMUNE, HEAT_IMMUNE, FREEZE_IMMUNE, FALL_IMMUNE,
@@ -180,49 +152,6 @@ public class Abilities {
         }
     }
 
-    static class HeatSensitive extends TickingDebuff {
-        HeatSensitive(Identifier id, String name, boolean requiresClient) {
-            super(id, name, requiresClient);
-        }
-
-        @Override
-        public void tick(ServerPlayer player, ServerLevel level) {
-            if (!player.gameMode.isSurvival()) return;
-            if (level.getGameTime() % 20 != 0) return;
-
-            if (!level.getBiome(player.blockPosition()).is(TagRegistry.HOT_BIOMES)) return;
-            if (!(level.canSeeSky(player.blockPosition())
-                && level.getBrightness(LightLayer.SKY, player.blockPosition()) >= 8)
-                || level.isDarkOutside()
-                || level.isRainingAt(player.blockPosition())
-                || player.isInWater()) return;
-
-            player.hurtServer(level, level.damageSources().onFire(), 1f);
-        }
-    }
-
-    static class ColdSensitive extends TickingAbility {
-        ColdSensitive(Identifier id, String name, boolean requiresClient) {
-            super(id, name, requiresClient);
-        }
-
-        @Override
-        public void tick(ServerPlayer player, ServerLevel level) {
-            if (!player.gameMode.isSurvival()) return;
-            if (!level.getBiome(player.blockPosition()).is(TagRegistry.COLD_BIOMES)) return;
-            // Completely cancel any effects if player has full leather armor.
-            // Still applies freezing overlays but stops damage when armor isn't full leather. It is an intended side effect.
-            if (player.getItemBySlot(EquipmentSlot.HEAD).is(Items.LEATHER_HELMET)
-                && player.getItemBySlot(EquipmentSlot.CHEST).is(Items.LEATHER_CHESTPLATE)
-                && player.getItemBySlot(EquipmentSlot.LEGS).is(Items.LEATHER_LEGGINGS)
-                && player.getItemBySlot(EquipmentSlot.FEET).is(Items.LEATHER_BOOTS)) return;
-
-            int targetTime = player.getTicksRequiredToFreeze() + 20;
-            player.setTicksFrozen(targetTime);
-            player.getEntityData().set(Entity.DATA_TICKS_FROZEN, targetTime, true);
-        }
-    }
-
     static class Light extends TickingAbility {
         Light(Identifier id, String name, boolean requiresClient) {
             super(id, name, requiresClient);
@@ -245,20 +174,6 @@ public class Abilities {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (player.isSprinting()) EntityUtil.applyEffect(player, MobEffects.SPEED, 30, 0);
-        }
-    }
-
-    static class Slow extends TickingAbility {
-        Slow(Identifier id, String name, boolean requiresClient) {
-            super(id, name, requiresClient);
-        }
-
-        @Override
-        public void tick(ServerPlayer player, ServerLevel level) {
-            float multiplier = AbilityProfilesUtil.has(player, AQUATIC_GRACE) && player.isInWater()? -0.16f : -0.32f;
-            var speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
-
-            addOrUpdate(speed, AR_SLOW_SPEED, multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         }
     }
 
@@ -362,87 +277,6 @@ public class Abilities {
         }
     }
 
-    static class CantBreatheAir extends TickingAbility {
-        CantBreatheAir(Identifier id, String name, boolean requiresClient) {
-            super(id, name, requiresClient);
-        }
-
-        @Override
-        public void tick(ServerPlayer player, ServerLevel level) {
-            if (!player.gameMode.isSurvival()) return;
-
-            if (player.isInWater() || player.hasEffect(MobEffects.WATER_BREATHING)) {
-                // Restore air when in water
-                if (player.getAirSupply() < player.getMaxAirSupply())
-                    player.setAirSupply(player.getAirSupply() + 4);
-            } else {
-                // Drain air on land
-                player.setAirSupply(player.getAirSupply() - 1);
-                if (player.getAirSupply() <= -20) {
-                    player.setAirSupply(1);
-                    player.hurtServer(level, level.damageSources().drown(), 1.0F);
-                }
-            }
-        }
-    }
-
-    static class Hydrophobic extends TickingAbility {
-        Hydrophobic(Identifier id, String name, boolean requiresClient) {
-            super(id, name, requiresClient);
-        }
-
-        @Override
-        public void tick(ServerPlayer player, ServerLevel level) {
-            if (!player.gameMode.isSurvival()) return;
-
-            boolean inWaterBlock = player.isInWater();
-            boolean inWaterCauldron = level.getBlockState(player.blockPosition()).is(Blocks.WATER_CAULDRON);
-            boolean hasHelmet = !player.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
-            boolean inWetBiome = level.getBiome(player.blockPosition()).is(TagRegistry.HYDROPHOBIC_HELMET_EXCEPTIONS);
-            boolean inRain = player.isInRain() && (!hasHelmet || inWetBiome);
-
-            boolean inWater = inWaterBlock || inRain || inWaterCauldron;
-
-            if (inWater && level.getGameTime() % 20 == 0) player.hurtServer(level, level.damageSources().magic(), 1.0F);
-        }
-    }
-
-    static class HuntedByFox extends TickingAbility {
-        HuntedByFox(Identifier id, String name, boolean requiresClient) {
-            super(id, name, requiresClient);
-        }
-
-        @Override
-        public void tick(ServerPlayer player, ServerLevel level) {
-            if (!player.gameMode.isSurvival()) return;
-            if (level.getGameTime() % 5 != 0) return;
-            // TODO: Possibly turn into a goal mixin
-            for (Fox fox : EntityUtil.getNearby(player, Fox.class, 12.0)) {
-                var accessor = (FoxAccessor) fox;
-                if (accessor.invokeTrusts(player)) continue;
-
-                if (fox.getTarget() == null) fox.setTarget(player);
-                if (fox.getTarget() == player && !accessor.invokeIsDefending()) accessor.invokeSetDefending(true);
-            }
-        }
-    }
-
-    static class HuntedByWolf extends TickingAbility {
-        HuntedByWolf(Identifier id, String name, boolean requiresClient) {
-            super(id, name, requiresClient);
-        }
-
-        @Override
-        public void tick(ServerPlayer player, ServerLevel level) {
-            if (!player.gameMode.isSurvival()) return;
-            if (level.getGameTime() % 5 != 0) return;
-            for (Wolf wolf : EntityUtil.getNearby(player, Wolf.class, 16.0)) {
-                if (wolf.isTame()) continue;
-                if (wolf.getTarget() == null) wolf.setTarget(player);
-            }
-        }
-    }
-
     static class ScaresCreepers extends TickingAbility {
         ScaresCreepers(Identifier id, String name, boolean requiresClient) {
             super(id, name, requiresClient);
@@ -509,103 +343,6 @@ public class Abilities {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (level.isDarkOutside()) EntityUtil.applyEffect(player, MobEffects.NIGHT_VISION, 320, 0);
-        }
-    }
-
-    static class BurnsInDaylight extends TickingAbility {
-        BurnsInDaylight(Identifier id, String name, boolean requiresClient) {
-            super(id, name, requiresClient);
-        }
-
-        @Override
-        public void tick(ServerPlayer player, ServerLevel level) {
-            if (!player.gameMode.isSurvival()) return;
-            if (!level.isBrightOutside() || !level.canSeeSky(player.blockPosition())) return;
-            if (level.getBrightness(LightLayer.SKY, player.blockPosition()) <= 8) return;
-
-            if (!player.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) return;
-            player.igniteForSeconds(2);
-        }
-    }
-
-    static class IsMonster extends TickingAbility {
-        IsMonster(Identifier id, String name, boolean requiresClient) {
-            super(id, name, requiresClient);
-        }
-
-        @Override
-        public void tick(ServerPlayer player, ServerLevel level) {
-            if (!player.gameMode.isSurvival()) return;
-
-            // Ignore
-            Set<UUID> stillNearby = new HashSet<>();
-            EntityUtil.executeForNearby(player, MONSTER_IGNORE, (mob, data) -> {
-                var uuid = mob.getUUID();
-                stillNearby.add(uuid);
-
-                if (!STORED_GOALS.containsKey(uuid)) {
-                    List<WrappedGoal> removed = mob.targetSelector.getAvailableGoals()
-                        .stream().filter(goal -> goal.getGoal() instanceof NearestAttackableTargetGoal<?>).collect(Collectors.toList());
-
-                    removed.forEach(goal -> mob.targetSelector.removeGoal(goal.getGoal()));
-                    STORED_GOALS.put(uuid, removed);
-
-                    mob.setTarget(null);
-                }
-            });
-            STORED_GOALS.entrySet().removeIf(entry -> {
-                if (stillNearby.contains(entry.getKey())) return false;
-                var entity = level.getEntity(entry.getKey());
-
-                if (entity instanceof Mob mob) {
-                    entry.getValue().forEach(goal -> mob.targetSelector.addGoal(goal.getPriority(), goal.getGoal()));
-                }
-
-                return true;
-            });
-
-            // Fear
-            EntityUtil.executeForNearby(player, MONSTER_FEAR, (mob, data) ->
-                mob.getNavigation().moveTo(
-                    mob.getX() + (mob.getX() - player.getX()),
-                    mob.getY(),
-                    mob.getZ() + (mob.getZ() - player.getZ()),
-                    data.runSpeed()
-                )
-            );
-
-            // Attack
-            EntityUtil.executeForNearby(player, MONSTER_AGGRO, (mob, data) -> {
-                    if (mob.getTarget() != player) mob.setTarget(player);
-                }
-            );
-        }
-    }
-
-    public static void restoreAllMonsterGoals(ServerLevel level) {
-        STORED_GOALS.forEach((uuid, goals) -> {
-            if (level.getEntity(uuid) instanceof Mob mob) {
-                goals.forEach(goal -> mob.targetSelector.addGoal(goal.getPriority(), goal.getGoal()));
-            }
-        });
-        STORED_GOALS.clear();
-    }
-
-    static class Predatory extends TickingAbility {
-        Predatory(Identifier id, String name, boolean requiresClient) {
-            super(id, name, requiresClient);
-        }
-
-        @Override
-        public void tick(ServerPlayer player, ServerLevel level) {
-            EntityUtil.executeForNearby(player, PREDATORY_FEAR, (mob, data) ->
-                mob.getNavigation().moveTo(
-                    mob.getX() + (mob.getX() - player.getX()),
-                    mob.getY(),
-                    mob.getZ() + (mob.getZ() - player.getZ()),
-                    data.runSpeed()
-                )
-            );
         }
     }
 }

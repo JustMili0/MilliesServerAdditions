@@ -52,7 +52,7 @@ public class Debuffs {
     public static void init() {
     }
 
-    /// Extra Ability variables
+    /// Extra Debuff variables
     public static final Identifier AR_SLOW_SPEED = ServerTweaks.asId("slow_speed");
     private static final Map<UUID, List<WrappedGoal>> STORED_GOALS = new HashMap<>();
     private static final List<EntityUtil.MobData> MONSTER_IGNORE = List.of(

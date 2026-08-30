@@ -5,8 +5,6 @@ import net.justmili.libs.v1.config.entry.ConfigEntry;
 import net.justmili.libs.v1.config.entry.ListConfigEntry;
 import net.justmili.libs.v1.config.items.CategoryItem;
 import net.justmili.libs.v1.config.writers.FormatWriter;
-import net.justmili.libs.v1.config.writers.json.Json5Writer;
-import net.justmili.libs.v1.config.writers.json.JsonWriter;
 import net.justmili.libs.v1.config.writers.properties.PropertiesWriter;
 
 import java.io.File;
@@ -69,8 +67,8 @@ public class ConfigLoader {
 
     private static FormatWriter resolveWriter(FileType fileType) {
         return switch (fileType) {
-            case JSON -> new JsonWriter();
-            case JSON5 -> new Json5Writer();
+            case JSON -> throw new UnsupportedOperationException("JSON is not supported in this Core Libs implementation.");
+            case JSON5 -> throw new UnsupportedOperationException("JSON5is not supported in this Core Libs implementation.");
             case YAML, YML -> throw new UnsupportedOperationException("YAML/YML support is not yet implemented.");
             case TOML -> throw new UnsupportedOperationException("TOML support is not yet implemented.");
             default -> new PropertiesWriter();

@@ -18,56 +18,56 @@ public class AbilityProfilesUtil {
     // Ability and Modifier management
     public static void grantAbility(Player player, Ability ability) {
         if (ability == null) {
-            warnUnknownType(player, "Ability");
+            warnUnknownType(player, "ability");
             return;
         }
         ABILITIES.computeIfAbsent(player.getUUID(), _ -> new HashSet<>()).add(ability);
-        saveServerFile();
+        saveProfiles();
     }
 
     public static void grantDebuff(Player player, Debuff debuff) {
         if (debuff == null) {
-            warnUnknownType(player, "Debuff");
+            warnUnknownType(player, "debuff");
             return;
         }
         DEBUFFS.computeIfAbsent(player.getUUID(), _ -> new HashSet<>()).add(debuff);
-        saveServerFile();
+        saveProfiles();
     }
 
     public static void grantModifier(ServerPlayer player, Modifier modifier) {
         if (modifier == null) {
-            warnUnknownType(player, "Ability/Debuff Modifier");
+            warnUnknownType(player, "ability/debuff modifier");
             return;
         }
         MODIFIERS.computeIfAbsent(player.getUUID(), _ -> new HashSet<>()).add(modifier);
-        saveServerFile();
+        saveProfiles();
     }
 
     public static void revokeAbility(Player player, Ability ability) {
         if (ability == null) {
-            warnUnknownType(player, "Ability");
+            warnUnknownType(player, "ability");
             return;
         }
         ABILITIES.getOrDefault(player.getUUID(), Collections.emptySet()).remove(ability);
-        saveServerFile();
+        saveProfiles();
     }
 
     public static void revokeDebuff(Player player, Debuff debuff) {
         if (debuff == null) {
-            warnUnknownType(player, "Debuff");
+            warnUnknownType(player, "debuff");
             return;
         }
         DEBUFFS.getOrDefault(player.getUUID(), Collections.emptySet()).remove(debuff);
-        saveServerFile();
+        saveProfiles();
     }
 
     public static void revokeModifier(Player player, Modifier modifier) {
         if (modifier == null) {
-            warnUnknownType(player, "Ability/Debuff Modifier");
+            warnUnknownType(player, "ability/debuff modifier");
             return;
         }
         MODIFIERS.getOrDefault(player.getUUID(), Collections.emptySet()).remove(modifier);
-        saveServerFile();
+        saveProfiles();
     }
 
     public static Set<Ability> getAbilities(Player player) {
@@ -84,7 +84,7 @@ public class AbilityProfilesUtil {
 
     public static boolean has(Player player, Ability ability) {
         if (ability == null) {
-            warnUnknownType(player, "Ability");
+            warnUnknownType(player, "ability");
             return false;
         }
         return getAbilities(player).contains(ability);
@@ -92,7 +92,7 @@ public class AbilityProfilesUtil {
 
     public static boolean has(Player player, Debuff debuff) {
         if (debuff == null) {
-            warnUnknownType(player, "Debuff");
+            warnUnknownType(player, "debuff");
             return false;
         }
         return getDebuffs(player).contains(debuff);
@@ -100,7 +100,7 @@ public class AbilityProfilesUtil {
 
     public static boolean has(Player player, Modifier modifier) {
         if (modifier == null) {
-            warnUnknownType(player, "Ability/Debuff Modifier");
+            warnUnknownType(player, "ability/debuff modifier");
             return false;
         }
         return getModifiers(player).contains(modifier);
@@ -115,7 +115,7 @@ public class AbilityProfilesUtil {
         ABILITIES.put(uuid, new HashSet<>(preset.getAbilities()));
         DEBUFFS.put(uuid, new HashSet<>(preset.getDebuffs()));
         MODIFIERS.put(uuid, new HashSet<>(preset.getModifiers()));
-        saveServerFile();
+        saveProfiles();
     }
 
     public static void clearPlayerProfile(Player player) {
@@ -123,10 +123,10 @@ public class AbilityProfilesUtil {
         ABILITIES.remove(uuid);
         DEBUFFS.remove(uuid);
         MODIFIERS.remove(uuid);
-        saveServerFile();
+        saveProfiles();
     }
 
     public static void warnUnknownType(Player player, String label) {
-        CommandUtil.sendFailTo((ServerPlayer) player, "Unknown Player " + label);
+        CommandUtil.sendFailTo((ServerPlayer) player, "Unknown player " + label);
     }
 }

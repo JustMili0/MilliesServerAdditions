@@ -8,9 +8,11 @@ import net.justmili.libs.v1.utils.common.FdaUtil;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfiles;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.justmili.servertweaks.content.abilities.type.Ability;
+import net.justmili.servertweaks.content.abilities.type.Debuff;
 import net.justmili.servertweaks.content.abilities.type.Modifier;
 import net.justmili.servertweaks.content.abilities.type.Preset;
 import net.justmili.servertweaks.content.commands.arguments.AbilityArgumentType;
+import net.justmili.servertweaks.content.commands.arguments.DebuffArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.ModifierArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.PresetArgumentType;
 import net.justmili.servertweaks.network.packets.ClientboundModCheckPacket;
@@ -38,14 +40,20 @@ public class PlayerAbilities {
             .then(Commands.literal("grant").requires(src -> CommandUtil.hasPerms(src, 1))
                 .then(Commands.argument("player", EntityArgument.player())
 
-                    .then(Commands.literal("ability").then(Commands.argument("abilityOrDebuff", AbilityArgumentType.abilities())
+                    .then(Commands.literal("ability").then(Commands.argument("ability", AbilityArgumentType.abilities())
                         .suggests(AbilityArgumentType::suggest)
                         .executes(context -> manage(
                             context.getSource(),
                             EntityArgument.getPlayer(context, "player"),
-                            AbilityArgumentType.getAbility(context, "abilityOrDebuff"),
+                            AbilityArgumentType.getAbility(context, "ability"),
                             Action.GRANT))))
-
+                    .then(Commands.literal("debuff").then(Commands.argument("debuff", DebuffArgumentType.debuffs())
+                        .suggests(DebuffArgumentType::suggest)
+                        .executes(context -> manage(
+                            context.getSource(),
+                            EntityArgument.getPlayer(context, "player"),
+                            DebuffArgumentType.getDebuff(context, "debuff"),
+                            Action.GRANT))))
                     .then(Commands.literal("modifier").then(Commands.argument("modifier", ModifierArgumentType.modifier())
                         .suggests(ModifierArgumentType::suggest)
                         .executes(context -> manage(
@@ -59,12 +67,19 @@ public class PlayerAbilities {
             .then(Commands.literal("revoke").requires(src -> CommandUtil.hasPerms(src, 1))
                 .then(Commands.argument("player", EntityArgument.player())
 
-                    .then(Commands.literal("ability").then(Commands.argument("abilityOrDebuff", AbilityArgumentType.abilities())
+                    .then(Commands.literal("ability").then(Commands.argument("ability", AbilityArgumentType.abilities())
                         .suggests(AbilityArgumentType::suggest)
                         .executes(context -> manage(
                             context.getSource(),
                             EntityArgument.getPlayer(context, "player"),
-                            AbilityArgumentType.getAbility(context, "abilityOrDebuff"),
+                            AbilityArgumentType.getAbility(context, "ability"),
+                            Action.REVOKE))))
+                    .then(Commands.literal("debuff").then(Commands.argument("debuff", DebuffArgumentType.debuffs())
+                        .suggests(DebuffArgumentType::suggest)
+                        .executes(context -> manage(
+                            context.getSource(),
+                            EntityArgument.getPlayer(context, "player"),
+                            DebuffArgumentType.getDebuff(context, "debuff"),
                             Action.REVOKE))))
                     .then(Commands.literal("modifier").then(Commands.argument("modifier", ModifierArgumentType.modifier())
                         .suggests(ModifierArgumentType::suggest)
@@ -112,17 +127,35 @@ public class PlayerAbilities {
     }
 
     static int manage(CommandSourceStack source, ServerPlayer player, Modifier modifier, Action action) {
-        var aName = modifier.getDisplayName();
+        var mName = modifier.getDisplayName();
         var pName = player.getName().getString();
 
         switch (action) {
             case GRANT -> {
                 AbilityProfilesUtil.grantModifier(player, modifier);
-                CommandUtil.sendOk(source, String.format("Granted ability modifier %s to %s", aName, pName));
+                CommandUtil.sendOk(source, String.format("Granted modifier %s to %s", mName, pName));
             }
             case REVOKE -> {
                 AbilityProfilesUtil.revokeModifier(player, modifier);
-                CommandUtil.sendOk(source, String.format("Revoked ability modifier %s from %s", aName, pName));
+                CommandUtil.sendOk(source, String.format("Revoked modifier %s from %s", mName, pName));
+            }
+        }
+
+        return 1;
+    }
+
+    static int manage(CommandSourceStack source, ServerPlayer player, Debuff debuff, Action action) {
+        var dName = debuff.getDisplayName();
+        var pName = player.getName().getString();
+
+        switch (action) {
+            case GRANT -> {
+                AbilityProfilesUtil.grantDebuff(player, debuff);
+                CommandUtil.sendOk(source, String.format("Granted debuff %s to %s", dName, pName));
+            }
+            case REVOKE -> {
+                AbilityProfilesUtil.revokeDebuff(player, debuff);
+                CommandUtil.sendOk(source, String.format("Revoked debuff %s from %s", dName, pName));
             }
         }
 
@@ -133,15 +166,15 @@ public class PlayerAbilities {
         AbilityProfilesUtil.clearPlayerProfile(player);
         FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, false);
 
-        CommandUtil.sendOk(source, "Cleared the Abilities Profile of " + player.getName().getString());
+        CommandUtil.sendOk(source, "Cleared the abilities profile of " + player.getName().getString());
 
         return 1;
     }
 
     static int reload(CommandSourceStack source) {
-        AbilityProfiles.loadServerFile();
+        AbilityProfiles.reloadProfiles();
 
-        CommandUtil.sendOk(source, "Reloaded Player Abilities");
+        CommandUtil.sendOk(source, "Reloaded player abilities");
         return 1;
     }
 
@@ -149,7 +182,7 @@ public class PlayerAbilities {
         var player = source.getPlayerOrException();
 
         if (FdaUtil.getBool(player, PlayerVars.HAS_PICKED_PRESET)) {
-            CommandUtil.sendFailTo(player, "You've already picked a Player Abilities Preset");
+            CommandUtil.sendFailTo(player, "You've already picked a player abilities preset");
             return 0;
         }
 
@@ -168,7 +201,7 @@ public class PlayerAbilities {
 
         AbilityProfilesUtil.applyPreset(player, preset);
         FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, true);
-        CommandUtil.sendOkTo(player, "\nApplied the \"" + psName + "\" Abilities Preset!");
+        CommandUtil.sendOkTo(player, "\nApplied the \"" + psName + "\" preset!");
 
         if (ServerPlayNetworking.canSend(player, ClientboundModCheckPacket.PACKET_ID)) return 1; // Shush if client already has mod
         for (var ability : preset.getAbilities()) { // Inform client needs mod
