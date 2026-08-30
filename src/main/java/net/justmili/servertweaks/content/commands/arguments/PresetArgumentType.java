@@ -21,7 +21,7 @@ public class PresetArgumentType {
 
     public static AbilityPreset getPreset(CommandContext<CommandSourceStack> context, String argName) throws CommandSyntaxException {
         var id = IdentifierArgument.getId(context, argName);
-        var preset = AbilityRegistries.byPresetId(id);
+        var preset = AbilityRegistries.getPresetById(id);
         if (preset == null) throw new SimpleCommandExceptionType(Component.literal("Unknown abilities preset: " + id)).create();
         return preset;
     }

@@ -7,6 +7,7 @@
 
 # TODO (1.3.1)
 - Tag datagen
+- Separate abilities and debuffs
 - Ench. book dupe with more enchantments at higher cost
 - Code own XP bottling
 

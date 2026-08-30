@@ -21,7 +21,7 @@ public class ModifierArgumentType {
 
     public static AbilityModifier getModifier(CommandContext<CommandSourceStack> context, String argName) throws CommandSyntaxException {
         var id = IdentifierArgument.getId(context, argName);
-        var modifier = AbilityRegistries.byModifierId(id);
+        var modifier = AbilityRegistries.getModifierById(id);
         if (modifier == null) throw new SimpleCommandExceptionType(Component.literal("Unknown ability modifier: " + id)).create();
         return modifier;
     }

@@ -21,7 +21,7 @@ public class AbilityArgumentType {
 
     public static Ability getAbility(CommandContext<CommandSourceStack> context, String argName) throws CommandSyntaxException {
         var id = IdentifierArgument.getId(context, argName);
-        var ability = AbilityRegistries.byAbilityId(id);
+        var ability = AbilityRegistries.getAbilityById(id);
         if (ability == null) throw new SimpleCommandExceptionType(Component.literal("Unknown player ability: " + id)).create();
         return ability;
     }
