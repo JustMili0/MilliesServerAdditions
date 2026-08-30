@@ -80,6 +80,8 @@ public class AbilityProfiles {
             return;
         }
 
+        boolean migrated = false;
+
         try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
             var root = GSON.fromJson(reader, JsonObject.class);
             for (var entry : root.entrySet()) {
@@ -96,7 +98,9 @@ public class AbilityProfiles {
                 Set<Debuff> debuffs = new LinkedHashSet<>();
                 Set<Modifier> modifiers = new LinkedHashSet<>();
 
-                loadElements(uuidObj, abilities, "abilities", "ability", AbilityRegistries::getAbilityById);
+                migrated |= AbilityProfilesMigrator.migrateAbilitiesSplit(uuidObj, abilities, debuffs);
+                migrated |= AbilityProfilesMigrator.migrateLegacyKey(uuidObj, "ability_modifiers", "modifiers");
+
                 loadElements(uuidObj, debuffs, "debuffs", "debuff", AbilityRegistries::getDebuffById);
                 loadElements(uuidObj, modifiers, "modifiers", "modifier", AbilityRegistries::getModifierById);
 
@@ -107,6 +111,8 @@ public class AbilityProfiles {
         } catch (Exception e) {
             ServerTweaks.LOGGER.error("Failed to load ability profiles: {}", e.getMessage());
         }
+
+        if (migrated) saveProfiles();
     }
 
     private static <T> void loadElements(JsonObject uuidObj, Set<T> member, String memberName, String elementName, Function<Identifier, T> lookup) {
@@ -122,8 +128,6 @@ public class AbilityProfiles {
 
             var type = lookup.apply(id);
             if (type == null) {
-                // TODO: Convert (abilities split into abilities and debuffs) - If in "abilities": [], but not an ability but is a debuff, move element to "debuffs": []
-
                 ServerTweaks.LOGGER.warn("Unknown {} '{}', skipping", elementName, raw);
                 continue;
             }
