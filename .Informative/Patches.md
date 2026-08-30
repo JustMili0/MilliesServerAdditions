@@ -182,13 +182,14 @@ Feedback is appreciated ^^
 
 **Player Abilities**
 - Mod can be now installed client-side for some abilities to work properly (quite literally, just `climbs_walls` needs it)
+- Added `Debuff`, `TickingDebuff` and `TickingModifier` class
 - Reworked registries for player abilities
   - Class names and packages were altered a lot
-  - All abilities and ability modifiers (including ticking) now define an Identifier, Display Name and whether it requires a client-side installation or not (for most; not)
-  - All ability presets now define an Identifier and Display Name
-- Added `TickingAbilityModifier` class
-- All abilities, ability modifiers and ability presets are no longer plain full-capitalized strings (`EXAMPLE_THING`) now being Identifiers (`mod_id:example_thing`)
-- Some abilities were renamed for consistency and better language
+  - Split Abilities registry class into Abilities and Debuffs
+  - All abilities and modifiers (including ticking) now define an Identifier, Display Name and whether it requires a client-side installation or not (for most; not)
+  - All presets now define an Identifier and Display Name
+- All abilities, debuffs, modifiers and presets are no longer plain full-capitalized strings (`EXAMPLE_THING`) now being Identifiers (`mod_id:example_thing`)
+- Some abilities and debuffs were renamed for consistency and better language
   - `FRIENDS_WITH_NATURE` -> `child_of_nature`
   - `GRASS_EATER` -> `herbivore`
   - `ONLY_EATS_SWEETS` -> `saccharivore`

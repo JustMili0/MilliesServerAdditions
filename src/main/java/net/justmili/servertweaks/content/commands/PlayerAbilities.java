@@ -8,8 +8,8 @@ import net.justmili.libs.v1.utils.common.FdaUtil;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfiles;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.justmili.servertweaks.content.abilities.type.Ability;
-import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
-import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
+import net.justmili.servertweaks.content.abilities.type.Modifier;
+import net.justmili.servertweaks.content.abilities.type.Preset;
 import net.justmili.servertweaks.content.commands.arguments.AbilityArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.ModifierArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.PresetArgumentType;
@@ -111,7 +111,7 @@ public class PlayerAbilities {
         return 1;
     }
 
-    static int manage(CommandSourceStack source, ServerPlayer player, AbilityModifier modifier, Action action) {
+    static int manage(CommandSourceStack source, ServerPlayer player, Modifier modifier, Action action) {
         var aName = modifier.getDisplayName();
         var pName = player.getName().getString();
 
@@ -139,14 +139,13 @@ public class PlayerAbilities {
     }
 
     static int reload(CommandSourceStack source) {
-        var server = source.getServer();
-        AbilityProfiles.loadFileServer(server);
+        AbilityProfiles.loadServerFile();
 
         CommandUtil.sendOk(source, "Reloaded Player Abilities");
         return 1;
     }
 
-    static int presentPreset(CommandSourceStack source, AbilityPreset preset) throws CommandSyntaxException {
+    static int presentPreset(CommandSourceStack source, Preset preset) throws CommandSyntaxException {
         var player = source.getPlayerOrException();
 
         if (FdaUtil.getBool(player, PlayerVars.HAS_PICKED_PRESET)) {
@@ -163,11 +162,11 @@ public class PlayerAbilities {
         return 1;
     }
 
-    static int setPreset(CommandSourceStack source, AbilityPreset preset) throws CommandSyntaxException {
+    static int setPreset(CommandSourceStack source, Preset preset) throws CommandSyntaxException {
         var player = source.getPlayerOrException();
         var psName = preset.getDisplayName();
 
-        AbilityProfilesUtil.applyPreset(player, source.getServer(), preset);
+        AbilityProfilesUtil.applyPreset(player, preset);
         FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, true);
         CommandUtil.sendOkTo(player, "\nApplied the \"" + psName + "\" Abilities Preset!");
 

@@ -1,4 +1,7 @@
 # TODO (1.3.0)
+- Update /abilities command to have debuffs
+- Update Patches.md
+
 - Finish fixing abilities
 - Improve the abilities file stuff
 - Fix default-level commands being inaccessible for limited_operator if not added to allowed list

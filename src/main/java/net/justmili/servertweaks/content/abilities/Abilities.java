@@ -7,6 +7,7 @@ import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
+import net.justmili.servertweaks.content.abilities.type.TickingDebuff;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.justmili.servertweaks.registries.TagRegistry;
 import net.justmili.servertweaks.util.ScalerUtil;
@@ -94,13 +95,9 @@ public class Abilities {
 
     public static final Ability
         FIRE_IMMUNE, LAVA_IMMUNE, HEAT_IMMUNE, FREEZE_IMMUNE, FALL_IMMUNE,
-        HEAT_SENSITIVE, COLD_SENSITIVE,
-        LIGHT, SWIFT, SLOW, HOPPY, DWARF, SQUISHY, MAGNETIC, TOUGH, STRONG,
-        AQUATIC_GRACE, BREATHES_UNDERWATER, CANT_BREATHE_AIR, CANT_SWIM, HYDROPHOBIC,
-        HUNTED_BY_FOX, HUNTED_BY_WOLF, SCARES_CREEPERS, SCARES_PHANTOMS,
-        CHILD_OF_NATURE, WEAK_TO_DAMAGE, NIGHT_VISION,
-        BURNS_IN_DAYLIGHT, IS_MONSTER, CLIMBS_WALLS, PEARLING,
-        PREDATORY, BOVID, CARNIVORE, VEGETARIAN, SACCHARIVORE, HERBIVORE, INSECTIVORE;
+        LIGHT, SWIFT, HOPPY, DWARF, SQUISHY, MAGNETIC, TOUGH, STRONG,
+        AQUATIC_GRACE, BREATHES_UNDERWATER, SCARES_CREEPERS, SCARES_PHANTOMS,
+        CHILD_OF_NATURE, NIGHT_VISION, CLIMBS_WALLS, PEARLING, BOVID;
 
     static {
         FIRE_IMMUNE = register(new FireImmune(id("fire_immune"), "Fire Immune", false));
@@ -108,11 +105,8 @@ public class Abilities {
         HEAT_IMMUNE = register(new Ability(id("heat_immune"), "Heat Immune", false));
         FREEZE_IMMUNE = register(new FreezeImmune(id("freeze_immune"), "Freeze Immune", false));
         FALL_IMMUNE = register(new FallImmune(id("fall_immune"), "Fall Immune", false));
-        HEAT_SENSITIVE = register(new HeatSensitive(id("heat_sensitive"), "Heat Sensitive", false));
-        COLD_SENSITIVE = register(new ColdSensitive(id("cold_sensitive"), "Cold Sensitive", false));
         LIGHT = register(new Light(id("light"), "Lightweight", false));
         SWIFT = register(new Swift(id("swift"), "Swift", false));
-        SLOW = register(new Slow(id("slow"), "Slow", false));
         HOPPY = register(new Hoppy(id("hoppy"), "Hoppy", false));
         DWARF = register(new Dwarf(id("dwarf"), "Dwarf", false));
         SQUISHY = register(new Ability(id("squishy"), "Squishy", false));
@@ -121,28 +115,14 @@ public class Abilities {
         STRONG = register(new Strong(id("strong"), "Strong", false));
         AQUATIC_GRACE = register(new AquaticGrace(id("aquatic_grace"), "Aquatic Grace", false));
         BREATHES_UNDERWATER = register(new BreathesUnderwater(id("breathes_underwater"), "Breathes Underwater", false));
-        CANT_BREATHE_AIR = register(new CantBreatheAir(id("cant_breathe_air"), "Can't Breathe Air", false));
-        CANT_SWIM = register(new Ability(id("cant_swim"), "Can't Swim", true));
-        HYDROPHOBIC = register(new Hydrophobic(id("hydrophobic"), "Hydrophobic", false));
-        HUNTED_BY_FOX = register(new HuntedByFox(id("hunted_by_fox"), "Hunted By Foxes", false));
-        HUNTED_BY_WOLF = register(new HuntedByWolf(id("hunted_by_wolf"), "Hunted By Wolves", false));
         SCARES_CREEPERS = register(new ScaresCreepers(id("scares_creepers"), "Scares Creepers", false));
         SCARES_PHANTOMS = register(new ScaresPhantoms(id("scares_phantoms"), "Scares Phantoms", false));
         CHILD_OF_NATURE = register(new ChildOfNature(id("child_of_nature"), "Child of Nature", false));
-        WEAK_TO_DAMAGE = register(new Ability(id("weak_to_damage"), "Weak to Damage", false));
         NIGHT_VISION = register(new NightVision(id("night_vision"), "Night Vision", false));
-        BURNS_IN_DAYLIGHT = register(new BurnsInDaylight(id("burns_in_daylight"), "Burns In Daylight", false));
-        IS_MONSTER = register(new IsMonster(id("is_monster"), "Monster", false));
         // TODO: Implement climbs_walls, should only work in survival, shouldn't work in water or when flying
         CLIMBS_WALLS = register(new Ability(id("climbs_walls"), "Climbs Walls", true));
         PEARLING = register(new Ability(id("pearling"), "Pearling", false));
-        PREDATORY = register(new Predatory(id("predatory"), "Predatory", false));
         BOVID = register(new Ability(id("bovid"), "Bovid", false));
-        CARNIVORE = register(new Ability(id("carnivore"), "Carnivore", false));
-        VEGETARIAN = register(new Ability(id("vegetarian"), "Vegetarian", false));
-        SACCHARIVORE = register(new Ability(id("saccharivore"), "Saccharivore", false));
-        HERBIVORE = register(new Ability(id("herbivore"), "Herbivore", false));
-        INSECTIVORE = register(new Ability(id("insectivore"), "Insectivore", false));
     }
 
     private static Identifier id(String id) {
@@ -200,7 +180,7 @@ public class Abilities {
         }
     }
 
-    static class HeatSensitive extends TickingAbility {
+    static class HeatSensitive extends TickingDebuff {
         HeatSensitive(Identifier id, String name, boolean requiresClient) {
             super(id, name, requiresClient);
         }

@@ -2,6 +2,7 @@ package net.justmili.servertweaks.mixin.entity;
 
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.Abilities;
+import net.justmili.servertweaks.content.abilities.Debuffs;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,7 +28,7 @@ public class LivingEntityMixin {
     private void servertweaks$increaseAirSupply(int currentSupply, CallbackInfoReturnable<Integer> cir) {
         if (!(Config.playerAbilities.get())) return;
         if (!((LivingEntity) (Object) this instanceof Player player)) return;
-        if (!AbilityProfilesUtil.has(player, Abilities.CANT_BREATHE_AIR)) return;
+        if (!AbilityProfilesUtil.has(player, Debuffs.CANT_BREATHE_AIR)) return;
         if (!player.isInWater()) cir.setReturnValue(currentSupply);
     }
 }

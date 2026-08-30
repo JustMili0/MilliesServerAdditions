@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.justmili.libs.v1.utils.common.ResourceUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.Abilities;
+import net.justmili.servertweaks.content.abilities.Debuffs;
 import net.justmili.servertweaks.content.abilities.Modifiers;
 import net.justmili.servertweaks.content.abilities.Presets;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfiles;
@@ -35,9 +36,10 @@ public class ServerTweaks implements ModInitializer {
 
         if (Config.playerAbilities.get()) {
             Abilities.init();
+            Debuffs.init();
             Modifiers.init();
             Presets.init();
-            ServerLifecycleEvents.SERVER_STARTED.register(AbilityProfiles::loadFileServer);
+            ServerLifecycleEvents.SERVER_STARTED.register(_ -> AbilityProfiles.loadServerFile());
         }
     }
 

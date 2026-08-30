@@ -4,12 +4,12 @@ import net.minecraft.resources.Identifier;
 
 import java.util.Objects;
 
-public class AbilityModifier {
+public class Modifier {
     private final Identifier id;
     private final String displayName;
     private final boolean clientRequired;
 
-    public AbilityModifier(Identifier id, String displayName, boolean requiresClient) {
+    public Modifier(Identifier id, String displayName, boolean requiresClient) {
         this.id = id;
         this.displayName = displayName;
         this.clientRequired = requiresClient;
@@ -30,7 +30,7 @@ public class AbilityModifier {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof AbilityModifier modifier)) return false;
+        if (!(obj instanceof Modifier modifier)) return false;
         return Objects.equals(id, modifier.id);
     }
 

@@ -1,9 +1,9 @@
 package net.justmili.servertweaks.content.abilities.core;
 
 import net.justmili.servertweaks.content.abilities.type.Ability;
-import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
-import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
 import net.justmili.servertweaks.content.abilities.type.Debuff;
+import net.justmili.servertweaks.content.abilities.type.Modifier;
+import net.justmili.servertweaks.content.abilities.type.Preset;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,8 +14,8 @@ import java.util.Set;
 public class AbilityRegistries {
     public static final Map<Identifier, Ability> ABILITIES = new HashMap<>();
     public static final Map<Identifier, Debuff> DEBUFFS = new HashMap<>();
-    public static final Map<Identifier, AbilityModifier> MODIFIERS = new HashMap<>();
-    public static final Map<Identifier, AbilityPreset> PRESETS = new HashMap<>();
+    public static final Map<Identifier, Modifier> MODIFIERS = new HashMap<>();
+    public static final Map<Identifier, Preset> PRESETS = new HashMap<>();
 
     public static Map<Identifier, Ability> getAbilities() {
         return ABILITIES;
@@ -41,11 +41,11 @@ public class AbilityRegistries {
         return DEBUFFS.keySet();
     }
 
-    public static Map<Identifier, AbilityModifier> getModifiers() {
+    public static Map<Identifier, Modifier> getModifiers() {
         return MODIFIERS;
     }
 
-    public static @Nullable AbilityModifier getModifierById(Identifier id) {
+    public static @Nullable Modifier getModifierById(Identifier id) {
         return MODIFIERS.get(id);
     }
 
@@ -53,11 +53,11 @@ public class AbilityRegistries {
         return MODIFIERS.keySet();
     }
 
-    public static Map<Identifier, AbilityPreset> getPresets() {
+    public static Map<Identifier, Preset> getPresets() {
         return PRESETS;
     }
 
-    public static @Nullable AbilityPreset getPresetById(Identifier id) {
+    public static @Nullable Preset getPresetById(Identifier id) {
         return PRESETS.get(id);
     }
 

@@ -6,7 +6,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
-import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
+import net.justmili.servertweaks.content.abilities.type.Modifier;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.IdentifierArgument;
@@ -19,7 +19,7 @@ public class ModifierArgumentType {
         return IdentifierArgument.id();
     }
 
-    public static AbilityModifier getModifier(CommandContext<CommandSourceStack> context, String argName) throws CommandSyntaxException {
+    public static Modifier getModifier(CommandContext<CommandSourceStack> context, String argName) throws CommandSyntaxException {
         var id = IdentifierArgument.getId(context, argName);
         var modifier = AbilityRegistries.getModifierById(id);
         if (modifier == null) throw new SimpleCommandExceptionType(Component.literal("Unknown ability modifier: " + id)).create();

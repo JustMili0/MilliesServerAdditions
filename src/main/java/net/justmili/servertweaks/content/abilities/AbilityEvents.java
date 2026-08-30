@@ -10,6 +10,7 @@ import net.justmili.libs.v1.utils.common.CommandUtil;
 import net.justmili.libs.v1.utils.common.EntityUtil;
 import net.justmili.libs.v1.utils.common.FdaUtil;
 import net.justmili.servertweaks.content.abilities.type.Ability;
+import net.justmili.servertweaks.content.abilities.type.Debuff;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.registries.TagRegistry;
 import net.justmili.servertweaks.variables.PlayerVars;
@@ -59,7 +60,7 @@ public class AbilityEvents {
                 }
 
                 // Reset attribute modifiers if related ability is not applied
-                removeModifier(player, player.getAttribute(Attributes.MOVEMENT_SPEED), Abilities.SLOW, Abilities.AR_SLOW_SPEED);
+                removeModifier(player, player.getAttribute(Attributes.MOVEMENT_SPEED), Debuffs.SLOW, Abilities.AR_SLOW_SPEED);
                 removeModifier(player, player.getAttribute(Attributes.ATTACK_DAMAGE), Abilities.STRONG, Abilities.AR_STRONG_DAMAGE);
                 removeModifier(player, player.getAttribute(Attributes.MAX_HEALTH), Abilities.STRONG, Abilities.AR_STRONG_HP);
 
@@ -77,7 +78,7 @@ public class AbilityEvents {
 
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             var leaving = handler.getPlayer();
-            boolean stillCovered = server.getPlayerList().getPlayers().stream().anyMatch(p -> p != leaving && has(p, Abilities.IS_MONSTER));
+            boolean stillCovered = server.getPlayerList().getPlayers().stream().anyMatch(p -> p != leaving && has(p, Debuffs.IS_MONSTER));
             if (!stillCovered) Abilities.restoreAllMonsterGoals(leaving.level());
         });
 
@@ -91,8 +92,11 @@ public class AbilityEvents {
     }
 
     // Remove modifiers that are related to abilities the player does not have
-    static void removeModifier(Player player, AttributeInstance instance, Ability ability, Identifier id) {
+    public static void removeModifier(Player player, AttributeInstance instance, Ability ability, Identifier id) {
         if (!has(player, ability) && instance != null) instance.removeModifier(id);
+    }
+    public static void removeModifier(Player player, AttributeInstance instance, Debuff debuff, Identifier id) {
+        if (!has(player, debuff) && instance != null) instance.removeModifier(id);
     }
 
     static boolean squishy(LivingEntity entity, DamageSource source, float value) {
@@ -109,7 +113,7 @@ public class AbilityEvents {
         if (!(entity instanceof Player player)) return true;
         if (handleOtherImmunities(player, source)) return false;
 
-        if (!has(player, Abilities.WEAK_TO_DAMAGE)) return true;
+        if (!has(player, Debuffs.WEAK_TO_DAMAGE)) return true;
         if (source.is(DamageTypes.FALL)) return true;
 
         return recalcDamage(player, source, value, 1.25F);
@@ -176,7 +180,7 @@ public class AbilityEvents {
 
     static void bugEaterItems(Player player, Level level, InteractionHand hand) {
         if (level.isClientSide()) return;
-        if (!has(player, Abilities.INSECTIVORE)) return;
+        if (!has(player, Debuffs.INSECTIVORE)) return;
 
         var stack = player.getItemInHand(hand);
         var food = player.getFoodData();
@@ -194,7 +198,7 @@ public class AbilityEvents {
 
     static InteractionResult bugEaterEntities(Player player, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
-        if (!has(player, Abilities.INSECTIVORE)) return InteractionResult.PASS;
+        if (!has(player, Debuffs.INSECTIVORE)) return InteractionResult.PASS;
 
         var food = player.getFoodData();
         if (!food.needsFood()) return InteractionResult.PASS;
@@ -244,7 +248,7 @@ public class AbilityEvents {
 
     static InteractionResult grassEater(Player player, Level level, InteractionHand hand, BlockHitResult hitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
-        if (!has(player, Abilities.HERBIVORE)) return InteractionResult.PASS;
+        if (!has(player, Debuffs.HERBIVORE)) return InteractionResult.PASS;
 
         if (!player.isShiftKeyDown()) return InteractionResult.PASS;
 
@@ -293,11 +297,11 @@ public class AbilityEvents {
     static boolean isDietBlocked(Player player, ItemStack stack) {
         if (!stack.has(DataComponents.FOOD) || stack.has(DataComponents.BUCKET_ENTITY_DATA)) return false;
 
-        boolean carnivore = has(player, Abilities.CARNIVORE);
-        boolean vegetarian = has(player, Abilities.VEGETARIAN);
-        boolean sweetOnly = has(player, Abilities.SACCHARIVORE);
-        boolean grassEater = has(player, Abilities.HERBIVORE);
-        boolean bugEater = has(player, Abilities.INSECTIVORE);
+        boolean carnivore = has(player, Debuffs.CARNIVORE);
+        boolean vegetarian = has(player, Debuffs.VEGETARIAN);
+        boolean sweetOnly = has(player, Debuffs.SACCHARIVORE);
+        boolean grassEater = has(player, Debuffs.HERBIVORE);
+        boolean bugEater = has(player, Debuffs.INSECTIVORE);
         boolean canConsumeGolden = has(player, Modifiers.CAN_EAT_GOLDEN_FOOD);
 
         boolean isMeat = stack.is(TagRegistry.DIET_CARNIVORE);

@@ -6,7 +6,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
-import net.justmili.servertweaks.content.abilities.type.AbilityPreset;
+import net.justmili.servertweaks.content.abilities.type.Preset;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.IdentifierArgument;
@@ -19,7 +19,7 @@ public class PresetArgumentType {
         return IdentifierArgument.id();
     }
 
-    public static AbilityPreset getPreset(CommandContext<CommandSourceStack> context, String argName) throws CommandSyntaxException {
+    public static Preset getPreset(CommandContext<CommandSourceStack> context, String argName) throws CommandSyntaxException {
         var id = IdentifierArgument.getId(context, argName);
         var preset = AbilityRegistries.getPresetById(id);
         if (preset == null) throw new SimpleCommandExceptionType(Component.literal("Unknown abilities preset: " + id)).create();

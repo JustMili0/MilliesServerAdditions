@@ -4,31 +4,73 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.type.Ability;
-import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
+import net.justmili.servertweaks.content.abilities.type.Debuff;
+import net.justmili.servertweaks.content.abilities.type.Modifier;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.MinecraftServer;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Function;
 
 public class AbilityProfiles {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final String FILE_NAME = "player_abilities.json";
     public static final Map<UUID, Set<Ability>> ABILITIES = new LinkedHashMap<>();
-    public static final Map<UUID, Set<AbilityModifier>> MODIFIERS = new LinkedHashMap<>();
+    public static final Map<UUID, Set<Debuff>> DEBUFFS = new LinkedHashMap<>();
+    public static final Map<UUID, Set<Modifier>> MODIFIERS = new LinkedHashMap<>();
 
-    public static void loadFileServer(MinecraftServer server) {
+    public static void saveServerFile() {
+        var root = new JsonObject();
+
+        Set<UUID> uuids = new HashSet<>(ABILITIES.keySet());
+        uuids.addAll(DEBUFFS.keySet());
+        uuids.addAll(MODIFIERS.keySet());
+
+        for (var uuid : uuids) {
+            var uuidObj = new JsonObject();
+
+            saveElements(uuidObj, "abilities", ABILITIES.getOrDefault(uuid, Collections.emptySet()), Ability::getId);
+            saveElements(uuidObj, "debuffs", DEBUFFS.getOrDefault(uuid, Collections.emptySet()), Debuff::getId);
+            saveElements(uuidObj, "modifiers", MODIFIERS.getOrDefault(uuid, Collections.emptySet()), Modifier::getId);
+
+            root.add(uuid.toString(), uuidObj);
+        }
+
+        try {
+            var file = getServerFile();
+            file.getParentFile().mkdirs();
+            try (Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
+                GSON.toJson(root, writer);
+            }
+            ServerTweaks.LOGGER.info("Saved Ability Profiles for {} player(s)", uuids.size());
+
+        } catch (Exception e) {
+            ServerTweaks.LOGGER.error("Failed to save Ability Profiles: {}", e.getMessage());
+        }
+    }
+
+    static <T> void saveElements(JsonObject playerObj, String memberName, Set<T> elements, Function<T, Identifier> lookup) {
+        var array = new JsonArray();
+        elements.stream().map(lookup).map(Identifier::toString).sorted().forEach(array::add);
+        playerObj.add(memberName, array);
+    }
+
+    public static void loadServerFile() {
         ABILITIES.clear();
+        DEBUFFS.clear();
         MODIFIERS.clear();
         if (!(Config.playerAbilities.get())) return;
 
-        File file = getFile();
+        var file = getServerFile();
         if (!file.exists()) {
-            saveFileServer(server);
+            saveServerFile();
             return;
         }
 
@@ -39,93 +81,62 @@ public class AbilityProfiles {
                 try {
                     uuid = UUID.fromString(entry.getKey());
                 } catch (IllegalArgumentException e) {
-                    ServerTweaks.LOGGER.warn("Invalid UUID '{}', skipping", entry.getKey());
+                    ServerTweaks.LOGGER.warn("Invalid player UUID '{}', skipping", entry.getKey());
                     continue;
                 }
 
-                JsonObject object = entry.getValue().getAsJsonObject();
+                var uuidObj = entry.getValue().getAsJsonObject();
                 Set<Ability> abilities = new LinkedHashSet<>();
-                if (object.has("abilities")) {
-                    for (var element : object.getAsJsonArray("abilities")) {
-                        String raw = element.getAsString();
-                        Identifier id = Identifier.tryParse(raw);
-                        if (id == null) {
-                            ServerTweaks.LOGGER.warn("Invalid ability id '{}', skipping", raw);
-                            continue;
-                        }
+                Set<Debuff> debuffs = new LinkedHashSet<>();
+                Set<Modifier> modifiers = new LinkedHashSet<>();
 
-                        var ability = AbilityRegistries.getAbilityById(id);
-                        if (ability == null) {
-                            ServerTweaks.LOGGER.warn("Unknown ability '{}', skipping", raw);
-                            continue;
-                        }
-                        abilities.add(ability);
-                    }
-                }
-                Set<AbilityModifier> modifiers = new LinkedHashSet<>();
-                if (object.has("ability_modifiers")) {
-                    for (var element : object.getAsJsonArray("ability_modifiers")) {
-                        String raw = element.getAsString();
-                        Identifier id = Identifier.tryParse(raw);
-                        if (id == null) {
-                            ServerTweaks.LOGGER.warn("Invalid modifier id '{}', skipping", raw);
-                            continue;
-                        }
+                loadElements(uuidObj, abilities, "abilities", "ability", AbilityRegistries::getAbilityById);
+                loadElements(uuidObj, debuffs, "debuffs", "debuff", AbilityRegistries::getDebuffById);
+                loadElements(uuidObj, modifiers, "modifiers", "modifier", AbilityRegistries::getModifierById);
 
-                        var modifier = AbilityRegistries.getModifierById(id);
-                        if (modifier == null) {
-                            ServerTweaks.LOGGER.warn("Unknown modifier '{}', skipping", raw);
-                            continue;
-                        }
-                        modifiers.add(modifier);
-                    }
-                }
                 ABILITIES.put(uuid, abilities);
+                DEBUFFS.put(uuid, debuffs);
                 MODIFIERS.put(uuid, modifiers);
             }
         } catch (Exception e) {
-            ServerTweaks.LOGGER.error("Failed to read config: {}", e.getMessage());
+            ServerTweaks.LOGGER.error("Failed to Ability Profiles: {}", e.getMessage());
         }
     }
 
-    public static void saveFileServer(MinecraftServer server) {
-        JsonObject root = new JsonObject();
+    private static <T> void loadElements(JsonObject uuidObj, Set<T> member, String memberName, String elementName, Function<Identifier, T> lookup) {
+        if (!uuidObj.has(memberName)) return;
 
-        Set<UUID> allUuids = new HashSet<>(ABILITIES.keySet());
-        allUuids.addAll(MODIFIERS.keySet());
-
-        for (UUID uuid : allUuids) {
-            JsonObject playerObj = new JsonObject();
-
-            var online = server.getPlayerList().getPlayer(uuid);
-            if (online != null) playerObj.addProperty("name", online.getName().getString());
-
-            JsonArray abilitiesArr = new JsonArray();
-            Set<Ability> abilities = ABILITIES.getOrDefault(uuid, Collections.emptySet());
-            abilities.stream().map(Ability::getId).map(Identifier::toString).sorted().forEach(abilitiesArr::add);
-            playerObj.add("abilities", abilitiesArr);
-
-            JsonArray modifiersArr = new JsonArray();
-            Set<AbilityModifier> modifiers = MODIFIERS.getOrDefault(uuid, Collections.emptySet());
-            modifiers.stream().map(AbilityModifier::getId).map(Identifier::toString).sorted().forEach(modifiersArr::add);
-            playerObj.add("ability_modifiers", modifiersArr);
-
-            root.add(uuid.toString(), playerObj);
-        }
-
-        try {
-            File file = getFile();
-            file.getParentFile().mkdirs();
-            try (Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
-                GSON.toJson(root, writer);
+        for (var element : uuidObj.getAsJsonArray(memberName)) {
+            var raw = element.getAsString();
+            var id = Identifier.tryParse(raw);
+            if (id == null) {
+                ServerTweaks.LOGGER.warn("Invalid {} id '{}', skipping", elementName, raw);
+                continue;
             }
-            ServerTweaks.LOGGER.info("Saved abilities for {} player(s)", allUuids.size());
-        } catch (Exception e) {
-            ServerTweaks.LOGGER.error("Failed to save config: {}", e.getMessage());
+
+            var type = lookup.apply(id);
+            if (type == null) {
+                ServerTweaks.LOGGER.warn("Unknown {} '{}', skipping", elementName, raw);
+                continue;
+            }
+
+            member.add(type);
         }
     }
 
-    private static File getFile() {
-        return new File("config/" + ServerTweaks.MODID + "/" + FILE_NAME);
+    public static Path getConfigDir() {
+        return Path.of("config", ServerTweaks.MODID);
+    }
+
+    public static File getServerFile() {
+        return Path.of(getConfigDir().toString(), "player_abilities.json").toFile();
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static File getClientFile(Minecraft client) {
+        var server = client.getCurrentServer();
+        if (server == null) return getServerFile();
+        var ip = server.ip.replaceAll("[^a-zA-Z0-9._-]", "_");
+        return Path.of(getConfigDir().toString(), "player_abilities-" + ip + ".json").toFile();
     }
 }

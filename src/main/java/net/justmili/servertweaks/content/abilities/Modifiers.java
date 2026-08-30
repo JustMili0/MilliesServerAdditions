@@ -2,24 +2,24 @@ package net.justmili.servertweaks.content.abilities;
 
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
-import net.justmili.servertweaks.content.abilities.type.AbilityModifier;
+import net.justmili.servertweaks.content.abilities.type.Modifier;
 import net.minecraft.resources.Identifier;
 
 public class Modifiers {
     public static void init() {
     }
 
-    public static final AbilityModifier CAN_EAT_GOLDEN_FOOD;
+    public static final Modifier CAN_EAT_GOLDEN_FOOD;
 
     static {
-        CAN_EAT_GOLDEN_FOOD = register(new AbilityModifier(id("can_eat_golden_foods"), "Can Eat Golden Foods", false));
+        CAN_EAT_GOLDEN_FOOD = register(new Modifier(id("can_eat_golden_foods"), "Can Eat Golden Foods", false));
     }
 
     private static Identifier id(String id) {
         return ServerTweaks.asId(id);
     }
 
-    private static AbilityModifier register(AbilityModifier modifier) {
+    private static Modifier register(Modifier modifier) {
         AbilityRegistries.MODIFIERS.put(modifier.getId(), modifier);
         return modifier;
     }

@@ -2,6 +2,7 @@ package net.justmili.servertweaks.mixin.entity;
 
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.Abilities;
+import net.justmili.servertweaks.content.abilities.Debuffs;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
@@ -21,7 +22,7 @@ public class PlayerMixin {
     private void servertweaks$preventSwimUp(Vec3 input, CallbackInfo ci) {
         if (!Config.playerAbilities.get()) return;
         if (!((Player) (Object) this instanceof ServerPlayer player)) return;
-        if (!AbilityProfilesUtil.has(player, Abilities.CANT_SWIM) || !player.isInWater() || !player.gameMode().isSurvival()) return;
+        if (!AbilityProfilesUtil.has(player, Debuffs.CANT_SWIM) || !player.isInWater() || !player.gameMode().isSurvival()) return;
 
         var level = player.level();
         var pos = player.blockPosition();
@@ -34,7 +35,8 @@ public class PlayerMixin {
         // Noticed: Even with the mod on the client, client never knows about abilities because file never gets created in client config (and never loaded)
         // Idea: Create files "player_abilities-<serverip>.json" to share with servers for client, and regular "player_abilities.json" for server and singleplayer use
         // Also make /abilities actually update stuff on the client as well
-        // And generally improve the file creation because it kinda sucks
+
+        // Noticed: Fuck, it doesn't even run in singleplayer with runClient
         var movement = player.getDeltaMovement();
         if (movement.y > 0.0) player.setDeltaMovement(movement.with(Direction.Axis.Y, 0.0));
         player.connection.send(new ClientboundSetEntityMotionPacket(player));
