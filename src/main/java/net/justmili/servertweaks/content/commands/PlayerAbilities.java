@@ -172,7 +172,7 @@ public class PlayerAbilities {
     }
 
     static int reload(CommandSourceStack source) {
-        AbilityProfiles.reloadProfiles(source.getServer());
+        AbilityProfiles.reloadProfiles();
 
         CommandUtil.sendOk(source, "Reloaded player abilities");
         return 1;

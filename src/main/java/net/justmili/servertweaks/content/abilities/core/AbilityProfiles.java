@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.mojang.authlib.GameProfile;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.justmili.libs.v1.utils.server.ServerUtil;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.type.Ability;
@@ -14,7 +14,6 @@ import net.justmili.servertweaks.content.abilities.type.Debuff;
 import net.justmili.servertweaks.content.abilities.type.Modifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.MinecraftServer;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -28,7 +27,7 @@ public class AbilityProfiles {
     public static final Map<UUID, Set<Debuff>> DEBUFFS = new LinkedHashMap<>();
     public static final Map<UUID, Set<Modifier>> MODIFIERS = new LinkedHashMap<>();
 
-    public static void saveProfiles(MinecraftServer server) {
+    public static void saveProfiles() {
         var root = new JsonObject();
 
         Set<UUID> uuids = new HashSet<>(ABILITIES.keySet());
@@ -38,7 +37,7 @@ public class AbilityProfiles {
         for (var uuid : uuids) {
             var uuidObj = new JsonObject();
 
-            var name = server.services().profileResolver().fetchById(uuid).map(GameProfile::name).orElse("");
+            var name = ServerUtil.getPlayerName(uuid, true);
             uuidObj.addProperty("name", name);
 
             saveElements(uuidObj, "abilities", ABILITIES.getOrDefault(uuid, Collections.emptySet()), Ability::getId);
@@ -73,7 +72,7 @@ public class AbilityProfiles {
         playerObj.add(memberName, array);
     }
 
-    public static void loadProfiles(MinecraftServer server) {
+    public static void loadProfiles() {
         ABILITIES.clear();
         DEBUFFS.clear();
         MODIFIERS.clear();
@@ -81,11 +80,9 @@ public class AbilityProfiles {
 
         var file = getServerFile();
         if (!file.exists()) {
-            saveProfiles(server);
+            saveProfiles();
             return;
         }
-
-        //boolean migrated = false;
 
         try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
             var root = GSON.fromJson(reader, JsonObject.class);
@@ -103,9 +100,6 @@ public class AbilityProfiles {
                 Set<Debuff> debuffs = new LinkedHashSet<>();
                 Set<Modifier> modifiers = new LinkedHashSet<>();
 
-                //migrated |= AbilityProfilesMigrator.migrateAbilitiesSplit(uuidObj, abilities, debuffs);
-                //migrated |= AbilityProfilesMigrator.migrateLegacyKey(uuidObj, "ability_modifiers", "modifiers");
-
                 loadElements(uuidObj, abilities, "abilities", "ability", AbilityRegistries::getAbilityById);
                 loadElements(uuidObj, debuffs, "debuffs", "debuff", AbilityRegistries::getDebuffById);
                 loadElements(uuidObj, modifiers, "modifiers", "modifier", AbilityRegistries::getModifierById);
@@ -117,8 +111,6 @@ public class AbilityProfiles {
         } catch (Exception e) {
             ServerTweaks.LOGGER.error("Failed to load ability profiles: {}", e.getMessage());
         }
-
-        //if (migrated) saveProfiles();
     }
 
     private static <T> void loadElements(JsonObject uuidObj, Set<T> member, String memberName, String elementName, Function<Identifier, T> lookup) {
@@ -142,9 +134,9 @@ public class AbilityProfiles {
         }
     }
 
-    public static void reloadProfiles(MinecraftServer server) {
-        loadProfiles(server);
-        saveProfiles(server);
+    public static void reloadProfiles() {
+        loadProfiles();
+        saveProfiles();
     }
 
     public static Path getConfigDir() {

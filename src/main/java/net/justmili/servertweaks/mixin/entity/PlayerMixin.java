@@ -30,12 +30,7 @@ public class PlayerMixin {
         // Issues:
         // - Still can rise up a little, but it's very slow
         // (generally swimming in any direction is now very slow, where it's only wanted for upwards movement to be entirely prevented)
-
-        // Noticed: Even with the mod on the client, client never knows about abilities because file never gets created in client config (and never loaded)
-        // Idea: Create files "player_abilities-<serverip>.json" to share with servers for client, and regular "player_abilities.json" for server and singleplayer use
-        // Also make /abilities actually update stuff on the client as well
-
-        // Noticed: Fuck, it doesn't even run in singleplayer with runClient
+        // Can't be a client-server or packet or whatever thing beause same thing happens in singleplayer
         var movement = player.getDeltaMovement();
         if (movement.y > 0.0) player.setDeltaMovement(movement.with(Direction.Axis.Y, 0.0));
         player.connection.send(new ClientboundSetEntityMotionPacket(player));

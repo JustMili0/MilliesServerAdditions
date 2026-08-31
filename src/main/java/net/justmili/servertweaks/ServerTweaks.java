@@ -2,6 +2,7 @@ package net.justmili.servertweaks;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.justmili.libs.CoreLibs;
 import net.justmili.libs.v1.utils.common.ResourceUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.Abilities;
@@ -24,6 +25,9 @@ public class ServerTweaks implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        LOGGER.info("Initializing Millie's Core Libraries...");
+        CoreLibs.init();
+
         LOGGER.info("Initializing Millie's Server Additions...");
 
         PacketRegistry.init();
@@ -40,7 +44,7 @@ public class ServerTweaks implements ModInitializer {
             Modifiers.init();
             Presets.init();
 
-            ServerLifecycleEvents.SERVER_STARTED.register(AbilityProfiles::loadProfiles);
+            ServerLifecycleEvents.SERVER_STARTED.register(_ -> AbilityProfiles.loadProfiles());
         }
     }
 

@@ -22,7 +22,7 @@ public class AbilityProfilesUtil {
             return;
         }
         ABILITIES.computeIfAbsent(player.getUUID(), _ -> new HashSet<>()).add(ability);
-        saveProfiles(player.level().getServer());
+        saveProfiles();
     }
 
     public static void grantDebuff(Player player, Debuff debuff) {
@@ -31,7 +31,7 @@ public class AbilityProfilesUtil {
             return;
         }
         DEBUFFS.computeIfAbsent(player.getUUID(), _ -> new HashSet<>()).add(debuff);
-        saveProfiles(player.level().getServer());
+        saveProfiles();
     }
 
     public static void grantModifier(Player player, Modifier modifier) {
@@ -40,7 +40,7 @@ public class AbilityProfilesUtil {
             return;
         }
         MODIFIERS.computeIfAbsent(player.getUUID(), _ -> new HashSet<>()).add(modifier);
-        saveProfiles(player.level().getServer());
+        saveProfiles();
     }
 
     public static void revokeAbility(Player player, Ability ability) {
@@ -49,7 +49,7 @@ public class AbilityProfilesUtil {
             return;
         }
         ABILITIES.getOrDefault(player.getUUID(), Collections.emptySet()).remove(ability);
-        saveProfiles(player.level().getServer());
+        saveProfiles();
     }
 
     public static void revokeDebuff(Player player, Debuff debuff) {
@@ -58,7 +58,7 @@ public class AbilityProfilesUtil {
             return;
         }
         DEBUFFS.getOrDefault(player.getUUID(), Collections.emptySet()).remove(debuff);
-        saveProfiles(player.level().getServer());
+        saveProfiles();
     }
 
     public static void revokeModifier(Player player, Modifier modifier) {
@@ -67,7 +67,7 @@ public class AbilityProfilesUtil {
             return;
         }
         MODIFIERS.getOrDefault(player.getUUID(), Collections.emptySet()).remove(modifier);
-        saveProfiles(player.level().getServer());
+        saveProfiles();
     }
 
     public static Set<Ability> getAbilities(Player player) {
@@ -115,7 +115,7 @@ public class AbilityProfilesUtil {
         ABILITIES.put(uuid, new HashSet<>(preset.getAbilities()));
         DEBUFFS.put(uuid, new HashSet<>(preset.getDebuffs()));
         MODIFIERS.put(uuid, new HashSet<>(preset.getModifiers()));
-        saveProfiles(player.level().getServer());
+        saveProfiles();
     }
 
     public static void clearPlayerProfile(Player player) {
@@ -123,7 +123,7 @@ public class AbilityProfilesUtil {
         ABILITIES.remove(uuid);
         DEBUFFS.remove(uuid);
         MODIFIERS.remove(uuid);
-        saveProfiles(player.level().getServer());
+        saveProfiles();
     }
 
     public static void warnUnknownType(Player player, String label) {

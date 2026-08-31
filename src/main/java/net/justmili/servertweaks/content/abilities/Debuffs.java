@@ -94,6 +94,8 @@ public class Debuffs {
         COLD_SENSITIVE = register(new ColdSensitive(id("cold_sensitive"), "Cold Sensitive", false));
         SLOW = register(new Slow(id("slow"), "Slow", false));
         CANT_BREATHE_AIR = register(new CantBreatheAir(id("cant_breathe_air"), "Can't Breathe Air", false));
+        // TODO: Fix cant_swim, should entirely prevent upwards movement, atm only heavily slows down the player
+        // Can't be a client-server or packet or whatever thing beause same thing happens in singleplayer
         CANT_SWIM = register(new Debuff(id("cant_swim"), "Can't Swim", true));
         HYDROPHOBIC = register(new Hydrophobic(id("hydrophobic"), "Hydrophobic", false));
         HUNTED_BY_FOX = register(new HuntedByFox(id("hunted_by_fox"), "Hunted By Foxes", false));

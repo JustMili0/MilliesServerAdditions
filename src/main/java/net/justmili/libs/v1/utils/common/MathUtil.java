@@ -5,6 +5,12 @@ import java.math.RoundingMode;
 import java.util.Random;
 
 public class MathUtil {
+    public static final double NANOS_IN_A_MICRO = 1.0E-3;
+    public static final double NANOS_IN_A_MILLI = 1.0E-6;
+    public static final double NANOS_IN_A_SECOND = 1.0E-9;
+    public static final double MICROS_IN_A_MILLI = 1.0E-3;
+    public static final double MICROS_IN_A_SECOND = 1.0E-6;
+    public static final double MILLIS_IN_A_SECOND = 1.0E-3;
     public static Random random = new Random();
 
     public static boolean chance(float chance) {
