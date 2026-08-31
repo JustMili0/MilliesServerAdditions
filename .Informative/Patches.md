@@ -172,10 +172,12 @@ Feedback is appreciated ^^
 **Commands**
 - Cleaned up and possibly optimized the code of all the command classes
 - Renamed `/fillExtras` to `/fillextras`
-- Reworked informative texts shown in `/abilities`
+- Updated texts and options in `/abilities`
   - `pickPreset <preset>` now utilizes `getDisplayName` instead of `getId` for informing that a preset had been applied
   - `pickPreset <preset>` now informs the player if any ability in given preset requires a client-side installation to function properly
   - `grant` and `revoke` now utilizes `getDisplayName` instead of `getId` for showing ability and ability modifier names
+  - `grant <player> <ability|debuff|modifier> <id>` - Reworked from `grant <player> <abilityOrDebuff|modifier>`, now properly distinguishes between abilities, debuffs and modifiers
+  - `revoke <player> <ability|debuff|modifier|everything> <id>` - Reworked from `revoke <player> <ability|modifier|everything> <abilityOrDebuff|modifier>`, now properly distinguishes between abilities, debuffs and modifiers
 - Fixed one-hit mace exploit in `/afk` not resetting fall distance
 - `/afk` now uses `Vec3` `player.position()` to store player position instead of individual x, y and z `double` values
 - `/afk` can now show the exact remaining time of its cooldown in days, hours, minutes and seconds format instead of just seconds
@@ -183,11 +185,13 @@ Feedback is appreciated ^^
 **Player Abilities**
 - Mod can be now installed client-side for some abilities to work properly (quite literally, just `climbs_walls` needs it)
 - Added `Debuff`, `TickingDebuff` and `TickingModifier` class
-- Reworked registries for player abilities
+- Reworked registries and other core elements of player abilities
   - Class names and packages were altered a lot
   - Split Abilities registry class into Abilities and Debuffs
-  - All abilities and modifiers (including ticking) now define an Identifier, Display Name and whether it requires a client-side installation or not (for most; not)
+  - Large optimizations to AbilityProfiles, cutting down on repetitive code and making it more efficient
+  - All abilities, debuffs and modifiers (including ticking) now define an Identifier, Display Name and whether it requires a client-side installation or not (for most; not)
   - All presets now define an Identifier and Display Name
+- Fixed `"name"` entries in `player_abilities.json` getting removed on file update if the referenced player was offline
 - All abilities, debuffs, modifiers and presets are no longer plain full-capitalized strings (`EXAMPLE_THING`) now being Identifiers (`mod_id:example_thing`)
 - Some abilities and debuffs were renamed for consistency and better language
   - `FRIENDS_WITH_NATURE` -> `child_of_nature`
@@ -203,16 +207,16 @@ Feedback is appreciated ^^
 - `fire_immune` and `lava_immune` now automatically get extinguished unless has Weakness effect
 - `fall_immune` is no longer affected by Slow Falling unless has Weakness effect
 - `freeze_immune` no longer gets the freezing overlay and hearts unless has Weakness effect
-- `aquarian` preset no longer grants `breathes_underwater`, as water breathing is already provided by Conduit Power effect from `aquatic_grace`
+- `aquarian` preset no longer grants `breathes_underwater`, as water breathing is already provided by Conduit Power effect from `aquatic_grace` when in water
 - Fixed and optimized damage immunity handling
-- Fixed and readjusted damage multipliers for `weak_to_damage` ability to match its descriptions in [Abilities.md](https://github.com/JustMili0/MilliesServerAdditions/blob/master/.Informative/Features/Abilities.md)
+- Fixed and readjusted damage multipliers for `weak_to_damage` debuff to match its descriptions in [Abilities.md](https://github.com/JustMili0/MilliesServerAdditions/blob/master/.Informative/Features/Abilities.md)
 - Fixed being able to eat anything by just having it in your offhand
-- Fixed `herbivore` ability being able to eat foliage even when full
+- Fixed `herbivore` debuff being able to eat foliage even when full
 - Fixed food values not updating when eating foliage as `herbivore`
-- Fixed block placement, block interactions and fish bucket place/pickup with any diet restriction abilities applied
+- Fixed block placement, block interactions and fish bucket place/pickup with any diet restriction debuffs applied
 - Fixed `child_of_nature` ability - Taming chance with any animal is now 100%
-- Fixed `hunted_by_fox` ability - Foxes now attack even if you're not crouching
-- [TODO - implementation wip] Fixed ability debuff `cant_swim` - Player no longer can swim up in water
+- Fixed `hunted_by_fox` debuff - Foxes now attack even if you're not crouching
+- [TODO - implementation wip] Fixed  debuff `cant_swim` - Player no longer can swim up in water
 - [TODO - to be reimplemented] Fixed ability `climbs_walls` - Now can actually climb walls
 - Fixed `light` ability applying Slow Falling at any fall distance, even when going downstairs
   - Now requires 3 blocks or more of fall distance to apply Slow Falling

@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.mixin.entity.animal;
+package net.justmili.servertweaks.mixin.entity;
 
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(RunAroundLikeCrazyGoal.class)
-public abstract class HorsesMixin extends Goal {
+public abstract class RunAroundLikeCrazyGoalmixin extends Goal {
 
     @Definition(id = "horse", field = "Lnet/minecraft/world/entity/ai/goal/RunAroundLikeCrazyGoal;horse:Lnet/minecraft/world/entity/animal/equine/AbstractHorse;")
     @Definition(id = "getRandom", method = "Lnet/minecraft/world/entity/animal/equine/AbstractHorse;getRandom()Lnet/minecraft/util/RandomSource;")

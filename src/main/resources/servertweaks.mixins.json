@@ -18,10 +18,10 @@
     "enchanting.EnchantmentMixin",
     "entity.LivingEntityMixin",
     "entity.MobMixin",
+    "entity.ParrotMixin",
+    "entity.PetsMixin",
     "entity.PlayerMixin",
-    "entity.animal.HorsesMixin",
-    "entity.animal.ParrotMixin",
-    "entity.animal.PetsMixin",
+    "entity.RunAroundLikeCrazyGoalmixin",
     "item.ItemMixin",
     "item.TridentItemMixin"
   ],

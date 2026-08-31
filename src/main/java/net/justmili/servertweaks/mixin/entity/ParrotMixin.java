@@ -1,4 +1,4 @@
-package net.justmili.servertweaks.mixin.entity.animal;
+package net.justmili.servertweaks.mixin.entity;
 
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;

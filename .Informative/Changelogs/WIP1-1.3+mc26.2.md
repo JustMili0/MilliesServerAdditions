@@ -1,4 +1,4 @@
-## 1.3.0+mc26.1.2 Changelog
+## 1.3.0+mc26.2 Changelog
 ***Most if not all features added in this update ARE CONFIGURABLE***
 
 ### ***GENERAL***
@@ -18,7 +18,7 @@
 - Special Player Abilities
   - Feature disabled by default
   - Abilities are based on Minecraft mobs and other fictional entities similar to DnD but not exactly.
-  - Player abilities and ability modifiers can be modified in-game with `/abilities` command or editing the `config/servertweaks/player_abilities.json` file.
+  - Player abilities, debuffs and modifiers can be modified in-game with `/abilities` command or editing the `config/servertweaks/player_abilities.json` file.
 - Right-Click-Harvest
   - Yes fortune applies
   - Larger affect area when using a hoe
