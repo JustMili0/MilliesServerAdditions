@@ -56,7 +56,7 @@ public class Config {
         despawnMonstersPostAfk = common.comment("Should \"wild\" (unnamed, not in boats/minecarts) monsters despawn around the player when coming out of AFK?")
             .define("despawnMonstersPostAfk", true);
         afkCommandCooldown = common.comment("Amount of time between the AFK command can be used again")
-            .define("afkCommandCooldown", 6000, 0, Integer.MAX_VALUE-255);
+            .define("afkCommandCooldown", 6000, 0, Integer.MAX_VALUE - 255);
 
         common.comment("What should be the min-max height values (In centimeters) for the \"/scale\" command?");
         scaleMinHeight = common.define("scaleMinHeight", 80f, 18.5f, 2960f);
@@ -65,11 +65,12 @@ public class Config {
         // Enchanting
         allowMixEnchantments = common.comment("Should previously incompatible enchantments be able to be combined?")
             .define("allowMixEnchantments", false);
-        enableHigherEnchants =  common.comment("Should some enchantments (controlled by enchantment tags) have a higher max value than Vanilla intended?")
+        enableHigherEnchants = common.comment("Should some enchantments (controlled by enchantment tags) have a higher max value than Vanilla intended?")
             .define("enableHigherEnchantmentLevels", false);
-        enableEnchantDuplication = common.comment("Should players be able to shift-right-click with an enchanted book in their offhand and a book in their main hand" +
-                "\nto duplicate the enchanted book using their experience?")
-            .define("enableEnchantDuplication", true);
+        enableEnchantDuplication = common.comment("""
+            Should players be able to shift-right-click with an enchanted book in their offhand and a book in their main hand" +
+            to duplicate the enchanted book using their experience?
+            """).define("enableEnchantDuplication", true);
 
         // Limits
         limitPlayerSpeed = common.comment("Should the server stop the player from moving too fast and print \"Player moved too fast!\" warn when on foot?")

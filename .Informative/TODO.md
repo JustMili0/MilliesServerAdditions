@@ -1,10 +1,11 @@
 # TODO (1.3.0)
 - Update Patches.md
 
-- Finish fixing abilities
-- Improve the abilities file stuff
 - Fix default-level commands being inaccessible for limited_operator if not added to allowed list
   - E.g. "/afk", "/msg"
+- Code CLIMBS_WALLS
+- Fix CANT_SWIM
+- Improve IS_MONSTER code
 - Add publishing to buildscript
 - Document every feature in `.Informative/Features/`
 

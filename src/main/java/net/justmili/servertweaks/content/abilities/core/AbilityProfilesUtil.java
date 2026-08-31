@@ -34,7 +34,7 @@ public class AbilityProfilesUtil {
         saveProfiles();
     }
 
-    public static void grantModifier(ServerPlayer player, Modifier modifier) {
+    public static void grantModifier(Player player, Modifier modifier) {
         if (modifier == null) {
             warnUnknownType(player, "ability/debuff modifier");
             return;

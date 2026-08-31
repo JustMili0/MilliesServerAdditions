@@ -1,7 +1,6 @@
 package net.justmili.servertweaks.mixin.entity;
 
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.abilities.Abilities;
 import net.justmili.servertweaks.content.abilities.Debuffs;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.minecraft.core.Direction;

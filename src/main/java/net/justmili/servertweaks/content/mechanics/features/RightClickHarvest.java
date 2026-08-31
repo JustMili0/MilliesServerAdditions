@@ -1,7 +1,6 @@
 package net.justmili.servertweaks.content.mechanics.features;
 
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.content.abilities.Abilities;
 import net.justmili.servertweaks.content.abilities.Debuffs;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.justmili.servertweaks.mixin.accessors.CropBlockAccessor;
