@@ -40,7 +40,7 @@ public class ServerTweaks implements ModInitializer {
             Modifiers.init();
             Presets.init();
 
-            ServerLifecycleEvents.SERVER_STARTED.register(_ -> AbilityProfiles.loadProfiles());
+            ServerLifecycleEvents.SERVER_STARTED.register(AbilityProfiles::loadProfiles);
         }
     }
 

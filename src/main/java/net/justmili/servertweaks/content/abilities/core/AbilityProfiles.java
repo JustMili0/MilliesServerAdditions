@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.authlib.GameProfile;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.justmili.servertweaks.ServerTweaks;
@@ -13,6 +14,7 @@ import net.justmili.servertweaks.content.abilities.type.Debuff;
 import net.justmili.servertweaks.content.abilities.type.Modifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -26,7 +28,7 @@ public class AbilityProfiles {
     public static final Map<UUID, Set<Debuff>> DEBUFFS = new LinkedHashMap<>();
     public static final Map<UUID, Set<Modifier>> MODIFIERS = new LinkedHashMap<>();
 
-    public static void saveProfiles() {
+    public static void saveProfiles(MinecraftServer server) {
         var root = new JsonObject();
 
         Set<UUID> uuids = new HashSet<>(ABILITIES.keySet());
@@ -35,6 +37,9 @@ public class AbilityProfiles {
 
         for (var uuid : uuids) {
             var uuidObj = new JsonObject();
+
+            var name = server.services().profileResolver().fetchById(uuid).map(GameProfile::name).orElse("");
+            uuidObj.addProperty("name", name);
 
             saveElements(uuidObj, "abilities", ABILITIES.getOrDefault(uuid, Collections.emptySet()), Ability::getId);
             saveElements(uuidObj, "debuffs", DEBUFFS.getOrDefault(uuid, Collections.emptySet()), Debuff::getId);
@@ -68,7 +73,7 @@ public class AbilityProfiles {
         playerObj.add(memberName, array);
     }
 
-    public static void loadProfiles() {
+    public static void loadProfiles(MinecraftServer server) {
         ABILITIES.clear();
         DEBUFFS.clear();
         MODIFIERS.clear();
@@ -76,7 +81,7 @@ public class AbilityProfiles {
 
         var file = getServerFile();
         if (!file.exists()) {
-            saveProfiles();
+            saveProfiles(server);
             return;
         }
 
@@ -137,8 +142,9 @@ public class AbilityProfiles {
         }
     }
 
-    public static void reloadProfiles() {
-        loadProfiles();
+    public static void reloadProfiles(MinecraftServer server) {
+        loadProfiles(server);
+        saveProfiles(server);
     }
 
     public static Path getConfigDir() {
