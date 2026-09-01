@@ -6,6 +6,7 @@ import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,7 +26,7 @@ public class PlayerMixin {
 
         var level = player.level();
         var pos = player.blockPosition();
-        if (level.getFluidState(pos.above()).isEmpty() && level.getFluidState(pos.below()).isEmpty()) return;
+        if (!level.getFluidState(pos.above()).is(FluidTags.WATER) && level.getFluidState(pos.below()).isEmpty()) return;
 
         // Issues:
         // - Still can rise up a little, but it's very slow
