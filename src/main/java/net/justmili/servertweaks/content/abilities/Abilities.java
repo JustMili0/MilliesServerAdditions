@@ -60,7 +60,6 @@ public class Abilities {
         SCARES_PHANTOMS = register(new ScaresPhantoms(id("scares_phantoms"), "Scares Phantoms", false));
         CHILD_OF_NATURE = register(new ChildOfNature(id("child_of_nature"), "Child of Nature", false));
         NIGHT_VISION = register(new NightVision(id("night_vision"), "Night Vision", false));
-        // TODO: Implement climbs_walls, should only work in survival, shouldn't work in water or when flying
         CLIMBS_WALLS = register(new Ability(id("climbs_walls"), "Climbs Walls", true));
         PEARLING = register(new Ability(id("pearling"), "Pearling", false));
         BOVID = register(new Ability(id("bovid"), "Bovid", false));

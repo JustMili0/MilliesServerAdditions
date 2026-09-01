@@ -202,7 +202,6 @@ public class PlayerAbilities {
         AbilityProfilesUtil.applyPreset(player, preset);
         FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, true);
         CommandUtil.sendOkTo(player, "\nApplied the \"" + psName + "\" preset!");
-
         int total = preset.getAbilities().size() + preset.getDebuffs().size() + preset.getModifiers().size();
 
         if (ServerPlayNetworking.canSend(player, ClientboundModCheckPacket.PACKET_ID)) return total; // Shush if client already has mod

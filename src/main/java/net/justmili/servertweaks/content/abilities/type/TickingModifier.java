@@ -4,7 +4,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 
-public abstract class TickingModifier extends Modifier {
+public abstract class TickingModifier extends Modifier implements TickingType {
     public TickingModifier(Identifier id, String displayName, boolean requiresClient) {
         super(id, displayName, requiresClient);
     }
