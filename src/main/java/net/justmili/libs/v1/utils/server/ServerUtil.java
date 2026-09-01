@@ -3,7 +3,6 @@ package net.justmili.libs.v1.utils.server;
 import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.justmili.libs.v1.utils.common.MathUtil;
-import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -31,14 +30,14 @@ import java.util.UUID;
 
 public class ServerUtil {
     private static MinecraftServer server;
-    private static IntegratedServer integrated;
+    //private static IntegratedServer integrated;
     private static DedicatedServer dedicated;
 
     /// Server is automatically assigned by CoreLibs common class at server startup
     public static void setServer() {
         ServerLifecycleEvents.SERVER_STARTED.register(instance -> {
             server = instance;
-            integrated = instance instanceof IntegratedServer? (IntegratedServer) instance : null;
+            //integrated = instance instanceof IntegratedServer? (IntegratedServer) instance : null;
             dedicated = instance instanceof DedicatedServer? (DedicatedServer) instance : null;
         });
     }
@@ -47,17 +46,17 @@ public class ServerUtil {
         return server;
     }
 
-    public static IntegratedServer integrated() {
-        return integrated;
-    }
+//    public static IntegratedServer integrated() {
+//        return integrated;
+//    }
 
     public static DedicatedServer dedicated() {
         return dedicated;
     }
 
-    public static boolean isIntegrated() {
-        return integrated != null;
-    }
+//    public static boolean isIntegrated() {
+//        return integrated != null;
+//    }
 
     public static boolean isDedicated() {
         return dedicated != null;
@@ -254,73 +253,5 @@ public class ServerUtil {
 
     public static float getAvgTickTime() {
         return (float) (server.getAverageTickTimeNanos() / MathUtil.NANOS_IN_A_SECOND);
-    }
-
-    public static String getMotd() {
-        return server.getMotd();
-    }
-
-    public static void setMotd(String motd) {
-        server.setMotd(motd);
-    }
-
-    public static int getPort() {
-        return server.getPort();
-    }
-
-    public static void setPort(int port) {
-        server.setPort(port);
-    }
-
-    public static boolean isSingleplayer() {
-        return server.isSingleplayer();
-    }
-
-    public static int getPlayerIdleTimeout() {
-        return server.playerIdleTimeout();
-    }
-
-    public static void setPlayerIdleTimeout(int timeout) {
-        server.setPlayerIdleTimeout(timeout);
-    }
-
-    public static boolean isWhitelistOn() {
-        return server.isEnforceWhitelist();
-    }
-
-    public static void setWhitelist(boolean status) {
-        server.setEnforceWhitelist(status);
-    }
-
-    public static int absoluteMaxWorldSize() {
-        return server.getAbsoluteMaxWorldSize();
-    }
-
-    public static Optional<MinecraftServer.ServerResourcePackInfo> resourcePack() {
-        return server.getServerResourcePack();
-    }
-
-    public static boolean resourcePackRequired() {
-        return server.isResourcePackRequired();
-    }
-
-    public static String serverVersion() {
-        return server.getServerVersion();
-    }
-
-    public static void saveEverything(boolean suppressLog, boolean flush, boolean forced) {
-        server.saveEverything(suppressLog, flush, forced);
-    }
-
-    public static void saveChunks(boolean suppressLog, boolean flush, boolean forced) {
-        server.saveAllChunks(suppressLog, flush, forced);
-    }
-
-    public static void pause() {
-        server.halt(true);
-    }
-
-    public static void unpause() {
-        server.halt(false);
     }
 }

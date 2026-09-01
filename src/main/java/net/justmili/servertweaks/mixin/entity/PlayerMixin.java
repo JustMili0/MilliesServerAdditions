@@ -31,8 +31,8 @@ public class PlayerMixin {
         // - Still can rise up a little, but it's very slow
         // (generally swimming in any direction is now very slow, where it's only wanted for upwards movement to be entirely prevented)
         // Can't be a client-server or packet or whatever thing beause same thing happens in singleplayer
-        var movement = player.getDeltaMovement();
-        if (movement.y > 0.0) player.setDeltaMovement(movement.with(Direction.Axis.Y, 0.0));
+        var delta = player.getDeltaMovement();
+        if (delta.y > 0.0) player.setDeltaMovement(delta.with(Direction.Axis.Y, 0.0));
         player.connection.send(new ClientboundSetEntityMotionPacket(player));
     }
 }

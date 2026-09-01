@@ -1,20 +1,36 @@
 package net.justmili.servertweaks.mixin.entity;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.Abilities;
 import net.justmili.servertweaks.content.abilities.Debuffs;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Optional;
+
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin {
+public abstract class LivingEntityMixin {
+
+    @Shadow
+    private Optional<BlockPos> lastClimbablePos;
+
+    @Shadow
+    public abstract boolean isSuppressingSlidingDownLadder();
+
     // TOUGH
     @Inject(method = "knockback(DDDLnet/minecraft/world/damagesource/DamageSource;FZ)V", at = @At("HEAD"), cancellable = true)
     private void servertweaks$knockback(double power, double xd, double zd, DamageSource source, float damage, boolean comesFromEffect, CallbackInfo ci) {
@@ -30,5 +46,21 @@ public class LivingEntityMixin {
         if (!((LivingEntity) (Object) this instanceof Player player)) return;
         if (!AbilityProfilesUtil.has(player, Debuffs.CANT_BREATHE_AIR)) return;
         if (!player.isInWater()) cir.setReturnValue(currentSupply);
+    }
+
+    // CLIMBS_WALLS
+    @ModifyReturnValue(method = "onClimbable", at = @At("RETURN"))
+    public boolean doSpiderClimbing(boolean original) {
+        if (original) return true;
+        if (!((LivingEntity) (Object) this instanceof Player player)) return original;
+
+        if (AbilityProfilesUtil.has(player, Abilities.CLIMBS_WALLS)) {
+            this.lastClimbablePos = Optional.of(player.blockPosition());
+            return true;
+        } else if (isSuppressingSlidingDownLadder()) {
+            return true;
+        }
+
+        return original;
     }
 }

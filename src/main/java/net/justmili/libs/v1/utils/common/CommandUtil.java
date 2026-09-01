@@ -1,8 +1,8 @@
 package net.justmili.libs.v1.utils.common;
 
+import net.justmili.libs.v1.utils.server.ServerUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permission;
 import net.minecraft.server.permissions.PermissionLevel;
@@ -63,28 +63,28 @@ public class CommandUtil {
         sendOkTo(player, Component.literal("§c" + message), false);
     }
 
-    public static void broadcastServer(MinecraftServer server, Component message, boolean showAboveHotbar) {
-        server.getPlayerList().broadcastSystemMessage(message, showAboveHotbar);
+    public static void broadcastServer(Component message, boolean showAboveHotbar) {
+        ServerUtil.broadcast(message, showAboveHotbar);
     }
 
-    public static void broadcastServer(MinecraftServer server, String message, boolean showAboveHotbar) {
-        broadcastServer(server, Component.literal(message), showAboveHotbar);
+    public static void broadcastServer(String message, boolean showAboveHotbar) {
+        broadcastServer(Component.literal(message), showAboveHotbar);
     }
 
-    public static void broadcastServer(MinecraftServer server, Component message) {
-        server.getPlayerList().broadcastSystemMessage(message, false);
+    public static void broadcastServer(Component message) {
+        ServerUtil.broadcast(message, false);
     }
 
-    public static void broadcastServer(MinecraftServer server, String message) {
-        broadcastServer(server, Component.literal(message), false);
+    public static void broadcastServer(String message) {
+        broadcastServer(Component.literal(message), false);
     }
 
     // Other
-    public static void executeAsPlayer(MinecraftServer server, ServerPlayer player, String command) {
-        if (player != null && server != null) server.getCommands().performPrefixedCommand(player.createCommandSourceStack().withSuppressedOutput(), command);
+    public static void runCommandAsPlayer(ServerPlayer player, String command) {
+        ServerUtil.runCommandAs(player.createCommandSourceStack(), command);
     }
 
-    public static void executeAsServer(MinecraftServer server, String command) {
-        if (server != null) server.getCommands().performPrefixedCommand(server.createCommandSourceStack(), command);
+    public static void runCommandAsServer(String command) {
+        ServerUtil.runCommandAsServer(command);
     }
 }
