@@ -50,15 +50,10 @@ public abstract class LivingEntityMixin {
     public boolean doSpiderClimbing(boolean original) {
         if (original) return true;
         if (!((LivingEntity) (Object) this instanceof Player player)) return original;
+        if (!AbilityProfilesUtil.has(player, Abilities.CLIMBS_WALLS)) return original;
         if (!EntityUtil.isTouchingWall(player) || player.isInWater()) return original;
 
-        if (AbilityProfilesUtil.has(player, Abilities.CLIMBS_WALLS)) {
-            this.lastClimbablePos = Optional.of(player.blockPosition());
-            return true;
-        } else if (isSuppressingSlidingDownLadder()) {
-            return true;
-        }
-
-        return original;
+        this.lastClimbablePos = Optional.of(player.blockPosition());
+        return true;
     }
 }
