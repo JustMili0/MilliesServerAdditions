@@ -25,9 +25,6 @@ public abstract class LivingEntityMixin {
     @Shadow
     private Optional<BlockPos> lastClimbablePos;
 
-    @Shadow
-    public abstract boolean isSuppressingSlidingDownLadder();
-
     // TOUGH
     @Inject(method = "knockback(DDDLnet/minecraft/world/damagesource/DamageSource;FZ)V", at = @At("HEAD"), cancellable = true)
     private void servertweaks$knockback(double power, double xd, double zd, DamageSource source, float damage, boolean comesFromEffect, CallbackInfo ci) {

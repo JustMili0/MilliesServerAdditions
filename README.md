@@ -90,6 +90,7 @@ allowing staff to clear out or fill blocks within an area in ways that `/fill` c
 <summary>/banish [Disabled By Default]</summary>
 
 A more fun way to "ban" people by sending them into the f#cking shadow realm.<br>
+A lot of safeguards and anti-abuse mechanics are in place so players can not escape in any way.<br>
 
 Banished players can still be killed if dealt enough damage in one hit (2^18hp or more)<br>
 this is so `/kill` still works if you ever need to use it in that dimension.
@@ -185,7 +186,7 @@ All three speed limits (elytra, on-ground movement, vehicle movement) are remove
 </details>
 
 <details>
-<summary>Faster Riptide Charge</summary>
+<summary>Faster Riptide Charge [Enabled By Default]</summary>
 
 Makes the time required to hold down right-click to use a riptide trident only 3 ticks instead of 10.
 
@@ -195,6 +196,25 @@ Makes the time required to hold down right-click to use a riptide trident only 3
 <summary>Pistons Pushing Limits [Vanilla By Default]</summary>
 
 Allows modifying how many blocks a single piston can push.
+
+</details>
+
+<hr>
+
+# Fixes & Workarounds
+This mod may also feature some small fixes and workarounds to annoying problems for servers and such.
+
+<details>
+<summary>MC-271325 Bug Workaround </summary>
+
+Works around MC-271325 to prevent spam of;
+```
+[22:35:52] [Netty Epoll Server IO #5/ERROR]: Error sending packet clientbound/minecraft:disconnect
+io.netty.handler.codec.EncoderException: Sending unknown packet 'clientbound/minecraft:disconnect'
+...
+```
+in dedicated server console.<br>
+This will be removed when Mojang fixes it themselves.
 
 </details>
 
