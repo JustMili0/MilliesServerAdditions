@@ -9,6 +9,8 @@ import net.justmili.servertweaks.content.commands.*;
 import net.justmili.servertweaks.mixin.accessors.CommandNodeAccessor;
 import net.justmili.servertweaks.util.SmpPermsUtil;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.permissions.LevelBasedPermissionSet;
+import net.minecraft.server.permissions.PermissionLevel;
 
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -52,7 +54,7 @@ public class CommandRegistry {
         var redirect = node.getRedirect();
         if (redirect != null && exempt.add(redirect)) collectRedirectTargets(redirect, exempt);
 
-        for (CommandNode<CommandSourceStack> child : node.getChildren()) collectRedirectTargets(child, exempt);
+        for (var child : node.getChildren()) collectRedirectTargets(child, exempt);
     }
 
     private static void patchRestrictRecursive(CommandNode<CommandSourceStack> node, Set<CommandNode<CommandSourceStack>> exempt) {
@@ -63,9 +65,12 @@ public class CommandRegistry {
         ((CommandNodeAccessor<CommandSourceStack>) node).setRequirement(source -> {
             if (!original.test(source)) return false;
             var player = source.getPlayer();
-            return player == null || !SmpPermsUtil.isLimitedOperator(player);
+            if (player == null || !SmpPermsUtil.isLimitedOperator(player)) return true;
+
+            var noPermSource = source.withPermission(LevelBasedPermissionSet.forLevel(PermissionLevel.ALL));
+            return original.test(noPermSource);
         });
 
-        for (CommandNode<CommandSourceStack> child : node.getChildren()) patchRestrictRecursive(child, exempt);
+        for (var child : node.getChildren()) patchRestrictRecursive(child, exempt);
     }
 }

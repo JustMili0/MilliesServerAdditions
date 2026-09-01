@@ -4,7 +4,7 @@ import net.minecraft.resources.Identifier;
 
 import java.util.Objects;
 
-public class Modifier {
+public class Modifier implements AnyType {
     private final Identifier id;
     private final String displayName;
     private final boolean clientRequired;

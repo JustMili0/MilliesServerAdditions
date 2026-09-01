@@ -159,6 +159,9 @@ Feedback is appreciated ^^
   - Consuming a Sulfur Cube poisons player
   - Consuming a Magma Cube deals half a heart of fire damage
 
+**Fixes & Workarounds**
+- Worked around MC-271325 bug - prevents console sometimes being spammed with invalid disconnection packet errors
+
 ### ***BUG FIXES/TECHNICAL CHANGES***
 **Configuration**
 - Changed config file from `config\servertweaks\common.toml` into `config\servertweaks\common.properties`

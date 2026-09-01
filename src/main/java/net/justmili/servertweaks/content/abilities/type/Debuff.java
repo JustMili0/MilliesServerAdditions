@@ -4,7 +4,7 @@ import net.minecraft.resources.Identifier;
 
 import java.util.Objects;
 
-public class Debuff {
+public class Debuff implements AbilityOrDebuff, AnyType {
     private final Identifier id;
     private final String displayName;
     private final boolean clientRequired;

@@ -7,10 +7,7 @@ import net.justmili.libs.v1.utils.common.CommandUtil;
 import net.justmili.libs.v1.utils.common.FdaUtil;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfiles;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
-import net.justmili.servertweaks.content.abilities.type.Ability;
-import net.justmili.servertweaks.content.abilities.type.Debuff;
-import net.justmili.servertweaks.content.abilities.type.Modifier;
-import net.justmili.servertweaks.content.abilities.type.Preset;
+import net.justmili.servertweaks.content.abilities.type.*;
 import net.justmili.servertweaks.content.commands.arguments.AbilityArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.DebuffArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.ModifierArgumentType;
@@ -25,6 +22,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerPlayer;
+
+import java.util.Set;
+import java.util.stream.Stream;
 
 public class PlayerAbilities {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -203,20 +203,19 @@ public class PlayerAbilities {
         FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, true);
         CommandUtil.sendOkTo(player, "\nApplied the \"" + psName + "\" preset!");
 
-        if (ServerPlayNetworking.canSend(player, ClientboundModCheckPacket.PACKET_ID)) return 1; // Shush if client already has mod
-        for (var ability : preset.getAbilities()) { // Inform client needs mod
-            if (ability.isClientRequired()) {
-                CommandUtil.sendOkTo(player, Component.literal(
-                    String.format("""
-                    One of the abilities in %s preset also requires
-                    Millie's Server Additions to be installed client-side to function properly.
-                    Please make sure you have it installed!
-                    """, psName)
-                ).withColor(TextColor.YELLOW));
-                break; // Close loop after finding just one
-            }
+        int total = preset.getAbilities().size() + preset.getDebuffs().size() + preset.getModifiers().size();
+
+        if (ServerPlayNetworking.canSend(player, ClientboundModCheckPacket.PACKET_ID)) return total; // Shush if client already has mod
+        if (Stream.of(preset.getAbilities(), preset.getDebuffs(), preset.getModifiers()).flatMap(Set::stream).anyMatch(AnyType::isClientRequired)) {
+            CommandUtil.sendOkTo(player, Component.literal(String.format("""
+                One of the abilities, debuffs or modifiers in %s preset
+                also requires Millie's Server Additions to be installed
+                client-side to function properly.
+                Please make sure you have it installed!
+                """, psName)
+            ).withColor(TextColor.YELLOW));
         }
 
-        return 1;
+        return total;
     }
 }
