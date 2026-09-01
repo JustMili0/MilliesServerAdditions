@@ -217,7 +217,7 @@ Feedback is appreciated ^^
 - Fixed `child_of_nature` ability - Taming chance with any animal is now 100%
 - Fixed `hunted_by_fox` debuff - Foxes now attack even if you're not crouching
 - [TODO - implementation wip] Fixed  debuff `cant_swim` - Player no longer can swim up in water
-- [TODO - fix flying???] Fixed ability `climbs_walls` - Now can actually climb walls (Requires client installation)
+- Fixed ability `climbs_walls` - Now can actually climb walls (Requires client installation)
 - Fixed `light` ability applying Slow Falling at any fall distance, even when going downstairs
   - Now requires 3 blocks or more of fall distance to apply Slow Falling
 - Fixed `aquatic_grace` checking HEAD equipment slot instead of FEET for Depth Strider enchantment

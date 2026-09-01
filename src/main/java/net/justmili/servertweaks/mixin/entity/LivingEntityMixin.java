@@ -1,20 +1,17 @@
 package net.justmili.servertweaks.mixin.entity;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import net.justmili.libs.v1.utils.common.EntityUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.Abilities;
 import net.justmili.servertweaks.content.abilities.Debuffs;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -53,6 +50,7 @@ public abstract class LivingEntityMixin {
     public boolean doSpiderClimbing(boolean original) {
         if (original) return true;
         if (!((LivingEntity) (Object) this instanceof Player player)) return original;
+        if (!EntityUtil.isTouchingWall(player) || player.isInWater()) return original;
 
         if (AbilityProfilesUtil.has(player, Abilities.CLIMBS_WALLS)) {
             this.lastClimbablePos = Optional.of(player.blockPosition());
