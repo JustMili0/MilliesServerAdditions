@@ -28,61 +28,61 @@ public class EntityUtil {
         entity.addEffect(new MobEffectInstance(effects, duration, power, false, false, false));
     }
 
-    public static void tp(LivingEntity entity, ServerLevel level, double x, double y, double z, float rotY, float rotX, boolean resetCameraToBody) {
+    public static void teleport(LivingEntity entity, ServerLevel level, double x, double y, double z, float rotY, float rotX, boolean resetCameraToBody) {
         entity.teleportTo(level, x, y, z, Relative.DELTA, rotY, rotX, resetCameraToBody);
     }
 
-    public static void tp(Player player, double x, double y, double z, float rotY, float rotX) {
+    public static void teleport(Player player, double x, double y, double z, float rotY, float rotX) {
         if (!(player instanceof ServerPlayer serverPlayer)) return;
         serverPlayer.connection.teleport(x, y, z, rotY, rotX);
     }
 
-    public static void tp(LivingEntity entity, Level level, double x, double y, double z, float rotY, float rotX, boolean resetCameraToBody) {
-        tp(entity, (ServerLevel) level, x, y, z, rotY, rotX, resetCameraToBody);
+    public static void teleport(LivingEntity entity, Level level, double x, double y, double z, float rotY, float rotX, boolean resetCameraToBody) {
+        teleport(entity, (ServerLevel) level, x, y, z, rotY, rotX, resetCameraToBody);
     }
 
-    public static void tp(LivingEntity entity, ServerLevel level, double x, double y, double z, boolean resetCameraToBody) {
-        tp(entity, level, x, y, z, entity.getYRot(), entity.getXRot(), resetCameraToBody);
+    public static void teleport(LivingEntity entity, ServerLevel level, double x, double y, double z, boolean resetCameraToBody) {
+        teleport(entity, level, x, y, z, entity.getYRot(), entity.getXRot(), resetCameraToBody);
     }
 
-    public static void tp(LivingEntity entity, Level level, double x, double y, double z, boolean resetCameraToBody) {
-        tp(entity, level, x, y, z, entity.getYRot(), entity.getXRot(), resetCameraToBody);
+    public static void teleport(LivingEntity entity, Level level, double x, double y, double z, boolean resetCameraToBody) {
+        teleport(entity, level, x, y, z, entity.getYRot(), entity.getXRot(), resetCameraToBody);
     }
 
-    public static void tp(LivingEntity entity, ServerLevel level, double x, double y, double z, float rotY, float rotX) {
-        tp(entity, level, x, y, z, rotY, rotX, true);
+    public static void teleport(LivingEntity entity, ServerLevel level, double x, double y, double z, float rotY, float rotX) {
+        teleport(entity, level, x, y, z, rotY, rotX, true);
     }
 
-    public static void tp(LivingEntity entity, Level level, double x, double y, double z, float rotY, float rotX) {
-        tp(entity, level, x, y, z, rotY, rotX, true);
+    public static void teleport(LivingEntity entity, Level level, double x, double y, double z, float rotY, float rotX) {
+        teleport(entity, level, x, y, z, rotY, rotX, true);
     }
 
-    public static void tp(LivingEntity entity, ServerLevel level, double x, double y, double z) {
-        tp(entity, level, x, y, z, entity.getYRot(), entity.getXRot(), true);
+    public static void teleport(LivingEntity entity, ServerLevel level, double x, double y, double z) {
+        teleport(entity, level, x, y, z, entity.getYRot(), entity.getXRot(), true);
     }
 
-    public static void tp(LivingEntity entity, Level level, double x, double y, double z) {
-        tp(entity, level, x, y, z, entity.getYRot(), entity.getXRot(), true);
+    public static void teleport(LivingEntity entity, Level level, double x, double y, double z) {
+        teleport(entity, level, x, y, z, entity.getYRot(), entity.getXRot(), true);
     }
 
-    public static void tp(Player player, BlockPos pos, float rotY, float rotX) {
-        tp(player, pos.getX(), pos.getY(), pos.getZ(), rotY, rotX);
+    public static void teleport(Player player, BlockPos pos, float rotY, float rotX) {
+        teleport(player, pos.getX(), pos.getY(), pos.getZ(), rotY, rotX);
     }
 
-    public static void tp(Player player, Vec3 pos, float rotY, float rotX) {
-        tp(player, pos.x, pos.y, pos.z, rotY, rotX);
+    public static void teleport(Player player, Vec3 pos, float rotY, float rotX) {
+        teleport(player, pos.x, pos.y, pos.z, rotY, rotX);
     }
 
-    public static void tp(Player player, double x, double y, double z) {
-        tp(player, x, y, z, player.getYRot(), player.getXRot());
+    public static void teleport(Player player, double x, double y, double z) {
+        teleport(player, x, y, z, player.getYRot(), player.getXRot());
     }
 
-    public static void tp(Player player, BlockPos pos) {
-        tp(player, pos, player.getYRot(), player.getXRot());
+    public static void teleport(Player player, BlockPos pos) {
+        teleport(player, pos, player.getYRot(), player.getXRot());
     }
 
-    public static void tp(Player player, Vec3 pos) {
-        tp(player, pos, player.getYRot(), player.getXRot());
+    public static void teleport(Player player, Vec3 pos) {
+        teleport(player, pos, player.getYRot(), player.getXRot());
     }
 
     public static void useStack(Player player, InteractionHand hand, int shrinkAmount) {

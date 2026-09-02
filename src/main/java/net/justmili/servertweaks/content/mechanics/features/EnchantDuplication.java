@@ -1,6 +1,7 @@
 package net.justmili.servertweaks.content.mechanics.features;
 
 import net.justmili.libs.v1.utils.common.MathUtil;
+import net.justmili.libs.v1.utils.common.NbtUtil;
 import net.justmili.servertweaks.config.Config;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -31,10 +32,10 @@ public class EnchantDuplication {
         boolean isShifting = player.isShiftKeyDown();
 
         if (isShifting && offhand.getItem() == Items.ENCHANTED_BOOK && mainHand.getItem() == Items.BOOK) {
-            var storedEnchantments = offhand.get(DataComponents.STORED_ENCHANTMENTS);
-            if (storedEnchantments == null || storedEnchantments.size() != 1) return;
+            var stored = NbtUtil.get(offhand, DataComponents.STORED_ENCHANTMENTS);
+            if (stored.size() != 1) return;
 
-            Map.Entry<Holder<Enchantment>, Integer> storedEnchantment = storedEnchantments.entrySet().iterator().next();
+            Map.Entry<Holder<Enchantment>, Integer> storedEnchantment = stored.entrySet().iterator().next();
             var enchantment = storedEnchantment.getKey();
 
             float requiredExp = switch (getRarity(enchantment)) {

@@ -2,6 +2,7 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.justmili.libs.v1.utils.common.CommandUtil;
+import net.justmili.libs.v1.utils.common.EntityUtil;
 import net.justmili.libs.v1.utils.common.FdaUtil;
 import net.justmili.libs.v1.utils.common.MathUtil;
 import net.justmili.servertweaks.config.Config;
@@ -84,14 +85,10 @@ public class Afk {
     static void despawnNearbyMonsters(ServerPlayer player) {
         var level = player.level();
         if (level.isBrightOutside()) return;
-        var area = new AABB(
-            player.getX() - 8, player.getY() - 8, player.getZ() - 8,
-            player.getX() + 8, player.getY() + 8, player.getZ() + 8
-        );
 
-        for (Monster monster : level.getEntitiesOfClass(Monster.class, area)) {
-            if (monster.hasCustomName() || monster.isPassenger() || monster.isVehicle()) continue;
+        EntityUtil.executeForNearby(player, Monster.class, 8, monster -> {
+            if (monster.hasCustomName() || monster.isPassenger() || monster.isVehicle()) return;
             monster.discard();
-        }
+        });
     }
 }

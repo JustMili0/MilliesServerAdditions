@@ -11,7 +11,6 @@ public class CoreLibs {
     public static final Logger LOGGER = LoggerFactory.getLogger(CoreLibs.class);
 
     public static void init() {
-        ServerUtil.setServer();
     }
 
     public static Identifier asId(String path) {

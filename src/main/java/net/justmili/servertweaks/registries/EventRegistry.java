@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.justmili.libs.v1.utils.server.ServerUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.AbilityEvents;
 import net.justmili.servertweaks.content.mechanics.features.*;
@@ -26,7 +27,7 @@ public class EventRegistry {
             Banishment.onEntityLoad(entity, level);
         });
         ServerTickEvents.END_SERVER_TICK.register(server -> {
-            for (var player : server.getPlayerList().getPlayers()) {
+            for (var player : ServerUtil.getPlayers(server)) {
                 Banishment.onPlayerTick(player);
                 WhileAfk.onPlayerTick(player);
             }

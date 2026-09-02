@@ -14,6 +14,7 @@ import net.justmili.servertweaks.content.abilities.type.Debuff;
 import net.justmili.servertweaks.content.abilities.type.Modifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -27,7 +28,7 @@ public class AbilityProfiles {
     public static final Map<UUID, Set<Debuff>> DEBUFFS = new LinkedHashMap<>();
     public static final Map<UUID, Set<Modifier>> MODIFIERS = new LinkedHashMap<>();
 
-    public static void saveProfiles() {
+    public static void saveProfiles(MinecraftServer server) {
         var root = new JsonObject();
 
         Set<UUID> uuids = new HashSet<>(ABILITIES.keySet());
@@ -37,7 +38,7 @@ public class AbilityProfiles {
         for (var uuid : uuids) {
             var uuidObj = new JsonObject();
 
-            var name = ServerUtil.getPlayerName(uuid, true);
+            var name = ServerUtil.getPlayerName(server, uuid, true);
             uuidObj.addProperty("name", name);
 
             saveElements(uuidObj, "abilities", ABILITIES.getOrDefault(uuid, Collections.emptySet()), Ability::getId);
@@ -72,7 +73,7 @@ public class AbilityProfiles {
         playerObj.add(memberName, array);
     }
 
-    public static void loadProfiles() {
+    public static void loadProfiles(MinecraftServer server) {
         ABILITIES.clear();
         DEBUFFS.clear();
         MODIFIERS.clear();
@@ -80,7 +81,7 @@ public class AbilityProfiles {
 
         var file = getServerFile();
         if (!file.exists()) {
-            saveProfiles();
+            saveProfiles(server);
             return;
         }
 
@@ -134,9 +135,9 @@ public class AbilityProfiles {
         }
     }
 
-    public static void reloadProfiles() {
-        loadProfiles();
-        saveProfiles();
+    public static void reloadProfiles(MinecraftServer server) {
+        loadProfiles(server);
+        saveProfiles(server);
     }
 
     public static Path getConfigDir() {

@@ -24,7 +24,7 @@ public class Banish {
             CommandUtil.sendFail(source, "Banishment dimension is not loaded");
             return 0;
         }
-        EntityUtil.tp(player, banishLevel, 0.5, 2.0, 0.5);
+        EntityUtil.teleport(player, banishLevel, 0.5, 2.0, 0.5);
 
         CommandUtil.sendOkTo(player,
             """

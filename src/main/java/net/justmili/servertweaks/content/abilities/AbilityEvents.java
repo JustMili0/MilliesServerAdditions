@@ -6,9 +6,8 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.justmili.libs.v1.utils.common.CommandUtil;
-import net.justmili.libs.v1.utils.common.EntityUtil;
-import net.justmili.libs.v1.utils.common.FdaUtil;
+import net.justmili.libs.v1.utils.common.*;
+import net.justmili.libs.v1.utils.server.ServerUtil;
 import net.justmili.servertweaks.content.abilities.type.*;
 import net.justmili.servertweaks.registries.TagRegistry;
 import net.justmili.servertweaks.variables.PlayerVars;
@@ -49,25 +48,19 @@ import static net.justmili.servertweaks.content.abilities.core.AbilityProfilesUt
 public class AbilityEvents {
     public static void registerAbilityEvents() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
-            for (var player : server.getPlayerList().getPlayers()) {
+            for (var player : ServerUtil.getPlayers(server)) {
                 var level = player.level();
 
                 // Tick all Ticking Abilities
-                for (var ability : getAbilities(player)) {
-                    if (ability instanceof TickingAbility ticking) ticking.tick(player, level);
-                }
-                for (var debuff : getDebuffs(player)) {
-                    if (debuff instanceof TickingDebuff ticking) ticking.tick(player, level);
-                }
-                for (var modifier : getModifiers(player)) {
-                    if (modifier instanceof TickingModifier ticking) ticking.tick(player, level);
-                }
+                tickIfTicking(getAbilities(player), player, level);
+                tickIfTicking(getDebuffs(player), player, level);
+                tickIfTicking(getModifiers(player), player, level);
 
 
                 // Reset attribute modifiers if related ability is not applied
-                removeModifier(player, player.getAttribute(Attributes.MOVEMENT_SPEED), Debuffs.SLOW, Debuffs.AR_SLOW_SPEED);
-                removeModifier(player, player.getAttribute(Attributes.ATTACK_DAMAGE), Abilities.STRONG, Abilities.AR_STRONG_DAMAGE);
-                removeModifier(player, player.getAttribute(Attributes.MAX_HEALTH), Abilities.STRONG, Abilities.AR_STRONG_HP);
+                removeModifier(player, AttribUtil.get(player, Attributes.MOVEMENT_SPEED), Debuffs.SLOW, Debuffs.AR_SLOW_SPEED);
+                removeModifier(player, AttribUtil.get(player, Attributes.ATTACK_DAMAGE), Abilities.STRONG, Abilities.AR_STRONG_DAMAGE);
+                removeModifier(player, AttribUtil.get(player, Attributes.MAX_HEALTH), Abilities.STRONG, Abilities.AR_STRONG_HP);
 
                 if (FdaUtil.getBool(player, PlayerVars.HAS_PICKED_PRESET) && getAbilities(player).isEmpty() && getModifiers(player).isEmpty()) {
 
@@ -94,6 +87,12 @@ public class AbilityEvents {
         UseBlockCallback.EVENT.register(AbilityEvents::grassEater);
         UseEntityCallback.EVENT.register(AbilityEvents::bugEaterEntities);
         UseEntityCallback.EVENT.register(AbilityEvents::bovid);
+    }
+
+    static void tickIfTicking(Iterable<? extends AnyType> traits, ServerPlayer player, ServerLevel level) {
+        for (var trait : traits) {
+            if (trait instanceof TickingType ticking) ticking.tick(player, level);
+        }
     }
 
     // Remove modifiers that are related to abilities the player does not have
@@ -162,14 +161,9 @@ public class AbilityEvents {
         if (FdaUtil.getInt(player, PlayerVars.MILK_TICK) == currentTick) return InteractionResult.CONSUME;
         FdaUtil.set(player, PlayerVars.MILK_TICK, currentTick);
 
-        var milkBucket = new ItemStack(Items.MILK_BUCKET);
-        milkBucket.set(DataComponents.CUSTOM_NAME, Component.literal(milked.getName().getString() + "'s Milk").withStyle(style -> style.withItalic(false)));
-        if (stack.getCount() == 1) {
-            player.setItemInHand(hand, milkBucket);
-        } else {
-            stack.shrink(1);
-            player.getInventory().add(milkBucket);
-        }
+        EntityUtil.useStackWithResult(player, hand, NbtUtil.set(
+            new ItemStack(Items.MILK_BUCKET), DataComponents.CUSTOM_NAME,
+            Component.literal(milked.getName().getString() + "'s Milk").withStyle(style -> style.withItalic(false))).getItem());
         player.containerMenu.broadcastFullState();
 
         return InteractionResult.CONSUME;

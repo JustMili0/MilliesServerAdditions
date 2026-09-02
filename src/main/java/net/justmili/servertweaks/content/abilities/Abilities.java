@@ -1,6 +1,7 @@
 package net.justmili.servertweaks.content.abilities;
 
 import net.justmili.libs.v1.utils.common.EntityUtil;
+import net.justmili.libs.v1.utils.server.RegistryUtil;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
 import net.justmili.servertweaks.content.abilities.type.Ability;
@@ -12,6 +13,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -24,7 +26,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 
-import static net.justmili.libs.v1.utils.common.AttributeUtil.*;
+import static net.justmili.libs.v1.utils.common.AttribUtil.*;
 
 public class Abilities {
     public static void init() {
@@ -224,7 +226,7 @@ public class Abilities {
             EntityUtil.applyEffect(player, MobEffects.CONDUIT_POWER, 100, 0);
 
             int num = player.hasEffect(MobEffects.POISON)? 1 : 2;
-            if (level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.DEPTH_STRIDER)
+            if (RegistryUtil.get(level, Registries.ENCHANTMENT, Enchantments.DEPTH_STRIDER)
                 .map(e -> EnchantmentHelper.getItemEnchantmentLevel(e, player.getItemBySlot(EquipmentSlot.FEET)) > num)
                 .orElse(false)) return; // Return before granting Dolphin's Grace if player has depth strider to prevent OP swimming speeds
 
@@ -254,13 +256,13 @@ public class Abilities {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
 
-            for (Creeper creeper : EntityUtil.getNearby(player, Creeper.class, 10.0)) {
+            EntityUtil.executeForNearby(player, Creeper.class, 12, creeper -> {
                 creeper.setTarget(null);
                 creeper.getNavigation().moveTo(
                     creeper.getX() + (creeper.getX() - player.getX()),
                     creeper.getY(),
                     creeper.getZ() + (creeper.getZ() - player.getZ()), 1.2);
-            }
+            });
         }
     }
 
@@ -273,13 +275,13 @@ public class Abilities {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
 
-            for (Phantom phantom : EntityUtil.getNearby(player, Phantom.class, 16.0)) {
+            EntityUtil.executeForNearby(player, Phantom.class, 16, phantom -> {
                 phantom.setTarget(null);
                 phantom.getNavigation().moveTo(
                     phantom.getX() + (phantom.getX() - player.getX()),
                     phantom.getY() + 8,
                     phantom.getZ() + (phantom.getZ() - player.getZ()), 1.2);
-            }
+            });
         }
     }
 

@@ -31,12 +31,12 @@ public class SmpPermsUtil {
     public static void op(ServerPlayer player, int smpPermLevel, int permLevel) {
         FdaUtil.set(player, PlayerVars.SMP_PERM_LEVEL, smpPermLevel);
         ServerUtil.opPlayer(player, LevelBasedPermissionSet.forLevel(PermissionLevel.byId(permLevel)), ServerUtil.isOp(player));
-        ServerUtil.commands().sendCommands(player);
+        ServerUtil.commands(player.level().getServer()).sendCommands(player);
     }
     public static void deop(ServerPlayer player) {
         FdaUtil.set(player, PlayerVars.SMP_PERM_LEVEL, SmpPermsUtil.defaultPerms());
         ServerUtil.deopPlayer(player);
-        ServerUtil.commands().sendCommands(player);
+        ServerUtil.commands(player.level().getServer()).sendCommands(player);
     }
 
     public static int defaultPerms() {

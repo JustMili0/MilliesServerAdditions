@@ -6,8 +6,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 
-public final class DataComponentUtil {
-    private DataComponentUtil() {
+public final class NbtUtil {
+    private NbtUtil() {
     }
 
     public static CustomDataBuilder custom() {
@@ -102,6 +102,10 @@ public final class DataComponentUtil {
 
     public static <T> T get(ItemStack stack, DataComponentType<T> type, T orElse) {
         return stack.getOrDefault(type, orElse);
+    }
+
+    public static <T> T get(ItemStack stack, DataComponentType<T> type) {
+        return stack.get(type);
     }
 
     public static <T> boolean has(ItemStack stack, DataComponentType<T> type) {

@@ -172,7 +172,7 @@ public class PlayerAbilities {
     }
 
     static int reload(CommandSourceStack source) {
-        AbilityProfiles.reloadProfiles();
+        AbilityProfiles.reloadProfiles(source.getServer());
 
         CommandUtil.sendOk(source, "Reloaded player abilities");
         return 1;
@@ -202,10 +202,14 @@ public class PlayerAbilities {
         AbilityProfilesUtil.applyPreset(player, preset);
         FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, true);
         CommandUtil.sendOkTo(player, "\nApplied the \"" + psName + "\" preset!");
-        int total = preset.getAbilities().size() + preset.getDebuffs().size() + preset.getModifiers().size();
+
+        var abilities = preset.getAbilities();
+        var debuffs = preset.getDebuffs();
+        var modifiers = preset.getModifiers();
+        int total = abilities.size() + debuffs.size() + modifiers.size();
 
         if (ServerPlayNetworking.canSend(player, ClientboundModCheckPacket.PACKET_ID)) return total; // Shush if client already has mod
-        if (Stream.of(preset.getAbilities(), preset.getDebuffs(), preset.getModifiers()).flatMap(Set::stream).anyMatch(AnyType::isClientRequired)) {
+        if (Stream.of(abilities, debuffs, modifiers).flatMap(Set::stream).anyMatch(AnyType::isClientRequired)) {
             CommandUtil.sendOkTo(player, Component.literal(String.format("""
                 One of the abilities, debuffs or modifiers in %s preset
                 also requires Millie's Server Additions to be installed

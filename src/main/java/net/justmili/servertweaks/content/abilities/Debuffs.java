@@ -1,5 +1,6 @@
 package net.justmili.servertweaks.content.abilities;
 
+import net.justmili.libs.v1.utils.common.AttribUtil;
 import net.justmili.libs.v1.utils.common.EntityUtil;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
@@ -46,7 +47,7 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static net.justmili.libs.v1.utils.common.AttributeUtil.addOrUpdate;
+import static net.justmili.libs.v1.utils.common.AttribUtil.addOrUpdate;
 
 public class Debuffs {
     public static void init() {
@@ -85,8 +86,8 @@ public class Debuffs {
     public static final Debuff
         HEAT_SENSITIVE, COLD_SENSITIVE, SLOW,
         CANT_BREATHE_AIR, CANT_SWIM, HYDROPHOBIC,
-        HUNTED_BY_FOX, HUNTED_BY_WOLF, WEAK_TO_DAMAGE, 
-        BURNS_IN_DAYLIGHT, IS_MONSTER, PREDATORY, 
+        HUNTED_BY_FOX, HUNTED_BY_WOLF, WEAK_TO_DAMAGE,
+        BURNS_IN_DAYLIGHT, IS_MONSTER, PREDATORY,
         CARNIVORE, VEGETARIAN, SACCHARIVORE, HERBIVORE, INSECTIVORE;
 
     static {
@@ -172,9 +173,8 @@ public class Debuffs {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             float multiplier = AbilityProfilesUtil.has(player, Abilities.AQUATIC_GRACE) && player.isInWater()? -0.16f : -0.32f;
-            var speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
 
-            addOrUpdate(speed, AR_SLOW_SPEED, multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+            addOrUpdate(AttribUtil.get(player, Attributes.MOVEMENT_SPEED), AR_SLOW_SPEED, multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         }
     }
 
@@ -323,9 +323,8 @@ public class Debuffs {
 
             // Attack
             EntityUtil.executeForNearby(player, MONSTER_AGGRO, (mob, data) -> {
-                    if (mob.getTarget() != player) mob.setTarget(player);
-                }
-            );
+                if (mob.getTarget() != player) mob.setTarget(player);
+            });
         }
     }
 

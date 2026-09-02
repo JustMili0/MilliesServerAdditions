@@ -1,6 +1,6 @@
 package net.justmili.servertweaks.util;
 
-import net.justmili.libs.v1.utils.common.AttributeUtil;
+import net.justmili.libs.v1.utils.common.AttribUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -20,7 +20,7 @@ public class ScalerUtil {
     }
 
     public static @Nullable AttributeInstance getScale(ServerPlayer player) {
-        return AttributeUtil.get(player, Attributes.SCALE);
+        return AttribUtil.get(player, Attributes.SCALE);
     }
 
     public static void setScale(ServerPlayer player, float scale) {

@@ -5,6 +5,8 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import net.justmili.libs.v1.utils.common.CommandUtil;
+import net.justmili.libs.v1.utils.common.NbtUtil;
+import net.justmili.libs.v1.utils.server.RegistryUtil;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -178,20 +180,14 @@ public class FillExtras {
     }
 
     static ItemStack silkTouchTool(ServerLevel level) {
-        var tool = new ItemStack(Items.NETHERITE_PICKAXE);
-        var silkTouch = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH);
         var enchantments = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
-        enchantments.set(silkTouch, 1);
-        tool.set(DataComponents.ENCHANTMENTS, enchantments.toImmutable());
-        return tool;
+        enchantments.set(RegistryUtil.getOrThrow(level, Registries.ENCHANTMENT, Enchantments.SILK_TOUCH), 1);
+        return NbtUtil.set(new ItemStack(Items.NETHERITE_PICKAXE), DataComponents.ENCHANTMENTS, enchantments.toImmutable());
     }
 
     static ItemStack fortuneTool(ServerLevel level, int fortuneLevel) {
-        var tool = new ItemStack(Items.NETHERITE_PICKAXE);
-        var fortune = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE);
         var enchantments = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
-        enchantments.set(fortune, fortuneLevel);
-        tool.set(DataComponents.ENCHANTMENTS, enchantments.toImmutable());
-        return tool;
+        enchantments.set(RegistryUtil.getOrThrow(level, Registries.ENCHANTMENT, Enchantments.FORTUNE), fortuneLevel);
+        return NbtUtil.set(new ItemStack(Items.NETHERITE_PICKAXE), DataComponents.ENCHANTMENTS, enchantments.toImmutable());
     }
 }

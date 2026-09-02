@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.mechanics.features;
 
 import net.justmili.libs.v1.utils.common.ContainerUtil;
-import net.justmili.libs.v1.utils.common.DataComponentUtil;
+import net.justmili.libs.v1.utils.common.NbtUtil;
 import net.justmili.libs.v1.utils.common.EntityUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.registries.DimRegistry;
@@ -40,7 +40,7 @@ public final class Banishment {
         // Give torch so they can even see
         var stack = inventory.getItem(ContainerUtil.HOTBAR_MIDDLE);
         if (stack.isEmpty()) {
-            var torch = DataComponentUtil.custom().addBool(TORCH_TAG, true).applyToStack(new ItemStack(Items.TORCH));
+            var torch = NbtUtil.custom().addBool(TORCH_TAG, true).applyToStack(new ItemStack(Items.TORCH));
             inventory.setItem(ContainerUtil.HOTBAR_MIDDLE, torch);
         }
 
@@ -60,7 +60,7 @@ public final class Banishment {
                 if (!level.getBlockState(block).is(Blocks.BEDROCK)) level.setBlock(block, Blocks.BEDROCK.defaultBlockState(), Block.UPDATE_ALL);
             }
 
-            EntityUtil.tp(player, level, player.getX(), 3.0, player.getZ());
+            EntityUtil.teleport(player, level, player.getX(), 3.0, player.getZ());
             player.setDeltaMovement(0.0, 0.0, 0.0);
             player.resetFallDistance();
         }
@@ -68,7 +68,7 @@ public final class Banishment {
 
     static boolean isBanishmentTorch(ItemStack stack) {
         if (!stack.is(Items.TORCH)) return false;
-        return DataComponentUtil.getBool(stack, TORCH_TAG, false);
+        return NbtUtil.getBool(stack, TORCH_TAG, false);
     }
 
     public static void onEntityLoad(Entity entity, ServerLevel level) {

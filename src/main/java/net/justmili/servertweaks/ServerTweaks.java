@@ -16,11 +16,11 @@ import net.justmili.servertweaks.registries.EventRegistry;
 import net.justmili.servertweaks.registries.PacketRegistry;
 import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.resources.Identifier;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ServerTweaks implements ModInitializer {
-    public static final Logger LOGGER = LogManager.getLogger(ServerTweaks.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(ServerTweaks.class);
     public static final String MODID = "servertweaks";
 
     @Override
@@ -44,7 +44,7 @@ public class ServerTweaks implements ModInitializer {
             Modifiers.init();
             Presets.init();
 
-            ServerLifecycleEvents.SERVER_STARTED.register(_ -> AbilityProfiles.loadProfiles());
+            ServerLifecycleEvents.SERVER_STARTED.register(AbilityProfiles::loadProfiles);
         }
     }
 
