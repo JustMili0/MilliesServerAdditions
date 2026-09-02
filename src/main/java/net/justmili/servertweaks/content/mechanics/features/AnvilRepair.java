@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.mechanics.features;
 
-import net.justmili.libs.v1.utils.common.FdaUtil;
-import net.justmili.libs.v1.utils.common.MathUtil;
+import net.justmili.mlibs.v1.utils.common.FdaUtil;
+import net.justmili.mlibs.v1.utils.common.MathUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.core.BlockPos;

@@ -25,7 +25,7 @@ public abstract class PetsMixin extends TamableAnimal {
     @Definition(id = "nextInt", method = "Lnet/minecraft/util/RandomSource;nextInt(I)I")
     @Expression("?.nextInt(?) == ?")
     @ModifyExpressionValue(method = "tryToTame", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private boolean servertweaks$alwaysTame(boolean original, @Local(argsOnly = true) Player player) {
+    private boolean servertweaks$childOfNatureTaming(boolean original, @Local(argsOnly = true) Player player) {
         return AbilityProfilesUtil.has(player, Abilities.CHILD_OF_NATURE) || original;
     }
 }

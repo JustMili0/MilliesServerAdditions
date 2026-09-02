@@ -1,10 +1,10 @@
 package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.justmili.libs.v1.utils.common.CommandUtil;
-import net.justmili.libs.v1.utils.common.EntityUtil;
-import net.justmili.libs.v1.utils.common.FdaUtil;
-import net.justmili.libs.v1.utils.common.MathUtil;
+import net.justmili.mlibs.v1.utils.common.CommandUtil;
+import net.justmili.mlibs.v1.utils.common.EntityUtil;
+import net.justmili.mlibs.v1.utils.common.FdaUtil;
+import net.justmili.mlibs.v1.utils.common.MathUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.commands.CommandSourceStack;
@@ -13,7 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.ServerScoreboard;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Team;
 import net.minecraft.world.scores.TeamColor;

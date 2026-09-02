@@ -2,8 +2,8 @@ package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.justmili.libs.v1.commands.arguments.DamageTypesArgumentType;
-import net.justmili.libs.v1.utils.common.CommandUtil;
+import net.justmili.mlibs.v1.commands.arguments.DamageTypesArgumentType;
+import net.justmili.mlibs.v1.utils.common.CommandUtil;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

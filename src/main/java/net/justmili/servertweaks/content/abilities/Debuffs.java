@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.abilities;
 
-import net.justmili.libs.v1.utils.common.AttribUtil;
-import net.justmili.libs.v1.utils.common.EntityUtil;
+import net.justmili.mlibs.v1.utils.common.AttribUtil;
+import net.justmili.mlibs.v1.utils.common.EntityUtil;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
@@ -9,6 +9,7 @@ import net.justmili.servertweaks.content.abilities.type.Debuff;
 import net.justmili.servertweaks.content.abilities.type.TickingDebuff;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.justmili.servertweaks.registries.TagRegistry;
+import net.justmili.servertweaks.util.Util;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -47,7 +48,7 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static net.justmili.libs.v1.utils.common.AttribUtil.addOrUpdate;
+import static net.justmili.mlibs.v1.utils.common.AttribUtil.addOrUpdate;
 
 public class Debuffs {
     public static void init() {
@@ -67,9 +68,6 @@ public class Debuffs {
         new EntityUtil.MobData(Skeleton.class, 24.0, 0),
         new EntityUtil.MobData(Parched.class, 24.0, 0),
         new EntityUtil.MobData(Slime.class, 16.0, 0)
-    );
-    private static final List<EntityUtil.MobData> MONSTER_FEAR = List.of(
-        new EntityUtil.MobData(Villager.class, 16.0, 0)
     );
     private static final List<EntityUtil.MobData> MONSTER_AGGRO = List.of(
         new EntityUtil.MobData(IronGolem.class, 16.0, 0),
@@ -312,14 +310,9 @@ public class Debuffs {
             });
 
             // Fear
-            EntityUtil.executeForNearby(player, MONSTER_FEAR, (mob, data) ->
-                mob.getNavigation().moveTo(
-                    mob.getX() + (mob.getX() - player.getX()),
-                    mob.getY(),
-                    mob.getZ() + (mob.getZ() - player.getZ()),
-                    data.runSpeed()
-                )
-            );
+            for (var mob : EntityUtil.getNearby(player, Villager.class, 16.0)) {
+                Util.scareMob(player, mob, 0);
+            }
 
             // Attack
             EntityUtil.executeForNearby(player, MONSTER_AGGRO, (mob, data) -> {
@@ -344,6 +337,8 @@ public class Debuffs {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
+            if (level.getGameTime() % 5 != 0) return;
+
             EntityUtil.executeForNearby(player, PREDATORY_FEAR, (mob, data) ->
                 mob.getNavigation().moveTo(
                     mob.getX() + (mob.getX() - player.getX()),

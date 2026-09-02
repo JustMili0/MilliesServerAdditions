@@ -1,5 +1,4 @@
 # TODO (1.3.0)
-- See where else can you use utils
 - Fix CANT_SWIM
 - Improve IS_MONSTER code
 - Add publishing to buildscript
@@ -7,7 +6,7 @@
 
 # TODO (1.3.1)
 - Tag datagen
-- Separate abilities and debuffs
+- Fix skeletons being weird with `scares_skeletons`
 - Ench. book dupe with more enchantments at higher cost
 - Code own XP bottling
 

@@ -1,8 +1,8 @@
 package net.justmili.servertweaks.content.mechanics.features;
 
-import net.justmili.libs.v1.utils.common.ContainerUtil;
-import net.justmili.libs.v1.utils.common.NbtUtil;
-import net.justmili.libs.v1.utils.common.EntityUtil;
+import net.justmili.mlibs.v1.utils.common.ContainerUtil;
+import net.justmili.mlibs.v1.utils.common.NbtUtil;
+import net.justmili.mlibs.v1.utils.common.EntityUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.registries.DimRegistry;
 import net.minecraft.core.BlockPos;

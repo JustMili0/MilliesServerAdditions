@@ -8,8 +8,8 @@ import net.justmili.servertweaks.content.mechanics.features.AnvilRepair;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 
-import static net.justmili.libs.v1.utils.common.FdaUtil.create;
-import static net.justmili.libs.v1.utils.common.FdaUtil.createPersistent;
+import static net.justmili.mlibs.v1.utils.common.FdaUtil.create;
+import static net.justmili.mlibs.v1.utils.common.FdaUtil.createPersistent;
 
 @SuppressWarnings({"NullableProblems"})
 public final class PlayerVars {

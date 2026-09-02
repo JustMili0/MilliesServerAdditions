@@ -1,19 +1,19 @@
 package net.justmili.servertweaks.content.abilities;
 
-import net.justmili.libs.v1.utils.common.EntityUtil;
-import net.justmili.libs.v1.utils.server.RegistryUtil;
+import net.justmili.mlibs.v1.utils.common.EntityUtil;
+import net.justmili.mlibs.v1.utils.server.RegistryUtil;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
 import net.justmili.servertweaks.util.ScalerUtil;
+import net.justmili.servertweaks.util.Util;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -22,11 +22,10 @@ import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.monster.skeleton.Skeleton;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
-
-import static net.justmili.libs.v1.utils.common.AttribUtil.*;
 
 public class Abilities {
     public static void init() {
@@ -39,8 +38,8 @@ public class Abilities {
     public static final Ability
         FIRE_IMMUNE, LAVA_IMMUNE, HEAT_IMMUNE, FREEZE_IMMUNE, FALL_IMMUNE,
         LIGHT, SWIFT, HOPPY, DWARF, SQUISHY, MAGNETIC, TOUGH, STRONG,
-        AQUATIC_GRACE, BREATHES_UNDERWATER, SCARES_CREEPERS, SCARES_PHANTOMS,
-        CHILD_OF_NATURE, NIGHT_VISION, CLIMBS_WALLS, PEARLING, BOVID;
+        AQUATIC_GRACE, BREATHES_UNDERWATER, SCARES_CREEPERS, SCARES_SKELETONS, SCARES_PHANTOMS,
+        CHILD_OF_NATURE, NIGHT_VISION, CLIMBS_WALLS, PEARLING, WEAVER, BOVID;
 
     static {
         FIRE_IMMUNE = register(new FireImmune(id("fire_immune"), "Fire Immune", false));
@@ -59,11 +58,13 @@ public class Abilities {
         AQUATIC_GRACE = register(new AquaticGrace(id("aquatic_grace"), "Aquatic Grace", false));
         BREATHES_UNDERWATER = register(new BreathesUnderwater(id("breathes_underwater"), "Breathes Underwater", false));
         SCARES_CREEPERS = register(new ScaresCreepers(id("scares_creepers"), "Scares Creepers", false));
+        SCARES_SKELETONS = register(new ScaresSkeletons(id("scares_skeletons"), "Scares Skeletons", false));
         SCARES_PHANTOMS = register(new ScaresPhantoms(id("scares_phantoms"), "Scares Phantoms", false));
         CHILD_OF_NATURE = register(new ChildOfNature(id("child_of_nature"), "Child of Nature", false));
         NIGHT_VISION = register(new NightVision(id("night_vision"), "Night Vision", false));
         CLIMBS_WALLS = register(new Ability(id("climbs_walls"), "Climbs Walls", true));
         PEARLING = register(new Ability(id("pearling"), "Pearling", false));
+        WEAVER = register(new Ability(id("weaver"), "Weaver", true));
         BOVID = register(new Ability(id("bovid"), "Bovid", false));
     }
 
@@ -167,7 +168,7 @@ public class Abilities {
         public void tick(ServerPlayer player, ServerLevel level) {
             var scale = ScalerUtil.getScale(player);
             if (scale != null && scale.getBaseValue() > 0.75) ScalerUtil.setScale(player, 0.75f);
-            EntityUtil.applyEffect(player, MobEffects.HASTE, 100, 1);
+            EntityUtil.applyEffect(player, MobEffects.HASTE, 30, 1);
         }
     }
 
@@ -223,14 +224,14 @@ public class Abilities {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.isInWater()) return;
 
-            EntityUtil.applyEffect(player, MobEffects.CONDUIT_POWER, 100, 0);
+            EntityUtil.applyEffect(player, MobEffects.CONDUIT_POWER, 30, 0);
 
             int num = player.hasEffect(MobEffects.POISON)? 1 : 2;
             if (RegistryUtil.get(level, Registries.ENCHANTMENT, Enchantments.DEPTH_STRIDER)
                 .map(e -> EnchantmentHelper.getItemEnchantmentLevel(e, player.getItemBySlot(EquipmentSlot.FEET)) > num)
                 .orElse(false)) return; // Return before granting Dolphin's Grace if player has depth strider to prevent OP swimming speeds
 
-            EntityUtil.applyEffect(player, MobEffects.DOLPHINS_GRACE, 100, 0);
+            EntityUtil.applyEffect(player, MobEffects.DOLPHINS_GRACE, 30, 0);
         }
     }
 
@@ -255,14 +256,27 @@ public class Abilities {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
+            if (level.getGameTime() % 5 != 0) return;
 
-            EntityUtil.executeForNearby(player, Creeper.class, 12, creeper -> {
-                creeper.setTarget(null);
-                creeper.getNavigation().moveTo(
-                    creeper.getX() + (creeper.getX() - player.getX()),
-                    creeper.getY(),
-                    creeper.getZ() + (creeper.getZ() - player.getZ()), 1.2);
-            });
+            for (Creeper creeper : EntityUtil.getNearby(player, Creeper.class, 16.0)) {
+                Util.scareMob(player, creeper, 1.2);
+            }
+        }
+    }
+
+    static class ScaresSkeletons extends TickingAbility {
+        ScaresSkeletons(Identifier id, String name, boolean requiresClient) {
+            super(id, name, requiresClient);
+        }
+
+        @Override
+        public void tick(ServerPlayer player, ServerLevel level) {
+            if (!player.gameMode.isSurvival()) return;
+            if (level.getGameTime() % 5 != 0) return;
+
+            for (Skeleton skeleton : EntityUtil.getNearby(player, Skeleton.class, 16.0)) {
+                Util.scareMob(player, skeleton, 1.2);
+            }
         }
     }
 
@@ -274,14 +288,11 @@ public class Abilities {
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
+            if (level.getGameTime() % 5 != 0) return;
 
-            EntityUtil.executeForNearby(player, Phantom.class, 16, phantom -> {
-                phantom.setTarget(null);
-                phantom.getNavigation().moveTo(
-                    phantom.getX() + (phantom.getX() - player.getX()),
-                    phantom.getY() + 8,
-                    phantom.getZ() + (phantom.getZ() - player.getZ()), 1.2);
-            });
+            for (Phantom phantom : EntityUtil.getNearby(player, Phantom.class, 16.0)) {
+                Util.scareMob(player, phantom, 1.2);
+            }
         }
     }
 

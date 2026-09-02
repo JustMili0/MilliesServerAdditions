@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Mob.class)
 public class MobMixin {
     @Inject(method = "tick", at = @At("HEAD"))
-    private void servertweaks$checkNoAiName(CallbackInfo ci) {
+    private void servertweaks$disableAiIfNamed(CallbackInfo ci) {
         if (!Config.noAiNameTags.get()) return;
         var mob = (Mob) (Object) this;
         if (mob.level().isClientSide()) return;

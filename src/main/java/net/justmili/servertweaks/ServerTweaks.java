@@ -2,8 +2,8 @@ package net.justmili.servertweaks;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.justmili.libs.CoreLibs;
-import net.justmili.libs.v1.utils.common.ResourceUtil;
+import net.justmili.mlibs.CoreLibs;
+import net.justmili.mlibs.v1.utils.common.ResourceUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.Abilities;
 import net.justmili.servertweaks.content.abilities.Debuffs;

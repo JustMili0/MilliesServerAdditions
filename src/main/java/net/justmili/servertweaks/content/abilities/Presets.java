@@ -98,7 +98,8 @@ public class Presets {
             Set.of(
                 Abilities.SWIFT,
                 Abilities.TOUGH,
-                Abilities.FREEZE_IMMUNE
+                Abilities.FREEZE_IMMUNE,
+                Abilities.SCARES_SKELETONS
             ),
             Set.of(
                 Debuffs.HUNTED_BY_WOLF,
@@ -291,6 +292,7 @@ public class Presets {
                 "They are also strict carnivores, feeding only on the meat of their prey.",
             Set.of(
                 Abilities.CLIMBS_WALLS,
+                Abilities.WEAVER,
                 Abilities.HOPPY
             ),
             Set.of(

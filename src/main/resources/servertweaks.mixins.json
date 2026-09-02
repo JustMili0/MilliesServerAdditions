@@ -7,16 +7,16 @@
     "minVersion": "0.5.0"
   },
   "mixins": [
-    "IdDispatchCodecMixin",
-    "PistonStructureResolverMixin",
-    "ServerGamePacketListenerImplMixin",
     "accessors.CommandNodeAccessor",
     "accessors.CropBlockAccessor",
     "accessors.FoxAccessor",
+    "block.PistonStructureResolverMixin",
+    "block.WebBlockMixin",
     "combat.CombatTrackerMixin",
     "combat.DamageSourceMixin",
     "enchanting.AnvilMenuMixin",
     "enchanting.EnchantmentMixin",
+    "entity.AbstractSkeletonMixin",
     "entity.LivingEntityMixin",
     "entity.MobMixin",
     "entity.ParrotMixin",
@@ -24,7 +24,9 @@
     "entity.PlayerMixin",
     "entity.RunAroundLikeCrazyGoalmixin",
     "item.ItemMixin",
-    "item.TridentItemMixin"
+    "item.TridentItemMixin",
+    "network.IdDispatchCodecMixin",
+    "network.ServerGamePacketListenerImplMixin"
   ],
   "client": [
   ],

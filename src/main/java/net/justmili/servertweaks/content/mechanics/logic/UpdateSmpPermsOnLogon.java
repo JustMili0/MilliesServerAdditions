@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.mechanics.logic;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.justmili.libs.v1.utils.common.FdaUtil;
+import net.justmili.mlibs.v1.utils.common.FdaUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.util.SmpPermsUtil;
 import net.justmili.servertweaks.variables.PlayerVars;

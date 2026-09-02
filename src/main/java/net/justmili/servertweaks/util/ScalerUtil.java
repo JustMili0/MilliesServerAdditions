@@ -1,6 +1,6 @@
 package net.justmili.servertweaks.util;
 
-import net.justmili.libs.v1.utils.common.AttribUtil;
+import net.justmili.mlibs.v1.utils.common.AttribUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;

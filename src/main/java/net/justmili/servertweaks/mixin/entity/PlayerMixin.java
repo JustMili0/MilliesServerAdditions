@@ -19,7 +19,7 @@ public class PlayerMixin {
 
     // CANT_SWIM
     @Inject(method = "travel", at = @At("TAIL"))
-    private void servertweaks$preventSwimUp(Vec3 input, CallbackInfo ci) {
+    private void servertweaks$cantSwimNoSwim(Vec3 input, CallbackInfo ci) {
         if (!Config.playerAbilities.get()) return;
         if (!((Player) (Object) this instanceof ServerPlayer player)) return;
         if (!AbilityProfilesUtil.has(player, Debuffs.CANT_SWIM) || !player.isInWater() || !player.gameMode().isSurvival()) return;

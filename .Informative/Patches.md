@@ -152,9 +152,11 @@ Feedback is appreciated ^^
 
 **Player Abilities**
 - Added `canine` ability preset
-- Bovid - Can be milked with a bucket by other players
-- Squishy - Decreases `fall` and `fly_into_wall` damage by 75% each
-- Insectivore - Can feed on bug-like entities (Silverfish, Endermites, and size-1 Slimes and Magma Cubes) as well as items like Slimeballs, Magma Cream and Spider Eyes
+- Added `scares_skeletons` - Skeletons within 16 blocks flee from the player
+- Added `weaver` ability - Doesn't get slowed by Cobwebs
+- Added `bovid` ability - Can be milked with a bucket by other players
+- Added `squishy` ability - Decreases `fall` and `fly_into_wall` damage by 75% each
+- Added `insectivore` debuff - Can feed on bug-like entities (Silverfish, Endermites, and size-1 Slimes and Magma Cubes) as well as items like Slimeballs, Magma Cream and Spider Eyes
   - Consuming a Cave Spider grants bonus nutrition but poisons player
   - Consuming a Sulfur Cube poisons player
   - Consuming a Magma Cube deals half a heart of fire damage
@@ -219,7 +221,7 @@ Feedback is appreciated ^^
 - Fixed block placement, block interactions and fish bucket place/pickup with any diet restriction debuffs applied
 - Fixed `child_of_nature` ability - Taming chance with any animal is now 100%
 - Fixed `hunted_by_fox` debuff - Foxes now attack even if you're not crouching
-- [TODO - implementation wip] Fixed  debuff `cant_swim` - Player no longer can swim up in water
+- [TODO - implementation wip] Fixed debuff `cant_swim` - Player no longer can swim up in water
 - Fixed ability `climbs_walls` - Now can actually climb walls (Requires client installation)
 - Fixed `light` ability applying Slow Falling at any fall distance, even when going downstairs
   - Now requires 3 blocks or more of fall distance to apply Slow Falling
