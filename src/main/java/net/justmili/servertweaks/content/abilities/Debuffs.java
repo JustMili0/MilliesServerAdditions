@@ -56,7 +56,16 @@ public class Debuffs {
 
     /// Extra Debuff variables
     public static final Identifier AR_SLOW_SPEED = ServerTweaks.asId("slow_speed");
-    private static final Map<UUID, List<WrappedGoal>> STORED_GOALS = new HashMap<>();
+    private static final class SuppressedMob {
+        final List<WrappedGoal> goals;
+        long lastRenewedTick;
+
+        SuppressedMob(List<WrappedGoal> goals, long lastRenewedTick) {
+            this.goals = goals;
+            this.lastRenewedTick = lastRenewedTick;
+        }
+    }
+    private static final Map<UUID, SuppressedMob> STORED_GOALS = new HashMap<>();
     private static final List<EntityUtil.MobData> MONSTER_IGNORE = List.of(
         new EntityUtil.MobData(Pillager.class, 64.0, 0),
         new EntityUtil.MobData(Vindicator.class, 32.0, 0),
@@ -282,32 +291,36 @@ public class Debuffs {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (!player.gameMode.isSurvival()) return;
 
+            long now = level.getGameTime();
+
             // Ignore
-            Set<UUID> stillNearby = new HashSet<>();
             EntityUtil.executeForNearby(player, MONSTER_IGNORE, (mob, data) -> {
                 var uuid = mob.getUUID();
-                stillNearby.add(uuid);
+                var suppressed = STORED_GOALS.get(uuid);
 
-                if (!STORED_GOALS.containsKey(uuid)) {
+                if (suppressed == null) {
                     List<WrappedGoal> removed = mob.targetSelector.getAvailableGoals()
                         .stream().filter(goal -> goal.getGoal() instanceof NearestAttackableTargetGoal<?>).collect(Collectors.toList());
 
                     removed.forEach(goal -> mob.targetSelector.removeGoal(goal.getGoal()));
-                    STORED_GOALS.put(uuid, removed);
-
-                    mob.setTarget(null);
-                }
-            });
-            STORED_GOALS.entrySet().removeIf(entry -> {
-                if (stillNearby.contains(entry.getKey())) return false;
-                var entity = level.getEntity(entry.getKey());
-
-                if (entity instanceof Mob mob) {
-                    entry.getValue().forEach(goal -> mob.targetSelector.addGoal(goal.getPriority(), goal.getGoal()));
+                    STORED_GOALS.put(uuid, new SuppressedMob(removed, now));
+                } else {
+                    suppressed.lastRenewedTick = now;
                 }
 
-                return true;
+                if (mob.getTarget() != null) mob.setTarget(null);
             });
+
+            // Restore goals
+            if (now % 60 == 0) {
+                STORED_GOALS.entrySet().removeIf(entry -> {
+                    if (now - entry.getValue().lastRenewedTick < 20) return false;
+
+                    var entity = level.getEntity(entry.getKey());
+                    if (entity instanceof Mob mob) entry.getValue().goals.forEach(goal -> mob.targetSelector.addGoal(goal.getPriority(), goal.getGoal()));
+                    return true;
+                });
+            }
 
             // Fear
             for (var mob : EntityUtil.getNearby(player, Villager.class, 16.0)) {
@@ -322,10 +335,8 @@ public class Debuffs {
     }
 
     public static void restoreAllMonsterGoals(ServerLevel level) {
-        STORED_GOALS.forEach((uuid, goals) -> {
-            if (level.getEntity(uuid) instanceof Mob mob) {
-                goals.forEach(goal -> mob.targetSelector.addGoal(goal.getPriority(), goal.getGoal()));
-            }
+        STORED_GOALS.forEach((uuid, suppressed) -> {
+            if (level.getEntity(uuid) instanceof Mob mob) suppressed.goals.forEach(goal -> mob.targetSelector.addGoal(goal.getPriority(), goal.getGoal()));
         });
         STORED_GOALS.clear();
     }

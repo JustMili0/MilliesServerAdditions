@@ -1,11 +1,11 @@
 # TODO (1.3.0)
-- Improve IS_MONSTER code, find and fix any possible issues with it
 - Fix CANT_SWIM
 
 # TODO (Between release of 1.3.0 and start of 1.3.1)
 - Document every feature in `.Informative/Features/`
 
 # TODO (1.3.1)
+- Actually start using proper Core Libs (Requires work on 'em, obviously)
 - Tag datagen
 - Fix skeletons being weird with `scares_skeletons`
 - Ench. book dupe with more enchantments at higher cost

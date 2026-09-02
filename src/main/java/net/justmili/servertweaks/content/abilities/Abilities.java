@@ -157,7 +157,7 @@ public class Abilities {
 
         @Override
         public void tick(ServerPlayer player, ServerLevel level) {
-            EntityUtil.applyEffect(player, MobEffects.JUMP_BOOST, 100, 0);
+            EntityUtil.applyEffect(player, MobEffects.JUMP_BOOST, 30, 0);
         }
     }
 

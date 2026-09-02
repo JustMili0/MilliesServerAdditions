@@ -208,6 +208,7 @@ Feedback is appreciated ^^
 - Removed Jungle and its variants from biome tag `hot_biomes`
 - Some abilities now have special interactions with potion effects (mainly with Weakness and Poison)
 - Decreased max health of `strong` ability from 100 to 80, minimum still being 40
+- `scares_creepers` now has a 16 block range instead of 12
 - Dolphin's Grace now applies to `aquatic_grace` with Depth Strider 2, below or none; if poisoned, only Depth Strider 1 or none, instead of just Depth Strider 1
 - `fire_immune` and `lava_immune` now automatically get extinguished unless has Weakness effect
 - `fall_immune` is no longer affected by Slow Falling unless has Weakness effect
@@ -226,5 +227,6 @@ Feedback is appreciated ^^
 - Fixed `light` ability applying Slow Falling at any fall distance, even when going downstairs
   - Now requires 3 blocks or more of fall distance to apply Slow Falling
 - Fixed `aquatic_grace` checking HEAD equipment slot instead of FEET for Depth Strider enchantment
+- Fixed multiple issues with `is_monster`, and made it more efficient
 
 Feedback is appreciated ^^
