@@ -27,6 +27,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 
+import static net.justmili.mlibs.v1.utils.common.AttribUtil.*;
+
 public class Abilities {
     public static void init() {
     }

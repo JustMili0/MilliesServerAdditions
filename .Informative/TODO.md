@@ -1,7 +1,8 @@
 # TODO (1.3.0)
+- Improve IS_MONSTER code, find and fix any possible issues with it
 - Fix CANT_SWIM
-- Improve IS_MONSTER code
-- Add publishing to buildscript
+
+# TODO (Between release of 1.3.0 and start of 1.3.1)
 - Document every feature in `.Informative/Features/`
 
 # TODO (1.3.1)
