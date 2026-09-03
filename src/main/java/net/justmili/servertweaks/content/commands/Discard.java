@@ -61,7 +61,7 @@ public class Discard {
         for (var entity : entities) entity.discard();
 
         if (entities.size() == 1) {
-            CommandUtil.sendOk(source, "Discarded " + entities.iterator().next().getName().getString());
+            CommandUtil.sendOk(source, "Discarded " + entities.iterator().next().getPlainTextName());
         } else {
             CommandUtil.sendOk(source, "Discarded " + entities.size() + " entities");
         }
@@ -120,7 +120,7 @@ public class Discard {
             }
         }
 
-        CommandUtil.sendOk(source, "Discarded " + cleared + " item(s) from " + entity.getName().getString() + "'s inventory");
+        CommandUtil.sendOk(source, "Discarded " + cleared + " item(s) from " + entity.getPlainTextName() + "'s inventory");
 
         return cleared;
     }

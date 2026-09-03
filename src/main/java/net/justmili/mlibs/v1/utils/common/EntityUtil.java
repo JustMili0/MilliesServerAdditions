@@ -91,24 +91,23 @@ public class EntityUtil {
     public static void useStack(Player player, InteractionHand hand) {
         useStack(player, hand, 1);
     }
-    public static void useStackWithResult(Player player, InteractionHand hand, ItemLike result, boolean shrinkStack, int shrinkAmount) {
+    public static void useStackWithResult(Player player, InteractionHand hand, ItemStack result, boolean shrinkStack, int shrinkAmount) {
         var stack = player.getItemInHand(hand);
-        var item = new ItemStack(result);
 
         if (shrinkStack) useStack(player, hand, shrinkAmount);
         if (stack.isEmpty()) {
-            player.setItemInHand(hand, item);
-        } else if (!player.getInventory().add(item)) {
-            player.drop(item, false);
+            player.setItemInHand(hand, result);
+        } else if (!player.getInventory().add(result)) {
+            player.drop(result, false);
         }
     }
-    public static void useStackWithResult(Player player, InteractionHand hand, ItemLike result, int shrinkAmount) {
+    public static void useStackWithResult(Player player, InteractionHand hand, ItemStack result, int shrinkAmount) {
         useStackWithResult(player, hand, result, true, shrinkAmount);
     }
-    public static void useStackWithResult(Player player, InteractionHand hand, ItemLike result, boolean shrinkStack) {
+    public static void useStackWithResult(Player player, InteractionHand hand, ItemStack result, boolean shrinkStack) {
         useStackWithResult(player, hand, result, shrinkStack, 1);
     }
-    public static void useStackWithResult(Player player, InteractionHand hand, ItemLike result) {
+    public static void useStackWithResult(Player player, InteractionHand hand, ItemStack result) {
         useStackWithResult(player, hand, result, true, 1);
     }
 

@@ -52,6 +52,3 @@ Idk, this is still wip
 | ***Ability Modifier*** | ***Based On*** | ***Description***                                                                  | ***Incompatibilities*** | ***Required Client-Side*** |
 |:----------------------:|:--------------:|:-----------------------------------------------------------------------------------|:-----------------------:|:--------------------------:|
 |  Can Eat Golden Foods  |      n/a       | Adds Golden Apples, Golden carrots and other golden foods to player's active diets |                         |             ❌             |
-
-# TODO:
-- Implement `Can't Swim` and `Climbs Walls` to only work if client has the mod installed. Keep mod client-optional, only mainly required on server.

@@ -59,7 +59,7 @@ public class ServerUtil {
 
     public static String getPlayerName(MinecraftServer server, UUID uuid, boolean tryGetOfflinePlayer) {
         var player = getPlayerList(server).getPlayer(uuid);
-        if (player != null) return player.getName().getString();
+        if (player != null) return player.getPlainTextName();
         // 1.21.9+
         //if (tryGetOfflinePlayer) return server.services().profileResolver().fetchById(uuid).map(GameProfile::name).orElse("");
         return "";
@@ -67,7 +67,7 @@ public class ServerUtil {
 
     public static String getPlayerName(MinecraftServer server, String username, boolean tryGetOfflinePlayer) {
         var player = getPlayerList(server).getPlayerByName(username);
-        if (player != null) return player.getName().getString();
+        if (player != null) return player.getPlainTextName();
         // 1.21.9+
         //if (tryGetOfflinePlayer) return server.services().profileResolver().fetchByName(username).map(GameProfile::name).orElse("");
         return "";

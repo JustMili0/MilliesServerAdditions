@@ -26,7 +26,7 @@ public class SmpPerms {
     }
 
     static int op(CommandSourceStack source, ServerPlayer player, SmpPermsArgumentType.PermissionLevel permissionLevel) {
-        var ownOrOthers = source.getPlayer() == player ? "own" : player.getName().getString() + "'s";
+        var ownOrOthers = source.getPlayer() == player ? "own" : player.getPlainTextName() + "'s";
         var message = "Set " + ownOrOthers + " SMP permission level to Default";
 
         switch (permissionLevel) {

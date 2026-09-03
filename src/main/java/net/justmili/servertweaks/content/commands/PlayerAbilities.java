@@ -110,7 +110,7 @@ public class PlayerAbilities {
 
     static int manage(CommandSourceStack source, ServerPlayer player, Ability ability, Action action) {
         var aName = ability.getDisplayName();
-        var pName = player.getName().getString();
+        var pName = player.getPlainTextName();
 
         switch (action) {
             case GRANT -> {
@@ -128,7 +128,7 @@ public class PlayerAbilities {
 
     static int manage(CommandSourceStack source, ServerPlayer player, Modifier modifier, Action action) {
         var mName = modifier.getDisplayName();
-        var pName = player.getName().getString();
+        var pName = player.getPlainTextName();
 
         switch (action) {
             case GRANT -> {
@@ -146,7 +146,7 @@ public class PlayerAbilities {
 
     static int manage(CommandSourceStack source, ServerPlayer player, Debuff debuff, Action action) {
         var dName = debuff.getDisplayName();
-        var pName = player.getName().getString();
+        var pName = player.getPlainTextName();
 
         switch (action) {
             case GRANT -> {
@@ -166,7 +166,7 @@ public class PlayerAbilities {
         AbilityProfilesUtil.clearPlayerProfile(player);
         FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, false);
 
-        CommandUtil.sendOk(source, "Cleared the abilities profile of " + player.getName().getString());
+        CommandUtil.sendOk(source, "Cleared the abilities profile of " + player.getPlainTextName());
 
         return 1;
     }
@@ -187,9 +187,9 @@ public class PlayerAbilities {
         }
 
         var apply = Component.literal("     [APPLY] ").setStyle(Style.EMPTY.withColor(0x55FF55).withClickEvent(
-            new ClickEvent.RunCommand("/abilities applyPreset " + preset.getId() + " " + player.getName().getString())));
+            new ClickEvent.RunCommand("/abilities applyPreset " + preset.getId() + " " + player.getPlainTextName())));
         var cancel = Component.literal(" [CANCEL]").setStyle(Style.EMPTY.withColor(0xFF5555).withClickEvent(
-            new ClickEvent.RunCommand("/abilities dontApplyPreset " + player.getName().getString())));
+            new ClickEvent.RunCommand("/abilities dontApplyPreset " + player.getPlainTextName())));
 
         CommandUtil.sendOkTo(player, Component.literal(preset.getDesc() + "\n\n").append(apply).append(cancel), false);
         return 1;

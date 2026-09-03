@@ -163,7 +163,7 @@ public class AbilityEvents {
 
         EntityUtil.useStackWithResult(player, hand, NbtUtil.set(
             new ItemStack(Items.MILK_BUCKET), DataComponents.CUSTOM_NAME,
-            Component.literal(milked.getName().getString() + "'s Milk").withStyle(style -> style.withItalic(false))).getItem());
+            Component.literal(milked.getPlainTextName() + "'s Milk").withStyle(s -> s.withItalic(false))));
         player.containerMenu.broadcastFullState();
 
         return InteractionResult.CONSUME;
