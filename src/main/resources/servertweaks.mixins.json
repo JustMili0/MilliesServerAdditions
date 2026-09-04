@@ -21,7 +21,6 @@
     "entity.MobMixin",
     "entity.ParrotMixin",
     "entity.PetsMixin",
-    "entity.PlayerMixin",
     "entity.RunAroundLikeCrazyGoalmixin",
     "item.ItemMixin",
     "item.TridentItemMixin",

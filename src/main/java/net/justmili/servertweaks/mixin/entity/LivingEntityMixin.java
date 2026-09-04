@@ -1,15 +1,19 @@
 package net.justmili.servertweaks.mixin.entity;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import net.justmili.mlibs.v1.utils.common.EntityUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.Abilities;
 import net.justmili.servertweaks.content.abilities.Debuffs;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,6 +44,25 @@ public abstract class LivingEntityMixin {
         if (!((LivingEntity) (Object) this instanceof Player player)) return;
         if (!AbilityProfilesUtil.has(player, Debuffs.CANT_BREATHE_AIR)) return;
         if (!player.isInWater()) cir.setReturnValue(currentSupply);
+    }
+
+    // CANT_SWIM
+    @ModifyReturnValue(method = "getFluidFallingAdjustedMovement", at = @At("RETURN"))
+    private Vec3 servertweaks$cantSwimNoRise(Vec3 original) {
+        if (!Config.playerAbilities.get()) return original;
+        if (!((LivingEntity) (Object) this instanceof Player player)) return original;
+
+        var gm = player.gameMode();
+        // Issue: Works only in singleplayer, because on servers even with client having the mod installed it doesn't know about the abilities
+        // Solution: Fabric Data Attachments and rewrite of AbilityProfiles and AbilityProfilesUtil
+        if (!AbilityProfilesUtil.has(player, Debuffs.CANT_SWIM) || !player.isInWater() || (gm != null && !gm.isSurvival())) return original;
+
+        var level = player.level();
+        var pos = player.blockPosition();
+        if (!level.getFluidState(pos.above()).is(FluidTags.WATER) && level.getFluidState(pos.below()).isEmpty()) return original;
+
+        double y = Math.min(original.y, -0.03);
+        return new Vec3(original.x, y, original.z);
     }
 
     // CLIMBS_WALLS
