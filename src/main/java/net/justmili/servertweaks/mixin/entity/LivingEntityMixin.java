@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import net.justmili.mlibs.v1.utils.common.EntityUtil;
+import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.Abilities;
 import net.justmili.servertweaks.content.abilities.Debuffs;
@@ -48,7 +49,7 @@ public abstract class LivingEntityMixin {
 
     // CANT_SWIM
     @ModifyReturnValue(method = "getFluidFallingAdjustedMovement", at = @At("RETURN"))
-    private Vec3 servertweaks$cantSwimNoRise(Vec3 original) {
+    private Vec3 servertweaks$cantSwimNoRise(Vec3 original, double baseGravity, boolean isFalling, Vec3 movement) {
         if (!Config.playerAbilities.get()) return original;
         if (!((LivingEntity) (Object) this instanceof Player player)) return original;
 
@@ -61,8 +62,7 @@ public abstract class LivingEntityMixin {
         var pos = player.blockPosition();
         if (!level.getFluidState(pos.above()).is(FluidTags.WATER) && level.getFluidState(pos.below()).isEmpty()) return original;
 
-        double y = Math.min(original.y, -0.03);
-        return new Vec3(original.x, y, original.z);
+        return new Vec3(original.x, Math.min(original.y, -baseGravity * 0.5), original.z);
     }
 
     // CLIMBS_WALLS
