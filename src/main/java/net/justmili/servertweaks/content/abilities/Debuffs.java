@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.abilities;
 
-import net.justmili.mlibs.v1.utils.common.AttribUtil;
-import net.justmili.mlibs.v1.utils.common.EntityUtil;
+import net.justmili.corelibs.v1.utils.common.AttribUtil;
+import net.justmili.corelibs.v1.utils.common.EntityUtil;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
@@ -48,7 +48,7 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static net.justmili.mlibs.v1.utils.common.AttribUtil.addOrUpdate;
+import static net.justmili.corelibs.v1.utils.common.AttribUtil.addOrUpdate;
 
 public class Debuffs {
     public static void init() {

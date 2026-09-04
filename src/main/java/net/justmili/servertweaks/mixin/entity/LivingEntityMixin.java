@@ -1,10 +1,7 @@
 package net.justmili.servertweaks.mixin.entity;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
-import net.justmili.mlibs.v1.utils.common.EntityUtil;
-import net.justmili.servertweaks.ServerTweaks;
+import net.justmili.corelibs.v1.utils.common.EntityUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.Abilities;
 import net.justmili.servertweaks.content.abilities.Debuffs;

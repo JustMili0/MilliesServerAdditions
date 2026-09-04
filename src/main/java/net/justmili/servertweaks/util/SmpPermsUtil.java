@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.util;
 
-import net.justmili.mlibs.v1.utils.common.FdaUtil;
-import net.justmili.mlibs.v1.utils.server.ServerUtil;
+import net.justmili.corelibs.v1.utils.common.FdaUtil;
+import net.justmili.corelibs.v1.utils.server.ServerUtil;
 import net.justmili.servertweaks.content.commands.arguments.SmpPermsArgumentType;
 import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.server.level.ServerPlayer;

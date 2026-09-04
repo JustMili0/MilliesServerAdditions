@@ -2,7 +2,7 @@ package net.justmili.servertweaks.mixin.network;
 
 import com.mojang.brigadier.context.CommandContextBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.justmili.mlibs.v1.utils.common.CommandUtil;
+import net.justmili.corelibs.v1.utils.common.CommandUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.util.SmpPermsUtil;
 import net.minecraft.commands.CommandSourceStack;

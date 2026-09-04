@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.mechanics.logic;
 
-import net.justmili.mlibs.v1.utils.common.EntityUtil;
-import net.justmili.mlibs.v1.utils.common.FdaUtil;
+import net.justmili.corelibs.v1.utils.common.EntityUtil;
+import net.justmili.corelibs.v1.utils.common.FdaUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.variables.PlayerVars;
 import net.minecraft.server.level.ServerPlayer;

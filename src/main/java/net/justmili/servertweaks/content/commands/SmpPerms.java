@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.justmili.mlibs.v1.utils.common.CommandUtil;
+import net.justmili.corelibs.v1.utils.common.CommandUtil;
 import net.justmili.servertweaks.content.commands.arguments.SmpPermsArgumentType;
 import net.justmili.servertweaks.util.SmpPermsUtil;
 import net.minecraft.commands.CommandBuildContext;

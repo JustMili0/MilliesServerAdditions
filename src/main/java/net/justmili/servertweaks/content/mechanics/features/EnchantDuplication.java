@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.mechanics.features;
 
-import net.justmili.mlibs.v1.utils.common.MathUtil;
-import net.justmili.mlibs.v1.utils.common.NbtUtil;
+import net.justmili.corelibs.v1.utils.common.MathUtil;
+import net.justmili.corelibs.v1.utils.common.NbtUtil;
 import net.justmili.servertweaks.config.Config;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;

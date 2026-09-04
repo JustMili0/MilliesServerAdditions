@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.content.abilities;
 
-import net.justmili.mlibs.v1.utils.common.EntityUtil;
-import net.justmili.mlibs.v1.utils.server.RegistryUtil;
+import net.justmili.corelibs.v1.utils.common.EntityUtil;
+import net.justmili.corelibs.v1.utils.server.RegistryUtil;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
 import net.justmili.servertweaks.content.abilities.type.Ability;
@@ -27,7 +27,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 
-import static net.justmili.mlibs.v1.utils.common.AttribUtil.*;
+import static net.justmili.corelibs.v1.utils.common.AttribUtil.*;
 
 public class Abilities {
     public static void init() {

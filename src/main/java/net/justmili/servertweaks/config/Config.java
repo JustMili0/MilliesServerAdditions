@@ -1,9 +1,9 @@
 package net.justmili.servertweaks.config;
 
-import net.justmili.mlibs.v1.config.ConfigType;
-import net.justmili.mlibs.v1.config.FileType;
-import net.justmili.mlibs.v1.config.MConfigBuilder;
-import net.justmili.mlibs.v1.config.entry.ConfigEntry;
+import net.justmili.corelibs.v1.config.ConfigType;
+import net.justmili.corelibs.v1.config.FileType;
+import net.justmili.corelibs.v1.config.MConfigBuilder;
+import net.justmili.corelibs.v1.config.entry.ConfigEntry;
 import net.justmili.servertweaks.ServerTweaks;
 
 public class Config {
