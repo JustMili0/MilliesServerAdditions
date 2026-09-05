@@ -104,7 +104,7 @@ this is so `/kill` still works if you ever need to use it in that dimension.
 An experimental feature, similar to Origins but server-side and not entirely the same as origins.<br>
 Players can pick presets of species via `/abilities pickPreset <preset>` that will grant them special abilities, debuffs and such.<br>
 Server moderators, admins, owners are also given tools to manage everyone's abilities within `/abilities` command.<br>
-***See [Features/Abilities.md](https://github.com/JustMili0/MilliesServerAdditions/blob/master/.Informative/Features/Abilities.md) on the mod's GitHub page for more information***
+***<br>More on [PlayerAbilities.md](https://github.com/JustMili0/MilliesServerAdditions/blob/master/.Informative/Features/PlayerAbilities.md)***
 
 </details>
 
@@ -170,7 +170,8 @@ Allows previously incompatible enchantments (different Protection types, Mending
 <details>
 <summary>Boosted Enchantment Levels [Disabled By Default]</summary>
 
-Some enchantments can go past their vanilla max level via an anvil (e.g. Sharpness VI, Unbreaking V, Frost Walker V). Fully customizable per-enchantment through tags.
+Some enchantments can go past their vanilla max level via an anvil (e.g. Sharpness VI, Unbreaking V, Frost Walker V). Fully customizable per-enchantment through tags.<br>
+***<br>More on [BoostedEnchantmentLevels.md](https://github.com/JustMili0/MilliesServerAdditions/blob/master/.Informative/Features/BoostedEnchantmentLevels.md)***
 
 </details>
 

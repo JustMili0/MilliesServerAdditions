@@ -71,17 +71,19 @@ tasks.jar {
 publishMods {
     file.set(tasks.jar.get().archiveFile)
     modLoaders.add("fabric")
+    version.set("$modVersion+mc$mcVersion-Fabric")
+    displayName.set("Millie's Server Additions $modVersion")
 
-    changelog = readChangelogFromBranch("origin/master", ".Informative/Changelogs/${modVersion}-Changelog.md")
+    changelog = readChangelogFromBranch("origin/master", ".Informative/Changelogs/${modVersion}+mc${mcVersion}.md")
 
     modrinth {
         accessToken = property("modrinth_token") as String
         projectId = "AvEXfaSD"
 
         minecraftVersions.add(mcVersion)
-        environment = CLIENT_AND_SERVER
+        environment.set(SERVER_ONLY_CLIENT_OPTIONAL)
         // STABLE, BETA, ALPHA
-        type = STABLE
+        type.set(STABLE)
 
         requires("fabric-api"/*, "millies-core-libs"*/)
     }

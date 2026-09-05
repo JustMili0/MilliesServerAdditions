@@ -1,7 +1,8 @@
-# Over Vanilla Enchantments
-desc wip
+# Boosted Enchantment Levels
+Boosted Enchantment Levels feature allows some enchantments to be up to 5 levels higher than vanilla.<br>
+This can be configured via datapacks, as the level boosts are configurable though tags.
 
-# Defaults
+### Defaults
 |      Enchantment       | New Max Level | Vanilla Max Level |
 |:----------------------:|:-------------:|:-----------------:|
 | Protection (All types) |       5       |         4         |
@@ -17,7 +18,7 @@ desc wip
 
 <hr>
 
-# Enabled on Millie's Cove server
+### Enabled on Millie's Cove server
 |      Enchantment       | New Max Level | Vanilla Max Level |
 |:----------------------:|:-------------:|:-----------------:|
 |       Efficiency       |       8       |         5         |
