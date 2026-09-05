@@ -101,9 +101,9 @@ public class AbilityProfiles {
                 Set<Debuff> debuffs = new LinkedHashSet<>();
                 Set<Modifier> modifiers = new LinkedHashSet<>();
 
-                loadElements(uuidObj, abilities, "abilities", "ability", AbilityRegistries::getAbilityById);
-                loadElements(uuidObj, debuffs, "debuffs", "debuff", AbilityRegistries::getDebuffById);
-                loadElements(uuidObj, modifiers, "modifiers", "modifier", AbilityRegistries::getModifierById);
+                loadElements(uuidObj, abilities, "abilities", "ability", TypeRegistries::getAbilityById);
+                loadElements(uuidObj, debuffs, "debuffs", "debuff", TypeRegistries::getDebuffById);
+                loadElements(uuidObj, modifiers, "modifiers", "modifier", TypeRegistries::getModifierById);
 
                 ABILITIES.put(uuid, abilities);
                 DEBUFFS.put(uuid, debuffs);

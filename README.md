@@ -211,7 +211,7 @@ Works around MC-271325 to prevent spam of;
 ```
 [22:35:52] [Netty Epoll Server IO #5/ERROR]: Error sending packet clientbound/minecraft:disconnect
 io.netty.handler.codec.EncoderException: Sending unknown packet 'clientbound/minecraft:disconnect'
-...
+[...]
 ```
 in dedicated server console.<br>
 This will be removed when Mojang fixes it themselves.

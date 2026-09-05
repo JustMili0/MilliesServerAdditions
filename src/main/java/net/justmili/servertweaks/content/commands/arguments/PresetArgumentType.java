@@ -5,7 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
+import net.justmili.servertweaks.content.abilities.core.TypeRegistries;
 import net.justmili.servertweaks.content.abilities.type.Preset;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -21,12 +21,12 @@ public class PresetArgumentType {
 
     public static Preset getPreset(CommandContext<CommandSourceStack> context, String argName) throws CommandSyntaxException {
         var id = IdentifierArgument.getId(context, argName);
-        var preset = AbilityRegistries.getPresetById(id);
+        var preset = TypeRegistries.getPresetById(id);
         if (preset == null) throw new SimpleCommandExceptionType(Component.literal("Unknown abilities preset: " + id)).create();
         return preset;
     }
 
     public static CompletableFuture<Suggestions> suggest(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggestResource(AbilityRegistries.PRESETS.keySet(), builder);
+        return SharedSuggestionProvider.suggestResource(TypeRegistries.PRESETS.keySet(), builder);
     }
 }

@@ -3,7 +3,7 @@ package net.justmili.servertweaks.content.abilities;
 import net.justmili.corelibs.v1.utils.common.EntityUtil;
 import net.justmili.corelibs.v1.utils.server.RegistryUtil;
 import net.justmili.servertweaks.ServerTweaks;
-import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
+import net.justmili.servertweaks.content.abilities.core.TypeRegistries;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.TickingAbility;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
@@ -75,7 +75,7 @@ public class Abilities {
     }
 
     private static Ability register(Ability ability) {
-        AbilityRegistries.ABILITIES.put(ability.getId(), ability);
+        TypeRegistries.ABILITIES.put(ability.getId(), ability);
         return ability;
     }
 

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class AbilityRegistries {
+public class TypeRegistries {
     public static final Map<Identifier, Ability> ABILITIES = new HashMap<>();
     public static final Map<Identifier, Debuff> DEBUFFS = new HashMap<>();
     public static final Map<Identifier, Modifier> MODIFIERS = new HashMap<>();

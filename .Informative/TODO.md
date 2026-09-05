@@ -1,11 +1,8 @@
-# TODO (1.3.0)
-- Fix CANT_SWIM
-- Try making Hunted By Fox a goal mixin
-
 # TODO (Between release of 1.3.0 and start of 1.3.1)
 - Document every feature in `.Informative/Features/`
 
 # TODO (1.3.1)
+- Try making Hunted By Fox a goal mixin
 - Actually start using proper Core Libs (Requires work on 'em, obviously)
 - Tag datagen
 - Fix skeletons being weird with `scares_skeletons`

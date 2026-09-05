@@ -4,7 +4,7 @@ import net.justmili.corelibs.v1.utils.common.AttribUtil;
 import net.justmili.corelibs.v1.utils.common.EntityUtil;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
-import net.justmili.servertweaks.content.abilities.core.AbilityRegistries;
+import net.justmili.servertweaks.content.abilities.core.TypeRegistries;
 import net.justmili.servertweaks.content.abilities.type.Debuff;
 import net.justmili.servertweaks.content.abilities.type.TickingDebuff;
 import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
@@ -124,7 +124,7 @@ public class Debuffs {
     }
 
     private static Debuff register(Debuff debuff) {
-        AbilityRegistries.DEBUFFS.put(debuff.getId(), debuff);
+        TypeRegistries.DEBUFFS.put(debuff.getId(), debuff);
         return debuff;
     }
 
