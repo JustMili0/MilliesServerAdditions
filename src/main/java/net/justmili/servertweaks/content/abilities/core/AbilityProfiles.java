@@ -112,6 +112,8 @@ public class AbilityProfiles {
         } catch (Exception e) {
             ServerTweaks.LOGGER.error("Failed to load ability profiles: {}", e.getMessage());
         }
+
+        for (var player : ServerUtil.getPlayers(server)) AbilityProfilesUtil.syncToClient(player);
     }
 
     private static <T> void loadElements(JsonObject uuidObj, Set<T> member, String memberName, String elementName, Function<Identifier, T> lookup) {

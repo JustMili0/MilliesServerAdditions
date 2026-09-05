@@ -142,7 +142,7 @@ public class AbilityProfilesUtil {
         syncToClient(player);
     }
 
-    static void syncToClient(Player player) {
+    public static void syncToClient(Player player) {
         FdaUtil.set(player, PlayerVars.SYNCED_ABILITIES, Set.copyOf(getAbilities(player)));
         FdaUtil.set(player, PlayerVars.SYNCED_DEBUFFS, Set.copyOf(getDebuffs(player)));
         FdaUtil.set(player, PlayerVars.SYNCED_MODIFIERS, Set.copyOf(getModifiers(player)));

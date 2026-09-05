@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.corelibs.v1.utils.common.*;
 import net.justmili.corelibs.v1.utils.server.ServerUtil;
+import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.justmili.servertweaks.content.abilities.type.*;
 import net.justmili.servertweaks.registries.TagRegistry;
 import net.justmili.servertweaks.variables.PlayerVars;
@@ -74,6 +75,7 @@ public class AbilityEvents {
             }
         });
 
+        ServerPlayConnectionEvents.JOIN.register((handler, _, _) -> AbilityProfilesUtil.syncToClient(handler.getPlayer()));
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             var leaving = handler.getPlayer();
             boolean stillCovered = server.getPlayerList().getPlayers().stream().anyMatch(p -> p != leaving && has(p, Debuffs.IS_MONSTER));
