@@ -1,4 +1,4 @@
-# Millie's Server Additions, Patch #6 - 1.3.0-beta.16
+# Millie's Server Additions, Patch #6 - 1.3.0 Full Release
 
 ### ***GENERIC***
 - New *Update Patches* format. Changelog format will also be changing with update 1.3.1 for this and all other projects by or involving JustMili
