@@ -67,8 +67,8 @@
 - Renamed `/fillExtras` to `/fillextras`
 - Updated texts and options in `/abilities`
   - `pickPreset <preset>` now utilizes `getDisplayName` instead of `getId` for informing that a preset had been applied
-  - `pickPreset <preset>` now informs the player if any ability in given preset requires a client-side installation to function properly
-  - `grant` and `revoke` now utilizes `getDisplayName` instead of `getId` for showing ability and ability modifier names
+  - `pickPreset <preset>` now informs the player if any  or preset in given preset requires a client-side installation to function properly
+  - `grant` and `revoke` now utilizes `getDisplayName` instead of `getId` for showing ability, debuff and modifier names
   - `grant <player> <ability|debuff|modifier> <id>` - Reworked from `grant <player> <abilityOrDebuff|modifier>`, now properly distinguishes between abilities, debuffs and modifiers
   - `revoke <player> <ability|debuff|modifier|everything> <id>` - Reworked from `revoke <player> <ability|modifier|everything> <abilityOrDebuff|modifier>`, now properly distinguishes between abilities, debuffs and modifiers
 - Fixed one-hit mace exploit in `/afk` not resetting fall distance
@@ -91,14 +91,14 @@
   - `GRASS_EATER` -> `herbivore`
   - `ONLY_EATS_SWEETS` -> `saccharivore`
   - `AQUA_GRACE` -> `aquatic_grace`
-- All ability presets with diet restriction abilities now come with `can_eat_golden_foods` modifier
+- All presets with diet restriction debuffs now come with `can_eat_golden_foods` modifier
 - Added Big Dripleaf, Small Dripleaf, Vines, Cave Vines, Glow Lichen, Ferns, Large Ferns, Bushes, Firefly Bushes, Seagrass, Tall Seagrass, Sea Pickles and Kelp to `herbivore`'s diet tag
 - Removed Jungle and its variants from biome tag `hot_biomes`
-- Some abilities now have special interactions with potion effects (mainly with Weakness and Poison)
+- Some abilities and debuffs now have special interactions with potion effects (mainly with Weakness and Poison)
 - Decreased max health of `strong` ability from 100 to 80, minimum still being 40
 - `scares_creepers` now has a 16 block range instead of 12
 - Dolphin's Grace now applies to `aquatic_grace` with Depth Strider 2, below or none; if poisoned, only Depth Strider 1 or none, instead of just Depth Strider 1
-- `fire_immune` and `lava_immune` now automatically get extinguished unless has Weakness effect
+- `fire_immune` and `lava_immune` now automatically get extinguished unless have Weakness effect
 - `fall_immune` is no longer affected by Slow Falling unless has Weakness effect
 - `freeze_immune` no longer gets the freezing overlay and hearts unless has Weakness effect
 - `aquarian` preset no longer grants `breathes_underwater`, as water breathing is already provided by Conduit Power effect from `aquatic_grace` when in water
@@ -106,15 +106,15 @@
 - Fixed and readjusted damage multipliers for `weak_to_damage` debuff to match its descriptions in [PlayerAbilities.md](https://github.com/JustMili0/MilliesServerAdditions/blob/master/.Informative/Features/PlayerAbilities.md)
 - Fixed being able to eat anything by just having it in your offhand
 - Fixed `herbivore` debuff being able to eat foliage even when full
-- Fixed food values not updating when eating foliage as `herbivore`
+- Fixed food values not updating on client when eating foliage as `herbivore`
 - Fixed block placement, block interactions and fish bucket place/pickup with any diet restriction debuffs applied
 - Fixed `child_of_nature` ability - Taming chance with any animal is now 100%
 - Fixed `hunted_by_fox` debuff - Foxes now attack even if you're not crouching
-- Fixed debuff `cant_swim` - Player no longer can swim up in water (Requires client installation)
-- Fixed ability `climbs_walls` - Now can actually climb walls (Requires client installation)
+- Fixed `cant_swim` debuff - Player no longer can swim up in water (Requires client installation)
+- Fixed `climbs_walls` ability - Now can actually climb walls (Requires client installation)
 - Fixed `light` ability applying Slow Falling at any fall distance, even when going downstairs
   - Now requires 3 blocks or more of fall distance to apply Slow Falling
 - Fixed `aquatic_grace` checking HEAD equipment slot instead of FEET for Depth Strider enchantment
-- Fixed multiple issues with `is_monster`, and made it more efficient
+- Fixed multiple issues with `is_monster` debuff, and made it more efficient
 
 Feedback is appreciated ^^
