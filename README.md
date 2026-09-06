@@ -7,6 +7,9 @@ Very cool 👍
 This mod was initially made as a private server-side mod for my own [Discord/Minecraft community server](https://discord.gg/DPEw9DU2vT),
 but after a while I decided to put a little more work into it, making the codebase less terrible, implement more features and make it public.
 
+## Notice
+It's recommended before the mod is updated on any server to specifically check the changelog in case there have been any major changes to gameplay features, config or other.
+
 ### How long will this be kept updated?
 This mod will keep being updated for latest Minecraft versions for as long as I can, but<br>
 content updates will only go as far as version `1.4.x`.

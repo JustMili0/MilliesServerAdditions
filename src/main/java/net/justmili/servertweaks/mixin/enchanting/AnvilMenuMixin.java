@@ -50,13 +50,13 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
     // Remove anvil "too expensive"
     @Inject(method = "createResult", at = {@At("RETURN")})
     private void servertweaks$clampResultCost(CallbackInfo ci) {
-        if (!Config.disableAnvilLimit.get()) return;
+        if (!Config.disableTooExpensive.get()) return;
         if (this.cost.get() > 39) this.cost.set(39);
     }
 
     @ModifyConstant(method = "createResult", constant = {@Constant(intValue = 40)})
     private int servertweaks$modifyCostLimit(int i) {
-        if (!Config.disableAnvilLimit.get()) return i;
+        if (!Config.disableTooExpensive.get()) return i;
         return Integer.MAX_VALUE;
     }
 }

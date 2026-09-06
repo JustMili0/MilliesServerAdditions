@@ -22,14 +22,14 @@ public class TridentItemMixin {
 
     @ModifyExpressionValue(method = "releaseUsing", at = @At(value = "CONSTANT", args = "intValue=10"))
     private int servertweaks$fasterRechargeWithRiptide(int original, ItemStack stack, Level level, LivingEntity entity, int remainingTime) {
-        if (!Config.fasterRiptideCharge.get()) return original;
+        if (!Config.fastRiptideCharge.get()) return original;
         if (entity instanceof Player player && EnchantmentHelper.getTridentSpinAttackStrength(stack, player) > 0.0F) return 3;
         return original;
     }
 
     @Inject(method = "releaseUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;push(DDD)V", shift = At.Shift.AFTER))
     private void servertweaks$syncRiptideVelocity(ItemStack stack, Level level, LivingEntity entity, int remainingTime, CallbackInfoReturnable<Boolean> cir) {
-        if (!Config.fasterRiptideCharge.get()) return;
+        if (!Config.fastRiptideCharge.get()) return;
         if (entity instanceof ServerPlayer player && !ServerPlayNetworking.canSend(player, ClientboundModCheckPacket.TYPE)) {
             player.connection.send(new ClientboundSetEntityMotionPacket(player));
         }

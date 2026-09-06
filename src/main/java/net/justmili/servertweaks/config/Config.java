@@ -25,11 +25,11 @@ public class Config {
     public static ConfigEntry<Boolean> rightClickHarvest;
     public static ConfigEntry<Boolean> noAiNameTags;
 
-    public static ConfigEntry<Boolean> enableAnvilRepair, disableAnvilLimit;
+    public static ConfigEntry<Boolean> enableAnvilRepair, disableTooExpensive;
     public static ConfigEntry<Boolean> enableEnchantDuplication, enableEnchantMixing, enableHigherEnchants;
 
     public static ConfigEntry<Boolean> limitPlayerSpeed, limitElytraSpeed, limitVehicleSpeed;
-    public static ConfigEntry<Boolean> fasterRiptideCharge;
+    public static ConfigEntry<Boolean> fastRiptideCharge;
     public static ConfigEntry<Integer> pistonPushLimit;
 
     public static ConfigEntry<Boolean> enableDiscordIntegrationFix;
@@ -51,7 +51,7 @@ public class Config {
             common.comment("Should \"wild\" (unnamed, not in boats/minecarts) monsters despawn around the player when coming out of AFK?")
             .define("despawnMonstersPostAfk", true);
         afkCooldown = common.comment("Amount of time between the AFK command can be used again")
-            .define("afkCommandCooldown", 6000, 0, Integer.MAX_VALUE - 255);
+            .define("afkUsageCooldown", 6000, 0, Integer.MAX_VALUE - 255);
 
         common.comment("What should be the min-max height values (In centimeters) for the \"/scale\" command?");
         scaleMinHeight = common.define("scaleMinHeight", 80f, 18.5f, 2960f);
@@ -63,7 +63,7 @@ public class Config {
             .define("enableEnchantMixing", false);
         enableHigherEnchants =
             common.comment("Should some enchantments (controlled by enchantment tags) have a higher max value than Vanilla intended?")
-            .define("enableHigherEnchantmentLevels", false);
+            .define("enableHigherEnchantLevels", false);
         enableEnchantDuplication = common.comment("""
             Should players be able to shift-right-click with an enchanted book in their offhand and a book in their main hand" +
             to duplicate the enchanted book using their experience?
@@ -74,12 +74,12 @@ public class Config {
         limitPlayerSpeed = common.comment(limitsWhenText + "on foot?").define("limitPlayerSpeed", false);
         limitElytraSpeed = common.comment(limitsWhenText + "using elytra?").define("limitElytraSpeed", false);
         limitVehicleSpeed = common.comment(limitsWhenText + "in/on vehicle?").define("limitVehicleSpeed", false);
-        disableAnvilLimit =
+        disableTooExpensive =
             common.comment("Should the server clamp the max anvil cost to 39 levels if at or over, to prevent \"Too Expensive\"?")
-            .define("disableAnvilLimit", true);
-        fasterRiptideCharge =
+            .define("disableAnvilTooExpensive", true);
+        fastRiptideCharge =
             common.comment("Should the right-click-hold time be shorter (by half) in order to use a Riptide Trident?")
-            .define("fasterRiptideCharge", true);
+            .define("enableFastRiptideCharge", true);
         pistonPushLimit =
             common.comment("How many blocks should the piston be able to push?")
             .define("pistonPushLimit", 12, 0, 511);
@@ -87,20 +87,20 @@ public class Config {
         // QoL, Gameplay
         rightClickHarvest =
             common.comment("Should the player be able to harvest crops with by just right-clicking?")
-            .define("rightClickHarvest", true);
+            .define("enableRightClickHarvest", true);
         enableAnvilRepair =
             common.comment("Should a player be able to fix anvils by shift-right-clicking them with iron ingots and iron blocks?")
-            .define("anvilRepair", true);
+            .define("enableAnvilRepair", true);
         noAiNameTags =
             common.comment("Should Villagers and Tamable mobs lose their AI when named \"NoAI\"?")
-            .define("noAiNameTags", true);
+            .define("enableNoAINameTags", true);
         obfInvisDeathMessages =
             common.comment("Should names of invisible players be obfuscated in chat in death messages?")
-            .define("obfuscateInvisDeathMessages", true);
+            .define("enableInvisDeathMessageObfuscation", true);
 
         // Experimental, Fun
         playerAbilities = common.comment("Allows server owners to configure player abilities for some or all members")
-            .define("playerAbilities", false);
+            .define("enablePlayerAbilities", false);
 
         common.build();
     }
