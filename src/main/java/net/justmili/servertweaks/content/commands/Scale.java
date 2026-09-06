@@ -3,8 +3,9 @@ package net.justmili.servertweaks.content.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.justmili.corelibs.v1.utils.common.CommandUtil;
-import net.justmili.corelibs.v1.utils.common.FdaUtil;
+import net.justmili.corelibs.util.utils.common.CommandUtil;
+import net.justmili.corelibs.util.utils.common.FdaUtil;
+import net.justmili.corelibs.util.utils.common.Text;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.util.ScalerUtil;
 import net.justmili.servertweaks.variables.PlayerVars;
@@ -58,7 +59,7 @@ public class Scale {
         ScalerUtil.applyScaleToPlayer(player, scale);
         FdaUtil.set(player, PlayerVars.SCALE_LOCKED, true);
 
-        CommandUtil.sendOk(source, String.format("Your irl-to-game scale is %.3f (%.1f cm). It is now locked", scale, height), false);
+        CommandUtil.sendOk(source, Text.string("Your irl-to-game scale is %.3f (%.1f cm). It is now locked", scale, height), false);
 
         return 1;
     }
@@ -66,7 +67,7 @@ public class Scale {
     static int forceScale(CommandSourceStack source, Collection<ServerPlayer> players, float height) {
         float scale = height / 185f;
         for (var player : players) applyScaleToPlayer(player, scale);
-        CommandUtil.sendOk(source, String.format("Applied scale %.3f (%.1f cm) to %d player(s)", scale, height, players.size()));
+        CommandUtil.sendOk(source, Text.string("Applied scale %.3f (%.1f cm) to %d player(s)", scale, height, players.size()));
 
         return players.size();
     }
@@ -74,7 +75,7 @@ public class Scale {
     static int unlockScale(CommandSourceStack source, Collection<ServerPlayer> players) {
         for (var player : players) FdaUtil.set(player, PlayerVars.SCALE_LOCKED, false);
 
-        CommandUtil.sendOk(source, String.format("Unlocked scale modification for %d player(s)", players.size()));
+        CommandUtil.sendOk(source, Text.string("Unlocked scale modification for %d player(s)", players.size()));
 
         return players.size();
     }
@@ -85,8 +86,8 @@ public class Scale {
             if (unlock) FdaUtil.set(player, PlayerVars.SCALE_LOCKED, false);
         }
 
-        String unlocked = unlock? "Reset scale and unlocked scale modifications for %d player(s)" : "Reset scale for %d player(s)";
-        CommandUtil.sendOk(source, String.format(unlocked, players.size()));
+        var unlocked = unlock? "Reset scale and unlocked scale modifications for %d player(s)" : "Reset scale for %d player(s)";
+        CommandUtil.sendOk(source, Text.string(unlocked, players.size()));
 
         return players.size();
     }

@@ -1,13 +1,15 @@
 package net.justmili.servertweaks.content.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.justmili.corelibs.v1.utils.common.CommandUtil;
+import net.justmili.corelibs.util.utils.common.CommandUtil;
+import net.justmili.corelibs.util.utils.common.Text;
 import net.justmili.servertweaks.content.commands.arguments.SmpPermsArgumentType;
 import net.justmili.servertweaks.util.SmpPermsUtil;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 public class SmpPerms {
@@ -26,8 +28,9 @@ public class SmpPerms {
     }
 
     static int op(CommandSourceStack source, ServerPlayer player, SmpPermsArgumentType.PermissionLevel permissionLevel) {
-        var ownOrOthers = source.getPlayer() == player ? "own" : player.getPlainTextName() + "'s";
-        var message = "Set " + ownOrOthers + " SMP permission level to Default";
+        var message = Text.string("Set %s SMP permission level to %s",
+            source.getPlayer() == player ? "own" : player.getPlainTextName() + "'s",
+            permissionLevel.getDisplayName());
 
         switch (permissionLevel) {
             case DEFAULT -> {
@@ -44,7 +47,7 @@ public class SmpPerms {
         return 1;
     }
 
-    public static void op(CommandSourceStack source, ServerPlayer player, String message, int smp, int vanilla) {
+    public static void op(CommandSourceStack source, ServerPlayer player, Component message, int smp, int vanilla) {
         SmpPermsUtil.op(player, smp, vanilla);
         CommandUtil.sendOk(source, message);
     }

@@ -1,7 +1,7 @@
 package net.justmili.servertweaks.mixin.entity;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.justmili.corelibs.v1.utils.common.EntityUtil;
+import net.justmili.corelibs.util.utils.common.EntityUtil;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.Abilities;
 import net.justmili.servertweaks.content.abilities.Debuffs;
@@ -51,8 +51,6 @@ public abstract class LivingEntityMixin {
         if (!((LivingEntity) (Object) this instanceof Player player)) return original;
 
         var gm = player.gameMode();
-        // Issue: Works only in singleplayer, because on servers even with client having the mod installed it doesn't know about the abilities
-        // Solution: Fabric Data Attachments and rewrite of AbilityProfiles and AbilityProfilesUtil
         if (!AbilityProfilesUtil.has(player, Debuffs.CANT_SWIM) || !player.isInWater() || (gm != null && !gm.isSurvival())) return original;
 
         var level = player.level();

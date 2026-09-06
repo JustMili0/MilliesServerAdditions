@@ -40,7 +40,7 @@
 
 **Player Abilities**
 - Added `canine` ability preset
-- Added `scares_skeletons` - Skeletons within 16 blocks flee from the player
+- Added `scares_skeletons` ability - Skeletons within 16 blocks flee from the player
 - Added `weaver` ability - Doesn't get slowed by Cobwebs (Requires client installation)
 - Added `bovid` ability - Can be milked with a bucket by other players
 - Added `squishy` ability - Decreases `fall` and `fly_into_wall` damage by 75% each
@@ -67,7 +67,7 @@
 - Renamed `/fillExtras` to `/fillextras`
 - Updated texts and options in `/abilities`
   - `pickPreset <preset>` now utilizes `getDisplayName` instead of `getId` for informing that a preset had been applied
-  - `pickPreset <preset>` now informs the player if any  or preset in given preset requires a client-side installation to function properly
+  - `pickPreset <preset>` now informs the player if any abilities, debuffs or modifiers in given preset requires a client-side installation to function properly
   - `grant` and `revoke` now utilizes `getDisplayName` instead of `getId` for showing ability, debuff and modifier names
   - `grant <player> <ability|debuff|modifier> <id>` - Reworked from `grant <player> <abilityOrDebuff|modifier>`, now properly distinguishes between abilities, debuffs and modifiers
   - `revoke <player> <ability|debuff|modifier|everything> <id>` - Reworked from `revoke <player> <ability|modifier|everything> <abilityOrDebuff|modifier>`, now properly distinguishes between abilities, debuffs and modifiers

@@ -1,6 +1,6 @@
 package net.justmili.corelibs;
 
-import net.justmili.corelibs.v1.utils.common.ResourceUtil;
+import net.justmili.corelibs.util.utils.common.ResourceUtil;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

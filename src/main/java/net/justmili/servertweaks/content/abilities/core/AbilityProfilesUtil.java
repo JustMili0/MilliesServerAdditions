@@ -1,8 +1,8 @@
 package net.justmili.servertweaks.content.abilities.core;
 
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
-import net.justmili.corelibs.v1.utils.common.CommandUtil;
-import net.justmili.corelibs.v1.utils.common.FdaUtil;
+import net.justmili.corelibs.util.utils.common.CommandUtil;
+import net.justmili.corelibs.util.utils.common.FdaUtil;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.Debuff;
 import net.justmili.servertweaks.content.abilities.type.Modifier;

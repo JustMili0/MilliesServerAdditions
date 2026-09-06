@@ -219,4 +219,13 @@ This will be removed when Mojang fixes it themselves.
 
 </details>
 
+<details>
+<summary>Discord Integration Issue #51 Fix</summary>
+
+Fixes issue [#51](https://github.com/ErdbeerbaerLP/DiscordIntegration/issues/51) of [Discord Integration](https://modrinth.com/plugin/dcintegration)
+by mixing into `DiscordIntegrationMod` class and replacing the faulty call.<br>
+This will be removed when ErdbeerbaerLP fixes it himself.
+
+</details>
+
 <hr>

@@ -6,7 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.justmili.corelibs.v1.utils.server.ServerUtil;
+import net.justmili.corelibs.util.utils.server.ServerUtil;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.type.Ability;
@@ -116,7 +116,7 @@ public class AbilityProfiles {
         for (var player : ServerUtil.getPlayers(server)) AbilityProfilesUtil.syncToClient(player);
     }
 
-    private static <T> void loadElements(JsonObject uuidObj, Set<T> member, String memberName, String elementName, Function<Identifier, T> lookup) {
+    static <T> void loadElements(JsonObject uuidObj, Set<T> member, String memberName, String elementName, Function<Identifier, T> lookup) {
         if (!uuidObj.has(memberName)) return;
 
         for (var element : uuidObj.getAsJsonArray(memberName)) {

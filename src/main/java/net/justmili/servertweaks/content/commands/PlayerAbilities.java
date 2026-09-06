@@ -3,8 +3,9 @@ package net.justmili.servertweaks.content.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.justmili.corelibs.v1.utils.common.CommandUtil;
-import net.justmili.corelibs.v1.utils.common.FdaUtil;
+import net.justmili.corelibs.util.utils.common.CommandUtil;
+import net.justmili.corelibs.util.utils.common.FdaUtil;
+import net.justmili.corelibs.util.utils.common.Text;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfiles;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.justmili.servertweaks.content.abilities.type.*;
@@ -18,7 +19,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerPlayer;
@@ -115,11 +115,11 @@ public class PlayerAbilities {
         switch (action) {
             case GRANT -> {
                 AbilityProfilesUtil.grantAbility(player, ability);
-                CommandUtil.sendOk(source, String.format("Granted ability %s to %s", aName, pName));
+                CommandUtil.sendOk(source, Text.string("Granted ability %s to %s", aName, pName));
             }
             case REVOKE -> {
                 AbilityProfilesUtil.revokeAbility(player, ability);
-                CommandUtil.sendOk(source, String.format("Revoked ability %s from %s", aName, pName));
+                CommandUtil.sendOk(source, Text.string("Revoked ability %s from %s", aName, pName));
             }
         }
 
@@ -133,11 +133,11 @@ public class PlayerAbilities {
         switch (action) {
             case GRANT -> {
                 AbilityProfilesUtil.grantModifier(player, modifier);
-                CommandUtil.sendOk(source, String.format("Granted modifier %s to %s", mName, pName));
+                CommandUtil.sendOk(source, Text.string("Granted modifier %s to %s", mName, pName));
             }
             case REVOKE -> {
                 AbilityProfilesUtil.revokeModifier(player, modifier);
-                CommandUtil.sendOk(source, String.format("Revoked modifier %s from %s", mName, pName));
+                CommandUtil.sendOk(source, Text.string("Revoked modifier %s from %s", mName, pName));
             }
         }
 
@@ -151,11 +151,11 @@ public class PlayerAbilities {
         switch (action) {
             case GRANT -> {
                 AbilityProfilesUtil.grantDebuff(player, debuff);
-                CommandUtil.sendOk(source, String.format("Granted debuff %s to %s", dName, pName));
+                CommandUtil.sendOk(source, Text.string("Granted debuff %s to %s", dName, pName));
             }
             case REVOKE -> {
                 AbilityProfilesUtil.revokeDebuff(player, debuff);
-                CommandUtil.sendOk(source, String.format("Revoked debuff %s from %s", dName, pName));
+                CommandUtil.sendOk(source, Text.string("Revoked debuff %s from %s", dName, pName));
             }
         }
 
@@ -166,7 +166,7 @@ public class PlayerAbilities {
         AbilityProfilesUtil.clearPlayerProfile(player);
         FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, false);
 
-        CommandUtil.sendOk(source, "Cleared the abilities profile of " + player.getPlainTextName());
+        CommandUtil.sendOk(source, Text.string("Cleared the abilities profile of %s", player.getPlainTextName()));
 
         return 1;
     }
@@ -186,12 +186,12 @@ public class PlayerAbilities {
             return 0;
         }
 
-        var apply = Component.literal("     [APPLY] ").setStyle(Style.EMPTY.withColor(0x55FF55).withClickEvent(
+        var apply = Text.string("     [APPLY] ").setStyle(Style.EMPTY.withColor(0x55FF55).withClickEvent(
             new ClickEvent.RunCommand("/abilities applyPreset " + preset.getId() + " " + player.getPlainTextName())));
-        var cancel = Component.literal(" [CANCEL]").setStyle(Style.EMPTY.withColor(0xFF5555).withClickEvent(
+        var cancel = Text.string(" [CANCEL]").setStyle(Style.EMPTY.withColor(0xFF5555).withClickEvent(
             new ClickEvent.RunCommand("/abilities dontApplyPreset " + player.getPlainTextName())));
 
-        CommandUtil.sendOkTo(player, Component.literal(preset.getDesc() + "\n\n").append(apply).append(cancel), false);
+        CommandUtil.sendOkTo(player, Text.string( "%s\n\n", preset.getDesc()).append(apply).append(cancel), false);
         return 1;
     }
 
@@ -201,7 +201,7 @@ public class PlayerAbilities {
 
         AbilityProfilesUtil.applyPreset(player, preset);
         FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, true);
-        CommandUtil.sendOkTo(player, "\nApplied the \"" + psName + "\" preset!");
+        CommandUtil.sendOkTo(player, Text.string("\nApplied the \"%s\" preset!", psName));
 
         var abilities = preset.getAbilities();
         var debuffs = preset.getDebuffs();
@@ -210,13 +210,12 @@ public class PlayerAbilities {
 
         if (ServerPlayNetworking.canSend(player, ClientboundModCheckPacket.PACKET_ID)) return total; // Shush if client already has mod
         if (Stream.of(abilities, debuffs, modifiers).flatMap(Set::stream).anyMatch(AnyType::isClientRequired)) {
-            CommandUtil.sendOkTo(player, Component.literal(String.format("""
+            CommandUtil.sendOkTo(player, Text.string("""
                 One of the abilities, debuffs or modifiers in %s preset
                 also requires Millie's Server Additions to be installed
                 client-side to function properly.
                 Please make sure you have it installed!
-                """, psName)
-            ).withColor(TextColor.YELLOW));
+                """, psName).withColor(TextColor.YELLOW));
         }
 
         return total;

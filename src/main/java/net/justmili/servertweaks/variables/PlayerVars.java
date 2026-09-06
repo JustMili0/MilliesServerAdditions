@@ -15,7 +15,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Set;
 
-import static net.justmili.corelibs.v1.utils.common.FdaUtil.*;
+import static net.justmili.corelibs.util.utils.common.FdaUtil.*;
 
 @SuppressWarnings({"NullableProblems"})
 public final class PlayerVars {

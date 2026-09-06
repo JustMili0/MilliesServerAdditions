@@ -5,12 +5,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import net.justmili.corelibs.util.utils.common.Text;
 import net.justmili.servertweaks.content.abilities.core.TypeRegistries;
 import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.IdentifierArgument;
-import net.minecraft.network.chat.Component;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -22,7 +22,7 @@ public class AbilityArgumentType {
     public static Ability getAbility(CommandContext<CommandSourceStack> context, String argName) throws CommandSyntaxException {
         var id = IdentifierArgument.getId(context, argName);
         var ability = TypeRegistries.getAbilityById(id);
-        if (ability == null) throw new SimpleCommandExceptionType(Component.literal("Unknown player ability: " + id)).create();
+        if (ability == null) throw new SimpleCommandExceptionType(Text.string("Unknown player ability: %s", id)).create();
         return ability;
     }
 

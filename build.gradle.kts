@@ -22,6 +22,9 @@ repositories {
     maven("https://api.modrinth.com/maven")
     maven("https://maven.parchmentmc.org")
     maven("https://maven.lumynitystudios.net") // Core Libs
+
+    // Compat/fixes bullshit
+    maven("https://repo.erdbeerbaerlp.de/repository/maven-public/") // Discord Integration
 }
 
 dependencies {
@@ -31,6 +34,10 @@ dependencies {
 
     // TODO: Uncomment when file becomes available
     //include(implementation("net.justmili:corelibs:${rootProject.property("corelibs")}")!!)
+
+    // for DC integration fix
+    implementation("de.erdbeerbaerlp:dcintegration.architectury:3.2.0-26.2")
+    implementation("de.erdbeerbaerlp:dcintegration.common:3.2.0")
 
     implementation("com.terraformersmc:modmenu:${rootProject.property("mod_menu")}") // Mod menu
     implementation("maven.modrinth:lithium:${rootProject.property("lithium")}") // Just for performance

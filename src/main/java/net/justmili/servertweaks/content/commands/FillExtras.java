@@ -4,9 +4,10 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
-import net.justmili.corelibs.v1.utils.common.CommandUtil;
-import net.justmili.corelibs.v1.utils.common.NbtUtil;
-import net.justmili.corelibs.v1.utils.server.RegistryUtil;
+import net.justmili.corelibs.util.utils.common.CommandUtil;
+import net.justmili.corelibs.util.utils.common.NbtUtil;
+import net.justmili.corelibs.util.utils.common.Text;
+import net.justmili.corelibs.util.utils.server.RegistryUtil;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -15,7 +16,6 @@ import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -28,7 +28,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 public class FillExtras {
     private static final Dynamic2CommandExceptionType ERROR_AREA_TOO_LARGE = new Dynamic2CommandExceptionType(
-        (max, count) -> Component.translatableEscape("commands.fill.toobig", max, count)
+        (max, count) -> Text.translateSafe("commands.fill.toobig", max, count)
     );
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {

@@ -1,7 +1,8 @@
 package net.justmili.servertweaks.content.abilities;
 
-import net.justmili.corelibs.v1.utils.common.EntityUtil;
-import net.justmili.corelibs.v1.utils.server.RegistryUtil;
+import net.justmili.corelibs.util.utils.common.AttribUtil;
+import net.justmili.corelibs.util.utils.common.EntityUtil;
+import net.justmili.corelibs.util.utils.server.RegistryUtil;
 import net.justmili.servertweaks.ServerTweaks;
 import net.justmili.servertweaks.content.abilities.core.TypeRegistries;
 import net.justmili.servertweaks.content.abilities.type.Ability;
@@ -26,8 +27,6 @@ import net.minecraft.world.entity.monster.skeleton.Skeleton;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
-
-import static net.justmili.corelibs.v1.utils.common.AttribUtil.*;
 
 public class Abilities {
     public static void init() {
@@ -200,10 +199,10 @@ public class Abilities {
         public void tick(ServerPlayer player, ServerLevel level) {
             if (level.getGameTime() % 5 != 0) return;
 
-            var attack = get(player, Attributes.ATTACK_DAMAGE);
-            var maxHp = get(player, Attributes.MAX_HEALTH);
+            var attack = AttribUtil.get(player, Attributes.ATTACK_DAMAGE);
+            var maxHp = AttribUtil.get(player, Attributes.MAX_HEALTH);
 
-            addOrUpdate(attack, AR_STRONG_DAMAGE, 3, AttributeModifier.Operation.ADD_VALUE);
+            AttribUtil.addOrUpdate(attack, AR_STRONG_DAMAGE, 3, AttributeModifier.Operation.ADD_VALUE);
 
             // Don't apply past this point
             if (!player.gameMode.isSurvival()) return;
@@ -212,7 +211,7 @@ public class Abilities {
             float targetHp = Math.clamp(max - (player.getArmorValue() * 2), min, max);
             if (targetHp % 2 != 0) targetHp += 1;
 
-            addOrReplace(maxHp, AR_STRONG_HP, targetHp - 20, AttributeModifier.Operation.ADD_VALUE);
+            AttribUtil.addOrReplace(maxHp, AR_STRONG_HP, targetHp - 20, AttributeModifier.Operation.ADD_VALUE);
             if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
         }
     }
