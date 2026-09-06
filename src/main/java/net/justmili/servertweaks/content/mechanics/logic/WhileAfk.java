@@ -32,7 +32,7 @@ public class WhileAfk {
         }
 
         // Set/reset command timer
-        if (!FdaUtil.getBool(serverPlayer, PlayerVars.IS_AFK) && Config.afkCommandCooldown.get() != 0) {
+        if (!FdaUtil.getBool(serverPlayer, PlayerVars.IS_AFK) && Config.afkCooldown.get() != 0) {
             int cooldown = FdaUtil.getInt(serverPlayer, PlayerVars.AFK_COOLDOWN);
             if (cooldown > 0) FdaUtil.set(serverPlayer, PlayerVars.AFK_COOLDOWN, cooldown - 1);
         }

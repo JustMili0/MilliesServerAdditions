@@ -27,7 +27,7 @@ public class Afk {
                 var player = source.getPlayerOrException();
 
                 int cooldown = FdaUtil.getInt(player, PlayerVars.AFK_COOLDOWN);
-                if (!FdaUtil.getBool(player, PlayerVars.IS_AFK) && Config.afkCommandCooldown.get() != 0 && cooldown > 0) {
+                if (!FdaUtil.getBool(player, PlayerVars.IS_AFK) && Config.afkCooldown.get() != 0 && cooldown > 0) {
                     CommandUtil.sendFail(source, "You must wait " + MathUtil.ticksToTime(cooldown) + " before using this command again");
                     return 0;
                 }
@@ -56,7 +56,7 @@ public class Afk {
             FdaUtil.set(player, PlayerVars.IS_AFK, false);
 
             // Reset command cooldown
-            FdaUtil.set(player, PlayerVars.AFK_COOLDOWN, Config.afkCommandCooldown.get());
+            FdaUtil.set(player, PlayerVars.AFK_COOLDOWN, Config.afkCooldown.get());
 
             // If enabled, despawn
             if (Config.despawnMonstersPostAfk.get()) despawnNearbyMonsters(player);

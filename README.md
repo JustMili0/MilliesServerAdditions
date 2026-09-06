@@ -4,21 +4,23 @@ Very cool 👍
 <hr>
 
 ## Why?
-I made this mod initially for my community Minecraft server, but after a while decided to put some more work into it and share it with the world.
+This mod was initially made as a private server-side mod for my own [Discord/Minecraft community server](https://discord.gg/DPEw9DU2vT),
+but after a while I decided to put a little more work into it, making the codebase less terrible, implement more features and make it public.
 
 ### How long will this be kept updated?
-As long as the two Minecraft servers I moderate live. So pretty long I guess.
+This mod will keep being updated for latest Minecraft versions for as long as I can, but<br>
+content updates will only go as far as version `1.4.x`.
 
-### Will this mod support other mod loaders or versions?
-No. This mod is Fabric-only, and it will remain like so.<br>
-It will not be ported to older versions either, and will remain updated for latest Minecraft updates only.
+### Support for other loaders/versions?
+No. This mod is Fabric-only and will remain like so.<br>
+Any content updates will not be available for older versions, only for current versions that my own server(s) are on.
 
 <hr>
 
 # Features
 ### ***CONFIGURATION***
-The entire mod is entirely configurable with exceptions to one command (`/discard`) and one feature (Display Armor Stands).<br>
-Other than that, you can pretty much customize it however the hell you want. Config file can be found in `config\servertweaks\` directory.
+The entire mod is entirely configurable with only 2 exceptions listed in features below.<br>
+Config can only currently be accessed by editing files in `config\servertweaks\` directory.
 
 ### ***COMMANDS***
 **For The Players**
@@ -52,7 +54,7 @@ Lets you set a player's permission level without having to just yeet full operat
 - `default` - Regular player permissions
 - `moderator` - Can use all commands that a command block can
 - `administrator` - Can use all commands (except `/smpperms`), can not stop the server
-- `limited_operator` (owner but fair) - Operator permission level but limited to only a few commands essential (or so) for moderation
+- `limited_operator` (owner but fair) - Operator permission level but limited to only a few commands and tools essential (or so) for moderation
 - `operator` (owner) - Regular operator permissions
 
 </details>
@@ -99,37 +101,42 @@ this is so `/kill` still works if you ever need to use it in that dimension.
 
 ### ***GAMEPLAY***
 <details>
-<summary>Player Abilities [Disabled By Default]</summary>
+<summary>Right-Click Harvest [Enabled By Default]</summary>
 
-An experimental feature, similar to Origins but server-side and not entirely the same as origins.<br>
-Players can pick presets of species via `/abilities pickPreset <preset>` that will grant them special abilities, debuffs and such.<br>
-Server moderators, admins, owners are also given tools to manage everyone's abilities within `/abilities` command.<br>
-***<br>More on [PlayerAbilities.md](https://github.com/JustMili0/MilliesServerAdditions/blob/master/.Informative/Features/PlayerAbilities.md)***
+Harvest full-grown crops by just right-clicking them. Bigger harvest area when using hoes. Fortune does apply when harvesting.
 
 </details>
+<details>
+<summary>Not Too Expensive [Enabled By Default]</summary>
 
+Remove anvil's "Too Expensive" limit, with the highest EXP cost being 39 levels.
+
+</details>
+<details>
+<summary>Anvil Repair [Enabled By Default]</summary>
+
+Shift-right-click a damaged or chipped anvil with an Iron Ingot or Iron Block to repair it a stage.<br>
+Iron Blocks have a much higher success chance than Ingots, and repair is always guaranteed by your 3rd attempt.
+
+</details>
+<details>
+<summary>Pistons Pushing Limits [Vanilla By Default]</summary>
+
+Allows modifying how many blocks a single piston can push.
+
+</details>
 <details>
 <summary>Obfuscated Invisible Player Names [Enabled By Default]</summary>
 
 Names of players that are invisible will be obfuscated in chat in death messages, whether they kill someone or die themselves.
 
 </details>
-
 <details>
 <summary>Display Armor Stands [Not Configurable]</summary>
 
 Naming an Armor Stand "display" gives it arms automatically, posed for holding items and gear on display.
 
 </details>
-
-
-<details>
-<summary>Right-Click Harvest [Enabled By Default]</summary>
-
-Harvest full-grown crops by just right-clicking them. Bigger harvest area when using hoes. Fortune does apply when harvesting.
-
-</details>
-
 <details>
 <summary>AI-Be-Gone [Enabled By Default]</summary>
 
@@ -139,17 +146,9 @@ which is pretty useful if you want to reduce lag in trading halls or have a lot 
 </details>
 
 <details>
-<summary>Anvil Repair [Enabled By Default]</summary>
+<summary>Enchantment Mixing [Disabled By Default]</summary>
 
-Shift-right-click a damaged or chipped anvil with an Iron Ingot or Iron Block to repair it a stage.<br>
-Iron Blocks have a much higher success chance than Ingots, and repair is always guaranteed by your 3rd attempt.
-
-</details>
-
-<details>
-<summary>Not Too Expensive [Enabled By Default]</summary>
-
-Remove anvil's "Too Expensive" limit, with the highest EXP cost being 39 levels.
+Allows previously incompatible enchantments (different Protection types, Mending + Infinity, etc.) to be combined on the same item.
 
 </details>
 
@@ -157,13 +156,6 @@ Remove anvil's "Too Expensive" limit, with the highest EXP cost being 39 levels.
 <summary>Enchanted Book Duplication [Enabled By Default]</summary>
 
 Shift-right-click an Enchantment Table with an Enchanted Book in your offhand and a regular Book in your main hand to duplicate the enchanted book, at the cost of some experience levels.
-
-</details>
-
-<details>
-<summary>Enchantment Mixing [Disabled By Default]</summary>
-
-Allows previously incompatible enchantments (different Protection types, Mending + Infinity, etc.) to be combined on the same item.
 
 </details>
 
@@ -192,11 +184,12 @@ All three speed limits (elytra, on-ground movement, vehicle movement) are remove
 Makes the time required to hold down right-click to use a riptide trident only 3 ticks instead of 10.
 
 </details>
-
 <details>
-<summary>Pistons Pushing Limits [Vanilla By Default]</summary>
+<summary>Player Abilities [Disabled By Default]</summary>
 
-Allows modifying how many blocks a single piston can push.
+Allows players to pick presets of different species, mobs etc. via  `/abilities pickPreset <preset>` that will grant them special abilities, debuffs and such.<br>
+Server moderators, admins and owners are also given options to manage everyone's abilities within `/abilities` command.<br>
+***<br>More on [PlayerAbilities.md](https://github.com/JustMili0/MilliesServerAdditions/blob/master/.Informative/Features/PlayerAbilities.md)***
 
 </details>
 

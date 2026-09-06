@@ -19,21 +19,21 @@ import java.util.Set;
 public class CommandRegistry {
     public static void init() {
         CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) -> {
-            if (Config.enableAfkCommand.get()) Afk.register(dispatcher);
-            if (Config.enableScaleCommand.get()) Scale.register(dispatcher);
+            if (Config.afkCommand.get()) Afk.register(dispatcher);
+            if (Config.scaleCommand.get()) Scale.register(dispatcher);
 
-            if (Config.enableSmpPermsCommand.get()) SmpPerms.register(dispatcher, buildContext, environment);
-            if (Config.enableFlyCommand.get()) Fly.register(dispatcher);
-            if (Config.enableDamageToggleCommand.get()) DamageToggle.register(dispatcher, buildContext);
+            if (Config.smpPermsCommand.get()) SmpPerms.register(dispatcher, buildContext, environment);
+            if (Config.flyCommand.get()) Fly.register(dispatcher);
+            if (Config.damageToggleCommand.get()) DamageToggle.register(dispatcher, buildContext);
             Discard.register(dispatcher); // This command is not configurable. Too useful to be configurable
-            if (Config.enableFillExtrasCommand.get()) FillExtras.register(dispatcher, buildContext, environment);
-            if (Config.enableBanishCommand.get()) Banish.register(dispatcher);
+            if (Config.fillExtrasCommand.get()) FillExtras.register(dispatcher, buildContext, environment);
+            if (Config.banishCommand.get()) Banish.register(dispatcher);
 
             if (Config.playerAbilities.get()) PlayerAbilities.register(dispatcher);
         });
 
         // SMP Permission Levels
-        if (Config.enableSmpPermsCommand.get()) {
+        if (Config.smpPermsCommand.get()) {
             var modifyPermissionsPhase = ServerTweaks.asId("modify_permissions");
             CommandRegistrationCallback.EVENT.addPhaseOrdering(Event.DEFAULT_PHASE, modifyPermissionsPhase);
             CommandRegistrationCallback.EVENT.register(modifyPermissionsPhase, (dispatcher, buildContext, selection) -> {

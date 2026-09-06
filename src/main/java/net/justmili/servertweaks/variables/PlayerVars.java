@@ -30,7 +30,7 @@ public final class PlayerVars {
 
     public static final AttachmentType<Integer>
         SMP_PERM_LEVEL = createPersistent(id("smp_permission_level"), 0, Codec.INT),
-        AFK_COOLDOWN = createPersistent(id("afk_cooldown"), Config.afkCommandCooldown.get(), Codec.INT),
+        AFK_COOLDOWN = createPersistent(id("afk_cooldown"), Config.afkCooldown.get(), Codec.INT),
         HURT_TICK = createTransient(id("hurt_tick"), -1),
         MILK_TICK = createTransient(id("milk_tick"), -1);
 

@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EnchantmentMixin {
     @Inject(method = "areCompatible", at = @At("HEAD"), cancellable = true)
     private static void servertweaks$makeCompatible(Holder<Enchantment> enchantment, Holder<Enchantment> other, CallbackInfoReturnable<Boolean> cir) {
-        if (!Config.allowMixEnchantments.get()) return;
+        if (!Config.enableEnchantMixing.get()) return;
 
         cir.setReturnValue(true);
     }

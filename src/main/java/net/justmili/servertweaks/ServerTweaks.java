@@ -31,7 +31,8 @@ public class ServerTweaks implements ModInitializer {
         LOGGER.info("Initializing Millie's Server Additions...");
 
         PacketRegistry.init();
-        Config.init();
+        Config.common();
+        Config.server();
         PlayerVars.init();
 
         DimRegistry.init();

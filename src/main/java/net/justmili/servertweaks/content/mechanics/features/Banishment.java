@@ -22,7 +22,7 @@ public final class Banishment {
     static final String TORCH_TAG = "banishment_torch";
 
     public static boolean onEntityHurt(LivingEntity entity, DamageSource source, float value) {
-        if (!Config.enableBanishCommand.get()) return true;
+        if (!Config.banishCommand.get()) return true;
         if (!(entity instanceof Player player)) return true;
 
         if (value >= (1 << 18)) return true;
@@ -30,7 +30,7 @@ public final class Banishment {
     }
 
     public static void onPlayerTick(Player player) {
-        if (!Config.enableBanishCommand.get()) return;
+        if (!Config.banishCommand.get()) return;
         var level = player.level();
 
         if (level.dimension() != DimRegistry.BANISHMENT) return;
@@ -73,7 +73,7 @@ public final class Banishment {
 
     public static void onEntityLoad(Entity entity, ServerLevel level) {
         // Safeguard 3 - despawn all dropped torch item entities so player can't infinitely dupe them
-        if (!Config.enableBanishCommand.get()) return;
+        if (!Config.banishCommand.get()) return;
         if (level.dimension() != DimRegistry.BANISHMENT) return;
         if (entity instanceof ItemEntity item && item.getItem().is(Items.TORCH)) entity.discard();
     }

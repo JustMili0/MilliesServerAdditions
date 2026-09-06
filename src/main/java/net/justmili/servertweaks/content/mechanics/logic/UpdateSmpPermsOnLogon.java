@@ -13,7 +13,7 @@ import net.minecraft.server.permissions.LevelBasedPermissionSet;
 public class UpdateSmpPermsOnLogon {
 
     public static void onLogon(ServerGamePacketListenerImpl listener, PacketSender sender, MinecraftServer server) {
-        if (!Config.enableSmpPermsCommand.get()) return;
+        if (!Config.smpPermsCommand.get()) return;
         var player = listener.getPlayer();
 
         if (!FdaUtil.has(player, PlayerVars.SMP_PERM_LEVEL)) {
