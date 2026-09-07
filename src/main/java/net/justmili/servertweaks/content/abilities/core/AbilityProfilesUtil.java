@@ -147,7 +147,10 @@ public class AbilityProfilesUtil {
     }
 
     public static boolean isProfileEmpty(Player player) {
-        return false; // TODO: make it check if player is not in profiles
+        var uuid = player.getUUID();
+        return ABILITIES.getOrDefault(uuid, Collections.emptySet()).isEmpty()
+            && DEBUFFS.getOrDefault(uuid, Collections.emptySet()).isEmpty()
+            && MODIFIERS.getOrDefault(uuid, Collections.emptySet()).isEmpty();
     }
 
     public static void syncToClient(Player player) {
