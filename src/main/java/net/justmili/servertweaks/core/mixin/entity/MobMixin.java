@@ -1,0 +1,25 @@
+package net.justmili.servertweaks.core.mixin.entity;
+
+import net.justmili.servertweaks.config.Config;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.npc.villager.AbstractVillager;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+@Mixin(Mob.class)
+public class MobMixin {
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void servertweaks$disableAiIfNamed(CallbackInfo ci) {
+        if (!Config.noAiNameTags.get()) return;
+        var mob = (Mob) (Object) this;
+        if (mob.level().isClientSide()) return;
+        if (!(mob instanceof TamableAnimal || mob instanceof AbstractVillager)) return;
+
+        var name = mob.getCustomName();
+        boolean shouldBeNoAi = name != null && name.getString().equals("NoAI");
+        if (mob.isNoAi() != shouldBeNoAi) mob.setNoAi(shouldBeNoAi);
+    }
+}

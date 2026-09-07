@@ -4,7 +4,7 @@ import net.justmili.corelibs.util.utils.common.ContainerUtil;
 import net.justmili.corelibs.util.utils.common.NbtUtil;
 import net.justmili.corelibs.util.utils.common.EntityUtil;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.registries.DimRegistry;
+import net.justmili.servertweaks.core.registries.DimRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;

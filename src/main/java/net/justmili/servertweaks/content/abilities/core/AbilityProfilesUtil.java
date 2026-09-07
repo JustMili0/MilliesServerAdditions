@@ -7,7 +7,7 @@ import net.justmili.servertweaks.content.abilities.type.Ability;
 import net.justmili.servertweaks.content.abilities.type.Debuff;
 import net.justmili.servertweaks.content.abilities.type.Modifier;
 import net.justmili.servertweaks.content.abilities.type.Preset;
-import net.justmili.servertweaks.variables.PlayerVars;
+import net.justmili.servertweaks.core.variables.PlayerVars;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -120,7 +120,7 @@ public class AbilityProfilesUtil {
         return getModifiers(player).contains(modifier);
     }
 
-    public static void applyPreset(Player player, Preset preset) {
+    public static void grantPreset(Player player, Preset preset) {
         if (preset == null) {
             CommandUtil.sendFailTo((ServerPlayer) player, "Unknown abilities preset");
             return;
@@ -133,13 +133,21 @@ public class AbilityProfilesUtil {
         syncToClient(player);
     }
 
-    public static void clearPlayerProfile(Player player) {
+    public static void removeProfile(Player player) {
         var uuid = player.getUUID();
         ABILITIES.remove(uuid);
         DEBUFFS.remove(uuid);
         MODIFIERS.remove(uuid);
         saveProfiles(getServer(player));
         syncToClient(player);
+    }
+
+    public static boolean isProfilesFileEmpty(Player player) {
+        return ABILITIES.isEmpty() && DEBUFFS.isEmpty() && MODIFIERS.isEmpty();
+    }
+
+    public static boolean isProfileEmpty(Player player) {
+        return false; // TODO: make it check if player is not in profiles
     }
 
     public static void syncToClient(Player player) {

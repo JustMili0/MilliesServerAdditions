@@ -9,9 +9,12 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.corelibs.util.utils.common.*;
 import net.justmili.corelibs.util.utils.server.ServerUtil;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
-import net.justmili.servertweaks.content.abilities.type.*;
-import net.justmili.servertweaks.registries.TagRegistry;
-import net.justmili.servertweaks.variables.PlayerVars;
+import net.justmili.servertweaks.content.abilities.type.Ability;
+import net.justmili.servertweaks.content.abilities.type.AnyType;
+import net.justmili.servertweaks.content.abilities.type.Debuff;
+import net.justmili.servertweaks.content.abilities.type.TickingType;
+import net.justmili.servertweaks.core.registries.TagRegistry;
+import net.justmili.servertweaks.core.variables.PlayerVars;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
@@ -34,6 +37,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.cubemob.AbstractCubeMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -63,10 +67,10 @@ public class AbilityEvents {
                 removeModifier(player, AttribUtil.get(player, Attributes.ATTACK_DAMAGE), Abilities.STRONG, Abilities.AR_STRONG_DAMAGE);
                 removeModifier(player, AttribUtil.get(player, Attributes.MAX_HEALTH), Abilities.STRONG, Abilities.AR_STRONG_HP);
 
-                if (FdaUtil.getBool(player, PlayerVars.HAS_PICKED_PRESET) && getAbilities(player).isEmpty() && getModifiers(player).isEmpty()) {
+                if (FdaUtil.getBool(player, PlayerVars.HAS_PICKED_PRESET) && isProfileEmpty(player)) {
 
                     // Remove from file
-                    clearPlayerProfile(player);
+                    removeProfile(player);
                     // Unlock preset picking
                     FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, false);
                     // Inform player
@@ -87,7 +91,7 @@ public class AbilityEvents {
 
         UseItemCallback.EVENT.register(AbilityEvents::pearling);
         UseBlockCallback.EVENT.register(AbilityEvents::grassEater);
-        UseEntityCallback.EVENT.register(AbilityEvents::bugEaterEntities);
+        UseEntityCallback.EVENT.register(AbilityEvents::insectivoreEntities);
         UseEntityCallback.EVENT.register(AbilityEvents::bovid);
     }
 
@@ -135,8 +139,8 @@ public class AbilityEvents {
         if (!stack.is(pearl.getItem())) return InteractionResult.PASS;
         if (player.getCooldowns().isOnCooldown(pearl)) return InteractionResult.PASS;
 
-        var inSlot = player.getInventory().getItem(player.getInventory().getSelectedSlot());
-        if (inSlot.isEmpty()) {
+        var held = player.getItemInHand(hand);
+        if (held.isEmpty()) {
             player.setItemInHand(hand, pearl);
         } else {
             player.getInventory().add(pearl); // Just in case
@@ -174,13 +178,13 @@ public class AbilityEvents {
     public static InteractionResult handleDietItemCall(Player player, Level level, InteractionHand hand) { // Clicking while looking at nothing
         if (level.isClientSide()) return InteractionResult.PASS;
 
-        bugEaterItems(player, level, hand); // Handle this first
+        insectivoreItems(player, level, hand); // Handle this first
         if (isDietBlocked(player, player.getItemInHand(hand))) return InteractionResult.FAIL;
 
         return InteractionResult.PASS;
     }
 
-    static void bugEaterItems(Player player, Level level, InteractionHand hand) {
+    static void insectivoreItems(Player player, Level level, InteractionHand hand) {
         if (level.isClientSide()) return;
         if (!has(player, Debuffs.INSECTIVORE)) return;
 
@@ -189,7 +193,7 @@ public class AbilityEvents {
 
         if (!food.needsFood()) return;
 
-        if (stack.is(TagRegistry.DIET_BUG_ITEMS) && !stack.has(DataComponents.FOOD)) {
+        if (stack.is(TagRegistry.DIET_EW_ITEMS) && !stack.has(DataComponents.FOOD)) {
             stack.shrink(1);
             food.add(3, 2.0F);
             playEatSound(player);
@@ -198,7 +202,7 @@ public class AbilityEvents {
         // In-tag foods with food data handle via handleDiet* methods
     }
 
-    static InteractionResult bugEaterEntities(Player player, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
+    static InteractionResult insectivoreEntities(Player player, Level level, InteractionHand hand, Entity entity, @Nullable EntityHitResult entityHitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
         if (!has(player, Debuffs.INSECTIVORE)) return InteractionResult.PASS;
 
@@ -208,44 +212,36 @@ public class AbilityEvents {
         // Calculate saturation and nutrition
         int addNutrition = 0;
         float addSaturation = 0f;
-        if (isType(entity, TagRegistry.DIET_BUG_ENTITY_NUTRITIOUS)) addNutrition = 2;
-        if (isType(entity, TagRegistry.DIET_BUG_ENTITY_SATURATING)) addSaturation = 2f;
+        if (isType(entity, TagRegistry.DIET_EW_ENTITY_NUTRITIOUS)) addNutrition = 2;
+        if (isType(entity, TagRegistry.DIET_EW_ENTITY_SATURATING)) addSaturation = 2f;
         int nutrition = 3 + addNutrition;
         float saturation = 2 + addSaturation;
 
         // Apply everything accordingly
-        if (isType(entity, TagRegistry.DIET_BUG_ENTITY_GENERIC)) {
+        if (isType(entity, TagRegistry.DIET_EW_ENTITY_GENERIC)) {
             if (!isBugLikeConsumable(entity)) return InteractionResult.PASS;
+            return insectivoreConsume(player, entity, food, nutrition, saturation);
 
-            entity.discard();
-            food.add(nutrition, saturation);
-            playEatSound(player);
-            sendUpdatePacket(player);
-
-            return InteractionResult.CONSUME;
-        } else if (isType(entity, TagRegistry.DIET_BUG_ENTITY_FIRE)) {
-            if (!isBugLikeConsumable(entity)) return InteractionResult.PASS;
-
-            entity.discard();
-            food.add(nutrition, saturation);
-            playEatSound(player);
+        } else if (isType(entity, TagRegistry.DIET_EW_ENTITY_FIRE)) {
+            if (!isBugLikeConsumable(entity)) return InteractionResult.PASS;;
             player.hurtServer((ServerLevel) level, player.damageSources().onFire(), 2f);
-            sendUpdatePacket(player);
+            return insectivoreConsume(player, entity, food, nutrition, saturation);
 
-            return InteractionResult.CONSUME;
-        } else if (isType(entity, TagRegistry.DIET_BUG_ENTITY_POISON)) {
+        } else if (isType(entity, TagRegistry.DIET_EW_ENTITY_POISON)) {
             if (!isBugLikeConsumable(entity)) return InteractionResult.PASS;
-
-            entity.discard();
-            food.add(nutrition, saturation);
-            playEatSound(player);
             EntityUtil.applyEffect(player, MobEffects.POISON, 200, 0);
-            sendUpdatePacket(player);
-
-            return InteractionResult.CONSUME;
+            return insectivoreConsume(player, entity, food, nutrition, saturation);
         }
 
         return InteractionResult.PASS;
+    }
+
+    static InteractionResult insectivoreConsume(Player player, Entity entity, FoodData food, int nutrition, float saturation) {
+        entity.discard();
+        food.add(nutrition, saturation);
+        playEatSound(player);
+        sendUpdatePacket(player);
+        return InteractionResult.CONSUME;
     }
 
     static InteractionResult grassEater(Player player, Level level, InteractionHand hand, BlockHitResult hitResult) {
@@ -306,11 +302,11 @@ public class AbilityEvents {
         boolean bugEater = has(player, Debuffs.INSECTIVORE);
         boolean canConsumeGolden = has(player, Modifiers.CAN_EAT_GOLDEN_FOOD);
 
-        boolean isMeat = stack.is(TagRegistry.DIET_CARNIVORE);
-        boolean isVege = stack.is(TagRegistry.DIET_VEGETARIAN);
-        boolean isSweet = stack.is(TagRegistry.DIET_SWEETS);
-        boolean isBugLike = stack.is(TagRegistry.DIET_BUG_ITEMS);
-        boolean isGold = stack.is(TagRegistry.DIET_MODIFIER_GOLDEN_FOODS);
+        boolean isMeat = stack.is(TagRegistry.DIET_MEAT);
+        boolean isVege = stack.is(TagRegistry.DIET_VEGE);
+        boolean isSweet = stack.is(TagRegistry.DIET_SUGAR);
+        boolean isBugLike = stack.is(TagRegistry.DIET_EW_ITEMS);
+        boolean isGold = stack.is(TagRegistry.DIET_GOLD);
 
         if (!carnivore && !vegetarian && !sweetOnly && !grassEater && !bugEater) return false;
 

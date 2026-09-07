@@ -7,8 +7,8 @@ import net.justmili.corelibs.util.utils.common.CommandUtil;
 import net.justmili.corelibs.util.utils.common.FdaUtil;
 import net.justmili.corelibs.util.utils.common.Text;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.util.ScalerUtil;
-import net.justmili.servertweaks.variables.PlayerVars;
+import net.justmili.servertweaks.core.util.ScalerUtil;
+import net.justmili.servertweaks.core.variables.PlayerVars;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -16,7 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
 
-import static net.justmili.servertweaks.util.ScalerUtil.applyScaleToPlayer;
+import static net.justmili.servertweaks.core.util.ScalerUtil.applyScaleToPlayer;
 
 public class Scale {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {

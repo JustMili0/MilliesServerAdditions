@@ -1,0 +1,23 @@
+{
+  "values": [
+    "minecraft:short_grass",
+    "minecraft:tall_grass",
+    "minecraft:short_dry_grass",
+    "minecraft:tall_dry_grass",
+    "minecraft:bush",
+    "minecraft:fern",
+    "minecraft:large_fern",
+    "minecraft:firefly_bush",
+    "minecraft:sugar_cane",
+    "minecraft:seagrass",
+    "minecraft:sea_pickle",
+    "minecraft:kelp",
+    "minecraft:big_dripleaf",
+    "minecraft:small_dripleaf",
+    "minecraft:vine",
+    "minecraft:cave_vines",
+    "minecraft:glow_lichen",
+    "minecraft:tall_seagrass",
+    "minecraft:cave_vines_plant"
+  ]
+}

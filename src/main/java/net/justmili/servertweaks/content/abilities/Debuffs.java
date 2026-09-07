@@ -7,9 +7,9 @@ import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
 import net.justmili.servertweaks.content.abilities.core.TypeRegistries;
 import net.justmili.servertweaks.content.abilities.type.Debuff;
 import net.justmili.servertweaks.content.abilities.type.TickingDebuff;
-import net.justmili.servertweaks.mixin.accessors.FoxAccessor;
-import net.justmili.servertweaks.registries.TagRegistry;
-import net.justmili.servertweaks.util.Util;
+import net.justmili.servertweaks.core.mixin.accessors.FoxAccessor;
+import net.justmili.servertweaks.core.registries.TagRegistry;
+import net.justmili.servertweaks.core.util.Util;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,7 +45,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static net.justmili.corelibs.util.utils.common.AttribUtil.addOrUpdate;

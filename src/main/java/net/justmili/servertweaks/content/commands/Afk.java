@@ -3,7 +3,7 @@ package net.justmili.servertweaks.content.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import net.justmili.corelibs.util.utils.common.*;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.variables.PlayerVars;
+import net.justmili.servertweaks.core.variables.PlayerVars;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.ServerScoreboard;

@@ -6,8 +6,9 @@
   "description": "${mod_description}",
   "authors": ["${mod_authors}"],
   "contact": {
-    "issues": "",
-    "homepage": ""
+    "homepage": "https://modrinth.com/mod/useful-fun-server-tweaks",
+    "issues": "https://github.com/JustMili0/MilliesServerAdditions/issues",
+    "sources": "https://github.com/JustMili0/MilliesServerAdditions"
   },
   "license": "${mod_license}",
   "environment": "*",
@@ -18,6 +19,9 @@
     ],
     "client": [
       "net.justmili.servertweaks.client.FabricClient"
+    ],
+    "fabric-datagen": [
+      "net.justmili.servertweaks.core.datagen.DataGenerator"
     ]
   },
   "mixins": [

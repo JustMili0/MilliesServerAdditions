@@ -3,7 +3,7 @@ package net.justmili.servertweaks.content.mechanics.features;
 import net.justmili.servertweaks.config.Config;
 import net.justmili.servertweaks.content.abilities.Debuffs;
 import net.justmili.servertweaks.content.abilities.core.AbilityProfilesUtil;
-import net.justmili.servertweaks.mixin.accessors.CropBlockAccessor;
+import net.justmili.servertweaks.core.mixin.accessors.CropBlockAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

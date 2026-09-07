@@ -3,7 +3,7 @@ package net.justmili.servertweaks.content.mechanics.logic;
 import net.justmili.corelibs.util.utils.common.EntityUtil;
 import net.justmili.corelibs.util.utils.common.FdaUtil;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.variables.PlayerVars;
+import net.justmili.servertweaks.core.variables.PlayerVars;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;

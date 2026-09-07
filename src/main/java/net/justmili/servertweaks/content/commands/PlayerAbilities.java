@@ -13,8 +13,8 @@ import net.justmili.servertweaks.content.commands.arguments.AbilityArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.DebuffArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.ModifierArgumentType;
 import net.justmili.servertweaks.content.commands.arguments.PresetArgumentType;
-import net.justmili.servertweaks.network.packets.ClientboundModCheckPacket;
-import net.justmili.servertweaks.variables.PlayerVars;
+import net.justmili.servertweaks.core.packets.ClientboundModCheckPacket;
+import net.justmili.servertweaks.core.variables.PlayerVars;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -94,7 +94,7 @@ public class PlayerAbilities {
                 )
             )
 
-            .then(Commands.literal("applyPreset").requires(src -> CommandUtil.hasPerms(src, 4))
+            .then(Commands.literal("grantPreset").requires(src -> CommandUtil.hasPerms(src, 4))
                 .then(Commands.argument("preset", PresetArgumentType.preset())
                     .suggests(PresetArgumentType::suggest)
                     .then(Commands.argument("player", EntityArgument.player())
@@ -163,7 +163,7 @@ public class PlayerAbilities {
     }
 
     static int clear(CommandSourceStack source, ServerPlayer player) {
-        AbilityProfilesUtil.clearPlayerProfile(player);
+        AbilityProfilesUtil.removeProfile(player);
         FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, false);
 
         CommandUtil.sendOk(source, Text.string("Cleared the abilities profile of %s", player.getPlainTextName()));
@@ -187,7 +187,7 @@ public class PlayerAbilities {
         }
 
         var apply = Text.string("     [APPLY] ").setStyle(Style.EMPTY.withColor(0x55FF55).withClickEvent(
-            new ClickEvent.RunCommand("/abilities applyPreset " + preset.getId() + " " + player.getPlainTextName())));
+            new ClickEvent.RunCommand("/abilities grantPreset " + preset.getId() + " " + player.getPlainTextName())));
         var cancel = Text.string(" [CANCEL]").setStyle(Style.EMPTY.withColor(0xFF5555).withClickEvent(
             new ClickEvent.RunCommand("/abilities dontApplyPreset " + player.getPlainTextName())));
 
@@ -199,7 +199,7 @@ public class PlayerAbilities {
         var player = source.getPlayerOrException();
         var psName = preset.getDisplayName();
 
-        AbilityProfilesUtil.applyPreset(player, preset);
+        AbilityProfilesUtil.grantPreset(player, preset);
         FdaUtil.set(player, PlayerVars.HAS_PICKED_PRESET, true);
         CommandUtil.sendOkTo(player, Text.string("\nApplied the \"%s\" preset!", psName));
 

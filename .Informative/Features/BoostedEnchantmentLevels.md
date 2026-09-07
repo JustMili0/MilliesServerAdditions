@@ -23,3 +23,11 @@ This can be configured via datapacks, as the level boosts are configurable thoug
 |:----------------------:|:-------------:|:-----------------:|
 |       Efficiency       |       8       |         5         |
 |       Unbreaking       |       5       |         3         |
+
+### Enabled on Cumbusters Patreon server
+|      Enchantment       | New Max Level | Vanilla Max Level |
+|:----------------------:|:-------------:|:-----------------:|
+|       Efficiency       |       8       |         5         |
+|       Unbreaking       |       5       |         3         |
+|      Frost Walker      |       5       |         2         |
+|       Multishot        |       3       |         1         |

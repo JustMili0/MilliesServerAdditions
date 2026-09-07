@@ -3,7 +3,7 @@ package net.justmili.servertweaks.content.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import net.justmili.corelibs.util.utils.common.CommandUtil;
 import net.justmili.corelibs.util.utils.common.EntityUtil;
-import net.justmili.servertweaks.registries.DimRegistry;
+import net.justmili.servertweaks.core.registries.DimRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;

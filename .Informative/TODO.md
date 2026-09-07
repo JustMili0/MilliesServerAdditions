@@ -4,14 +4,13 @@
 # TODO (1.3.1)
 - Try making Hunted By Fox a goal mixin
 - Actually start using proper Core Libs (Requires work on 'em, obviously)
-- Tag datagen
 - Fix skeletons being weird with `scares_skeletons`
 - Ench. book dupe with more enchantments at higher cost
 - Code own XP bottling
 
 # TODO (1.4.0)
 - Data driven presets
-- Code own timber
-- Code own veinminer
+- Code own timber (also add block tag "timber_allowed_blocks" and tool tag "timber_allowed_tools")
+- Code own veinminer (also add block tag "veinminer_allowed_blocks" and tool tag "veinminer_allowed_tools")
 - Code own portal blocker
 - Code own sitting

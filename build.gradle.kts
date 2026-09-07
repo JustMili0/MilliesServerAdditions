@@ -14,6 +14,12 @@ loom {
     accessWidenerPath = file("src/main/resources/${rootProject.property("mod_id")}.accesswidener")
 }
 
+fabricApi {
+    configureDataGeneration {
+        client = true
+    }
+}
+
 repositories {
     mavenCentral()
     maven("https://maven.terraformersmc.com/") // Mod Menu

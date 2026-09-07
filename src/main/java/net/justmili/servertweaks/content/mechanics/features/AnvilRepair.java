@@ -3,7 +3,7 @@ package net.justmili.servertweaks.content.mechanics.features;
 import net.justmili.corelibs.util.utils.common.FdaUtil;
 import net.justmili.corelibs.util.utils.common.MathUtil;
 import net.justmili.servertweaks.config.Config;
-import net.justmili.servertweaks.variables.PlayerVars;
+import net.justmili.servertweaks.core.variables.PlayerVars;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;

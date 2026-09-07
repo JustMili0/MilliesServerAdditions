@@ -2,7 +2,7 @@ package net.justmili.servertweaks.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.justmili.servertweaks.network.packets.ClientboundModCheckPacket;
+import net.justmili.servertweaks.core.packets.ClientboundModCheckPacket;
 
 public class FabricClient implements ClientModInitializer {
     @Override
