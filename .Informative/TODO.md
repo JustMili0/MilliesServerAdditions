@@ -1,8 +1,12 @@
-# TODO (Between release of 1.3.0 and start of 1.3.1)
+# TODO (1.3.1)
+- Fix `cant_swim` riptide stuff, fix bubble columns
+- Patch being able to still somewhat swim up by sprint swimming
+  - If `lookAngle < 0.0` make player stop swimming/be unable to sprint swim
+- Patch tools and stuff having to "load twice" (load longer) because of higher level enchantments
+- Try making Hunted By Fox a goal mixin
 - Document every feature in `.Informative/Features/`
 
-# TODO (1.3.1)
-- Try making Hunted By Fox a goal mixin
+# TODO (1.3.2)
 - Actually start using proper Core Libs (Requires work on 'em, obviously)
 - Fix skeletons being weird with `scares_skeletons`
 - Ench. book dupe with more enchantments at higher cost

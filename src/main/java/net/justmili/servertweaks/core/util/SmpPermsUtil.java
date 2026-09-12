@@ -14,7 +14,7 @@ public class SmpPermsUtil {
     public static final Set<String> ALLOWED_FOR_LIMITED_OP = Set.of(
         "stop", "ban", "ban-ip", "pardon", "pardon-ip", "kick", "banish", "discard", "gamemode", "fly", "trigger",
         "abilities", "scale", "flan", "waypoint", "function", "whitelist", "banlist", "reload", "datapack", "graves", "servercore", "servux",
-        "spectate", "sit", "vanish"
+        "spectate", "sit", "vanish", "grieflogger"
     );
 
     public static boolean isLimitedOperator(ServerPlayer player) {
